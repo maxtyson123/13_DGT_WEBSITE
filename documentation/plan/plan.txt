@@ -1,0 +1,39 @@
+Notes:
+- Focus on subtle hover animations rather than flashy ones like last year
+- Dark theme by default
+
+Content theme:
+- Project. Either MaxOS, 2048, or a game.
+
+Colour theme:
+- Dark: https://coolors.co/palette/00132d-00193b-001e45-002657-002d67-00377e
+- Light: https://coolors.co/palette/03045e-0077b6-00b4d8-90e0ef-caf0f8
+
+Features:
+- Themeing (custom theme?)
+- Nav bar up top
+- Page settings in openable side bar
+- scroll to top button
+- footer
+- cool carousel thing
+- dark mode toggle
+- accessibility settings
+- mobile friendly
+- search bar
+- page transitions
+- 404 page
+- loading screen (first load only, not on refresh/navigation)
+- mouse responsive header, smoke effect for background
+
+Inspiration:
+- https://toaruos.org/
+- https://xelix.org/
+- https://skiftos.org/
+- https://lemonos.org/
+
+Pages:
+- Home
+- About
+- Updates
+- Repository
+- Code (Doxygen)
