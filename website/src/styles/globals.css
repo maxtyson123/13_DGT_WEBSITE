@@ -4,11 +4,84 @@
 
 :root{
     --main-bg: #000000;
+    --main-bg-secondary: #302626;
     --main-text: #ffffff;
+
+    --dark-main-1: #00377E;
+    --dark-main-2: #002D67;
+    --dark-main-3: #002657;
+
+    --dark-secondary-1: #00132D;
+    --dark-secondary-2: #00193B;
+    --dark-secondary-3: #001E45;
+
+    --light-main-1: #CAF0F8;
+    --light-main-2: #90E0EF;
+    --light-main-3: #00B4D8;
+
+    --light-secondary-1: #03045E;
+    --light-secondary-2: #0077B6;
+    --light-secondary-3: #00B4D8;
+
+    --main-1: var(--dark-main-1);
+    --main-2: var(--dark-main-2);
+    --main-3: var(--dark-main-3);
+
+    --secondary-1: var(--dark-secondary-1);
+    --secondary-2: var(--dark-secondary-2);
+    --secondary-3: var(--dark-secondary-3);
+
+
 }
 
 body{
-    background-color: var(--main-bg);
     color: var(--main-text);
+    background: linear-gradient(270deg, var(--main-bg), var(--main-bg-secondary));
+    background-size: 400% 400%;
 
+    -webkit-animation: BackgroundGradient 25s ease infinite;
+    -moz-animation: BackgroundGradient 25s ease infinite;
+    animation: BackgroundGradient 25s ease infinite;
+}
+
+/* Theme */
+.bg-main-1{
+    background-color: var(--main-1);
+}
+
+.bg-main-2{
+    background-color: var(--main-2);
+}
+
+.bg-main-3{
+    background-color: var(--main-3);
+}
+
+.bg-secondary-1{
+    background-color: var(--secondary-1);
+}
+
+.bg-secondary-2{
+    background-color: var(--secondary-2);
+}
+
+.bg-secondary-3{
+    background-color: var(--secondary-3);
+}
+
+/* Animations */
+@-webkit-keyframes BackgroundGradient {
+    0%{background-position:0 72%}
+    50%{background-position:100% 29%}
+    100%{background-position:0 72%}
+}
+@-moz-keyframes BackgroundGradient {
+    0%{background-position:0 72%}
+    50%{background-position:100% 29%}
+    100%{background-position:0 72%}
+}
+@keyframes BackgroundGradient {
+    0%{background-position:0 72%}
+    50%{background-position:100% 29%}
+    100%{background-position:0 72%}
 }
