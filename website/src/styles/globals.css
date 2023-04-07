@@ -34,10 +34,19 @@
 
 }
 
+* {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
 body{
     color: var(--main-text);
     background: linear-gradient(270deg, var(--main-bg), var(--main-bg-secondary));
     background-size: 400% 400%;
+
+    transition-duration: 1s;
 
     -webkit-animation: BackgroundGradient 25s ease infinite;
     -moz-animation: BackgroundGradient 25s ease infinite;
