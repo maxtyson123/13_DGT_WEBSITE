@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-export default function Header(props: any) {
+export default function HtmlHeader(props: any) {
 
     // Constants
     const currentPage = props.currentPage;

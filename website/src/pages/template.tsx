@@ -1,4 +1,4 @@
-import Header from "@/components/header";
+import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 
 export default function Template() {
@@ -7,7 +7,7 @@ export default function Template() {
 
     return (
         <>
-            <Header currentPage={CURRENT_PAGE}/>
+            <HtmlHeader currentPage={CURRENT_PAGE}/>
             <Navbar currentPage={CURRENT_PAGE}/>
         </>
     );
