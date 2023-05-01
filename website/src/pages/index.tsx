@@ -13,20 +13,33 @@ export default function Home() {
 
                     <Navbar/>  - This sticky
 
-                    <PageHeader>
-                        <WelcomeDiv/>
-                    </PageHeader>
-
                     <Section>
-                        <CollumContainer amount=3>
-                            <Collum>
-                                <PlantCard data=/>
-                                <PlantCard data=/>
-                                <PlantCard data=/>
-                            </Collum>
-                        </Collum>
+                        <PageHeader>
+                                - Welcome div
+                        </PageHeader>
                     </Section>
 
+                    <Section>
+                        <ColumnContainer amount=3>
+                            <Column>
+                                <PlantCard data=/>
+                                <PlantCard data=/>
+                                <PlantCard data=/>
+                            </Column>
+                        </Column>
+                    </Section>
+
+                    <Section>
+                        - Image Break Here
+                    </Section>
+
+                    <Section>
+                        <Stats/>
+                    </Section>
+
+                    <Section>
+                        </Footer/>
+                    </Section>
 
                  */
             }

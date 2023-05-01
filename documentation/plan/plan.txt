@@ -1,39 +1,129 @@
-Notes:
-- Focus on subtle hover animations rather than flashy ones like last year
-- Dark theme by default
+NZ Native Plant Based Website Notes (Rongoa):
 
-Content theme:
-- Project. Either MaxOS, 2048, or a game.
-
-Colour theme:
-- Dark: https://coolors.co/palette/00132d-00193b-001e45-002657-002d67-00377e
-- Light: https://coolors.co/palette/03045e-0077b6-00b4d8-90e0ef-caf0f8
-
-Features:
-- Themeing (custom theme?)
-- Nav bar up top
-- Page settings in openable side bar
-- scroll to top button
-- footer
-- cool carousel thing
-- dark mode toggle
-- accessibility settings
-- mobile friendly
-- search bar
-- page transitions
-- 404 page
-- loading screen (first load only, not on refresh/navigation)
-- mouse responsive header, smoke effect for background
+Breif:
+I am going to create a website that informs users about NZ plants. The information and data should be displayed in a
+entertaining and interactive way, with the site being accessible to a wide range of users on mobile or pc. The plant
+pages should be automatically generated from JSON data contain all the information, it should be easy to update and edit
+data.
 
 Inspiration:
-- https://toaruos.org/
-- https://xelix.org/
-- https://skiftos.org/
-- https://lemonos.org/
+- https://www.hortis.com/
+- https://plants.usda.gov/home
+- https://www.landcareresearch.co.nz/tools-and-resources/databases/
+- https://garden.org/plants/
+- https://ww1.wbhsoba.co.nz/
+- https://plantnet.org/en/
+- https://powo.science.kew.org/#main
+- https://davesgarden.com/guides/pf/
+-  https://www.bhg.com/gardening/plant-dictionary/#alphabetical-list-n (good for stats)
 
-Pages:
-- Home
-- About
-- Updates
-- Repository
-- Code (Doxygen)
+Plan:
+- Figma Mock Up: https://www.figma.com/file/Kk8xBt6xba5k448VpILIyv/13-DGT-Website?node-id=0%3A1&t=JckHKCGevQqI6JDG-1
+
+Features:
+- Search Bar
+- Dynamic Plant Index
+- Dynamic Plant Page
+- Plant page should have sections, sections and their images should alternate from left to right automatically
+- Stats
+- Accessibility Settings
+- Calendar of plant in season
+
+Possible Features:
+- 3D Parallax Plant on Header
+- Page to log a new plant
+- Social Media Side where users sign up and post pictures of plants they see, automatically tagged with location and date
+- Plant of the day
+- API to get plant information and upload plants
+
+Data Stucture:
+
+- Plants:
+{
+    "id": "1",
+    "preferred_name": "eng/maori/latin",
+    "english_name": "*",
+    "moari_name": "*",
+    "latin_name": "*",
+    "use": ["food", "medical_internal", "medical_external", "craft"],
+    "months_ready_for_use": [*],
+    "location": "coastal/inland/forest/ground/canopy"
+    "small_description": "*",
+    "long_description": "*",
+    "attachments": **See Attachments**,
+    "sections": **See Sections**,
+    "tags": []
+}
+
+- Generic Attachment:
+{
+    "path": "*",
+    "type": "*",
+    "description": "*"
+    "downloadable": "true/false",
+    "flags": [*],
+    "tags": []
+}
+- Image Attachment:
+{
+    "path": "*",
+    "type": "image",
+    "description": "*",
+    "downloadable": false,
+    "flags": [transparent, in_season, out_season],
+    "tags": [whole_plant, leaf_top, leaf_underside, stem, fruit_or_buds, other]
+}
+
+- Edible Section:
+{
+    "type": "edible",
+    "edible_parts": [{
+                 "part_of_plant": "*",
+                 "image_of_part": "*",
+                 "nutrition": "*",
+                 "preparation": "raw/cooked/boiled"
+              }]
+
+}
+
+- Medical Section:
+{
+    "type": "medical",
+    "internal_uses": [{
+                     "use": "*",
+                     "image": "*",
+                     "preparation": "*"
+                    }],
+    "external_uses": [{
+                    "use": "*",
+                    "image": "*",
+                    "preparation": "*"
+                   }]
+
+
+
+}
+
+- Craft Section:
+{
+    "type": "craft",
+    "crafts": [{
+               "part_of_plant": "*",
+               "nutrition": "*",
+               "preparation": "raw/cooked/boiled"
+            }]
+
+}
+
+- History Section:
+{
+    "type": "history",
+
+}
+
+- Months for use:
+{
+    "use": "*",
+    "start_month": "",
+    "end_month": "",
+}
