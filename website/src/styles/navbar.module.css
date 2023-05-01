@@ -1,0 +1,65 @@
+.navbar {
+    overflow: hidden;
+    background-color: rgba(10, 44, 9, 0.6);
+    position: absolute;
+    z-index: 2;
+    width: 100vw;
+    top: 0;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.466);
+}
+
+/* Float all the navbar <a> links left, give them a white font colour to contrast the black bg, center the text, hide the <a> underlining */
+.navbar a {
+    float: left;
+    margin: 0;
+    display: block;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 17px;
+
+}
+
+/* Nicer Underlining */
+.navbar a p{
+    border-bottom: #90E0EF 3px double;
+}
+
+.navright a{
+    padding: 14px 16px;
+}
+
+/*Change bg and font colour on hover*/
+.navbar a:hover {
+    background-color: rgba(10, 44, 9, 0.8);
+}
+
+.title{
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    padding: 14px 16px 0;
+    text-decoration: none;
+    display: inline;
+}
+
+.logo{
+    display: inline;
+}
+
+.homeContainer{
+    float: left;
+    height: 100%;
+    padding: 12.5px;
+}
+
+.activePage{
+    background-color: green;
+    color: white;
+}
+
+/* Right-aligned section inside the top navigation */
+.navright {
+    float: right;
+    height: 100%;
+}

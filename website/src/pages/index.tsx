@@ -8,6 +8,8 @@ export default function Home() {
     return (
         <>
             <HtmlHeader currentPage={pageName}/>
+            <Navbar currentPage={pageName}/>
+
             {
                 /*
 
