@@ -1,17 +1,30 @@
 .mainBG{
     width: 100vw;
     height: 98vh;
-    background-color: #00B4D8;
     box-shadow: 0px 10px 10px black;
 }
 
-.headerContainer{
+.pageHeader{
 
+}
+
+.headerContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 98vh;
 }
 
 .contentContainer{
     background: #00B4D8;
-    top: 40vh;
+    padding: 2.5%;
+    width: 77.5%;
     position: relative;
+    background: rgba(217, 217, 217, 0.1);
+    box-shadow: inset 31px -31px 31px rgba(165, 165, 165, 0.1), inset -31px 31px 31px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(31px);
+    border-radius: 30px;
+
 
 }
