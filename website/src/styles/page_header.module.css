@@ -1,0 +1,17 @@
+.mainBG{
+    width: 100vw;
+    height: 98vh;
+    background-color: #00B4D8;
+    box-shadow: 0px 10px 10px black;
+}
+
+.headerContainer{
+
+}
+
+.contentContainer{
+    background: #00B4D8;
+    top: 40vh;
+    position: relative;
+
+}

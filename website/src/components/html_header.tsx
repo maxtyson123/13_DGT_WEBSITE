@@ -4,7 +4,7 @@ export default function HtmlHeader(props: any) {
 
     // Constants
     const currentPage = props.currentPage;
-    const iconpath = "/media/images/favicon.png";
+    const iconpath = "/media/images/logo.svg";
 
     return(
         <>
