@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100&display=swap');
 
 :root{
     --main-bg: #000000;
@@ -43,6 +44,7 @@
 
 body{
     background: whitesmoke;
+    font-family: 'Archivo', sans-serif;
 }
 
 

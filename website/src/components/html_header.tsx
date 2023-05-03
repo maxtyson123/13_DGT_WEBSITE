@@ -11,6 +11,9 @@ export default function HtmlHeader(props: any) {
                 <Head>
                     <title>{currentPage}</title>
                     <link rel="icon" href={iconpath}/>
+                    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
+                    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100&display=swap" rel="stylesheet"/>
                 </Head>
         </>
     )
