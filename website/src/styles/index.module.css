@@ -1,5 +1,6 @@
 .welcomeContainer{
     color: #FFFFFF;
+    display: flex;
 }
 
 .title{
@@ -11,16 +12,16 @@
 .description{
     font-size: 20px;
     line-height: 27px;
-    padding: 4% 40% 20% 4%;
+    padding-left: 4%;
+
 
 }
 
-.imageContainer{
-    bottom: 0;
-    right: 0;
-    height: 80%;
-    z-index: 2;
-    width: 100%;
-    position: absolute;
+.plantContainer{
+    width: 50%;
+}
 
+.titleContainer{
+    width: 60%;
+    padding-bottom: 10%;
 }

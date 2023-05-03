@@ -1,0 +1,24 @@
+.searchContainer input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+    background: #C2C2C2;
+    border-radius: 10px 0 0 10px;
+    color: #838383;
+}
+
+.searchContainer button {
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(180deg, #12400C 0%, #081E05 100%);
+    border-radius: 0 10px 10px 0;
+}
+
+.searchContainer button:hover {
+    background: linear-gradient(180deg, #12400C 100%, #081E05 0%);
+}

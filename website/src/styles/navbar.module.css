@@ -1,7 +1,7 @@
 .navbar {
     overflow: hidden;
     background-color: rgba(10, 44, 9, 0.6);
-    position: absolute;
+    position: fixed;
     z-index: 2;
     width: 100vw;
     top: 0;
@@ -21,7 +21,7 @@
 
 /* Nicer Underlining */
 .navbar a p{
-    border-bottom: #90E0EF 3px double;
+    border-bottom: #FFFFFF 3px double;
 }
 
 .navright a{
