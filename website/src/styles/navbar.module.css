@@ -1,3 +1,9 @@
+/*
+ The navbar is a fixed element at the top of the page, with a z-index of 2 to ensure it is always on top.
+ Hide the overflow so that the navbar doesn't create scroll bars.
+ Give the navbar a black background with 60% opacity.
+ Give the navbar a box shadow to make it stand out from the background.
+ */
 .navbar {
     overflow: hidden;
     background-color: rgba(10, 44, 9, 0.6);
@@ -8,7 +14,11 @@
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.466);
 }
 
-/* Float all the navbar <a> links left, give them a white font colour to contrast the black bg, center the text, hide the <a> underlining */
+/*
+ Float all the navbar <a> links left
+ Give them a white font colour to contrast the bg, center the text
+ Hide the <a> underlining
+ */
 .navbar a {
     float: left;
     margin: 0;
@@ -19,20 +29,26 @@
 
 }
 
-/* Nicer Underlining */
+/*
+ Nicer Underlining
+ */
 .navbar a p{
     border-bottom: #FFFFFF 3px double;
 }
 
-.navright a{
-    padding: 14px 16px;
-}
 
-/*Change bg and font colour on hover*/
+/*
+ Change bg and font colour on hover
+ */
 .navbar a:hover {
     background-color: rgba(10, 44, 9, 0.8);
 }
 
+/*
+ The title of the site on the left of the navbar
+ Give it a font size of 30px, bold, white, centered, no underlining
+ Padding to make it look nice and inline to position it next to the logo
+ */
 .title{
     font-size: 30px;
     font-weight: bold;
@@ -43,23 +59,41 @@
     display: inline;
 }
 
+/*
+ Position the logo next to the title
+ */
 .logo{
     display: inline;
 }
 
+/*
+ Contains the Title and Logo
+ Position it to the left of the navbar
+ */
 .homeContainer{
     float: left;
     height: 100%;
     padding: 12.5px;
 }
 
+/*
+ Make the current page visible to the user
+ */
 .activePage{
     background-color: green;
-    color: white;
 }
 
-/* Right-aligned section inside the top navigation */
+/*
+ Right-aligned section inside the top navigation
+ */
 .navright {
     float: right;
     height: 100%;
+}
+
+/*
+ Give the <a> links in the navright section some padding
+ */
+.navright a{
+    padding: 14px 16px;
 }

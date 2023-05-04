@@ -3,6 +3,9 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100&display=swap');
 
+/*
+ Defines Some Global CSS Variables for the theme
+ */
 :root{
     --main-bg: #000000;
     --main-bg-secondary: #302626;
@@ -35,6 +38,9 @@
 
 }
 
+/*
+ Have a smooth transition effect on all elements
+ */
 * {
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
@@ -42,11 +48,14 @@
     transition: all 0.3s ease-in-out;
 }
 
+/*
+ The body of the website should be white with the font family of Archivo.
+ The overflow-x is hidden to prevent the horizontal scroll bar from appearing
+ */
 body{
     background: whitesmoke;
     overflow-x: hidden;
     font-family: 'Archivo', sans-serif;
-    margin-right: 50px;
 }
 
 

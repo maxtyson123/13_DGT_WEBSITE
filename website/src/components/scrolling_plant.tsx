@@ -1,17 +1,17 @@
-import {Canvas, useFrame, useThree} from "@react-three/fiber";
+import {Canvas, useThree} from "@react-three/fiber";
 import {PlantModel} from "@/components/plant_model";
-import {useRef} from "react";
+import { Environment } from '@react-three/drei'
 
 
 export default function ScrollingPlant() {
 
     return(
         <>
+            {/* Canvas component from react-three-fiber, this creates a 3D scene */}
             <Canvas shadows={true}>
+                {/* Scene is used to add objects to the 3D scene and also programmatically interact with some components of the canvas */}
                 <Scene />
             </Canvas>
-
-
         </>
 
     )
@@ -21,12 +21,13 @@ export default function ScrollingPlant() {
 function Scene() {
     const { camera } = useThree();
 
-    // Function to move the camera
+    // Function to move the camera, used here instead of intial camera position to allow for the camera to be moved later
+    // Additionally this helps for real time reloading of the page when in the dev environment as the camera will be automatically moved to the correct position
     const moveCamera = () => {
         camera.position.x = 0;
-        camera.position.y = 11;
-        camera.position.z = 11;
-        camera.rotation.x = -0.85;
+        camera.position.y = 14;
+        camera.position.z = 7;
+        camera.rotation.x = -1.2;
         camera.rotation.y = 0;
         camera.rotation.z = 0;
 
@@ -36,11 +37,12 @@ function Scene() {
     // Call the moveCamera function to set the initial camera position
     moveCamera();
 
-
     return (
         <>
-            <ambientLight color={"white"} intensity={0.8} />
-            <pointLight position={[-3, 5, -2]} intensity={0.8}/>
+            {/* Use the Environment component from drei to add HDR lighting to the scene */}
+            <Environment preset={"forest"} />
+
+            {/* Add the plant model to the scene */}
             <PlantModel/>
         </>
     );

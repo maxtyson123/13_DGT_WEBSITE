@@ -1,27 +1,43 @@
+/*
+ Make the text in the welcome container white and any child elements should be flex to align them horizontally.
+ */
 .welcomeContainer{
     color: #FFFFFF;
     display: flex;
 }
 
+/*
+ Make the title have a font size of 60px and a line height of 103%.
+ Padding should be 4% to give spacing from the edges of the container.
+ */
 .title{
     font-size: 60px;
     line-height: 103%;
     padding: 4%;
 }
 
+/*
+ Make the description have a font size of 20px and a line height of 27px.
+ Padding should be 4% to give spacing from the edges of the container.
+ */
 .description{
     font-size: 20px;
     line-height: 27px;
     padding-left: 4%;
-
-
 }
 
+/*
+ This is used to add styling to the ThreeCanvas component.
+ Give a width of 60% to the plantContainer to make it larger than the titleContainer.
+ */
 .plantContainer{
-    width: 50%;
+    width: 60%;
 }
 
+/*
+ Container for the title and description.
+ */
 .titleContainer{
-    width: 60%;
+    width: 40%;
     padding-bottom: 10%;
 }

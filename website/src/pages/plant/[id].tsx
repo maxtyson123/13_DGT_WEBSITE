@@ -1,17 +1,20 @@
-
 import React, {useEffect, useState} from "react";
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 
+
+// Define the data for the plant
+interface PlantData {
+    english_name: string;
+    // Add other fields here
+
+}
 
 export async function getLocalData(plantId: any) {
     // Get the path of the json file
     const filePath = "/data/plants/" + plantId + ".json";
 
-    // Read the json file
-    const jsonData = await fetch(filePath).then((res) => res.json());
-
     // Return the json data
-    return jsonData
+    return await fetch(filePath).then((res) => res.json())
 }
 
 export default function Home() {
@@ -24,10 +27,10 @@ export default function Home() {
     console.log(typeof id)
 
     // Store the plant data
-    const [plantData, setPlantData] = useState(null)
+    const [plantData, setPlantData] = useState<PlantData | null>(null)
     const [isLoading, setLoading] = useState(true)
 
-    // Get the plant data
+    // Get the plant data, depend on the id changing
     useEffect(() => {
 
         // Set the loading state
@@ -48,7 +51,7 @@ export default function Home() {
 
     return (
         <>
-            <h1>Plant ID: {isLoading ? "Loading..." : plantData.english_name}</h1>
+            <h1>Plant ID: {isLoading ? "Loading..." : plantData?.english_name}</h1>
 
             {/*
 

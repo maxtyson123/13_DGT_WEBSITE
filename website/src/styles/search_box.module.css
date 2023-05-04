@@ -1,24 +1,42 @@
+/*
+ Font styling that should be consistent across the search box: Size 23px, color #838383
+ */
+.searchContainer{
+    color: #838383;
+    font-size: 23px;
+}
+
+/*
+ Style the input field to have no border and a background color of #C2C2C2
+ Add some padding and curved corners to the left side (right side should be straight so the search button can be placed there)
+ */
 .searchContainer input[type=text] {
     padding: 6px;
     margin-top: 8px;
-    font-size: 17px;
     border: none;
     background: #C2C2C2;
     border-radius: 10px 0 0 10px;
-    color: #838383;
 }
 
+/*
+ Give the search button a gradient background and curved corners on the right side (left side should be straight so it can be placed next to the input field)
+ Add some padding to make it look nice
+ Change the cursor to a pointer when hovering over the button to show it is clickable
+ Remove the border as it is not needed
+ */
 .searchContainer button {
     padding: 6px 10px;
     margin-top: 8px;
     margin-right: 16px;
-    font-size: 17px;
     border: none;
     cursor: pointer;
     background: linear-gradient(180deg, #12400C 0%, #081E05 100%);
     border-radius: 0 10px 10px 0;
 }
 
+/*
+ Invert the gradient on hover to show the user that the button is being hovered over
+ */
 .searchContainer button:hover {
-    background: linear-gradient(180deg, #12400C 100%, #081E05 0%);
+    background: linear-gradient(180deg, #081E05 0%, #12400C 100%);
 }

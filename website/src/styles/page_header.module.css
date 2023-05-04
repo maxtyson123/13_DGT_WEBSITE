@@ -1,30 +1,40 @@
+/*
+ This styles the main image for the background of the website.
+ Cover the entire screen except for the bottom 4vh to show the user that there is more content below.
+ Give it a box shadow to have the image pop out of the screen.
+ */
 .mainBG{
     width: 100vw;
-    height: 98vh;
+    height: 96vh;
     box-shadow: 0px 10px 10px black;
 }
 
-.pageHeader{
-
-}
-
+/*
+ Center the content of the header container using flexbox.
+ Size the header container to be the same size as the mainBG.
+ */
 .headerContainer{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 98vh;
+    height: 96vh;
 }
 
+/*
+ Main container for the content of the header.
+ Give it a width of 80% to make it smaller than the mainBG.
+ Have a blurry background to make the content stand out.
+ Inset box shadow to add depth to the blue of the container.
+ */
 .contentContainer{
     background: #00B4D8;
     padding: 2.5%;
-    width: 77.5%;
+    width: 80%;
     position: relative;
     background: rgba(217, 217, 217, 0.1);
     box-shadow: inset 31px -31px 31px rgba(165, 165, 165, 0.1), inset -31px 31px 31px rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(31px);
     border-radius: 30px;
-
-
+    max-width: 1200px;
 }
