@@ -1,21 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
+import {getLocalData, PlantData} from "@/components/plant_card";
 
 
-// Define the data for the plant
-interface PlantData {
-    english_name: string;
-    // Add other fields here
-
-}
-
-export async function getLocalData(plantId: any) {
-    // Get the path of the json file
-    const filePath = "/data/plants/" + plantId + ".json";
-
-    // Return the json data
-    return await fetch(filePath).then((res) => res.json())
-}
 
 export default function Home() {
 

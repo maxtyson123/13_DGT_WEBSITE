@@ -25,7 +25,7 @@ function Scene() {
     // Additionally this helps for real time reloading of the page when in the dev environment as the camera will be automatically moved to the correct position
     const moveCamera = () => {
         camera.position.x = 0;
-        camera.position.y = 14;
+        camera.position.y = 15;
         camera.position.z = 7;
         camera.rotation.x = -1.2;
         camera.rotation.y = 0;

@@ -41,3 +41,14 @@
     width: 40%;
     padding-bottom: 10%;
 }
+
+/*
+  Centres the plant cards using a flexbox
+ */
+.cardsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+
+}
