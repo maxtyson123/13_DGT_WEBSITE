@@ -46,7 +46,7 @@ export default function PlantCard({ data }: PlantCardProps){
                 <p className={styles.description}>{data?.small_description}</p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
-                <Link className={styles.button} href={"/plant/" + data?.id}>
+                <Link scroll={false} className={styles.button} href={"/plant/" + data?.id}>
                    <p className={styles.button}>More Info</p>
                 </Link>
 
