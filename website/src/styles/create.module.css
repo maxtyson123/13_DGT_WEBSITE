@@ -1,3 +1,7 @@
+/**
+ Make the title a large font size and centre it
+ Use overflow wrap to make sure the input from the user doesn't overflow the box
+ */
 .title{
     font-size: 64px;
     line-height: 103%;
@@ -7,6 +11,11 @@
 
 }
 
+/*
+ Split the page so that the input can be on the left and the images on the right
+ Use flex to vertically and horizontally centre the input
+ Flex in a collum for it to be vertical
+ */
 .column {
     float: left;
     width: 50%;
@@ -17,16 +26,14 @@
     align-items: center;
 }
 
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
 
 .formSection{
 
 }
 
+/*
+ Make the title for a section large and centre it
+ */
 .sectionTitle{
     font-size: 64px;
     line-height: 103%;
@@ -36,6 +43,9 @@
 
 }
 
+/*
+ Add spacing between items in the input form
+ */
 .formItem{
     padding-bottom: 30px;
 }

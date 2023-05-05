@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
-import {DropdownInput, SmallInput} from "@/components/input_sections";
+import {AdvandcedTextArea, DropdownInput, SimpleTextArea, SmallInput} from "@/components/input_sections";
 
 
 export default function CreatePlant() {
@@ -16,11 +16,32 @@ export default function CreatePlant() {
     const [englishName, setEnglishName] = useState("")
     const [moariName, setMoariName] = useState("")
     const [latinName, setLatinName] = useState("")
+    const [preferredName, setPreferredName] = useState("")
+    const [smallDescription, setSmallDescription] = useState("")
 
     // Value Handlers
     const handleEnglishNameChange = (value) => { setEnglishName(value); };
     const handleMoariNameChange = (value) => { setMoariName(value); };
     const handleLatinNameChange = (value) => { setLatinName(value); };
+    const handleDropDownChange = (value) => { setPreferredName(value) };
+    const handleSmallDescriptionChange = (value) => { setSmallDescription(value) };
+
+    // Update the page title when name changes
+    useEffect(() => {
+        switch (preferredName) {
+            case "English":
+                setPlantName(englishName);
+                break;
+
+            case "Moari":
+                setPlantName(moariName);
+                break;
+
+            case "Latin":
+                setPlantName(latinName);
+                break
+        }
+    }, [englishName, moariName, latinName, preferredName]);
 
     return (
         <>
@@ -48,7 +69,7 @@ export default function CreatePlant() {
                             placeHolder={"English Name"}
                             required={false}
                             state={"normal"}
-                            onChange={handleEnglishNameChange}
+                            changeEventHandler={handleEnglishNameChange}
                         />
                     </div>
                     <div className={styles.formItem}>
@@ -56,6 +77,7 @@ export default function CreatePlant() {
                             placeHolder={"Moari Name"}
                             required={false}
                             state={"normal"}
+                            changeEventHandler={handleMoariNameChange}
                         />
                     </div>
                     <div className={styles.formItem}>
@@ -63,6 +85,7 @@ export default function CreatePlant() {
                             placeHolder={"Latin Name"}
                             required={false}
                             state={"normal"}
+                            changeEventHandler={handleLatinNameChange}
                         />
                     </div>
 
@@ -70,12 +93,32 @@ export default function CreatePlant() {
                     <div className={styles.formItem}>
                         <DropdownInput
                             placeHolder={"Preferred Name"}
-                            required={false}
+                            required={true}
                             state={"normal"}
+                            errorText={"Please Select a Name"}
                             options={["English", 'Moari', "Latin"]}
+                            changeEventHandler={handleDropDownChange}
                         />
                     </div>
 
+                    {/* Plant Small Description */}
+                    <div className={styles.formItem}>
+                        <SimpleTextArea
+                            placeHolder={"Small Description"}
+                            required={true}
+                            state={"normal"}
+                            changeEventHandler={handleSmallDescriptionChange}
+                        />
+                    </div>
+
+                    {/* Plant Large Description */}
+                    <div className={styles.formItem}>
+                        <AdvandcedTextArea
+                            placeHolder={"Long Description"}
+                            required={true}
+                            state={"success"}
+                        />
+                    </div>
                 </div>
 
             </div>

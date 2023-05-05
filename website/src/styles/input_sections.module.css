@@ -1,17 +1,30 @@
-.smallInput {
-    --top-spacing: 8px;
-    min-width: 340px;
-}
-
-.smallInput input[type=text] {
-    padding: var(--top-spacing) 16px 8px 16px;
+.selectBorder{
     border: 2px solid #CFD3D5;
     border-radius: 8px;
-    box-sizing: border-box;
-    width: 100%;
 }
 
-.smallInput .required{
+/*
+ When the input is in the success state change the border colour to be green
+ */
+.success .selectBorder{
+    border: 2px solid #32936F;
+    border-radius: 8px;
+}
+
+/*
+ When the input is in the error state change the border colour to be red
+ */
+.error .selectBorder{
+    border: 2px solid #F57E77;
+    border-radius: 8px;
+}
+
+
+/*
+ Since cant change much of the place holder text have to use absolute positioing and translate to move it to make a overlayed lable
+ Smaller font to suggest insignifacance and to not distract from the input
+ */
+.required{
     color: #5E6366;
     font-size: 12px;
     line-height: 15px;
@@ -19,27 +32,31 @@
     translate: 35% 30%;
 }
 
-.smallInput .required.hidden {
+/*
+ Hide the required text when the input is focused
+ */
+.required.hidden {
     opacity: 0;
 }
 
-
-.success input[type=text] {
-    border: 2px solid #32936F;
-}
-
-.error input[type=text] {
-    border: 2px solid #F57E77;
-}
-
+/*
+ When the input is in the success state change the required text to be the same green as the border
+ */
 .success .required{
     color: #32936F;
 }
 
+/*
+ When the input is in the error state change the required text to be the same red as the border
+ */
 .error .required{
     color: #F57E77;
 }
 
+/*
+ Similar to the required text use absolute positioning and translate to move the icon to the right place
+ Give it a green colour to match the border
+ */
 .icon{
     position: absolute;
     translate: 2000% 150%;
@@ -47,13 +64,134 @@
     opacity: 1;
 }
 
+/*
+ Hide the icon when the input is not in the success state
+ Using opacity instead of display so that the it can be animated
+ */
 .icon.hidden {
     opacity: 0;
 }
 
+/*
+ The error text to be displayed below the input div
+ The text is red to match the border
+ Smaller font to not distract from the input
+ */
 .errorText{
     color: #F57E77;
     font-size: 12px;
     line-height: 15px;
     padding: 5px;
+}
+
+/**** INPUTS ****/
+
+
+/*
+ Use a top spacing var so that it can be changed easily via JS
+ Min width so that the position of the icon doesn't change when the input is too small
+ */
+.smallInput {
+    --top-spacing: 8px;
+    min-width: 340px;
+}
+
+/*
+  Style the input box to look better by changing the border and adding a border radius
+  Make it take up the full width of the container
+ */
+.smallInput input[type=text] {
+    padding: var(--top-spacing) 16px 8px 16px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.dropdownInput {
+    --top-spacing: 8px;
+    min-width: 340px;
+}
+
+.dropdownInput .icon {
+    translate: 1900% 90%;
+}
+
+.dropdownInput .dropDownSelect{
+    padding: var(--top-spacing) 16px 8px 11px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    color: #ABAFB1;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+
+.simpleTextArea{
+    --top-spacing: 8px;
+    min-width: 340px;
+}
+
+.simpleTextArea .simpleTextAreaTA{
+    padding: var(--top-spacing) 16px 8px 11px;
+    color: #ABAFB1;
+    font-size: 16px;
+    line-height: 19px;
+    width: 100%;
+    border: 2px solid #CFD3D5;
+    border-radius: 8px;
+    min-height: 120px;
+}
+
+.simpleTextArea .required{
+    translate: 25% 30%;
+}
+
+.success .simpleTextAreaTA{
+    border: 2px solid #32936F;
+    border-radius: 8px;
+}
+
+.error .simpleTextAreaTA{
+    border: 2px solid #F57E77;
+    border-radius: 8px;
+}
+
+.simpleTextArea .icon{
+    translate: 2000% 50%;
+}
+
+
+.advancedTA{
+    color: #ABAFB1;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+}
+
+.advancedTA .topBar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #CFD3D5;
+    padding-right: 16px;
+}
+
+.topBarButton{
+    color: black;
+    border: none;
+    margin-left: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+
+
+.topBarButton:hover{
+    background-color: #CFD3D5;
+}
+
+.advancedTA .simpleTextAreaTA{
+    border: none;
+    border-radius: 0;
 }
