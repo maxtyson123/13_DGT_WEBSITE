@@ -52,3 +52,16 @@
     align-items: baseline;
 
 }
+
+/*
+ A bigger sized title for the heading of the section
+ */
+.sectionTitle{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 24px;
+    text-align: center;
+    color: #000000;
+    padding: 5%;
+}

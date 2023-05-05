@@ -69,8 +69,15 @@ export default function Home() {
                 </PageHeader>
             </Section>
 
+            {/* Section for the featured plants */}
             <Section autoPadding>
+                {/* Section title */}
+                <h1 className={styles.sectionTitle}>Featured Plants</h1>
+
+                {/* Container that centers the cards */}
                 <div className={styles.cardsContainer}>
+
+                    {/* Plant cards */}
                     <PlantCard data={plantData}/>
                     <PlantCard data={plantData}/>
                     <PlantCard data={plantData}/>
