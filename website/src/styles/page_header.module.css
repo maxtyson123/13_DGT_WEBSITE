@@ -1,11 +1,20 @@
 /*
+ Provides a varible to set the height of the header.
+ This varible is updated in the page_header component based on a size value.
+ Set to 0vh by default to show if it isnt working, this also gives alittle drop down animation when the page loads.
+ */
+.pageHeader{
+    --headerHeight: 0vh;
+}
+
+/*
  This styles the main image for the background of the website.
  Cover the entire screen except for the bottom 4vh to show the user that there is more content below.
  Give it a box shadow to have the image pop out of the screen.
  */
 .mainBG{
     width: 100vw;
-    height: 96vh;
+    height: var(--headerHeight);
     box-shadow: 0px 10px 10px black;
 }
 
@@ -18,7 +27,7 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 96vh;
+    height: var(--headerHeight);
 }
 
 /*

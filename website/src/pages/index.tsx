@@ -46,10 +46,10 @@ export default function Home(ref: HomeRef) {
             <PageTransition ref={ref}>
 
                 {/* Section for the welcome message and search box */}
-                <Section autoPadding={false}>
+                <Section>
 
                     {/* Use the page header component to display the welcome message (See: components/page_header.tsx) */}
-                    <PageHeader>
+                    <PageHeader size={"large"}>
 
                       {/* Container for the welcome message and search box */}
                        <div className={styles.welcomeContainer}>

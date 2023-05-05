@@ -15,7 +15,6 @@ export default function Search(ref: SearchRef){
 
             {/* Add a page transition */}
             <PageTransition ref={ref}>
-                <PageHeader/>
             </PageTransition>
         </>
     )

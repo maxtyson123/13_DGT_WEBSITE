@@ -1,16 +1,41 @@
 import styles from "@/styles/page_header.module.css"
 import Image from 'next/image';
-import React from "react";
+import React, {useEffect, useRef} from "react";
 
 type PageHeaderProps = {
     children: React.ReactNode;
+    size?: "small" | "medium" | "large";
 };
-export default function PageHeader({ children }: PageHeaderProps) {
+export default function PageHeader({ children, size = "medium" }: PageHeaderProps) {
+
+    // Get a consitant refrence to the page header
+    const pageHeaderRef = useRef(null);
+
+    // Update the height of the page header
+    useEffect(() => {
+        const pageHeaderElement = pageHeaderRef.current;
+
+        // Update CSS variable based on size
+        if(pageHeaderElement)
+        switch (size) {
+            case "small":
+                pageHeaderElement.style.setProperty("--headerHeight", "36vh");
+                break;
+
+            case "medium":
+                pageHeaderElement.style.setProperty("--headerHeight", "66vh");
+                break;
+
+            case "large":
+                pageHeaderElement.style.setProperty("--headerHeight", "96vh");
+
+        }
+    }, [size, pageHeaderRef.current]);
 
     return(
         <>
             {/* Page Header */}
-            <div className={styles.pageHeader}>
+            <div ref={pageHeaderRef} className={styles.pageHeader}>
 
                 {/* Make the image container go behind the content*/}
                 {/* Apply the styling to the div as <Image> uses fit="cover" to make image the size of the div */}

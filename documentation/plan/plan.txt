@@ -21,20 +21,20 @@ Plan:
 - Figma Mock Up: https://www.figma.com/file/Kk8xBt6xba5k448VpILIyv/13-DGT-Website?node-id=0%3A1&t=JckHKCGevQqI6JDG-1
 
 Features:
-- Search Bar
-- Dynamic Plant Index
-- Dynamic Plant Page
-- Plant page should have sections, sections and their images should alternate from left to right automatically
-- Stats
-- Accessibility Settings
-- Calendar of plant in season
+- [ ] Search Bar
+- [ ] Dynamic Plant Index
+- [ ] Dynamic Plant Page
+- [ ] Plant page should have sections, sections and their images should alternate from left to right automatically
+- [ ] Stats
+- [ ] Accessibility Settings
+- [ ] Calendar of plant in season
 
 Possible Features:
-- 3D Parallax Plant on Header
-- Page to log a new plant
-- Social Media Side where users sign up and post pictures of plants they see, automatically tagged with location and date
-- Plant of the day
-- API to get plant information and upload plants
+- [x] 3D Parallax Plant on Header
+- [ ] Page to log a new plant
+- [ ] Social Media Side where users sign up and post pictures of plants they see, automatically tagged with location and date
+- [ ] Plant of the day
+- [ ] API to get plant information and upload plants
 
 Data Stucture:
 
@@ -109,8 +109,9 @@ Data Stucture:
     "type": "craft",
     "crafts": [{
                "part_of_plant": "*",
-               "nutrition": "*",
-               "preparation": "raw/cooked/boiled"
+               "use": "*",
+               "image": "*",
+               "Addditonal info": "*"
             }]
 
 }

@@ -1,0 +1,41 @@
+.title{
+    font-size: 64px;
+    line-height: 103%;
+    text-align: center;
+    color: #FFFFFF;
+    overflow-wrap: break-word;
+
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.formSection{
+
+}
+
+.sectionTitle{
+    font-size: 64px;
+    line-height: 103%;
+    text-align: center;
+    color: #000000;
+    padding: 30px;
+
+}
+
+.formItem{
+    padding-bottom: 30px;
+}

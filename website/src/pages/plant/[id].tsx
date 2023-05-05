@@ -4,7 +4,7 @@ import {getLocalData, PlantData} from "@/components/plant_card";
 
 
 
-export default function Home() {
+export default function PlantPage() {
 
     // Set up the router
     const router = useRouter()

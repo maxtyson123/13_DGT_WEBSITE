@@ -1,0 +1,59 @@
+.smallInput {
+    --top-spacing: 8px;
+    min-width: 340px;
+}
+
+.smallInput input[type=text] {
+    padding: var(--top-spacing) 16px 8px 16px;
+    border: 2px solid #CFD3D5;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.smallInput .required{
+    color: #5E6366;
+    font-size: 12px;
+    line-height: 15px;
+    position: absolute;
+    translate: 35% 30%;
+}
+
+.smallInput .required.hidden {
+    opacity: 0;
+}
+
+
+.success input[type=text] {
+    border: 2px solid #32936F;
+}
+
+.error input[type=text] {
+    border: 2px solid #F57E77;
+}
+
+.success .required{
+    color: #32936F;
+}
+
+.error .required{
+    color: #F57E77;
+}
+
+.icon{
+    position: absolute;
+    translate: 2000% 150%;
+    color: #32936F;
+    opacity: 1;
+}
+
+.icon.hidden {
+    opacity: 0;
+}
+
+.errorText{
+    color: #F57E77;
+    font-size: 12px;
+    line-height: 15px;
+    padding: 5px;
+}
