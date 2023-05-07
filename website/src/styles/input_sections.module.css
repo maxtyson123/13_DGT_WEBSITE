@@ -93,7 +93,7 @@
  */
 .smallInput {
     --top-spacing: 8px;
-    min-width: 340px;
+    width: 340px;
 }
 
 /*
@@ -128,7 +128,7 @@
 
 .simpleTextArea{
     --top-spacing: 8px;
-    min-width: 340px;
+    width: 340px;
 }
 
 .simpleTextArea .simpleTextAreaTA{
@@ -139,7 +139,7 @@
     width: 100%;
     border: 2px solid #CFD3D5;
     border-radius: 8px;
-    min-height: 120px;
+    height: 120px;
 }
 
 .simpleTextArea .required{
@@ -165,6 +165,8 @@
     color: #ABAFB1;
     background-color: #FFFFFF;
     border-radius: 8px;
+    --top-spacing: 16px;
+    width: 340px;
 }
 
 .advancedTA .topBar{
@@ -185,7 +187,9 @@
     cursor: pointer;
 }
 
-
+.advancedTA .icon{
+    translate: 2000% 50%;
+}
 
 .topBarButton:hover{
     background-color: #CFD3D5;
@@ -194,4 +198,14 @@
 .advancedTA .simpleTextAreaTA{
     border: none;
     border-radius: 0;
+}
+
+.editableDiv {
+    padding: var(--top-spacing) 16px 8px 11px;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.editableDiv:focus{
+    outline: none;
 }

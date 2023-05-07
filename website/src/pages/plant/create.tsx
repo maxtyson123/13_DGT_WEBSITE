@@ -18,6 +18,7 @@ export default function CreatePlant() {
     const [latinName, setLatinName] = useState("")
     const [preferredName, setPreferredName] = useState("")
     const [smallDescription, setSmallDescription] = useState("")
+    const [largeDescription, setLargeDescription] = useState("")
 
     // Value Handlers
     const handleEnglishNameChange = (value) => { setEnglishName(value); };
@@ -25,6 +26,7 @@ export default function CreatePlant() {
     const handleLatinNameChange = (value) => { setLatinName(value); };
     const handleDropDownChange = (value) => { setPreferredName(value) };
     const handleSmallDescriptionChange = (value) => { setSmallDescription(value) };
+    const handleLargeDescriptionChange = (value) => { setLargeDescription(value) };
 
     // Update the page title when name changes
     useEffect(() => {
@@ -51,7 +53,7 @@ export default function CreatePlant() {
 
             {/* Set up the page header */}
             <PageHeader size={"medium"}>
-                <h1 className={styles.title}>Creating plant: {plantName}</h1>
+                <h1 className={styles.title}>Creating plant: {largeDescription}</h1>
             </PageHeader>
 
             {/* Divide the page into a left and right collum*/}
@@ -95,7 +97,6 @@ export default function CreatePlant() {
                             placeHolder={"Preferred Name"}
                             required={true}
                             state={"normal"}
-                            errorText={"Please Select a Name"}
                             options={["English", 'Moari', "Latin"]}
                             changeEventHandler={handleDropDownChange}
                         />
@@ -116,7 +117,9 @@ export default function CreatePlant() {
                         <AdvandcedTextArea
                             placeHolder={"Long Description"}
                             required={true}
-                            state={"success"}
+                            state={"normal"}
+                            errorText={"This is an error"}
+                            changeEventHandler={handleLargeDescriptionChange}
                         />
                     </div>
                 </div>
