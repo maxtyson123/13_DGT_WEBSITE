@@ -323,16 +323,14 @@ function combineStyles(previousStyling: string, newStyling: string) {
         return newStyling;
     }
 
-    // Log the arrays
-    console.log(previousStylingArray);
-    console.log(newStylingArray);
-
     // Find the text in the new styling that is wrapped in tags
     const newStyledText = newStylingArray[2];
 
     // Loop through the previous styling array
     let textFound = ""
+    let tagEncountered = 0;
     for (let i = 0; i < previousStylingArray.length; i++) {
+
 
         // If the text is not a tag then add it to the text found
         if (!previousStylingArray[i].includes("<")) {
@@ -342,13 +340,18 @@ function combineStyles(previousStyling: string, newStyling: string) {
             textFound += splitText[0];
 
             // If the text found now matches the before part of the new styling then this is where the new styling should be added
-            if (textFound === newStylingArray[0]){
+            if (textFound === newStylingArray[0] || textFound.length >= newStylingArray[0].length){
 
-                // Close the split text
-                splitText[0] = splitText[0] + previousStylingArray[i+1];
+                // If the text is currently being wrapped in tags then add the tags to the text found. (tag encountered will be unenven if havent met closing tag yet)
+                if (tagEncountered % 2 === 1) {
+                    // Close the split text
+                    splitText[0] = splitText[0] + previousStylingArray[i+1];
 
-                // Open the split text again
-                splitText[1] = previousStylingArray[i-1] + splitText[1];
+                    // Open the split text again
+                    splitText[1] = previousStylingArray[i-1] + splitText[1];
+
+                }
+
 
                 // Get the new styling
                 const newStyling = newStylingArray[1] + newStyledText + newStylingArray[3];
@@ -359,6 +362,9 @@ function combineStyles(previousStyling: string, newStyling: string) {
 
                 break;
             }
+        }
+        else{
+            tagEncountered++;
         }
     }
 
