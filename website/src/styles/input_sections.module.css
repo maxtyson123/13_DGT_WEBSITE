@@ -204,6 +204,7 @@
     padding: var(--top-spacing) 16px 8px 11px;
     overflow-wrap: break-word;
     max-width: 100%;
+    border: none;
 }
 
 .editableDiv:focus{
