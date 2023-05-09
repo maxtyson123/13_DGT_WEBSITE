@@ -28,7 +28,11 @@
 
 
 .formSection{
-
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /*
@@ -40,7 +44,6 @@
     text-align: center;
     color: #000000;
     padding: 30px;
-
 }
 
 /*
@@ -48,4 +51,28 @@
  */
 .formItem{
     padding-bottom: 30px;
+    width: 90%;
+}
+
+.formContainer{
+    background: #FFFFFF;
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.addSectionButton{
+    width: 100%;
+    padding: 15%;
+    font-size: 82px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.addSectionButton:hover{
+    background-color: #CFD3D5;
 }

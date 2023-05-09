@@ -1,11 +1,12 @@
 import '@/styles/globals.css'
+import "@/styles/quill.snow.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
-import type { AppProps} from 'next/app'
-import { useRouter } from 'next/router'
-import { AnimatePresence } from 'framer-motion'
-import { config } from "@fortawesome/fontawesome-svg-core";
-import { Analytics } from '@vercel/analytics/react';
+import type {AppProps} from 'next/app'
+import {useRouter} from 'next/router'
+import {AnimatePresence} from 'framer-motion'
+import {config} from "@fortawesome/fontawesome-svg-core";
+import {Analytics} from '@vercel/analytics/react';
 
 // Tell Font Awesome to skip adding the CSS automatically
 // since it's already imported above
