@@ -139,14 +139,16 @@ type DropdownInputProps = {
     required: boolean;
     state: "normal" | "error" | "success";
     errorText?: string;
-    options: string[];
     changeEventHandler?: (value: string) => void;
+    options: string[];
+    allowCustom: boolean;
 };
-export function DropdownInput({placeHolder, required, state, errorText = "", options, changeEventHandler}: DropdownInputProps){
+export function DropdownInput({placeHolder, required, state, errorText = "", options, changeEventHandler, allowCustom}: DropdownInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
+    const [customOption, setCustomOption] = useState(false)
 
 
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
@@ -173,6 +175,10 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
             break;
     }
 
+    const changeHandler = () =>{
+
+    }
+
     return(
         <>
             <div className={styles.dropdownInput + " " + stateClass} ref={inputRef}>
@@ -189,6 +195,10 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}
                         onChange={(e) => {
+
+                            // Set if the user has selected custom option
+                            setCustomOption(e.target.value === "Custom");
+
                             // Update the value
                             setInputValue(e.target.value);
 
@@ -210,8 +220,38 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
                             return <option value={option} key={index}>{option}</option>
                         })}
 
+                        {/* Allow for the user to add a custom choice */}
+                        {allowCustom ? <option value={"Custom"}>{"Custom"}</option>  : ""}
+
                     </select>
+
                 </div>
+
+
+                {/* Allow for the user to enter their custom choice */}
+                {customOption ?
+                    <>
+                        <br/>
+                        <SmallInput
+                            placeHolder={"Custom Option"}
+                            required={true}
+                            state={state}
+                            changeEventHandler={(value) => {
+                                // Update the value
+                                setInputValue(value);
+
+                                // User has changed the value, so the previous state is no longer valid
+                                setThisState("normal")
+
+                                // Pass to the handler if it exists
+                                if (changeEventHandler) {
+                                    changeEventHandler(value);
+                                }
+
+                            }}
+                        />
+                    </>
+                    : ""}
 
                 {/* Show the success icon if the state is in success and if the input is not focused */}
                 {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}

@@ -11,7 +11,9 @@ import Image from "next/image";
 
 
 
-class EdibleInfo {
+
+
+class help {
 
     images: ImageInfo[] = [];
 
@@ -57,14 +59,114 @@ class EdibleInfo {
 }
 
 
+type MedicalUseSectionProps = {
+    medicalTypeHandler: (value: string) => void;
+    useValueHandler: (value: string) => void;
+    preparationHandler: (value: string) => void;
+    imageHandler: (value: string) => void;
+    images: string[];
+}
+export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparationHandler, imageHandler, images}: MedicalUseSectionProps){
+
+    return(
+        <>
+            {/* Internal Or External*/}
+            <div className={styles.formItem}>
+                <DropdownInput
+                    placeHolder={"Internal/External"}
+                    required={true}
+                    state={"normal"}
+                    options={["Internal", "External"]}
+                    allowCustom={false}
+                    changeEventHandler={medicalTypeHandler}
+                />
+            </div>
+
+            {/* Use */}
+            <div className={styles.formItem}>
+                <AdvandcedTextArea
+                    placeHolder={"Use"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={useValueHandler}
+                />
+            </div>
+
+            {/* Preparation */}
+            <div className={styles.formItem}>
+                <AdvandcedTextArea
+                    placeHolder={"Preparation"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={preparationHandler}
+                />
+            </div>
+
+
+
+        </>
+    )
+}
+
+
+class EdibleInfo {
+
+    images: ImageInfo[] = [];
+
+    state = {
+        partOfPlant: "",
+        nutritionalValue: "",
+        preparation: "",
+        preparationType: "",
+        image: "",
+    };
+
+    section: JSX.Element = <></>;
+
+    handlePartOfPlantChange = (value) => { this.state.partOfPlant = value};
+    handleNutritionalValueChange = (value) => {this.state.nutritionalValue = value};
+    handlePreparationChange = (value) => {this.state.preparation = value};
+    handlePreparationTypeChange = (value) => {this.state.preparationType = value};
+    handleImageChange = (value) => {this.state.image = value};
+
+
+    setSection = (section) => {this.section = section};
+
+    constructor(images: ImageInfo[]) {
+        this.images = images;
+
+        this.setSection(
+            <EdibleUseSection
+                partOfPlantHandler={this.handlePartOfPlantChange}
+                nutritionalValueHandler={this.handleNutritionalValueChange}
+                preparationHandler={this.handlePreparationChange}
+                preparationTypeHandler={this.handlePreparationTypeChange}
+                imageHandler={this.handleImageChange}
+                images={ this.images.map((value, index) => {
+                    let imageNames = value.state.image_name
+
+                    if(imageNames === ""){
+                        imageNames = "Loading..."
+                    }
+
+                    return imageNames
+                })}
+            />
+        )
+    }
+
+}
+
+
 type EdibleUseSectionProps = {
    partOfPlantHandler: (value: string) => void;
    nutritionalValueHandler: (value: string) => void;
+   preparationTypeHandler: (value: string) => void;
    preparationHandler: (value: string) => void;
    imageHandler: (value: string) => void;
    images: string[];
 }
-export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationHandler, imageHandler, images}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, imageHandler, images}: EdibleUseSectionProps){
 
     return(
         <>
@@ -88,6 +190,18 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                 />
             </div>
 
+
+            <div className={styles.formItem}>
+                <DropdownInput
+                    placeHolder={"Preparation Type"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={preparationTypeHandler}
+                    options={["Raw", "Boiled", "Cooked", "Dried"]}
+                    allowCustom={true}
+                />
+            </div>
+
             {/* Preparation */}
             <div className={styles.formItem}>
                 <AdvandcedTextArea
@@ -106,6 +220,7 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     state={"normal"}
                     options={images}
                     changeEventHandler={imageHandler}
+                    allowCustom={false}
                 />
             </div>
         </>
@@ -139,6 +254,7 @@ class ImageInfo{
             // Check if there is an image url
             if (this.state.image_url === null || this.state.image_url === undefined || this.state.image_url === "") {
                 continueLoop = true;
+                this.state.image_url = ""   // Make sure null/undefined doest cause any errors
                 alert("Please enter an image url")
             }
 
@@ -292,7 +408,8 @@ export default function CreatePlant() {
     const [edibleInfo, setEdibleInfo] = useState([]);
 
     // Value Handlers
-    const handleEnglishNameChange = (value) => { setEnglishName(value); };
+    const handleEnglishNameChange = (value) => { setEnglishName(value);
+        console.log(value) };
     const handleMoariNameChange = (value) => { setMoariName(value); };
     const handleLatinNameChange = (value) => { setLatinName(value); };
     const handleDropDownChange = (value) => { setPreferredName(value) };
@@ -387,6 +504,7 @@ export default function CreatePlant() {
                             state={"normal"}
                             options={["English", 'Moari', "Latin"]}
                             changeEventHandler={handleDropDownChange}
+                            allowCustom={false}
                         />
                     </div>
 
@@ -475,6 +593,46 @@ export default function CreatePlant() {
                         </div>
                     </div>
                 </div>
+
+                <div className={styles.formSection}>
+                    {/* Section title */}
+                    <h1 className={styles.sectionTitle}> Medical Uses</h1>
+
+                    {/* Uses} */}
+
+                    <div className={styles.formItem}>
+                        <div className={styles.formContainer}>
+                            {/* Add some space */}
+                            <br/>
+                            <MedicalUseSection partOfPlantHandler={handleEnglishNameChange} nutritionalValueHandler={handleEnglishNameChange} preparationHandler={handleEnglishNameChange} imageHandler={handleEnglishNameChange}
+                                               images={[]}/>
+                            
+                        </div>
+                    </div>
+
+                    {edibleInfo.map((value, index) => {
+                        return (
+                            <div key={index} className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    {/* Add some space */}
+                                    <br/>
+
+                                    {/* Add the section */}
+                                    {value.section}
+                                </div>
+                            </div>
+                        )
+                    })}
+
+
+                    {/* Add Edible info */}
+                    <div className={styles.formItem}>
+                        <div className={styles.formContainer}>
+                            <button onClick={newEdibleInfo} className={styles.addSectionButton}> + </button>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
             <div className={styles.column}>
