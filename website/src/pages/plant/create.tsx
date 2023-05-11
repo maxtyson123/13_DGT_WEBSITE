@@ -10,50 +10,179 @@ import Image from "next/image";
 /// _______________ SECTIONS _______________ ///
 
 
+class CustomInfo {
+
+    state = {
+        title: "",
+        text: "",
+    };
+
+    section: JSX.Element = <></>;
+
+    handleTitleChange = (value : string) => {this.state.title = value};
+    handleTextChange = (value : string) => {this.state.text = value};
+
+    setSection = (section: JSX.Element) => {this.section = section};
+
+    updateSection = () => {
+        this.setSection(
+            <CustomSection
+                titleHandler={this.handleTitleChange}
+                textHandler={this.handleTextChange}
+            />
+        );
+    }
+
+    constructor() {
+        this.updateSection();
+    }
+
+}
+
+type CustomSectionProps = {
+    titleHandler: (value: string) => void;
+    textHandler: (value: string) => void;
+}
+export function CustomSection({titleHandler, textHandler}: CustomSectionProps){
+
+    return(
+        <>
+            {/* Part of Plant */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Custom Section Title"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={titleHandler}
+                />
+            </div>
 
 
+            {/* Custom Text */}
+            <div className={styles.formItem}>
+                <AdvandcedTextArea
+                    placeHolder={"Custom Section Text"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={textHandler}
+                />
+            </div>
+        </>
+    )
+}
 
-class help {
-
-    images: ImageInfo[] = [];
+class CraftInfo {
 
     state = {
         partOfPlant: "",
-        nutritionalValue: "",
+        use: "",
+        additionalInfo: "",
+        image: "",
+    };
+
+    section: JSX.Element = <></>;
+
+    handleUseValueChange = (value : string) => {this.state.use = value};
+    handleAdditionalInfoChange = (value : string) => {this.state.additionalInfo = value};
+    handlePartOfPlantChange = (value : string) => { this.state.partOfPlant = value};
+    handleImageChange = (value : string) => {this.state.image = value};
+
+
+    setSection = (section: JSX.Element) => {this.section = section};
+
+    updateSection = () => {
+        this.setSection(
+            <CraftSection
+                useValueHandler={this.handleUseValueChange}
+                additionalInfoHandler={this.handleAdditionalInfoChange}
+                partOfPlantHandler={this.handlePartOfPlantChange}
+            />
+        );
+    }
+
+    constructor() {
+        this.updateSection();
+    }
+
+}
+
+type CraftSectionProps = {
+    useValueHandler: (value: string) => void;
+    additionalInfoHandler: (value: string) => void;
+    partOfPlantHandler: (value: string) => void;
+}
+export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlantHandler}: CraftSectionProps){
+
+    return(
+        <>
+
+            {/* Part of Plant */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Part of Plant"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={partOfPlantHandler}
+                />
+            </div>
+
+
+            {/* Use */}
+            <div className={styles.formItem}>
+                <AdvandcedTextArea
+                    placeHolder={"Use"}
+                    required={true}
+                    state={"normal"}
+                    changeEventHandler={useValueHandler}
+                />
+            </div>
+
+            {/* Additional Info */}
+            <div className={styles.formItem}>
+                <AdvandcedTextArea
+                    placeHolder={"Additional Info"}
+                    required={false}
+                    state={"normal"}
+                    changeEventHandler={additionalInfoHandler}
+                />
+            </div>
+
+        </>
+    )
+}
+
+class MedicalInfo {
+
+
+    state = {
+        partOfPlant: "",
+        use: "",
         preparation: "",
         image: "",
     };
 
     section: JSX.Element = <></>;
 
-    handlePartOfPlantChange = (value) => { this.state.partOfPlant = value};
-    handleNutritionalValueChange = (value) => {this.state.nutritionalValue = value};
-    handlePreparationChange = (value) => {this.state.preparation = value};
-    handleImageChange = (value) => {this.state.image = value};
+    handlePartOfPlantChange = (value : string) => { this.state.partOfPlant = value};
+    handeUseValueChange = (value : string) => {this.state.use = value};
+    handlePreparationChange = (value : string) => {this.state.preparation = value};
+    handleImageChange = (value : string) => {this.state.image = value};
 
 
-    setSection = (section) => {this.section = section};
+    setSection = (section: JSX.Element) => {this.section = section};
 
-    constructor(images: ImageInfo[]) {
-        this.images = images;
-
+    updateSection = () => {
         this.setSection(
-            <EdibleUseSection
-                partOfPlantHandler={this.handlePartOfPlantChange}
-                nutritionalValueHandler={this.handleNutritionalValueChange}
+            <MedicalUseSection
+                medicalTypeHandler={this.handlePartOfPlantChange}
+                useValueHandler={this.handeUseValueChange}
                 preparationHandler={this.handlePreparationChange}
-                imageHandler={this.handleImageChange}
-                images={ this.images.map((value, index) => {
-                    let imageNames = value.state.image_name
-
-                    if(imageNames === ""){
-                        imageNames = "Loading..."
-                    }
-
-                    return imageNames
-                })}
             />
-        )
+        );
+    }
+
+    constructor() {
+       this.updateSection();
     }
 
 }
@@ -63,10 +192,8 @@ type MedicalUseSectionProps = {
     medicalTypeHandler: (value: string) => void;
     useValueHandler: (value: string) => void;
     preparationHandler: (value: string) => void;
-    imageHandler: (value: string) => void;
-    images: string[];
 }
-export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparationHandler, imageHandler, images}: MedicalUseSectionProps){
+export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparationHandler}: MedicalUseSectionProps){
 
     return(
         <>
@@ -101,9 +228,6 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
                     changeEventHandler={preparationHandler}
                 />
             </div>
-
-
-
         </>
     )
 }
@@ -111,50 +235,37 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
 
 class EdibleInfo {
 
-    images: ImageInfo[] = [];
-
     state = {
         partOfPlant: "",
         nutritionalValue: "",
         preparation: "",
         preparationType: "",
-        image: "",
+        edibleImage: "",
     };
 
     section: JSX.Element = <></>;
 
-    handlePartOfPlantChange = (value) => { this.state.partOfPlant = value};
-    handleNutritionalValueChange = (value) => {this.state.nutritionalValue = value};
-    handlePreparationChange = (value) => {this.state.preparation = value};
-    handlePreparationTypeChange = (value) => {this.state.preparationType = value};
-    handleImageChange = (value) => {this.state.image = value};
-
-
+    handlePartOfPlantChange = (value : string) => { this.state.partOfPlant = value};
+    handleNutritionalValueChange = (value : string) => {this.state.nutritionalValue = value};
+    handlePreparationChange = (value : string) => {this.state.preparation = value};
+    handlePreparationTypeChange = (value : string) => {this.state.preparationType = value};
+    handleImageChange = (value : string) => {this.state.edibleImage = value};
     setSection = (section) => {this.section = section};
 
-    constructor(images: ImageInfo[]) {
-        this.images = images;
+    constructor() {
+        this.updateSection();
+    }
 
+    updateSection = () => {
         this.setSection(
             <EdibleUseSection
                 partOfPlantHandler={this.handlePartOfPlantChange}
                 nutritionalValueHandler={this.handleNutritionalValueChange}
                 preparationHandler={this.handlePreparationChange}
                 preparationTypeHandler={this.handlePreparationTypeChange}
-                imageHandler={this.handleImageChange}
-                images={ this.images.map((value, index) => {
-                    let imageNames = value.state.image_name
-
-                    if(imageNames === ""){
-                        imageNames = "Loading..."
-                    }
-
-                    return imageNames
-                })}
             />
-        )
-    }
-
+        );
+    };
 }
 
 
@@ -163,10 +274,8 @@ type EdibleUseSectionProps = {
    nutritionalValueHandler: (value: string) => void;
    preparationTypeHandler: (value: string) => void;
    preparationHandler: (value: string) => void;
-   imageHandler: (value: string) => void;
-   images: string[];
 }
-export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, imageHandler, images}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler}: EdibleUseSectionProps){
 
     return(
         <>
@@ -211,18 +320,6 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     changeEventHandler={preparationHandler}
                 />
             </div>
-
-            {/* Image Selector */}
-            <div className={styles.formItem}>
-                <DropdownInput
-                    placeHolder={"Image Showing Plant Part"}
-                    required={true}
-                    state={"normal"}
-                    options={images}
-                    changeEventHandler={imageHandler}
-                    allowCustom={false}
-                />
-            </div>
         </>
     )
 }
@@ -237,8 +334,18 @@ class ImageInfo{
 
     setSection = (section) => {this.section = section};
 
-    handleImageUrlChange = (value) => {this.state.image_url = value};
-    handleNameChange = (value) => {this.state.image_name = value};
+    handleImageUrlChange = (value : string) => {this.state.image_url = value};
+    handleNameChange = (value : string) => {this.state.image_name = value};
+
+    updateSection = () => {
+        this.setSection(
+            <ImageSection
+                imageUrl = {this.state.image_url}
+                name = {this.state.image_name}
+                descriptionHandler={this.handleNameChange}
+            />
+        )
+    }
 
     constructor() {
 
@@ -249,7 +356,6 @@ class ImageInfo{
 
             this.handleImageUrlChange(prompt("Enter Image URL: "))
             continueLoop = false;
-
 
             // Check if there is an image url
             if (this.state.image_url === null || this.state.image_url === undefined || this.state.image_url === "") {
@@ -271,18 +377,9 @@ class ImageInfo{
                 continueLoop = true;
                 alert("URL must start with / or http or https")
             }
-
         }
 
-
-        this.setSection(
-                <ImageSection
-                    imageUrl = {this.state.image_url}
-                    name = {this.state.image_name}
-                    descriptionHandler={this.handleNameChange}
-                />
-            )
-
+        this.updateSection();
     }
 
 }
@@ -297,7 +394,7 @@ export function ImageSection({imageUrl, name, descriptionHandler}: ImageSectionP
 
     const [imageName, setImageName] = useState(name)
 
-    function imageNameHandler(value){
+    function imageNameHandler(value : string){
         descriptionHandler(value)
         setImageName(value)
     }
@@ -308,7 +405,8 @@ export function ImageSection({imageUrl, name, descriptionHandler}: ImageSectionP
                 <Image style={{borderRadius: 8}} src={imageUrl} alt={imageName} width={600} height={600} objectFit={"contain"}/>
             </div>
             <br/>
-            <SmallInput placeHolder={"Image Name"} required={true} state={"normal"} changeEventHandler={imageNameHandler}/>
+                <SmallInput placeHolder={"Image Name"} required={true} state={"normal"} changeEventHandler={imageNameHandler}/>
+
         </>
     )
 }
@@ -316,21 +414,21 @@ export function ImageSection({imageUrl, name, descriptionHandler}: ImageSectionP
 class TimeInfo {
     state = {
         use: "",
-        startDate: undefined,
-        endDate: undefined
+        startDate: "",
+        endDate: ""
     };
 
     section: JSX.Element = <></>;
 
-    handleUseChange = (value) => { this.state.use = value};
+    handleUseChange = (value : string) => { this.state.use = value};
 
-    handleStartDateChange = (value) => {this.state.startDate = value};
+    handleStartDateChange = (value : string) => {this.state.startDate = value};
 
-    handleEndDateChange = (value) => {this.state.endDate = value};
+    handleEndDateChange = (value : string) => {this.state.endDate = value};
 
-    setSection = (section) => {this.section = section};
+    setSection = (section: JSX.Element) => {this.section = section};
 
-    constructor() {
+    updateSection = () => {
         this.setSection(
             <TimeInfoSection
                 useHandler={this.handleUseChange}
@@ -338,6 +436,10 @@ class TimeInfo {
                 endDateHandler={this.handleEndDateChange}
             />
         )
+    }
+    
+    constructor() {
+        this.updateSection();
     }
 
 }
@@ -406,17 +508,21 @@ export default function CreatePlant() {
     const [location, setLocation] = useState("")
     const [timeInfo, setTimeInfo] = useState([]);
     const [edibleInfo, setEdibleInfo] = useState([]);
+    const [medicalInfo, setMedicalInfo] = useState([]);
+    const [craftInfo, setCraftInfo] = useState([]);
+    const [customInfo, setCustomInfo] = useState([]);
 
     // Value Handlers
-    const handleEnglishNameChange = (value) => { setEnglishName(value);
+    const handleEnglishNameChange = (value : string) => { setEnglishName(value);
         console.log(value) };
-    const handleMoariNameChange = (value) => { setMoariName(value); };
-    const handleLatinNameChange = (value) => { setLatinName(value); };
-    const handleDropDownChange = (value) => { setPreferredName(value) };
-    const handleSmallDescriptionChange = (value) => { setSmallDescription(value) };
-    const handleLargeDescriptionChange = (value) => { setLargeDescription(value) };
-    const handleLocationChange = (value) => { setLocation(value) };
+    const handleMoariNameChange = (value : string) => { setMoariName(value); };
+    const handleLatinNameChange = (value : string) => { setLatinName(value); };
+    const handleDropDownChange = (value : string) => { setPreferredName(value) };
+    const handleSmallDescriptionChange = (value : string) => { setSmallDescription(value) };
+    const handleLargeDescriptionChange = (value : string) => { setLargeDescription(value) };
+    const handleLocationChange = (value : string) => { setLocation(value) };
 
+    // New Section Setters
     const newTimeInfo = () => {
         setTimeInfo([...timeInfo, new TimeInfo()])
     }
@@ -427,10 +533,24 @@ export default function CreatePlant() {
     }
 
     const newEdibleInfo = () => {
-        setEdibleInfo([...edibleInfo, new EdibleInfo(imageInfo)])
+        setEdibleInfo([...edibleInfo, new EdibleInfo()])
         console.log(edibleInfo)
     }
 
+    const newMedicinalInfo = () => {
+        setMedicalInfo([...medicalInfo, new MedicalInfo()])
+        console.log(medicalInfo)
+    }
+
+    const newCraftInfo = () => {
+        setCraftInfo([...craftInfo, new CraftInfo()])
+        console.log(craftInfo)
+    }
+
+    const newCustomInfo = () => {
+        setCustomInfo([...customInfo, new CustomInfo()])
+        console.log(customInfo)
+    }
 
     // Update the page title when name changes
     useEffect(() => {
@@ -448,6 +568,13 @@ export default function CreatePlant() {
                 break
         }
     }, [englishName, moariName, latinName, preferredName]);
+
+
+
+    useEffect(() => {
+       console.log("Image Info: ", imageInfo)
+    }, [imageInfo]);
+
 
 
     return (
@@ -571,7 +698,7 @@ export default function CreatePlant() {
 
                     {/* Uses} */}
 
-                    {edibleInfo.map((value, index) => {
+                    {edibleInfo.map((value : EdibleInfo, index) => {
                         return (
                             <div key={index} className={styles.formItem}>
                                 <div className={styles.formContainer}>
@@ -580,11 +707,27 @@ export default function CreatePlant() {
 
                                     {/* Add the section */}
                                     {value.section}
+
+                                    {/* Image Reference has to be here or it won't update*/}
+                                    <div className={styles.formItem}>
+                                        <DropdownInput
+                                            placeHolder={"Image for Edible"}
+                                            required={true}
+                                            state={"normal"}
+                                            options={
+                                                imageInfo.map((value, index) => {
+                                                      // Use index as name cant be updated properly
+                                                    return("Image " + (index +1).toString())
+                                                })
+                                            }
+                                            allowCustom={false}
+                                            changeEventHandler={value.handleImageChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         )
                     })}
-
 
                     {/* Add Edible info */}
                     <div className={styles.formItem}>
@@ -600,17 +743,97 @@ export default function CreatePlant() {
 
                     {/* Uses} */}
 
+                    {medicalInfo.map((value : MedicalInfo, index) => {
+                        return (
+                            <div key={index} className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    {/* Add some space */}
+                                    <br/>
+
+                                    {/* Add the section */}
+                                    {value.section}
+
+                                    {/* Image Reference has to be here or it won't update*/}
+                                    <div className={styles.formItem}>
+                                        <DropdownInput
+                                            placeHolder={"Image for Medical Use"}
+                                            required={true}
+                                            state={"normal"}
+                                            options={
+                                                imageInfo.map((value, index) => {
+                                                      // Use index as name cant be updated properly
+                                                    return("Image " + (index +1).toString())
+                                                })
+                                            }
+                                            allowCustom={false}
+                                            changeEventHandler={value.handleImageChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+
+                    {/* Add Medical info */}
                     <div className={styles.formItem}>
                         <div className={styles.formContainer}>
-                            {/* Add some space */}
-                            <br/>
-                            <MedicalUseSection partOfPlantHandler={handleEnglishNameChange} nutritionalValueHandler={handleEnglishNameChange} preparationHandler={handleEnglishNameChange} imageHandler={handleEnglishNameChange}
-                                               images={[]}/>
-                            
+                            <button onClick={newMedicinalInfo} className={styles.addSectionButton}> + </button>
                         </div>
                     </div>
+                </div>
 
-                    {edibleInfo.map((value, index) => {
+                <div className={styles.formSection}>
+                    {/* Section title */}
+                    <h1 className={styles.sectionTitle}> Craft Uses</h1>
+
+                    {/* Uses} */}
+
+                    {craftInfo.map((value : CraftInfo, index) => {
+                        return (
+                            <div key={index} className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    {/* Add some space */}
+                                    <br/>
+
+                                    {/* Add the section */}
+                                    {value.section}
+
+                                    {/* Image Reference has to be here or it won't update*/}
+                                    <div className={styles.formItem}>
+                                        <DropdownInput
+                                            placeHolder={"Image for Craft Use"}
+                                            required={true}
+                                            state={"normal"}
+                                            options={
+                                                imageInfo.map((value, index) => {
+
+                                                    // Use index as name cant be updated properly
+                                                    return("Image " + (index +1).toString())
+                                                })
+                                            }
+                                            allowCustom={false}
+                                            changeEventHandler={value.handleImageChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+
+                    {/* Add Craft info */}
+                    <div className={styles.formItem}>
+                        <div className={styles.formContainer}>
+                            <button onClick={newCraftInfo} className={styles.addSectionButton}> + </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.formSection}>
+                    {/* Section title */}
+                    <h1 className={styles.sectionTitle}> Custom Information</h1>
+
+                    {/* Time Infos} */}
+                    {customInfo.map((value, index) => {
                         return (
                             <div key={index} className={styles.formItem}>
                                 <div className={styles.formContainer}>
@@ -624,18 +847,20 @@ export default function CreatePlant() {
                         )
                     })}
 
-
-                    {/* Add Edible info */}
+                    {/* Add time info */}
                     <div className={styles.formItem}>
                         <div className={styles.formContainer}>
-                            <button onClick={newEdibleInfo} className={styles.addSectionButton}> + </button>
+                            <button onClick={newCustomInfo} className={styles.addSectionButton}> + </button>
                         </div>
                     </div>
                 </div>
-
-
             </div>
+
+            {/* Right Hand Collumn */}
             <div className={styles.column}>
+
+                {/*Images Section */}
+
                 {/* Section title */}
                 <h1 className={styles.sectionTitle}> Images</h1>
 
