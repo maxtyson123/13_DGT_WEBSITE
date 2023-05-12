@@ -124,9 +124,8 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
                 {/* Show the success icon if the state is in success and if the input is not focused */}
                 {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
-
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
+                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
 
@@ -257,7 +256,7 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
                 {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
+                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
     )
@@ -337,7 +336,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
 
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
+                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
     )
@@ -519,7 +518,7 @@ export function DateSelector({placeHolder, required, state, errorText = "", chan
 
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
+                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
 
