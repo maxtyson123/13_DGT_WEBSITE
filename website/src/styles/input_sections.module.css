@@ -35,7 +35,7 @@
 /*
  Hide the required text when the input is focused
  */
-.required.hidden {
+.hidden {
     opacity: 0;
 }
 
