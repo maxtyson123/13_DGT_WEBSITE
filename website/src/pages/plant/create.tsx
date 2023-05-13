@@ -8,7 +8,7 @@ import Image from "next/image";
 
 // Constants
 const PLANT_PARTS = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
-
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
 
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
@@ -636,6 +636,7 @@ class ImageInfo{
                 imageUrl = {this.state.image_url}
                 name = {this.state.image_name}
                 descriptionHandler={this.handleNameChange}
+                imageURLHandler={this.handleImageUrlChange}
                 valid={this.valid}
             />
         )
@@ -663,37 +664,6 @@ class ImageInfo{
     }
 
     constructor() {
-
-        let continueLoop = true;
-
-        // Validate the image url
-        while (continueLoop){
-
-            this.handleImageUrlChange(prompt("Enter Image URL: "))
-            continueLoop = false;
-
-            // Check if there is an image url
-            if (this.state.image_url === null || this.state.image_url === undefined || this.state.image_url === "") {
-                continueLoop = true;
-                this.state.image_url = ""   // Make sure null/undefined doest cause any errors
-                alert("Please enter an image url")
-            }
-
-            // Check if the image url is a valid url
-            if (this.state.image_url.match(/\.(jpeg|jpg|gif|png)$/) === null) {
-                continueLoop = true;
-                alert("Please enter a valid image type (jpeg, jpg, gif, png)")
-            }
-
-            // Check if the image url starts with / or http or https
-            if (this.state.image_url.startsWith("/") || this.state.image_url.startsWith("http") || this.state.image_url.startsWith("https")) {
-
-            }else{
-                continueLoop = true;
-                alert("URL must start with / or http or https")
-            }
-        }
-
         this.updateSection();
     }
 
@@ -704,24 +674,50 @@ type ImageSectionProps = {
     imageUrl: string;
     name: string;
     descriptionHandler: (value: string) => void;
+    imageURLHandler: (value: string) => void;
     valid: {
         image_url: string[];
         image_name: string[];
     }
 }
-export function ImageSection({imageUrl, name, descriptionHandler, valid}: ImageSectionProps){
+export function ImageSection({imageUrl, name, descriptionHandler, imageURLHandler, valid}: ImageSectionProps){
 
     const [imageName, setImageName] = useState(name)
+    const [imageURL, setImageURL] = useState(imageUrl)
 
     function imageNameHandler(value : string){
         descriptionHandler(value)
         setImageName(value)
     }
 
+    const handleImageUpload = async (event) => {
+        event.preventDefault();
+        const file = event.target.files[0];
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=877ed2f3c890826488e67dfc295668d4`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        console.log(data)
+
+        setImageURL(data.data.url);
+        imageURLHandler(data.data.url);
+    }
+
     return(
         <>
             <div className={styles.formContainer}>
-                <Image style={{borderRadius: 8}} src={imageUrl} alt={imageName} width={600} height={600} objectFit={"contain"}/>
+                {imageURL !== "" ?
+                    <Image style={{borderRadius: 8}} src={imageURL} alt={imageName} width={600} height={600} objectFit={"contain"}/>
+                    :
+                    <input type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
+                }
             </div>
             <br/>
                 <SmallInput
@@ -778,16 +774,10 @@ class DateInfo {
         if(this.state.startDate === ""){
             this.valid.startDate = ["error", "Please enter a start date"];
             isValid = false;
-        }else if (this.state.startDate > this.state.endDate) {
-            this.valid.startDate = ["error", "Start date must be before end date"];
-            isValid = false;
         }else { this.valid.startDate = ["success", "No Error"] }
 
         if(this.state.endDate === ""){
             this.valid.endDate = ["error", "Please enter an end date"];
-            isValid = false;
-        }else if (this.state.startDate > this.state.endDate) {
-            this.valid.endDate = ["error", "End date must be after start date"];
             isValid = false;
         }else { this.valid.endDate = ["success", "No Error"] }
 
@@ -835,23 +825,27 @@ export function DateInfoSection({eventHandler, startDateHandler, endDateHandler,
 
             {/* Start Date */}
             <div className={styles.formItem}>
-                <DateSelector
+                <DropdownInput
                     placeHolder={"Start Date"}
                     required={true}
                     state={valid.startDate[0]}
                     errorText={valid.startDate[1]}
                     changeEventHandler={startDateHandler}
+                    allowCustom={false}
+                    options={MONTHS}
                 />
             </div>
 
             {/* End Date */}
             <div className={styles.formItem}>
-                <DateSelector
+                <DropdownInput
                     placeHolder={"End Date"}
                     required={true}
                     state={valid.endDate[0]}
                     errorText={valid.endDate[1]}
                     changeEventHandler={endDateHandler}
+                    allowCustom={false}
+                    options={MONTHS}
                 />
             </div>
         </>
@@ -946,12 +940,14 @@ export default function CreatePlant() {
 
         //Allow for multiple invalid inputs
         let isValid = true;
+        let elementThatNeedsFocus = null;
 
         // English Name
         if(englishName === ""){
             if(preferredName === "English"){
                 setEnglishNameValidationState(["error", "Required if preferred name is English"])
                 isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "english-name";
             }
         } else { setEnglishNameValidationState(["success", "No Error"]) }
 
@@ -960,6 +956,7 @@ export default function CreatePlant() {
             if(preferredName === "Moari"){
                 setMoariNameValidationState(["error", "Required if preferred name is Moari"])
                 isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "moari-name";
             }
         }else { setMoariNameValidationState(["success", "No Error"]) }
 
@@ -968,6 +965,7 @@ export default function CreatePlant() {
             if(preferredName === "Latin"){
                 setLatinNameValidationState(["error", "Required if preferred name is Latin"])
                 isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "latin-name";
             }
         } else { setLatinNameValidationState(["success", "No Error"]) }
 
@@ -975,12 +973,14 @@ export default function CreatePlant() {
         if(preferredName === ""){
             setPreferredNameValidationState(["error", "Please select a preferred name"])
             isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "preferred-name";
         } else { setPreferredNameValidationState(["success", "No Error"]) }
 
         // Small Description
         if(smallDescription === ""){
             setSmallDescriptionValidationState(["error", "Please enter a small description"])
             isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "small-description";
         } else if(smallDescription.length > 100){
             setSmallDescriptionValidationState(["error", "Small description must be less than 100 characters"])
         } else { setSmallDescriptionValidationState(["success", "No Error"]) }
@@ -989,58 +989,92 @@ export default function CreatePlant() {
         if(largeDescription === ""){
             setLargeDescriptionValidationState(["error", "Please enter a large description"])
             isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "large-description";
         } else { setLargeDescriptionValidationState(["success", "No Error"]) }
 
         // Location
         if(location === ""){
             setLocationValidationState(["error", "Please enter a location"])
             isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "location";
         } else { setLocationValidationState(["success", "No Error"]) }
 
         // Validate the image info
         for (let i = 0; i < imageInfo.length; i++) {
-            isValid = imageInfo[i].validate()
+
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!imageInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "image-info";
+            }
         }
 
         // Validate the date info
         for (let i = 0; i < dateInfo.length; i++) {
-            isValid = dateInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!dateInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "date-info-" + i;
+            }
         }
 
         // Validate the edible info
         for (let i = 0; i < edibleInfo.length; i++) {
-            isValid = edibleInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!edibleInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "edible-info-" + i;
+            }
         }
 
         // Validate the medicinal info
         for (let i = 0; i < medicalInfo.length; i++) {
-            isValid = medicalInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!medicalInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "medical-info-" + i;
+            }
         }
 
         // Validate the craft info
         for (let i = 0; i < craftInfo.length; i++) {
-            isValid = craftInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!craftInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "craft-info-" + i;
+            }
         }
 
         // Validate the source info
         for (let i = 0; i < sourceInfo.length; i++) {
-            isValid = sourceInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!sourceInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "source-info-" + i;
+            }
         }
 
         // Validate the custom info
         for (let i = 0; i < customInfo.length; i++) {
-            isValid = customInfo[i].validate()
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!customInfo[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "custom-info-" + i;
+            }
         }
 
+        // Scroll to the element with an error:
+        const element = document.getElementById(elementThatNeedsFocus);
+        if (element) {
+            let dims = element.getBoundingClientRect();
+            window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+        }
 
         return isValid;
     }
 
     const generateJSON = () => {
-
         if(!validateInput()){
-            // Scroll the page to the top
-            window.scrollTo(0, 0);
             return
         }
 
@@ -1057,9 +1091,174 @@ export default function CreatePlant() {
             long_description: "",
             attachments: [],
             sections: [],
-
-
         };
+
+        // Basic info
+        plantOBJ.preferred_name = preferredName;
+        plantOBJ.english_name = englishName;
+        plantOBJ.moari_name = moariName;
+        plantOBJ.latin_name = latinName;
+        plantOBJ.location = location;
+        plantOBJ.small_description = smallDescription;
+        plantOBJ.long_description = largeDescription;
+
+        // Image info
+        for(let i = 0; i < imageInfo.length; i++) {
+            const thisImageInfo = imageInfo[i].state;
+
+            let imageInfoOBJ = {
+                path: "",
+                type: "image",
+                name: "",
+                downloadable: false,
+                flags: [],
+            }
+
+            imageInfoOBJ.path = thisImageInfo.image_url;
+            imageInfoOBJ.name = thisImageInfo.image_name;
+
+            plantOBJ.attachments.push(imageInfoOBJ);
+        }
+
+        // Date info
+        for(let i = 0; i < dateInfo.length; i++) {
+            const thisDateInfo = dateInfo[i].state;
+
+            let dateInfoOBJ = {
+                event: "",
+                start_month: "",
+                end_month: "",
+            }
+
+            dateInfoOBJ.event = thisDateInfo.event;
+            dateInfoOBJ.start_month = thisDateInfo.startMonth;
+            dateInfoOBJ.end_month = thisDateInfo.endMonth;
+
+            plantOBJ.months_ready_for_use.push(dateInfoOBJ);
+        }
+
+        // Edible info
+        for(let i = 0; i < edibleInfo.length; i++) {
+            const thisEdibleInfo = edibleInfo[i].state;
+
+            let edibleInfoOBJ = {
+                type: "edible",
+                part_of_plant: "",
+                image_of_part: "",
+                nutrition: "",
+                preparation: "",
+                preparation_type: "",
+            }
+
+            edibleInfoOBJ.part_of_plant = thisEdibleInfo.partOfPlant;
+            edibleInfoOBJ.image_of_part = thisEdibleInfo.edibleImage;
+            edibleInfoOBJ.nutrition = thisEdibleInfo.nutritionalValue;
+            edibleInfoOBJ.preparation = thisEdibleInfo.preparation;
+            edibleInfoOBJ.preparation_type = thisEdibleInfo.preparationType;
+
+            // If it isn't already in the use array, add it
+            if(!plantOBJ.use.includes("edible")){
+                plantOBJ.use.push("edible");
+            }
+
+            plantOBJ.sections.push(edibleInfoOBJ);
+        }
+
+        // Medicinal info
+        for(let i = 0; i < medicalInfo.length; i++) {
+            const thisMedicalInfo = medicalInfo[i].state;
+
+            let medicalInfoOBJ = {
+                type: "medical",
+                medical_type: "",
+                use: "",
+                image: "",
+                preparation: "",
+            }
+
+            medicalInfoOBJ.medical_type = thisMedicalInfo.type;
+            medicalInfoOBJ.use = thisMedicalInfo.use;
+            medicalInfoOBJ.image = thisMedicalInfo.image;
+            medicalInfoOBJ.preparation = thisMedicalInfo.preparation;
+
+            // If it isn't already in the use array, add it
+            if(!plantOBJ.use.includes("medical_"+medicalInfoOBJ.medical_type)){
+                plantOBJ.use.push("medical_"+medicalInfoOBJ.medical_type);
+            }
+
+            plantOBJ.sections.push(medicalInfoOBJ);
+        }
+
+        // Craft info
+        for(let i = 0; i < craftInfo.length; i++) {
+            const thisCraftInfo = craftInfo[i].state;
+
+            let craftInfoOBJ = {
+                type: "craft",
+                part_of_plant: "",
+                use: "",
+                image: "",
+                additonal_info: "",
+            }
+
+            craftInfoOBJ.part_of_plant = thisCraftInfo.partOfPlant;
+            craftInfoOBJ.use = thisCraftInfo.use;
+            craftInfoOBJ.image = thisCraftInfo.image;
+            craftInfoOBJ.additonal_info = thisCraftInfo.additionalInfo;
+
+            // If it isn't already in the use array, add it
+            if(!plantOBJ.use.includes("craft")){
+                plantOBJ.use.push("craft");
+            }
+
+            plantOBJ.sections.push(craftInfoOBJ);
+        }
+
+        // Source info
+        for(let i = 0; i < sourceInfo.length; i++) {
+            const thisSourceInfo = sourceInfo[i].state;
+
+            let sourceInfoOBJ = {
+                type: "source",
+                source_type: "",
+                data: "",
+            }
+
+            sourceInfoOBJ.source_type = thisSourceInfo.type;
+            sourceInfoOBJ.data = thisSourceInfo.data;
+
+            plantOBJ.sections.push(sourceInfoOBJ);
+        }
+
+        // Custom info
+        for (let i = 0; i < customInfo.length; i++) {
+            const thisCustomInfo = customInfo[i].state;
+
+            let customInfoOBJ = {
+                type: "custom",
+                title: "",
+                text: "",
+            }
+
+            customInfoOBJ.title = thisCustomInfo.title;
+            customInfoOBJ.text = thisCustomInfo.text;
+
+            plantOBJ.sections.push(customInfoOBJ);
+        }
+
+        // Log for debugging as well
+        console.log(plantOBJ);
+
+        // Download the JSON file
+        const element = document.createElement("a");
+        const file = new Blob([JSON.stringify(plantOBJ)], {type: 'text/plain'});
+        element.href = URL.createObjectURL(file);
+        element.download = plantName + ".json";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+
+        // Remove the element
+        document.body.removeChild(element);
 
     }
 
@@ -1086,7 +1285,7 @@ export default function CreatePlant() {
                         <h1 className={styles.sectionTitle}> Basic Info</h1>
 
                         {/* Plant name */}
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"english-name"}>
                             <SmallInput
                                 placeHolder={"English Name"}
                                 required={false}
@@ -1095,7 +1294,7 @@ export default function CreatePlant() {
                                 changeEventHandler={handleEnglishNameChange}
                             />
                         </div>
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"moari-name"}>
                             <SmallInput
                                 placeHolder={"Moari Name"}
                                 required={false}
@@ -1104,7 +1303,7 @@ export default function CreatePlant() {
                                 changeEventHandler={handleMoariNameChange}
                             />
                         </div>
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"latin-name"}>
                             <SmallInput
                                 placeHolder={"Latin Name"}
                                 required={false}
@@ -1115,7 +1314,7 @@ export default function CreatePlant() {
                         </div>
 
                         {/* Preferred plant name */}
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"preferred-name"}>
                             <DropdownInput
                                 placeHolder={"Preferred Name"}
                                 required={true}
@@ -1128,7 +1327,7 @@ export default function CreatePlant() {
                         </div>
 
                         {/* Plant Small Description */}
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"small-description"}>
                             <SimpleTextArea
                                 placeHolder={"Small Description"}
                                 required={true}
@@ -1139,7 +1338,7 @@ export default function CreatePlant() {
                         </div>
 
                         {/* Plant Large Description */}
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"large-description"}>
                             <AdvandcedTextArea
                                 placeHolder={"Long Description"}
                                 required={true}
@@ -1150,7 +1349,7 @@ export default function CreatePlant() {
                         </div>
 
                         {/* Plant Location */}
-                        <div className={styles.formItem}>
+                        <div className={styles.formItem} id={"location"}>
                             <DropdownInput
                                 placeHolder={"Location"}
                                 required={true}
@@ -1170,7 +1369,7 @@ export default function CreatePlant() {
                         {/* Date Infos} */}
                         {dateInfo.map((value, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`date-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>
@@ -1198,7 +1397,7 @@ export default function CreatePlant() {
                         {edibleInfo.map((value : EdibleInfo, index) => {
 
                             return (
-                                <div key={index + renderKey} className={styles.formItem}>
+                                <div key={index + renderKey} className={styles.formItem} id={`edible-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>
@@ -1244,7 +1443,7 @@ export default function CreatePlant() {
 
                         {medicalInfo.map((value : MedicalInfo, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`medical-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>
@@ -1289,7 +1488,7 @@ export default function CreatePlant() {
 
                         {craftInfo.map((value : CraftInfo, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`craft-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>
@@ -1335,7 +1534,7 @@ export default function CreatePlant() {
                         {/* Date Infos} */}
                         {sourceInfo.map((value, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`source-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>
@@ -1362,7 +1561,7 @@ export default function CreatePlant() {
                         {/* Custom Info */}
                         {customInfo.map((value, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`custom-info-${index}`}>
                                     <div className={styles.formContainer}>
                                         {/* Add some space */}
                                         <br/>

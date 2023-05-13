@@ -7,12 +7,12 @@
   "use": ["food", "medical_internal", "medical_external"],
   "months_ready_for_use": [
     {
-      "use": "Leaves",
+      "event": "Leaves",
       "start_month": "January",
       "end_month": "December"
     },
     {
-      "use": "Fruit",
+      "event": "Fruit",
       "start_month": "February",
       "end_month": "March"
     }
@@ -24,7 +24,7 @@
     {
       "path": "media/images/plants/kawakawa.jpg",
       "type": "image",
-      "description": "Kawakawa plant in season Feb-March",
+      "name": "Kawakawa plant in season Feb-March",
       "downloadable": false,
       "flags": ["in_season"],
       "tags": ["whole_plant"]
@@ -33,34 +33,17 @@
   "sections": [
     {
       "type": "edible",
-      "edible_parts": [{
-        "part_of_plant": "Fruit",
-        "image_of_part": "media/images/plants/kawakawa.jpg",
-        "nutrition": "none",
-        "preparation": "raw"
-      }]
+      "part_of_plant": "Fruit",
+      "image_of_part": "media/images/plants/kawakawa.jpg",
+      "nutrition": "none",
+      "preparation": "raw"
     },
     {
       "type": "medical",
-      "internal_uses": [
-        {
-        "use": ":The leaves can be boiled an made in to a drink for these Illnesses. WARNING do not consume too much or you can become paralysed. ",
-        "image": "media/images/plants/kawakawa.jpg",
-        "preparation": "Method Here (Gather the leaves with bug holes in as they have the best elements… place about x amount in x mls of water… )"
-        }
-      ],
-      "external_uses": [
-        {
-        "use": "Bark can be processed to help with skin",
-        "image": "media/images/plants/kawakawa.jpg",
-        "preparation": "*"
-        },
-        {
-          "use": "Mixed with bees wax etc to make balm ",
-          "image": "media/images/plants/kawakawa.jpg",
-          "preparation": "*"
-        }
-      ]
+       "medical_type": "internal",
+       "use": ":The leaves can be boiled an made in to a drink for these Illnesses. WARNING do not consume too much or you can become paralysed. ",
+       "image": "media/images/plants/kawakawa.jpg",
+       "preparation": "Method Here (Gather the leaves with bug holes in as they have the best elements… place about x amount in x mls of water… )"
     }
   ]
 }

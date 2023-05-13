@@ -68,7 +68,7 @@ Data Stucture:
 {
     "path": "*",
     "type": "image",
-    "description": "*",
+    "name": "*",
     "downloadable": false,
     "flags": [transparent, in_season, out_season],
     "tags": [whole_plant, leaf_top, leaf_underside, stem, fruit_or_buds, other]
@@ -77,28 +77,22 @@ Data Stucture:
 - Edible Section:
 {
     "type": "edible",
-    "edible_parts": [{
-                 "part_of_plant": "*",
-                 "image_of_part": "*",
-                 "nutrition": "*",
-                 "preparation": "raw/cooked/boiled"
-              }]
+    "part_of_plant": "*",
+    "image_of_part": "*",
+    "nutrition": "*",
+    "preparation": "*",
+    "preparation_type": "raw/cooked/boiled",
 
 }
 
 - Medical Section:
 {
     "type": "medical",
-    "internal_uses": [{
-                     "use": "*",
-                     "image": "*",
-                     "preparation": "*"
-                    }],
-    "external_uses": [{
-                    "use": "*",
-                    "image": "*",
-                    "preparation": "*"
-                   }]
+    "medical_type": "internal/external",
+    "use": "*",
+    "image": "*",
+    "preparation": "*"
+
 
 
 
@@ -107,12 +101,11 @@ Data Stucture:
 - Craft Section:
 {
     "type": "craft",
-    "crafts": [{
-               "part_of_plant": "*",
-               "use": "*",
-               "image": "*",
-               "Addditonal info": "*"
-            }]
+    "part_of_plant": "*",
+    "use": "*",
+    "image": "*",
+    "Addditonal info": "*"
+
 
 }
 
@@ -124,7 +117,7 @@ Data Stucture:
 
 - Months for use:
 {
-    "use": "*",
+    "event": "*",
     "start_month": "",
     "end_month": "",
 }
