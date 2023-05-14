@@ -8,7 +8,8 @@ import Section from "@/components/section";
 import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import ScrollingPlant from "@/components/scrolling_plant";
-import PlantCard, {getLocalData, PlantData} from "@/components/plant_card";
+import PlantCard, {getLocalData} from "@/components/plant_card";
+import {PlantData} from "@/components/plant_data";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {

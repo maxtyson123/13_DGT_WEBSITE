@@ -1,37 +1,11 @@
 import styles from "@/styles/plant_card.module.css"
 import Image from "next/image";
 import Link from "next/link";
-import {number} from "prop-types";
+import {PlantData} from "@/components/plant_data";
 
 type PlantCardProps = {
     data: PlantData | null
 };
-
-// Define the data for the plant
-export interface PlantData {
-    id: number;
-    preferred_name: string;
-    english_name: string;
-    moari_name: string;
-    latin_name: string;
-    use: string[];
-    months_ready_for_use: {
-        event: string,
-        start_month: string,
-        end_month: string,
-    }[];
-    location: string;
-    small_description: string;
-    long_description: string;
-    attachments: {
-        path: string;
-        type: string;
-        name: string;
-        downloadable: boolean;
-        flags: string[];
-    }[];
-    sections: any[];
-}
 
 
 export async function getLocalData(plantId: any) {
@@ -63,7 +37,7 @@ export default function PlantCard({ data }: PlantCardProps){
                 <p className={styles.description}>{data?.small_description}</p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
-                <Link scroll={false} className={styles.button} href={"/plant/" + data?.id}>
+                <Link scroll={false} className={styles.button} href={"/plants/" + data?.id}>
                    <p className={styles.button}>More Info</p>
                 </Link>
 
