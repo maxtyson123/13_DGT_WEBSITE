@@ -8,8 +8,8 @@ type PageHeaderProps = {
 };
 export default function PageHeader({ children, size = "medium" }: PageHeaderProps) {
 
-    // Get a consitant refrence to the page header
-    const pageHeaderRef = useRef(null);
+    // Get a constant reference to the page header
+    const pageHeaderRef : React.RefObject<HTMLDivElement> = useRef(null);
 
     // Update the height of the page header
     useEffect(() => {
@@ -17,20 +17,20 @@ export default function PageHeader({ children, size = "medium" }: PageHeaderProp
 
         // Update CSS variable based on size
         if(pageHeaderElement)
-        switch (size) {
-            case "small":
-                pageHeaderElement.style.setProperty("--headerHeight", "36vh");
-                break;
+            switch (size) {
+                case "small":
+                    pageHeaderElement.style.setProperty("--headerHeight", "36vh");
+                    break;
 
-            case "medium":
-                pageHeaderElement.style.setProperty("--headerHeight", "66vh");
-                break;
+                case "medium":
+                    pageHeaderElement.style.setProperty("--headerHeight", "66vh");
+                    break;
 
-            case "large":
-                pageHeaderElement.style.setProperty("--headerHeight", "96vh");
+                case "large":
+                    pageHeaderElement.style.setProperty("--headerHeight", "96vh");
 
-        }
-    }, [size, pageHeaderRef.current]);
+            }
+    }, [size]);
 
     return(
         <>

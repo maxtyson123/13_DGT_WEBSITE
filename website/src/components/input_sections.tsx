@@ -4,7 +4,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 
-export function useInputState(initialValue: string, required: boolean, state: "normal" | "error" | "success", setThisState: (state: "normal" | "error" | "success") => void, setThisRequired: (required: boolean) => void) {
+
+// States
+export type ValidationState = "normal" | "error" | "success";
+
+export function useInputState(initialValue: string, required: boolean, state: ValidationState, setThisState: (state: ValidationState) => void, setThisRequired: (required: boolean) => void) {
     // States to track
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
@@ -54,7 +58,7 @@ export function useInputState(initialValue: string, required: boolean, state: "n
 type SmallInputProps = {
     placeHolder: string;
     required: boolean;
-    state: "normal" | "error" | "success";
+    state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };
@@ -136,7 +140,7 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
 type DropdownInputProps = {
     placeHolder: string;
     required: boolean;
-    state: "normal" | "error" | "success";
+    state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
     options: string[];
@@ -266,7 +270,7 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
 type SimpleTextAreaProps = {
     placeHolder: string;
     required: boolean;
-    state: "normal" | "error" | "success";
+    state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };
@@ -342,12 +346,22 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
     )
 }
 
+interface RenderQuillProps {
+    className?: string;
+    theme?: string;
+    onFocus?: () => void;
+    onBlur?: () => void;
+    value?: string;
+    onChange?: (value: string) => void;
+    placeholder?: string;
+}
+
 const QuillNoSSRWrapper = dynamic(
     () =>  import('react-quill'),
     { ssr: false, loading: () => <p>Loading ...</p> },
 )
 
-class RenderQuill extends React.Component {
+class RenderQuill extends React.Component<RenderQuillProps>{
     render () {
         const { className, theme, onFocus, onBlur, value, onChange, placeholder} = this.props;
         return (
@@ -443,7 +457,7 @@ export function AdvandcedTextArea({placeHolder, required, state, errorText = "",
 type DateSelectorProps = {
     placeHolder: string;
     required: boolean;
-    state: "normal" | "error" | "success";
+    state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };

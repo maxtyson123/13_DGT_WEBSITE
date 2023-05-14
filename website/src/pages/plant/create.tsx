@@ -1,33 +1,42 @@
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
-import {AdvandcedTextArea, DateSelector, DropdownInput, SimpleTextArea, SmallInput} from "@/components/input_sections";
+import {AdvandcedTextArea, DropdownInput, SimpleTextArea, SmallInput, ValidationState} from "@/components/input_sections";
 import Image from "next/image";
+import {number} from "prop-types";
+import {PlantData} from "@/components/plant_card";
 
 // Constants
-const PLANT_PARTS = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
+const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
+const MONTHS        = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
+
 
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 
+    // Store the data for the section at its current state
     state = {
         type: "",
         data: "",
     };
 
+    // Store the validation state for each input
     valid = {
-        type: ["normal", "No Error"],
-        data: ["normal", "No Error"]
+        type: ["normal", "No Error"] as [ValidationState, string],
+        data: ["normal", "No Error"] as [ValidationState, string]
     }
 
+    // The section to be rendered
     section: JSX.Element = <></>;
 
+    // Change Handlers that update the state
     handleTypeChange = (value : string) => {this.state.type = value};
     handleDataChange = (value : string) => {this.state.data = value};
 
+
+    // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
@@ -35,23 +44,25 @@ class SourceInfo {
                 typeHandler={this.handleTypeChange}
                 dataHandler={this.handleDataChange}
                 valid={this.valid}
-                key={Math.random()}
             />
         );
     }
 
+    // Validate each input
     validate = () => {
         let isValid = true;
 
+        // If there is no type selected then show an error otherwise the input is valid
         if(this.state.type === ""){
-            this.valid.type = ["error", "Please select a source type"];
+            this.valid.type = ["error", "Please select a source type"] as [ValidationState, string];
             isValid = false;
-        } else { this.valid.type = ["success", "No Error"] }
+        } else { this.valid.type = ["success", "No Error"] as [ValidationState, string] }
 
+        // If there is no data entered then show an error otherwise the input is valid
         if(this.state.data === ""){
-            this.valid.data = ["error", "Please enter data for the source"];
+            this.valid.data = ["error", "Please enter data for the source"] as [ValidationState, string];
             isValid = false;
-        } else { this.valid.data = ["success", "No Error"] }
+        } else { this.valid.data = ["success", "No Error"] as [ValidationState, string]}
 
         // Update section to show errors
         const updatedSection = React.cloneElement(
@@ -60,6 +71,7 @@ class SourceInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid
     }
 
@@ -69,12 +81,13 @@ class SourceInfo {
 
 }
 
+// Define the types for the props
 type SourceSectionProps = {
     typeHandler: (value: string) => void;
     dataHandler: (value: string) => void;
     valid: {
-        type: string[];
-        data: string[];
+        type: [ValidationState, string];
+        data: [ValidationState, string];
     }
 }
 export function SourceSection({typeHandler, dataHandler, valid}: SourceSectionProps){
@@ -111,21 +124,25 @@ export function SourceSection({typeHandler, dataHandler, valid}: SourceSectionPr
 
 class CustomInfo {
 
+    // Store the data for the section at its current state
     state = {
-        title: "",
-        text: "",
+        title:  "",
+        text:   "",
     };
 
+    // Store the validation state for each input
     valid = {
-        title: ["normal", "No Error"],
-        text: ["normal", "No Error"]
+        title:  ["normal", "No Error"] as [ValidationState, string],
+        text:   ["normal", "No Error"] as [ValidationState, string]
     };
 
     section: JSX.Element = <></>;
 
-    handleTitleChange = (value : string) => {this.state.title = value};
-    handleTextChange = (value : string) => {this.state.text = value};
+    // Change Handlers that update the state
+    handleTitleChange   = (value : string) => {this.state.title    = value};
+    handleTextChange    = (value : string) => {this.state.text     = value};
 
+    // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
@@ -137,18 +154,21 @@ class CustomInfo {
         );
     }
 
+    // Validate each input
     validate = () => {
         let isValid = true;
 
+        // If there is no title entered then show an error otherwise the input is valid
         if(this.state.title === ""){
-            this.valid.title = ["error", "Please enter a title for the section"];
+            this.valid.title = ["error", "Please enter a title for the section"] as [ValidationState, string];
             isValid = false;
-        } else { this.valid.title = ["success", "No Error"] }
+        } else { this.valid.title = ["success", "No Error"] as [ValidationState, string] }
 
+        // If there is no text entered then show an error otherwise the input is valid
         if(this.state.text === ""){
-            this.valid.text = ["error", "Please enter some text for the section"];
+            this.valid.text = ["error", "Please enter some text for the section"] as [ValidationState, string];
             isValid = false;
-        } else { this.valid.text = ["success", "No Error"] }
+        } else { this.valid.text = ["success", "No Error"] as [ValidationState, string] }
 
         // Update section to show errors
         const updatedSection = React.cloneElement(
@@ -157,6 +177,7 @@ class CustomInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid
     }
 
@@ -166,18 +187,20 @@ class CustomInfo {
 
 }
 
+// Define the types for the props
 type CustomSectionProps = {
-    titleHandler: (value: string) => void;
-    textHandler: (value: string) => void;
+    titleHandler:   (value: string) => void;
+    textHandler:    (value: string) => void;
     valid: {
-        title: string[];
-        text: string[];
+        title: [ValidationState, string];
+        text: [ValidationState, string];
     }
 }
 export function CustomSection({titleHandler, textHandler, valid}: CustomSectionProps){
 
     return(
         <>
+            {/* Custom Title */}
             <div className={styles.formItem}>
                 <SmallInput
                     placeHolder={"Custom Section Title"}
@@ -204,61 +227,69 @@ export function CustomSection({titleHandler, textHandler, valid}: CustomSectionP
 
 class CraftInfo {
 
+    // Store the data for the section at its current state
     state = {
-        partOfPlant: "",
-        use: "",
+        partOfPlant:    "",
+        use:            "",
         additionalInfo: "",
-        image: "",
+        image:          "",
     };
 
+    // Store the validation state for each input
     valid = {
-        partOfPlant: ["normal", "No Error"],
-        use: ["normal", "No Error"],
-        additionalInfo: ["normal", "No Error"],
-        image: ["normal", "No Error"],
+        partOfPlant:    ["normal", "No Error"] as [ValidationState, string],
+        use:            ["normal", "No Error"] as [ValidationState, string],
+        additionalInfo: ["normal", "No Error"] as [ValidationState, string],
+        image:          ["normal", "No Error"] as [ValidationState, string],
     };
 
     section: JSX.Element = <></>;
 
-    handleUseValueChange = (value : string) => {this.state.use = value};
-    handleAdditionalInfoChange = (value : string) => {this.state.additionalInfo = value};
-    handlePartOfPlantChange = (value : string) => { this.state.partOfPlant = value};
-    handleImageChange = (value : string) => {this.state.image = value};
+    // Change Handlers that update the state
+    handleUseValueChange        = (value : string) => {this.state.use              = value};
+    handleAdditionalInfoChange  = (value : string) => {this.state.additionalInfo   = value};
+    handlePartOfPlantChange     = (value : string) => { this.state.partOfPlant     = value};
+    handleImageChange           = (value : string) => {this.state.image            = value};
 
+    // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
             <CraftSection
-                useValueHandler={this.handleUseValueChange}
-                additionalInfoHandler={this.handleAdditionalInfoChange}
-                partOfPlantHandler={this.handlePartOfPlantChange}
-                valid={this.valid}
+                useValueHandler = {this.handleUseValueChange}
+                additionalInfoHandler = {this.handleAdditionalInfoChange}
+                partOfPlantHandler = {this.handlePartOfPlantChange}
+                valid = {this.valid}
             />
         );
     }
 
+    // Validate each input
     validate = () => {
         let isValid = true;
 
+        // If there is no part of plant selected then show an error otherwise the input is valid
         if(this.state.partOfPlant === "") {
-            this.valid.partOfPlant = ["error", "Please select a part of the plant"];
+            this.valid.partOfPlant = ["error", "Please select a part of the plant"] as [ValidationState, string];
             isValid = false;
-        }else{ this.valid.partOfPlant = ["success", "No Error"]; }
+        }else{ this.valid.partOfPlant = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no use selected then show an error otherwise the input is valid
         if(this.state.use === "") {
-            this.valid.use = ["error", "Please enter how this plant is used"];
+            this.valid.use = ["error", "Please enter how this plant is used"] as [ValidationState, string];
             isValid = false;
-        }else{ this.valid.use = ["success", "No Error"]; }
+        }else{ this.valid.use = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no additional info entered then ignore as not required otherwise the input is valid
         if(this.state.additionalInfo !== "") {
-            this.valid.additionalInfo = ["success", "No Error"];
-            isValid = false;
+            this.valid.additionalInfo = ["success", "No Error"] as [ValidationState, string];
         }
 
+        // If there is no image selected then show an error otherwise the input is valid
         if(this.state.image === "") {
-            this.valid.image = ["error", "Please select what image is related to the use of this plant"];
+            this.valid.image = ["error", "Please select what image is related to the use of this plant"] as [ValidationState, string];
             isValid = false;
-        }else{ this.valid.image = ["success", "No Error"]; }
+        }else{ this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
         const updatedSection = React.cloneElement(
@@ -267,6 +298,7 @@ class CraftInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid
     }
 
@@ -276,15 +308,16 @@ class CraftInfo {
 
 }
 
+// Define the types for the props
 type CraftSectionProps = {
-    useValueHandler: (value: string) => void;
-    additionalInfoHandler: (value: string) => void;
-    partOfPlantHandler: (value: string) => void;
+    useValueHandler:        (value: string) => void;
+    additionalInfoHandler:  (value: string) => void;
+    partOfPlantHandler:     (value: string) => void;
     valid: {
-        partOfPlant: string[];
-        use: string[];
-        additionalInfo: string[];
-        image: string[];
+        partOfPlant:    [ValidationState, string];
+        use:            [ValidationState, string];
+        additionalInfo: [ValidationState, string];
+        image:          [ValidationState, string];
     }
 }
 export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlantHandler, valid}: CraftSectionProps){
@@ -333,28 +366,31 @@ export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlan
 }
 
 class MedicalInfo {
+    // Store the data for the section at its current state
     state = {
-        type: "",
-        use: "",
-        preparation: "",
-        image: "",
+        type:           "",
+        use:            "",
+        preparation:    "",
+        image:          "",
     };
 
+    // Store the validation state for each input
     valid = {
-        type: ["normal", "No Error"],
-        use: ["normal", "No Error"],
-        preparation: ["normal", "No Error"],
-        image: ["normal", "No Error"],
+        type:           ["normal", "No Error"] as [ValidationState, string],
+        use:            ["normal", "No Error"] as [ValidationState, string],
+        preparation:    ["normal", "No Error"] as [ValidationState, string],
+        image:          ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
 
-    handleTypeChange = (value : string) => { this.state.type = value};
-    handeUseValueChange = (value : string) => {this.state.use = value};
-    handlePreparationChange = (value : string) => {this.state.preparation = value};
-    handleImageChange = (value : string) => {this.state.image = value};
+    // Change Handlers that update the state
+    handleTypeChange            = (value : string) => { this.state.type        = value};
+    handeUseValueChange         = (value : string) => {this.state.use          = value};
+    handlePreparationChange     = (value : string) => {this.state.preparation  = value};
+    handleImageChange           = (value : string) => {this.state.image        = value};
 
-
+    // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
@@ -367,28 +403,33 @@ class MedicalInfo {
         );
     }
 
+    // Validate each input
     validate = () => {
         let isValid = true;
 
+        // If there is no type selected then show an error otherwise the input is valid
         if(this.state.type === "") {
-            this.valid.type = ["error", "Please select if the plant is used internally or externally"];
+            this.valid.type = ["error", "Please select if the plant is used internally or externally"] as [ValidationState, string];
             isValid = false;
-        }else { this.valid.type = ["success", "No Error"]; }
+        }else { this.valid.type = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no use selected then show an error otherwise the input is valid
         if(this.state.use === "") {
-            this.valid.use = ["error", "Please enter how this plant is used in a medical context"];
+            this.valid.use = ["error", "Please enter how this plant is used in a medical context"] as [ValidationState, string];
             isValid = false;
-        }else { this.valid.use = ["success", "No Error"]; }
+        }else { this.valid.use = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no preparation entered then show an error otherwise the input is valid
         if(this.state.preparation === "") {
-            this.valid.preparation = ["error", "Please give instructions on how this plant is prepared for medical use"];
+            this.valid.preparation = ["error", "Please give instructions on how this plant is prepared for medical use"] as [ValidationState, string];
             isValid = false;
-        }else { this.valid.preparation = ["success", "No Error"]; }
+        }else { this.valid.preparation = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no image selected then show an error otherwise the input is valid
         if(this.state.image === "") {
-            this.valid.image = ["error", "Please select what image is related to the medical use of this plant"];
+            this.valid.image = ["error", "Please select what image is related to the medical use of this plant"] as [ValidationState, string];
             isValid = false;
-        }else { this.valid.image = ["success", "No Error"]; }
+        }else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
         const updatedSection = React.cloneElement(
@@ -397,6 +438,7 @@ class MedicalInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid;
     }
 
@@ -406,16 +448,16 @@ class MedicalInfo {
 
 }
 
-
+// Define the types for the props
 type MedicalUseSectionProps = {
-    medicalTypeHandler: (value: string) => void;
-    useValueHandler: (value: string) => void;
-    preparationHandler: (value: string) => void;
+    medicalTypeHandler:     (value: string) => void;
+    useValueHandler:        (value: string) => void;
+    preparationHandler:     (value: string) => void;
     valid: {
-        type: string[];
-        use: string[];
-        preparation: string[];
-        image: string[];
+        type:           [ValidationState, string];
+        use:            [ValidationState, string];
+        preparation:    [ValidationState, string];
+        image:          [ValidationState, string];
     }
 }
 export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparationHandler, valid}: MedicalUseSectionProps){
@@ -463,32 +505,35 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
 
 class EdibleInfo {
 
+    // Store the data for the section at its current state
     state = {
-        partOfPlant: "",
-        nutritionalValue: "",
-        preparation: "",
-        preparationType: "",
-        edibleImage: "",
+        partOfPlant:        "",
+        nutritionalValue:   "",
+        preparation:        "",
+        preparationType:    "",
+        edibleImage:        "",
     };
 
+    // Store the validation state for each input
     valid = {
-        partOfPlant: ["normal", "No Error"],
-        nutritionalValue: ["normal", "No Error"],
-        preparation: ["normal", "No Error"],
-        preparationType: ["normal", "No Error"],
-        image: ["normal", "No Error"],
+        partOfPlant:        ["normal", "No Error"] as [ValidationState, string],
+        nutritionalValue:   ["normal", "No Error"] as [ValidationState, string],
+        preparation:        ["normal", "No Error"] as [ValidationState, string],
+        preparationType:    ["normal", "No Error"] as [ValidationState, string],
+        image:              ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
 
-    handlePartOfPlantChange = (value : string) => { this.state.partOfPlant = value};
-    handleNutritionalValueChange = (value : string) => {this.state.nutritionalValue = value};
-    handlePreparationChange = (value : string) => {this.state.preparation = value};
-    handlePreparationTypeChange = (value : string) => {this.state.preparationType = value};
-    handleImageChange = (value : string) => {this.state.edibleImage = value};
+    // Change Handlers that update the state
+    handlePartOfPlantChange         = (value : string) => { this.state.partOfPlant     = value};
+    handleNutritionalValueChange    = (value : string) => {this.state.nutritionalValue = value};
+    handlePreparationChange         = (value : string) => {this.state.preparation      = value};
+    handlePreparationTypeChange     = (value : string) => {this.state.preparationType  = value};
+    handleImageChange               = (value : string) => {this.state.edibleImage      = value};
 
-    setSection = (section) => {this.section = section};
-
+    // Update the section to show the current state
+    setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
             <EdibleUseSection
@@ -501,32 +546,38 @@ class EdibleInfo {
         );
     };
 
+    // Validate the section
     validate = () => {
         let isValid = true;
 
+        // If there is no part of plant selected then show an error otherwise the input is valid
         if(this.state.partOfPlant === "") {
             this.valid.partOfPlant = ["error", "Please select what part of the plant is edible"];
             isValid = false;
-        }else { this.valid.partOfPlant = ["success", "No Error"]; }
+        }else { this.valid.partOfPlant = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no nutritional value entered then ignore as not requried otherwise the input is valid
         if (this.state.nutritionalValue !== "") {
-            this.valid.nutritionalValue = ["success", "No Error"];
+            this.valid.nutritionalValue = ["success", "No Error"] as [ValidationState, string];
         }
 
+        // If there is no preparation type selected then show an error otherwise the input is valid
         if(this.state.preparationType === "") {
             this.valid.preparationType = ["error", "Please select how this plant is prepared for consumption"];
             isValid = false;
-        } else { this.valid.preparationType = ["success", "No Error"]; }
+        } else { this.valid.preparationType = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no preparation entered then show an error otherwise the input is valid
         if(this.state.preparation === "") {
             this.valid.preparation = ["error", "Please give instructions on how this plant is prepared for consumption"];
             isValid = false;
-        } else { this.valid.preparation = ["success", "No Error"]; }
+        } else { this.valid.preparation = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no image selected then show an error otherwise the input is valid
         if(this.state.edibleImage === "") {
             this.valid.image = ["error", "Please select what image is related to the edible use of this plant"];
             isValid = false;
-        } else { this.valid.image = ["success", "No Error"]; }
+        } else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
         const updatedSection = React.cloneElement(
@@ -535,6 +586,7 @@ class EdibleInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid;
     }
 
@@ -543,18 +595,18 @@ class EdibleInfo {
     }
 }
 
-
+// Edible Use Section Props
 type EdibleUseSectionProps = {
-   partOfPlantHandler: (value: string) => void;
+   partOfPlantHandler:      (value: string) => void;
    nutritionalValueHandler: (value: string) => void;
-   preparationTypeHandler: (value: string) => void;
-   preparationHandler: (value: string) => void;
+   preparationTypeHandler:  (value: string) => void;
+   preparationHandler:      (value: string) => void;
    valid: {
-        partOfPlant: string[];
-        nutritionalValue: string[];
-        preparation: string[];
-        preparationType: string[];
-        image: string[];
+        partOfPlant:        [ValidationState, string];
+        nutritionalValue:   [ValidationState, string];
+        preparation:        [ValidationState, string];
+        preparationType:    [ValidationState, string];
+        image:              [ValidationState, string];
 
    }
 }
@@ -614,22 +666,27 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
 }
 
 class ImageInfo{
+
+    // Store the state of the section
     state = {
-        image_url: "",
+        image_url:  "",
         image_name: "",
     }
 
+    // Store the validation state of the section
     valid = {
-        image_url: ["normal", "No Error"],
-        image_name: ["normal", "No Error"],
+        image_url:  ["normal", "No Error"] as [ValidationState, string],
+        image_name: ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
 
-    handleImageUrlChange = (value : string) => {this.state.image_url = value};
-    handleNameChange = (value : string) => {this.state.image_name = value};
+    // Handlers that update the state
+    handleImageUrlChange    = (value : string) => {this.state.image_url    = value};
+    handleNameChange        = (value : string) => {this.state.image_name   = value};
 
-    setSection = (section) => {this.section = section};
+    // Update the section
+    setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
             <ImageSection
@@ -642,16 +699,24 @@ class ImageInfo{
         )
     }
 
+    // Validate the section
     validate = () => {
         let isValid = true;
 
+        // If there is no image name entered or it is longer than 50 chars then show an error otherwise the input is valid
         if(this.state.image_name === "") {
             this.valid.image_name = ["error", "Please enter a name for the image"];
             isValid = false;
         }else if(this.state.image_name.length > 50) {
             this.valid.image_name = ["error", "Image name must be less than 50 characters"];
             isValid = false;
-        }else { this.valid.image_name = ["success", "No Error"]; }
+        }else { this.valid.image_name = ["success", "No Error"] as [ValidationState, string]; }
+
+        // If there is no image uploaded then show an error otherwise the input is valid
+        if(this.state.image_url === "") {
+            this.valid.image_name = ["error", "Please upload a image"]; // Use name here as upload doesn't have a state
+            isValid = false;
+        }
 
         // Update section to show validation
         const updatedSection = React.cloneElement(
@@ -660,6 +725,7 @@ class ImageInfo{
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid;
     }
 
@@ -669,49 +735,61 @@ class ImageInfo{
 
 }
 
-
+// Define the type of the props for the Image Section
 type ImageSectionProps = {
-    imageUrl: string;
-    name: string;
-    descriptionHandler: (value: string) => void;
-    imageURLHandler: (value: string) => void;
+    imageUrl:   string;
+    name:       string;
+    descriptionHandler:     (value: string) => void;
+    imageURLHandler:        (value: string) => void;
     valid: {
-        image_url: string[];
-        image_name: string[];
+        image_url:  [ValidationState, string];
+        image_name: [ValidationState, string];
     }
 }
 export function ImageSection({imageUrl, name, descriptionHandler, imageURLHandler, valid}: ImageSectionProps){
 
+    // States
     const [imageName, setImageName] = useState(name)
-    const [imageURL, setImageURL] = useState(imageUrl)
+    const [imageURL, setImageURL ]  = useState(imageUrl)
 
+    // Update the image alt tag state and also pass it to the handler
     function imageNameHandler(value : string){
         descriptionHandler(value)
         setImageName(value)
     }
 
-    const handleImageUpload = async (event) => {
-        event.preventDefault();
-        const file = event.target.files[0];
+    // Upload the image to imgbb and then pass the url to the handler and update the image url state
+    const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
 
+        // Prevent the default event and grab the file selected
+        event.preventDefault();
+        const file = event.target.files?.[0];
+
+        // If there is no file then return
+        if(!file) return;
+
+        // Create a new form data object and append the file to it
         const formData = new FormData();
         formData.append('image', file);
 
+        // Upload the image to imgbb
         const response = await fetch(`https://api.imgbb.com/1/upload?key=877ed2f3c890826488e67dfc295668d4`, {
             method: 'POST',
             body: formData,
         });
 
+        // Get the response and update the image url state and pass it to the handler
         const data = await response.json();
-
-        console.log(data)
-
         setImageURL(data.data.url);
         imageURLHandler(data.data.url);
+
+        // Debug the data
+        console.log(data)
     }
 
     return(
         <>
+            {/* Image / Uploader */}
             <div className={styles.formContainer}>
                 {imageURL !== "" ?
                     <Image style={{borderRadius: 8}} src={imageURL} alt={imageName} width={600} height={600} objectFit={"contain"}/>
@@ -720,37 +798,43 @@ export function ImageSection({imageUrl, name, descriptionHandler, imageURLHandle
                 }
             </div>
             <br/>
-                <SmallInput
-                    placeHolder={"Image Name"}
-                    required={true}
-                    state={valid.image_name[0]}
-                    errorText={valid.image_name[1]}
-                    changeEventHandler={imageNameHandler}
-                />
 
+            {/* Image Name */}
+            <SmallInput
+                placeHolder={"Image Name"}
+                required={true}
+                state={valid.image_name[0]}
+                errorText={valid.image_name[1]}
+                changeEventHandler={imageNameHandler}
+            />
         </>
     )
 }
 
 class DateInfo {
+
+    // Store the state of the section
     state = {
-        event: "",
-        startDate: "",
-        endDate: ""
+        event:      "",
+        startDate:  "",
+        endDate:    ""
     };
 
+    // Store the validation state of the section
     valid = {
-        event: ["normal", "No Error"],
-        startDate: ["normal", "No Error"],
-        endDate: ["normal", "No Error"]
+        event:      ["normal", "No Error"] as [ValidationState, string],
+        startDate:  ["normal", "No Error"] as [ValidationState, string],
+        endDate:    ["normal", "No Error"] as [ValidationState, string]
     }
 
     section: JSX.Element = <></>;
 
-    handleEventChange = (value : string) => { this.state.event = value};
-    handleStartDateChange = (value : string) => {this.state.startDate = value};
-    handleEndDateChange = (value : string) => {this.state.endDate = value};
+    // Handlers that update the state
+    handleEventChange       = (value : string) => { this.state.event = value};
+    handleStartDateChange   = (value : string) => {this.state.startDate = value};
+    handleEndDateChange     = (value : string) => {this.state.endDate = value};
 
+    // Update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
@@ -763,23 +847,27 @@ class DateInfo {
         )
     }
 
+    // Function to validate the section
     validate = () => {
         let isValid = true;
 
+        // If there is no event entered then show an error otherwise the input is valid
         if(this.state.event === ""){
             this.valid.event = ["error", "Please enter what is happening during this period"];
             isValid = false;
-        }else { this.valid.event = ["success", "No Error"] }
+        }else { this.valid.event = ["success", "No Error"] as [ValidationState, string] }
 
+        // If there is no start date entered then show an error otherwise the input is valid
         if(this.state.startDate === ""){
             this.valid.startDate = ["error", "Please enter a start date"];
             isValid = false;
-        }else { this.valid.startDate = ["success", "No Error"] }
+        }else { this.valid.startDate = ["success", "No Error"] as [ValidationState, string] }
 
+        // If there is no end date entered then show an error otherwise the input is valid
         if(this.state.endDate === ""){
             this.valid.endDate = ["error", "Please enter an end date"];
             isValid = false;
-        }else { this.valid.endDate = ["success", "No Error"] }
+        }else { this.valid.endDate = ["success", "No Error"] as [ValidationState, string] }
 
         // Update section to show validation
         const updatedSection = React.cloneElement(
@@ -788,6 +876,7 @@ class DateInfo {
         );
         this.setSection(updatedSection);
 
+        // Return whether the section is valid or not
         return isValid;
     }
 
@@ -799,13 +888,13 @@ class DateInfo {
 
 
 type DateInfoSectionProps = {
-    eventHandler: (value: string) => void;
-    startDateHandler: (value: string) => void;
-    endDateHandler: (value: string) => void;
+    eventHandler:       (value: string) => void;
+    startDateHandler:   (value: string) => void;
+    endDateHandler:     (value: string) => void;
     valid: {
-        event: [string, string];
-        startDate: [string, string];
-        endDate: [string, string];
+        event:      [ValidationState, string];
+        startDate:  [ValidationState, string];
+        endDate:    [ValidationState, string];
     }
 }
 export function DateInfoSection({eventHandler, startDateHandler, endDateHandler, valid}: DateInfoSectionProps){
@@ -865,20 +954,20 @@ export default function CreatePlant() {
     const [renderKey, setRenderKey] = useState(0);
 
     // Value Setters
-    const [imageInfo, setImageInfo] = useState([]);
-    const [englishName, setEnglishName] = useState("")
-    const [moariName, setMoariName] = useState("")
-    const [latinName, setLatinName] = useState("")
-    const [preferredName, setPreferredName] = useState("")
-    const [smallDescription, setSmallDescription] = useState("")
-    const [largeDescription, setLargeDescription] = useState("")
-    const [location, setLocation] = useState("")
-    const [dateInfo, setDateInfo] = useState([]);
-    const [edibleInfo, setEdibleInfo] = useState([]);
-    const [medicalInfo, setMedicalInfo] = useState([]);
-    const [craftInfo, setCraftInfo] = useState([]);
-    const [customInfo, setCustomInfo] = useState([]);
-    const [sourceInfo, setSourceInfo] = useState([]);
+    const [imageInfo, setImageInfo]                 = useState<ImageInfo[]>([]);
+    const [englishName, setEnglishName]             = useState("")
+    const [moariName, setMoariName]                 = useState("")
+    const [latinName, setLatinName]                 = useState("")
+    const [preferredName, setPreferredName]         = useState("")
+    const [smallDescription, setSmallDescription]   = useState("")
+    const [largeDescription, setLargeDescription]   = useState("")
+    const [location, setLocation]                   = useState("")
+    const [dateInfo, setDateInfo]                   = useState<DateInfo[]>([]);
+    const [edibleInfo, setEdibleInfo]               = useState<EdibleInfo[]>([]);
+    const [medicalInfo, setMedicalInfo]             = useState<MedicalInfo[]>([]);
+    const [craftInfo, setCraftInfo]                 = useState<CraftInfo[]>([]);
+    const [customInfo, setCustomInfo]               = useState<CustomInfo[]>([]);
+    const [sourceInfo, setSourceInfo]               = useState<SourceInfo[]>([]);
 
     // Value Handlers
     const handleEnglishNameChange = (value : string) => { setEnglishName(value);
@@ -900,13 +989,13 @@ export default function CreatePlant() {
     const newSourceInfo = () => { setSourceInfo([...sourceInfo, new SourceInfo()]) }
 
     // Section States
-    const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"])
-    const [moariNameValidationState, setMoariNameValidationState] = useState(["normal", "No Error"])
-    const [latinNameValidationState, setLatinNameValidationState] = useState(["normal", "No Error"])
-    const [preferredNameValidationState, setPreferredNameValidationState] = useState(["normal", "No Error"])
-    const [smallDescriptionValidationState, setSmallDescriptionValidationState] = useState(["normal", "No Error"])
-    const [largeDescriptionValidationState, setLargeDescriptionValidationState] = useState(["normal", "No Error"])
-    const [locationValidationState, setLocationValidationState] = useState(["normal", "No Error"])
+    const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [moariNameValidationState, setMoariNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [latinNameValidationState, setLatinNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [preferredNameValidationState, setPreferredNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [smallDescriptionValidationState, setSmallDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [largeDescriptionValidationState, setLargeDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [locationValidationState, setLocationValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
 
 
     // Update the page title when name changes
@@ -926,16 +1015,6 @@ export default function CreatePlant() {
         }
     }, [englishName, moariName, latinName, preferredName]);
 
-
-
-    useEffect(() => {
-       console.log("Image Info: ", imageInfo)
-    }, [imageInfo]);
-
-    useEffect(() => {
-        console.log("Edible Info: ", edibleInfo)
-    }, [edibleInfo]);
-
     const validateInput = () => {
 
         //Allow for multiple invalid inputs
@@ -949,7 +1028,7 @@ export default function CreatePlant() {
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "english-name";
             }
-        } else { setEnglishNameValidationState(["success", "No Error"]) }
+        } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Moari Name
         if(moariName === ""){
@@ -958,7 +1037,7 @@ export default function CreatePlant() {
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "moari-name";
             }
-        }else { setMoariNameValidationState(["success", "No Error"]) }
+        }else { setMoariNameValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Latin Name
         if(latinName === ""){
@@ -967,14 +1046,14 @@ export default function CreatePlant() {
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "latin-name";
             }
-        } else { setLatinNameValidationState(["success", "No Error"]) }
+        } else { setLatinNameValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Preferred Name
         if(preferredName === ""){
             setPreferredNameValidationState(["error", "Please select a preferred name"])
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "preferred-name";
-        } else { setPreferredNameValidationState(["success", "No Error"]) }
+        } else { setPreferredNameValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Small Description
         if(smallDescription === ""){
@@ -983,21 +1062,21 @@ export default function CreatePlant() {
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "small-description";
         } else if(smallDescription.length > 100){
             setSmallDescriptionValidationState(["error", "Small description must be less than 100 characters"])
-        } else { setSmallDescriptionValidationState(["success", "No Error"]) }
+        } else { setSmallDescriptionValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Large Description
         if(largeDescription === ""){
             setLargeDescriptionValidationState(["error", "Please enter a large description"])
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "large-description";
-        } else { setLargeDescriptionValidationState(["success", "No Error"]) }
+        } else { setLargeDescriptionValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Location
         if(location === ""){
             setLocationValidationState(["error", "Please enter a location"])
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "location";
-        } else { setLocationValidationState(["success", "No Error"]) }
+        } else { setLocationValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Validate the image info
         for (let i = 0; i < imageInfo.length; i++) {
@@ -1005,7 +1084,7 @@ export default function CreatePlant() {
             // Only change the valid state if it is false to prevent previous falses being overridden to be true
             if(!imageInfo[i].validate()){
                 isValid = false;
-                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "image-info";
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "image-info-" + i;
             }
         }
 
@@ -1042,6 +1121,9 @@ export default function CreatePlant() {
             if(!craftInfo[i].validate()){
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "craft-info-" + i;
+                console.log("Error in craft info: ")
+                console.log(craftInfo[i])
+
             }
         }
 
@@ -1064,10 +1146,12 @@ export default function CreatePlant() {
         }
 
         // Scroll to the element with an error:
-        const element = document.getElementById(elementThatNeedsFocus);
-        if (element) {
-            let dims = element.getBoundingClientRect();
-            window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+        if(elementThatNeedsFocus !== null){
+            const element = document.getElementById(elementThatNeedsFocus);
+            if (element) {
+                let dims = element.getBoundingClientRect();
+                window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+            }
         }
 
         return isValid;
@@ -1078,7 +1162,7 @@ export default function CreatePlant() {
             return
         }
 
-        let plantOBJ = {
+        let plantOBJ : PlantData = {
             id: 1,
             preferred_name: "",
             english_name: "",
@@ -1131,8 +1215,8 @@ export default function CreatePlant() {
             }
 
             dateInfoOBJ.event = thisDateInfo.event;
-            dateInfoOBJ.start_month = thisDateInfo.startMonth;
-            dateInfoOBJ.end_month = thisDateInfo.endMonth;
+            dateInfoOBJ.start_month = thisDateInfo.startDate;
+            dateInfoOBJ.end_month = thisDateInfo.endDate;
 
             plantOBJ.months_ready_for_use.push(dateInfoOBJ);
         }
@@ -1609,7 +1693,7 @@ export default function CreatePlant() {
                         {/* Images */}
                         {imageInfo.map((value, index) => {
                             return (
-                                <div key={index} className={styles.formItem}>
+                                <div key={index} className={styles.formItem} id={`image-info-${index}`}>
                                     {value.section}
                                 </div>
                             )
@@ -1643,4 +1727,4 @@ export default function CreatePlant() {
 
 
 
-//TODO: Submit button, upload images
+//TODO: Upload to server, New API to upload image that hides the API key

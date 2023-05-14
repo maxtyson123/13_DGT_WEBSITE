@@ -1,6 +1,7 @@
 import styles from "@/styles/plant_card.module.css"
 import Image from "next/image";
 import Link from "next/link";
+import {number} from "prop-types";
 
 type PlantCardProps = {
     data: PlantData | null
@@ -8,12 +9,28 @@ type PlantCardProps = {
 
 // Define the data for the plant
 export interface PlantData {
-    id: number,
+    id: number;
+    preferred_name: string;
     english_name: string;
+    moari_name: string;
+    latin_name: string;
     use: string[];
+    months_ready_for_use: {
+        event: string,
+        start_month: string,
+        end_month: string,
+    }[];
+    location: string;
     small_description: string;
-
-    // Add other fields here
+    long_description: string;
+    attachments: {
+        path: string;
+        type: string;
+        name: string;
+        downloadable: boolean;
+        flags: string[];
+    }[];
+    sections: any[];
 }
 
 

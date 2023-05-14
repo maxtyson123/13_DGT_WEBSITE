@@ -9,7 +9,6 @@ import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import ScrollingPlant from "@/components/scrolling_plant";
 import PlantCard, {getLocalData, PlantData} from "@/components/plant_card";
-import PageTransition from "@/components/transitioner";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -42,71 +41,66 @@ export default function Home(ref: HomeRef) {
             <HtmlHeader currentPage={pageName}/>
             <Navbar currentPage={pageName}/>
 
-            {/* Add a page transition */}
-            <PageTransition ref={ref}>
+            {/* Section for the welcome message and search box */}
+            <Section autoPadding={false}>
+                {/* Use the page header component to display the welcome message (See: components/page_header.tsx) */}
+                <PageHeader size={"large"}>
 
-                {/* Section for the welcome message and search box */}
-                <Section>
+                  {/* Container for the welcome message and search box */}
+                   <div className={styles.welcomeContainer}>
 
-                    {/* Use the page header component to display the welcome message (See: components/page_header.tsx) */}
-                    <PageHeader size={"large"}>
-
-                      {/* Container for the welcome message and search box */}
-                       <div className={styles.welcomeContainer}>
-
-                           {/* Place the title and description on the left */}
-                           <div className={styles.titleContainer}>
-                               <h1 className={styles.title}> Rongoa </h1>
-                               <p className={styles.description}>Site description ... ... ... ... ... ... ... ... ... ... ... ...
-                                   ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                                   ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                                   ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  </p>
-                           </div>
-
-                          {/* Place the plant model on the right */}
-                           <div className={styles.plantContainer}>
-                               <ScrollingPlant/>
-                           </div>
+                       {/* Place the title and description on the left */}
+                       <div className={styles.titleContainer}>
+                           <h1 className={styles.title}> Rongoa </h1>
+                           <p className={styles.description}>Site description ... ... ... ... ... ... ... ... ... ... ... ...
+                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
+                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
+                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  </p>
                        </div>
 
-                        {/* Search is to be below the welcome message so don't include it in the flex div*/}
-                        <SearchBox/>
-                    </PageHeader>
-                </Section>
+                      {/* Place the plant model on the right */}
+                       <div className={styles.plantContainer}>
+                           <ScrollingPlant/>
+                       </div>
+                   </div>
 
-                {/* Section for the featured plants */}
-                <Section autoPadding>
-                    {/* Section title */}
-                    <h1 className={styles.sectionTitle}>Featured Plants</h1>
+                    {/* Search is to be below the welcome message so don't include it in the flex div*/}
+                    <SearchBox/>
+                </PageHeader>
+            </Section>
 
-                    {/* Container that centers the cards */}
-                    <div className={styles.cardsContainer}>
+            {/* Section for the featured plants */}
+            <Section autoPadding>
+                {/* Section title */}
+                <h1 className={styles.sectionTitle}>Featured Plants</h1>
 
-                        {/* Plant cards */}
-                        <PlantCard data={plantData}/>
-                        <PlantCard data={plantData}/>
-                        <PlantCard data={plantData}/>
-                    </div>
-                </Section>
+                {/* Container that centers the cards */}
+                <div className={styles.cardsContainer}>
 
-                {
-                    /*
+                    {/* Plant cards */}
+                    <PlantCard data={plantData}/>
+                    <PlantCard data={plantData}/>
+                    <PlantCard data={plantData}/>
+                </div>
+            </Section>
 
-                        <Section>
-                            - Image Break Here
-                        </Section>
+            {
+                /*
 
-                        <Section>
-                            <Stats/>
-                        </Section>
+                    <Section>
+                        - Image Break Here
+                    </Section>
 
-                        <Section>
-                            </Footer/>
-                        </Section>
+                    <Section>
+                        <Stats/>
+                    </Section>
 
-                     */
-                }
-            </PageTransition>
+                    <Section>
+                        </Footer/>
+                    </Section>
+
+                 */
+            }
         </>
     );
 }
