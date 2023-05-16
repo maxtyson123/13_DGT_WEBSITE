@@ -9,20 +9,21 @@
     border: 1px solid #E7E6EB;
     box-shadow: 0 8px 24px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    padding: 20px 70px 20px 70px;
-    margin: 2%;
+    padding: 20px 35px 20px 35px;
+    margin: 2% 2% 75px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 20%;
+    max-width: 400px;
 }
 
 /*
  It is unknown the size of the image that will be used, so use object-fit: contain to ensure the image is not stretched.
  */
 .image{
-    object-fit: contain;
+    object-fit: fill;
+    padding: 10px;
 }
 
 /*
@@ -119,6 +120,6 @@
     margin: 2%;
     font-weight: 400;
     font-size: 14px;
-    line-height: 24px;
+    text-align: center;
 
 }

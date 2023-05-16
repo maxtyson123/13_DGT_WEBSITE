@@ -1,6 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 import React, {useEffect, useState} from "react";
+
 import styles from "@/styles/index.module.css"
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
@@ -10,6 +11,7 @@ import SearchBox from "@/components/search_box";
 import ScrollingPlant from "@/components/scrolling_plant";
 import PlantCard, {getLocalData} from "@/components/plant_card";
 import {PlantData} from "@/components/plant_data";
+import Image from "next/image";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -85,13 +87,30 @@ export default function Home(ref: HomeRef) {
                 </div>
             </Section>
 
+
+            <Section autoPadding>
+                <div className={styles.pageBreakContainer}>
+                    <div className={styles.pageBreak}>
+                        <Image
+                            src={"/media/images/fern.png"}
+                            alt={"fern"}
+                            width={400}
+                            height={400}
+                            style={styles.image}
+                        />
+                        <Image
+                            src={"/media/images/kowhai.png"}
+                            alt={"kowhai"}
+                            width={400}
+                            height={400}
+                            style={styles.image}
+                        />
+                    </div>
+                </div>
+            </Section>
+
             {
                 /*
-
-                    <Section>
-                        - Image Break Here
-                    </Section>
-
                     <Section>
                         <Stats/>
                     </Section>

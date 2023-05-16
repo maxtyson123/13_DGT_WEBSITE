@@ -27,7 +27,7 @@ export default function PlantCard({ data }: PlantCardProps){
                     src={"/media/images/plants/example_transparent.png"}
                     alt={data?.english_name + " Header Image "}
                     width={400}
-                    height={400}
+                    height={600}
                     className={styles.image}
                 />
 
@@ -45,9 +45,9 @@ export default function PlantCard({ data }: PlantCardProps){
                 <div className={styles.tagsContainer}>
 
                     {/* Map through the tags and display them */}
-                    {data?.use.map((useItem, index) => (
+                    {data?.sections.map((useItem, index) => (
                         <p key={index} className={styles.useText}>{
-                            convertUseTag(useItem)
+                            convertUseTag(useItem.type)
                         }</p>
                     ))}
                 </div>
