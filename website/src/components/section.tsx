@@ -2,7 +2,7 @@ import React from "react";
 
 type SectionProps = {
     children: React.ReactNode;
-    autoPadding: boolean
+    autoPadding?: boolean
 };
 export default function Section({ children, autoPadding = false }: SectionProps){
     return(

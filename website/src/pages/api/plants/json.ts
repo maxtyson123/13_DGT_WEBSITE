@@ -1,6 +1,7 @@
-import { db } from '@vercel/postgres';
-import { NextApiRequest, NextApiResponse } from 'next';
-import {ConvertApiIntoPlantData, PlantData, PlantDataApi} from "@/components/plant_data";
+import {db} from '@vercel/postgres';
+import {NextApiRequest, NextApiResponse} from 'next';
+import {ConvertApiIntoPlantData, PlantDataApi} from "@/modules/plant_data";
+
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,

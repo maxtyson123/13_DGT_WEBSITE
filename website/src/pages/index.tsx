@@ -10,8 +10,9 @@ import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import ScrollingPlant from "@/components/scrolling_plant";
 import PlantCard, {getLocalData} from "@/components/plant_card";
-import {PlantData} from "@/components/plant_data";
+import {PlantData} from "@/modules/plant_data";
 import Image from "next/image";
+import Stats from "@/components/stats";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -45,7 +46,7 @@ export default function Home(ref: HomeRef) {
             <Navbar currentPage={pageName}/>
 
             {/* Section for the welcome message and search box */}
-            <Section autoPadding={false}>
+            <Section>
                 {/* Use the page header component to display the welcome message (See: components/page_header.tsx) */}
                 <PageHeader size={"large"}>
 
@@ -96,24 +97,28 @@ export default function Home(ref: HomeRef) {
                             alt={"fern"}
                             width={400}
                             height={400}
-                            style={styles.image}
+                            className={styles.image}
                         />
                         <Image
                             src={"/media/images/kowhai.png"}
                             alt={"kowhai"}
                             width={400}
                             height={400}
-                            style={styles.image}
+                            className={styles.image}
                         />
                     </div>
                 </div>
             </Section>
 
+            <Section autoPadding>
+                <div className={styles.pageBreakContainer}>
+                    <Stats/>
+                </div>
+            </Section>
+
             {
                 /*
-                    <Section>
-                        <Stats/>
-                    </Section>
+
 
                     <Section>
                         </Footer/>

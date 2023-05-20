@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import {getLocalData} from "@/components/plant_card";
-import {PlantData} from "@/components/plant_data";
-
+import {PlantData} from "@/modules/plant_data";
 
 
 export default function PlantPage() {

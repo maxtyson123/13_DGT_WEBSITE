@@ -1,7 +1,7 @@
 import styles from "@/styles/plant_card.module.css"
 import Image from "next/image";
 import Link from "next/link";
-import {PlantData} from "@/components/plant_data";
+import {PlantData} from "@/modules/plant_data";
 
 type PlantCardProps = {
     data: PlantData | null

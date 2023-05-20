@@ -3,11 +3,16 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
-import {AdvandcedTextArea, DropdownInput, SimpleTextArea, SmallInput, ValidationState} from "@/components/input_sections";
+import {
+    AdvandcedTextArea,
+    DropdownInput,
+    SimpleTextArea,
+    SmallInput,
+    ValidationState
+} from "@/components/input_sections";
 import Image from "next/image";
-import {number} from "prop-types";
 
-import {PlantData} from "@/components/plant_data";
+import {PlantData} from "@/modules/plant_data";
 
 // Constants
 const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];

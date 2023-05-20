@@ -1,0 +1,49 @@
+.statsSection{
+    background: #FFFFFF;
+    border: 1px solid #E7E6EB;
+    box-shadow: 0px 8px 24px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 80vw;
+    padding: 32px;
+    text-align: center;
+
+}
+
+.statsSection p{
+    width: 100%;
+
+}
+
+.statsSection h1{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 74px;
+    line-height: 75px;
+    width: 100%;
+    color: #000000;
+
+}
+
+.statsRowContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px;
+}
+
+.stat{
+    font-size: 40px;
+    line-height: 47px;
+    color: #000000;
+
+}
+
+.stat h2{
+    font-size: 96px;
+    line-height: 112px;
+    color: #474747;
+}
+
+.inline{
+    display: inline;
+}
