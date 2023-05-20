@@ -1,7 +1,8 @@
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
 import React from "react";
-import PageHeader from "@/components/page_header";
+import Section from "@/components/section";
+import Footer from "@/components/footer";
 
 type SearchRef = React.ForwardedRef<HTMLDivElement>
 export default function Search(ref: SearchRef){
@@ -11,6 +12,11 @@ export default function Search(ref: SearchRef){
         <>
             <HtmlHeader currentPage={pageName}/>
             <Navbar currentPage={pageName}/>
+
+            {/* Page footer */}
+            <Section>
+                <Footer/>
+            </Section>
         </>
     )
 }

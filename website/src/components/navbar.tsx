@@ -2,23 +2,22 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch, faHome, faBook, faCalendar} from "@fortawesome/free-solid-svg-icons";
 import styles from "@/styles/navbar.module.css";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {faBook, faCalendar, faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
+
+// Define items for the navbar, each item is an array with the following format: Name to display, icon, link
+export const pageNames = [
+    ["Home", faHome, "/"],
+    ["Plant Index", faBook, "/plant_index"],
+    ["Calender", faCalendar, "/calender"],
+    ["Search", faSearch, "/search"],
+];
 
 export default function Navbar(props: any) {
 
     // Get the data from the props
     const currentPage = props.currentPage;
-
-    // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
-    const pageNames = [
-        ["Home", faHome, "/"],
-        ["Plant Index", faBook, "/plant_index"],
-        ["Calender", faCalendar, "/calender"],
-        ["Search", faSearch, "/search"],
-    ];
-
 
     return(
         <>

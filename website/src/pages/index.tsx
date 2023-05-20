@@ -1,5 +1,23 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
+// TODO: Credits card
+// TODO: Scroll to top button
+// TODO: Comment Code
+// TODO: Get the plants from the database for the featured plants (random plants)
+// TODO: Plant page for the plants
+// TODO: Plant index page for all the plants
+// TODO: Search page to search for plants
+// TODO: Calendar page to show all the plants that are in season
+// TODO: Authentication
+// TODO: Upload the plant data to the database
+// TODO: Responsive design
+// TODO: Accessibility Settings (Dark mode, font size, etc.)
+// TODO: Any extensions to the website
+// TODO: Testing
+// TODO: Code cleanup
+// TODO: Code Validation
+// TODO: Documentation
+
 import React, {useEffect, useState} from "react";
 
 import styles from "@/styles/index.module.css"
@@ -13,6 +31,7 @@ import PlantCard, {getLocalData} from "@/components/plant_card";
 import {PlantData} from "@/modules/plant_data";
 import Image from "next/image";
 import Stats from "@/components/stats";
+import Footer from "@/components/footer";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -110,22 +129,18 @@ export default function Home(ref: HomeRef) {
                 </div>
             </Section>
 
+            {/* Section for the plant stats */}
             <Section autoPadding>
                 <div className={styles.pageBreakContainer}>
                     <Stats/>
                 </div>
             </Section>
 
-            {
-                /*
+            {/* Page footer */}
+            <Section>
+                    <Footer/>
+            </Section>
 
-
-                    <Section>
-                        </Footer/>
-                    </Section>
-
-                 */
-            }
         </>
     );
 }

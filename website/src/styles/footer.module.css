@@ -1,0 +1,48 @@
+.footerBackgroundImage{
+    width: 100vw;
+    height: 30vh;
+    filter: blur(1px);
+}
+
+.footer{
+    width: 100vw;
+    height: 30vh;
+    bottom: 0;
+    color: white;
+    display: flex;
+    margin-top: 100px;
+}
+
+.searchBoxContainer{
+    height: 100%;
+    width: 45%;
+    display: flex;
+    align-items: center;
+    padding-left: 7.5%;
+}
+
+.linksContainer{
+    height: 100%;
+    width: 45%;
+    display: flex;
+    align-items: center;
+    padding-left: 15%;
+}
+
+.links h1{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 75px;
+    color: #FFFFFF;
+}
+
+.link{
+    font-size: 22px;
+    line-height: 38px;
+    color: #FFFFFF;
+}
+
+.link p{
+    margin: 10px;
+}

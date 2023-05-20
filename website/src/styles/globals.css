@@ -59,21 +59,3 @@ body{
 }
 
 
-.userTextClear{
-    font-weight: normal;
-    font-size: 16px;
-    font-style: normal;
-
-}
-
-.userTextBold{
-    font-weight: bold;
-}
-
-.userTextItalic{
-    font-style: italic;
-}
-
-.userTextLarge{
-    font-size: 32px;
-}

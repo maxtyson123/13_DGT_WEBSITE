@@ -13,6 +13,8 @@ import {
 import Image from "next/image";
 
 import {PlantData} from "@/modules/plant_data";
+import Section from "@/components/section";
+import Footer from "@/components/footer";
 
 // Constants
 const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
@@ -1363,369 +1365,375 @@ export default function CreatePlant() {
                 <h1 className={styles.title}>Creating plant: {plantName}</h1>
             </PageHeader>
 
-            <div className={styles.row}>
+            <Section>
+                <div className={styles.row}>
 
-                {/* Divide the page into a left and right column*/}
-                <div className={styles.column}>
+                    {/* Divide the page into a left and right column*/}
+                    <div className={styles.column}>
 
-                    {/* Basic plant information */}
-                    <div className={styles.formSection}>
+                        {/* Basic plant information */}
+                        <div className={styles.formSection}>
 
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Basic Info</h1>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Basic Info</h1>
 
-                        {/* Plant name */}
-                        <div className={styles.formItem} id={"english-name"}>
-                            <SmallInput
-                                placeHolder={"English Name"}
-                                required={false}
-                                state={englishNameValidationState[0]}
-                                errorText={englishNameValidationState[1]}
-                                changeEventHandler={handleEnglishNameChange}
-                            />
-                        </div>
-                        <div className={styles.formItem} id={"moari-name"}>
-                            <SmallInput
-                                placeHolder={"Moari Name"}
-                                required={false}
-                                state={moariNameValidationState[0]}
-                                errorText={moariNameValidationState[1]}
-                                changeEventHandler={handleMoariNameChange}
-                            />
-                        </div>
-                        <div className={styles.formItem} id={"latin-name"}>
-                            <SmallInput
-                                placeHolder={"Latin Name"}
-                                required={false}
-                                state={latinNameValidationState[0]}
-                                errorText={latinNameValidationState[1]}
-                                changeEventHandler={handleLatinNameChange}
-                            />
-                        </div>
+                            {/* Plant name */}
+                            <div className={styles.formItem} id={"english-name"}>
+                                <SmallInput
+                                    placeHolder={"English Name"}
+                                    required={false}
+                                    state={englishNameValidationState[0]}
+                                    errorText={englishNameValidationState[1]}
+                                    changeEventHandler={handleEnglishNameChange}
+                                />
+                            </div>
+                            <div className={styles.formItem} id={"moari-name"}>
+                                <SmallInput
+                                    placeHolder={"Moari Name"}
+                                    required={false}
+                                    state={moariNameValidationState[0]}
+                                    errorText={moariNameValidationState[1]}
+                                    changeEventHandler={handleMoariNameChange}
+                                />
+                            </div>
+                            <div className={styles.formItem} id={"latin-name"}>
+                                <SmallInput
+                                    placeHolder={"Latin Name"}
+                                    required={false}
+                                    state={latinNameValidationState[0]}
+                                    errorText={latinNameValidationState[1]}
+                                    changeEventHandler={handleLatinNameChange}
+                                />
+                            </div>
 
-                        {/* Preferred plant name */}
-                        <div className={styles.formItem} id={"preferred-name"}>
-                            <DropdownInput
-                                placeHolder={"Preferred Name"}
-                                required={true}
-                                state={preferredNameValidationState[0]}
-                                errorText={preferredNameValidationState[1]}
-                                options={["English", 'Moari', "Latin"]}
-                                changeEventHandler={handleDropDownChange}
-                                allowCustom={false}
-                            />
-                        </div>
+                            {/* Preferred plant name */}
+                            <div className={styles.formItem} id={"preferred-name"}>
+                                <DropdownInput
+                                    placeHolder={"Preferred Name"}
+                                    required={true}
+                                    state={preferredNameValidationState[0]}
+                                    errorText={preferredNameValidationState[1]}
+                                    options={["English", 'Moari', "Latin"]}
+                                    changeEventHandler={handleDropDownChange}
+                                    allowCustom={false}
+                                />
+                            </div>
 
-                        {/* Plant Small Description */}
-                        <div className={styles.formItem} id={"small-description"}>
-                            <SimpleTextArea
-                                placeHolder={"Small Description"}
-                                required={true}
-                                state={smallDescriptionValidationState[0]}
-                                errorText={smallDescriptionValidationState[1]}
-                                changeEventHandler={handleSmallDescriptionChange}
-                            />
-                        </div>
+                            {/* Plant Small Description */}
+                            <div className={styles.formItem} id={"small-description"}>
+                                <SimpleTextArea
+                                    placeHolder={"Small Description"}
+                                    required={true}
+                                    state={smallDescriptionValidationState[0]}
+                                    errorText={smallDescriptionValidationState[1]}
+                                    changeEventHandler={handleSmallDescriptionChange}
+                                />
+                            </div>
 
-                        {/* Plant Large Description */}
-                        <div className={styles.formItem} id={"large-description"}>
-                            <AdvandcedTextArea
-                                placeHolder={"Long Description"}
-                                required={true}
-                                state={largeDescriptionValidationState[0]}
-                                errorText={largeDescriptionValidationState[1]}
-                                changeEventHandler={handleLargeDescriptionChange}
-                            />
-                        </div>
+                            {/* Plant Large Description */}
+                            <div className={styles.formItem} id={"large-description"}>
+                                <AdvandcedTextArea
+                                    placeHolder={"Long Description"}
+                                    required={true}
+                                    state={largeDescriptionValidationState[0]}
+                                    errorText={largeDescriptionValidationState[1]}
+                                    changeEventHandler={handleLargeDescriptionChange}
+                                />
+                            </div>
 
-                        {/* Plant Location */}
-                        <div className={styles.formItem} id={"location"}>
-                            <DropdownInput
-                                placeHolder={"Location"}
-                                required={true}
-                                state={locationValidationState[0]}
-                                errorText={locationValidationState[1]}
-                                options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
-                                allowCustom={true}
-                                changeEventHandler={handleLocationChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={styles.formSection}>
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Dates </h1>
-
-                        {/* Date Infos} */}
-                        {dateInfo.map((value, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`date-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
-
-                                        {/* Add the section */}
-                                        {value.section}
-                                    </div>
-                                </div>
-                            )
-                        })}
-                        {/* Add date info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newDateInfo} className={styles.addSectionButton}> + </button>
+                            {/* Plant Location */}
+                            <div className={styles.formItem} id={"location"}>
+                                <DropdownInput
+                                    placeHolder={"Location"}
+                                    required={true}
+                                    state={locationValidationState[0]}
+                                    errorText={locationValidationState[1]}
+                                    options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
+                                    allowCustom={true}
+                                    changeEventHandler={handleLocationChange}
+                                />
                             </div>
                         </div>
-                    </div>
 
-                    <div className={styles.formSection}>
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Edible Uses</h1>
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Dates </h1>
 
-                        {/* Uses} */}
+                            {/* Date Infos} */}
+                            {dateInfo.map((value, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`date-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
 
-                        {edibleInfo.map((value : EdibleInfo, index) => {
-
-                            return (
-                                <div key={index + renderKey} className={styles.formItem} id={`edible-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
-
-                                        {/* Add the section */}
-                                        {value.section}
-
-                                        {/* Image Reference has to be here or it won't update*/}
-                                        <div className={styles.formItem}>
-                                            <DropdownInput
-                                                placeHolder={"Image for Edible"}
-                                                required={true}
-                                                state={value.valid.image[0]}
-                                                errorText={value.valid.image[1]}
-                                                options={
-                                                    imageInfo.map((value, index) => {
-                                                          // Use index as name cant be updated properly
-                                                        return("Image " + (index +1).toString())
-                                                    })
-                                                }
-                                                allowCustom={false}
-                                                changeEventHandler={value.handleImageChange}
-                                            />
+                                            {/* Add the section */}
+                                            {value.section}
                                         </div>
                                     </div>
+                                )
+                            })}
+                            {/* Add date info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newDateInfo} className={styles.addSectionButton}> + </button>
                                 </div>
-                            )
-                        })}
-
-                        {/* Add Edible info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newEdibleInfo} className={styles.addSectionButton}> + </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div className={styles.formSection}>
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Medical Uses</h1>
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Edible Uses</h1>
 
-                        {/* Uses} */}
+                            {/* Uses} */}
 
-                        {medicalInfo.map((value : MedicalInfo, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`medical-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
+                            {edibleInfo.map((value : EdibleInfo, index) => {
 
-                                        {/* Add the section */}
-                                        {value.section}
+                                return (
+                                    <div key={index + renderKey} className={styles.formItem} id={`edible-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
 
-                                        {/* Image Reference has to be here or it won't update*/}
-                                        <div className={styles.formItem}>
-                                            <DropdownInput
-                                                placeHolder={"Image for Medical Use"}
-                                                required={true}
-                                                state={"normal"}
-                                                options={
-                                                    imageInfo.map((value, index) => {
-                                                          // Use index as name cant be updated properly
-                                                        return("Image " + (index +1).toString())
-                                                    })
-                                                }
-                                                allowCustom={false}
-                                                changeEventHandler={value.handleImageChange}
-                                            />
+                                            {/* Add the section */}
+                                            {value.section}
+
+                                            {/* Image Reference has to be here or it won't update*/}
+                                            <div className={styles.formItem}>
+                                                <DropdownInput
+                                                    placeHolder={"Image for Edible"}
+                                                    required={true}
+                                                    state={value.valid.image[0]}
+                                                    errorText={value.valid.image[1]}
+                                                    options={
+                                                        imageInfo.map((value, index) => {
+                                                              // Use index as name cant be updated properly
+                                                            return("Image " + (index +1).toString())
+                                                        })
+                                                    }
+                                                    allowCustom={false}
+                                                    changeEventHandler={value.handleImageChange}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            })}
 
-                        {/* Add Medical info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newMedicinalInfo} className={styles.addSectionButton}> + </button>
+                            {/* Add Edible info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newEdibleInfo} className={styles.addSectionButton}> + </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className={styles.formSection}>
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Craft Uses</h1>
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Medical Uses</h1>
 
-                        {/* Uses} */}
+                            {/* Uses} */}
 
-                        {craftInfo.map((value : CraftInfo, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`craft-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
+                            {medicalInfo.map((value : MedicalInfo, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`medical-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
 
-                                        {/* Add the section */}
-                                        {value.section}
+                                            {/* Add the section */}
+                                            {value.section}
 
-                                        {/* Image Reference has to be here or it won't update*/}
-                                        <div className={styles.formItem}>
-                                            <DropdownInput
-                                                placeHolder={"Image for Craft Use"}
-                                                required={true}
-                                                state={value.valid.image[0]}
-                                                errorText={value.valid.image[1]}
-                                                options={
-                                                    imageInfo.map((value, index) => {
-
-                                                        // Use index as name cant be updated properly
-                                                        return("Image " + (index +1).toString())
-                                                    })
-                                                }
-                                                allowCustom={false}
-                                                changeEventHandler={value.handleImageChange}
-                                            />
+                                            {/* Image Reference has to be here or it won't update*/}
+                                            <div className={styles.formItem}>
+                                                <DropdownInput
+                                                    placeHolder={"Image for Medical Use"}
+                                                    required={true}
+                                                    state={"normal"}
+                                                    options={
+                                                        imageInfo.map((value, index) => {
+                                                              // Use index as name cant be updated properly
+                                                            return("Image " + (index +1).toString())
+                                                        })
+                                                    }
+                                                    allowCustom={false}
+                                                    changeEventHandler={value.handleImageChange}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            })}
 
-                        {/* Add Craft info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newCraftInfo} className={styles.addSectionButton}> + </button>
+                            {/* Add Medical info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newMedicinalInfo} className={styles.addSectionButton}> + </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Craft Uses</h1>
+
+                            {/* Uses} */}
+
+                            {craftInfo.map((value : CraftInfo, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`craft-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
+
+                                            {/* Add the section */}
+                                            {value.section}
+
+                                            {/* Image Reference has to be here or it won't update*/}
+                                            <div className={styles.formItem}>
+                                                <DropdownInput
+                                                    placeHolder={"Image for Craft Use"}
+                                                    required={true}
+                                                    state={value.valid.image[0]}
+                                                    errorText={value.valid.image[1]}
+                                                    options={
+                                                        imageInfo.map((value, index) => {
+
+                                                            // Use index as name cant be updated properly
+                                                            return("Image " + (index +1).toString())
+                                                        })
+                                                    }
+                                                    allowCustom={false}
+                                                    changeEventHandler={value.handleImageChange}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
+                            {/* Add Craft info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newCraftInfo} className={styles.addSectionButton}> + </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Sources</h1>
+
+                            {/* Date Infos} */}
+                            {sourceInfo.map((value, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`source-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
+
+                                            {/* Add the section */}
+                                            {value.section}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
+                            {/* Add date info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newSourceInfo} className={styles.addSectionButton}> + </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.formSection}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}> Custom Info</h1>
+
+                            {/* Custom Info */}
+                            {customInfo.map((value, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`custom-info-${index}`}>
+                                        <div className={styles.formContainer}>
+                                            {/* Add some space */}
+                                            <br/>
+
+                                            {/* Add the section */}
+                                            {value.section}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
+                            {/* Add date info */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newCustomInfo} className={styles.addSectionButton}> + </button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className={styles.formSection}>
+                    {/* Right Hand Collumn */}
+                    <div className={styles.column}>
+
+                        {/*Images Section */}
+
                         {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Sources</h1>
+                        <h1 className={styles.sectionTitle}> Images</h1>
 
-                        {/* Date Infos} */}
-                        {sourceInfo.map((value, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`source-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
+                        {/* Image Section */}
+                        <div className={styles.formSection}>
 
-                                        {/* Add the section */}
+                            {/* Add Image */}
+                            <div className={styles.formItem}>
+                                <div className={styles.formContainer}>
+                                    <button onClick={newImage} className={styles.addSectionButton}>
+                                        <div>
+                                            <p> + </p>
+                                            <p style={{fontSize: "44px"}}> Add Image </p>
+                                        </div>
+
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Images */}
+                            {imageInfo.map((value, index) => {
+                                return (
+                                    <div key={index} className={styles.formItem} id={`image-info-${index}`}>
                                         {value.section}
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            })}
 
-                        {/* Add date info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newSourceInfo} className={styles.addSectionButton}> + </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.formSection}>
-                        {/* Section title */}
-                        <h1 className={styles.sectionTitle}> Custom Info</h1>
-
-                        {/* Custom Info */}
-                        {customInfo.map((value, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`custom-info-${index}`}>
-                                    <div className={styles.formContainer}>
-                                        {/* Add some space */}
-                                        <br/>
-
-                                        {/* Add the section */}
-                                        {value.section}
-                                    </div>
-                                </div>
-                            )
-                        })}
-
-                        {/* Add date info */}
-                        <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newCustomInfo} className={styles.addSectionButton}> + </button>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Right Hand Collumn */}
-                <div className={styles.column}>
 
-                    {/*Images Section */}
+                <div className={styles.row}>
 
-                    {/* Section title */}
-                    <h1 className={styles.sectionTitle}> Images</h1>
-
-                    {/* Image Section */}
-                    <div className={styles.formSection}>
-
-                        {/* Add Image */}
+                    <div className={styles.submitButtonsContainer}>
+                        {/* Generate JSON Button */}
                         <div className={styles.formItem}>
-                            <div className={styles.formContainer}>
-                                <button onClick={newImage} className={styles.addSectionButton}>
-                                    <div>
-                                        <p> + </p>
-                                        <p style={{fontSize: "44px"}}> Add Image </p>
-                                    </div>
-
-                                </button>
-                            </div>
+                            <button onClick={generateJSON} className={styles.submitDataButton}> Generate JSON File </button>
                         </div>
 
-                        {/* Images */}
-                        {imageInfo.map((value, index) => {
-                            return (
-                                <div key={index} className={styles.formItem} id={`image-info-${index}`}>
-                                    {value.section}
-                                </div>
-                            )
-                        })}
+                        {/* Upload to DB */}
+                        <div className={styles.formItem}>
+                            <button className={styles.submitDataButton}> Upload to database </button>
+                        </div>
 
                     </div>
                 </div>
-            </div>
+            </Section>
 
-
-            <div className={styles.row}>
-
-                <div className={styles.submitButtonsContainer}>
-                    {/* Generate JSON Button */}
-                    <div className={styles.formItem}>
-                        <button onClick={generateJSON} className={styles.submitDataButton}> Generate JSON File </button>
-                    </div>
-
-                    {/* Upload to DB */}
-                    <div className={styles.formItem}>
-                        <button className={styles.submitDataButton}> Upload to database </button>
-                    </div>
-
-                </div>
-            </div>
-
+            {/* Page footer */}
+            <Section>
+                <Footer/>
+            </Section>
         </>
     )
 

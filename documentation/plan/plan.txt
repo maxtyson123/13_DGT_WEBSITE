@@ -25,13 +25,13 @@ Features:
 - [ ] Dynamic Plant Index
 - [ ] Dynamic Plant Page
 - [ ] Plant page should have sections, sections and their images should alternate from left to right automatically
-- [ ] Stats
+- [x] Stats
 - [ ] Accessibility Settings
 - [ ] Calendar of plant in season
 
 Possible Features:
 - [x] 3D Parallax Plant on Header
-- [ ] Page to log a new plant
+- [x] Page to log a new plant
 - [ ] Social Media Side where users sign up and post pictures of plants they see, automatically tagged with location and date
 - [ ] Plant of the day
 - [ ] API to get plant information and upload plants

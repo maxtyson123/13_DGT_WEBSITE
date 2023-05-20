@@ -1,6 +1,8 @@
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
 import React from "react";
+import Section from "@/components/section";
+import Footer from "@/components/footer";
 
 type CalenderRef = React.ForwardedRef<HTMLDivElement>
 export default function Calender(ref: CalenderRef){
@@ -10,7 +12,13 @@ export default function Calender(ref: CalenderRef){
         <>
             <HtmlHeader currentPage={pageName}/>
             <Navbar currentPage={pageName}/>
-            {/* Add a page transition */}
+
+
+
+            {/* Page footer */}
+            <Section>
+                <Footer/>
+            </Section>
         </>
     )
 }
