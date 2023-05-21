@@ -7,7 +7,6 @@
 // TODO: Search page to search for plants
 // TODO: Calendar page to show all the plants that are in season
 // TODO: Authentication
-// TODO: Upload the plant data to the database
 // TODO: Responsive design
 // TODO: Accessibility Settings (Dark mode, font size, etc.)
 // TODO: Any extensions to the website

@@ -1,5 +1,6 @@
-import { db } from '@vercel/postgres';
-import { NextApiRequest, NextApiResponse } from 'next';
+import {db} from '@vercel/postgres';
+import {NextApiRequest, NextApiResponse} from 'next';
+
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -64,7 +65,7 @@ export default async function handler(
                                 array_agg(start_month) AS months_ready_start_months,
                                 array_agg(end_month) AS months_ready_end_months
                                 FROM months_ready_for_use
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) months_ready ON plants.id = months_ready.plant_id`;
                     break;
@@ -85,7 +86,7 @@ export default async function handler(
                                 array_agg(preparation) AS edible_preparation,
                                 array_agg(preparation_type) AS edible_preparation_type
                                 FROM edible
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) edible ON plants.id = edible.plant_id`;
                     break;
@@ -105,7 +106,7 @@ export default async function handler(
                                 array_agg(image) AS medical_images,
                                 array_agg(preparation) AS medical_preparation
                                 FROM medical
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) medical ON plants.id = medical.plant_id`;
                     break;
@@ -125,7 +126,7 @@ export default async function handler(
                                 array_agg(image) AS craft_images,
                                 array_agg(additional_info) AS craft_additional_info
                                 FROM craft
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) craft ON plants.id = craft.plant_id`;
                     break;
@@ -143,7 +144,7 @@ export default async function handler(
                                 array_agg(source_type) AS source_types,
                                 array_agg(data) AS source_data
                                 FROM source
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) source ON plants.id = source.plant_id`;
                     break;
@@ -160,10 +161,10 @@ export default async function handler(
                                 array_agg(title) AS custom_titles,
                                 array_agg(text) AS custom_text
                                 FROM custom
-                                WHERE plant_id = 10
+                                WHERE plant_id = ${id}
                                 GROUP BY plant_id
                                 ) custom ON plants.id = custom.plant_id
-                                WHERE plants.id = 10`;
+                                WHERE plants.id = ${id}`;
             }
 
         }
@@ -199,7 +200,7 @@ export default async function handler(
 
     } catch (error) {
         // If there is an error, return the error
-        return response.status(500).json({ error });
+        return response.status(500).json({ error: error });
     }
 
 }

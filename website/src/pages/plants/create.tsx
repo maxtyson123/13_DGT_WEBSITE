@@ -12,13 +12,14 @@ import {
 } from "@/components/input_sections";
 import Image from "next/image";
 
-import {PlantData} from "@/modules/plant_data";
+import {ConvertPlantDataIntoApi, PlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
+import axios from "axios";
 
 // Constants
-const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
+const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Wood", "Gum", "Whole Plant"];
 const MONTHS        = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
 
 
@@ -958,7 +959,7 @@ export default function CreatePlant() {
     // Page Constants
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
-    
+
     // Value Setters
     const [imageInfo, setImageInfo]                 = useState<ImageInfo[]>([]);
     const [englishName, setEnglishName]             = useState("")
@@ -1164,10 +1165,6 @@ export default function CreatePlant() {
     }
 
     const generateJSON = () => {
-        if(!validateInput()){
-            return
-        }
-
         let plantOBJ : PlantData = {
             id: 1,
             preferred_name: "",
@@ -1336,8 +1333,19 @@ export default function CreatePlant() {
             plantOBJ.sections.push(customInfoOBJ);
         }
 
-        // Log for debugging as well
-        console.log(plantOBJ);
+        return plantOBJ;
+
+
+
+    }
+
+    const downloadPlant = () => {
+
+        if(!validateInput()){
+            return
+        }
+
+        const plantOBJ = generateJSON();
 
         // Download the JSON file
         const element = document.createElement("a");
@@ -1349,6 +1357,44 @@ export default function CreatePlant() {
 
         // Remove the element
         document.body.removeChild(element);
+    }
+
+    const uploadPlant = async () => {
+
+        if(!validateInput()){
+            return
+        }
+
+        // Generate the JSON file
+        const jsonData = generateJSON();
+
+        // Convert the JSON file to API format
+        const uploadApiData = ConvertPlantDataIntoApi(jsonData)
+
+        let result;
+
+        try{
+            // Upload the data to the database using the upload API by passing each json key as params
+            result = await axios.post(`/api/plants/upload`, uploadApiData);
+
+        } catch (err) {
+            console.log(err);
+
+            //TODO: Error handling
+            return;
+        }
+
+        const url = "/plants/" + result.data.id
+        console.log(url);
+
+        // If the upload was successful, redirect to the plant page
+        if(result.status === 200){
+            window.location.href = url;
+        }
+
+        console.log(result);
+
+
 
     }
 
@@ -1716,12 +1762,12 @@ export default function CreatePlant() {
                     <div className={styles.submitButtonsContainer}>
                         {/* Generate JSON Button */}
                         <div className={styles.formItem}>
-                            <button onClick={generateJSON} className={styles.submitDataButton}> Generate JSON File </button>
+                            <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON File </button>
                         </div>
 
                         {/* Upload to DB */}
                         <div className={styles.formItem}>
-                            <button className={styles.submitDataButton}> Upload to database </button>
+                            <button onClick={uploadPlant} className={styles.submitDataButton}> Upload to database </button>
                         </div>
 
                     </div>
