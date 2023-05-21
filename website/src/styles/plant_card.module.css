@@ -22,8 +22,15 @@
  It is unknown the size of the image that will be used, so use object-fit: contain to ensure the image is not stretched.
  */
 .image{
-    object-fit: fill;
-    padding: 10px;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+
+}
+
+.imageContainer{
+    width: 400px;
+    height: 400px;
 }
 
 /*
@@ -123,3 +130,4 @@
     text-align: center;
 
 }
+

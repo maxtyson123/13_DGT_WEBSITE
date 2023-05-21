@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {getFromCache, saveToCache} from "@/modules/cache";
 
 export default function Stats(){
 
@@ -19,22 +20,17 @@ export default function Stats(){
     useEffect( () => {
         async function fetchData() {
             try {
-                console.log("Fetching data...")
 
                 let res = null;
 
+                const storedData = getFromCache("plant_stats");
+
                 // Check if the data is already in the session storage (this is to prevent the data from being fetched multiple times)
-                if (sessionStorage.getItem("plant_stats") !== null) {
-                    console.log("Data already fetched... Using session storage")
-
+                if (storedData !== null) {
                     // Get the data from the session storage
-                    res = sessionStorage.getItem("plant_stats");
-
-                    // If the data is not null, convert it to JSON
-                    if (res !== null) { res = JSON.parse(res); }
+                    res = storedData;
 
                 }else{
-                    console.log("Data not fetched yet... Fetching from API")
 
                     // Get the data from the API
                     res = await axios.get('/api/plants/uses');
@@ -42,13 +38,9 @@ export default function Stats(){
                     // Get the contents of the response
                     res = res.data;
 
-                    // Set the data in the session storage
-                    sessionStorage.setItem("plant_stats", JSON.stringify(res));
+                    // Store in the cache
+                    saveToCache("plant_stats", res)
                 }
-
-                // Debug
-                console.log("Data fetched!")
-                console.log(res)
 
                 // Set the duration it took to fetch the data
                 setDuration(Date.now() - startTime);

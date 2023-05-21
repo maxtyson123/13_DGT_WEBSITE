@@ -19,7 +19,6 @@ export interface PlantData {
         type:           string;
         name:           string;
         downloadable:   boolean;
-        flags:          string[];
     }[];
     sections:           any[];
 }
@@ -56,7 +55,6 @@ export interface PlantDataApi {
     attachment_types:           string[];
     attachment_names:           string[];
     attachment_downloadable:    boolean[];
-    attachment_flags:           string[][];
 
 }
 
@@ -112,7 +110,6 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.attachment_types        = [];
         apiData.attachment_names        = [];
         apiData.attachment_downloadable = [];
-        apiData.attachment_flags        = [];
     }
 
     return apiData;
@@ -151,7 +148,6 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.attachment_types             == null
         || apiData.attachment_names             == null
         || apiData.attachment_downloadable      == null
-        || apiData.attachment_flags             == null
     );
 }
 
@@ -210,15 +206,12 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             type: "image",
             name: "",
             downloadable: false,
-            flags: [""],
         }
 
         imageInfoOBJ.path           = apiData.attachment_paths[i];
         imageInfoOBJ.type           = apiData.attachment_types[i];
         imageInfoOBJ.name           = apiData.attachment_names[i];
         imageInfoOBJ.downloadable   = apiData.attachment_downloadable[i];
-        imageInfoOBJ.flags          = apiData.attachment_flags[i];
-
     }
 
     // Date info
@@ -352,7 +345,6 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         attachment_types:           [],
         attachment_names:           [],
         attachment_downloadable:    [],
-        attachment_flags:           [],
     };
 
     // Basic info
@@ -377,7 +369,6 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         apiData.attachment_types.push(plantData.attachments[i].type);
         apiData.attachment_names.push(plantData.attachments[i].name);
         apiData.attachment_downloadable.push(plantData.attachments[i].downloadable);
-        apiData.attachment_flags.push(plantData.attachments[i].flags);
     }
 
     // Loop through the sections

@@ -1,7 +1,5 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Get the plants from the database for the featured plants (random plants)
-// TODO: Fix image uplaoding
 // TODO: Comment Code
 // TODO: Plant page for the plants
 // TODO: Plant index page for all the plants
@@ -10,13 +8,14 @@
 // TODO: Authentication
 // TODO: Responsive design
 // TODO: Accessibility Settings (Dark mode, font size, etc.)
+// TODO: Comment Code
 // TODO: Any extensions to the website
 // TODO: Testing
 // TODO: Code cleanup
 // TODO: Code Validation
 // TODO: Documentation
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 
 import styles from "@/styles/index.module.css"
 import Navbar from "@/components/navbar";
@@ -25,37 +24,71 @@ import Section from "@/components/section";
 import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import ScrollingPlant from "@/components/scrolling_plant";
-import PlantCard, {getLocalData} from "@/components/plant_card";
-import {PlantData} from "@/modules/plant_data";
+import {PlantCardApi, PlantCardLoading} from "@/components/plant_card";
 import Image from "next/image";
 import Stats from "@/components/stats";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
+import {getFromCache, saveToCache} from "@/modules/cache";
+import axios from "axios";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
     const pageName = "Home"
 
-    const [plantData, setPlantData] = useState<PlantData | null>(null)
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [plantIds, setPlantIds] = React.useState([0,0,0])
 
-    // Get the plant data, depend on the id changing
     useEffect(() => {
 
-        // Set the loading state
-        setLoading(true)
-
-        // Get the plant data
-        getLocalData("1").then((data) => {
-
-            // Set the plant data
-            setPlantData(data)
-
-            // Set the loading state
-            setLoading(false)
-        })
+        getPlantIDs();
 
     }, [])
+
+    const getPlantIDs = async () => {
+
+        // Check if the plant ids have been cached
+        const ids = getFromCache("plantIds")
+
+        // If the plant ids have been cached
+        if (ids !== null) {
+            setPlantIds(ids)
+            setIsLoading(false)
+        }else{
+
+            // Use the api to get the plant ids
+            try{
+                // Make the api call
+                const response = await axios.get("/api/plants/random?amount=3")
+
+                // API returns the data as "data" which axios also uses so we need to use response.data.data
+                const data = response.data.data
+
+                let ids = [0,0,0]
+
+                // Loop through the data and get the ids
+                for (let i = 0; i < data.length; i++) {
+                    ids[i] = data[i].id
+                }
+
+                // Set the plant ids
+                setPlantIds(ids)
+                setIsLoading(false)
+
+                // Save the plant ids to the cache
+                saveToCache("plantIds", ids)
+
+
+            } catch (error) {
+
+                console.log(error)
+
+            }
+
+        }
+
+    }
+
 
     return (
         <>
@@ -98,11 +131,24 @@ export default function Home(ref: HomeRef) {
 
                 {/* Container that centers the cards */}
                 <div className={styles.cardsContainer}>
+                    {
+                        isLoading ?
+                        <>
+                            <PlantCardLoading/>
+                            <PlantCardLoading/>
+                            <PlantCardLoading/>
+                        </>
+                        :
+                        <>
+                            <PlantCardApi id={plantIds[0]}/>
+                            <PlantCardApi id={plantIds[1]}/>
+                            <PlantCardApi id={plantIds[2]}/>
+                        </>
 
-                    {/* Plant cards */}
-                    <PlantCard data={plantData}/>
-                    <PlantCard data={plantData}/>
-                    <PlantCard data={plantData}/>
+                    }
+
+
+
                 </div>
             </Section>
 

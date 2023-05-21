@@ -1198,7 +1198,6 @@ export default function CreatePlant() {
                 type: "image",
                 name: "",
                 downloadable: false,
-                flags: [],
             }
 
             imageInfoOBJ.path = thisImageInfo.image_url;

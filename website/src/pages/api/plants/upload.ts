@@ -51,8 +51,7 @@ export default async function handler(
             attachment_paths,
             attachment_types,
             attachment_names,
-            attachment_downloadable,
-            attachment_flags
+            attachment_downloadable
 
         } = request.body;
 
@@ -91,15 +90,6 @@ export default async function handler(
         if(attachment_types === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment types parameter not found' }); }
         if(attachment_names === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment names parameter not found' }); }
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
-        if(attachment_flags === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment flags parameter not found' }); }
-
-        // If the flags array is empty, set it to null
-        for (let i = 0; i < attachment_flags.length; i++) {
-            if(attachment_flags[i].length === 0) {
-                attachment_flags[i] = null;
-            }
-        }
-
         // Create the query
         let query = ``;
 
@@ -237,13 +227,13 @@ export default async function handler(
         if(attachment_paths.length > 0) {
 
             // Tell the query that we are adding to the attachments table
-            query += `INSERT INTO attachments (plant_id, path, type, name, downloadable, flags) VALUES `;
+            query += `INSERT INTO attachments (plant_id, path, type, name, downloadable) VALUES `;
 
             // Loop through each of the attachments
             for(let i = 0; i < attachment_paths.length; i++) {
 
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]}, ${attachment_flags[i]})`;
+                query += `((SELECT id FROM new_plant), '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]})`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < attachment_paths.length - 1) {

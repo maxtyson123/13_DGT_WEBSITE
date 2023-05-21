@@ -170,7 +170,7 @@ export default async function handler(
                 case 'attachments':
 
                     // Select all the attachments data and make them into an array
-                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_names, attachments.attachment_downloadable, attachments.attachment_flags,`;
+                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_names, attachments.attachment_downloadable,`;
 
                     // Join the attachments table
                     joiner += ` LEFT JOIN (
@@ -179,8 +179,7 @@ export default async function handler(
                                 array_agg(path) AS attachment_paths,
                                 array_agg(type) AS attachment_types,
                                 array_agg(name) AS attachment_names,
-                                array_agg(downloadable) AS attachment_downloadable,
-                                array_agg(flags) AS attachment_flags
+                                array_agg(downloadable) AS attachment_downloadable
                                 FROM attachments
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
