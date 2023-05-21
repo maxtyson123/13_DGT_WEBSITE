@@ -32,6 +32,7 @@ import {PlantData} from "@/modules/plant_data";
 import Image from "next/image";
 import Stats from "@/components/stats";
 import Footer from "@/components/footer";
+import Credits from "@/components/credits";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -141,6 +142,7 @@ export default function Home(ref: HomeRef) {
                     <Footer/>
             </Section>
 
+            <Credits/>
         </>
     );
 }

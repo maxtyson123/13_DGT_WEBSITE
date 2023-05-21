@@ -2,6 +2,12 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import {getLocalData} from "@/components/plant_card";
 import {PlantData} from "@/modules/plant_data";
+import Section from "@/components/section";
+import Footer from "@/components/footer";
+import Credits from "@/components/credits";
+import HtmlHeader from "@/components/html_header";
+import Navbar from "@/components/navbar";
+import PageHeader from "@/components/page_header";
 
 
 export default function PlantPage() {
@@ -38,19 +44,20 @@ export default function PlantPage() {
 
     return (
         <>
-            <h1>Plant ID: {isLoading ? "Loading..." : plantData?.english_name}</h1>
+
+
+            {/* Set up the page header and navbar */}
+            <HtmlHeader currentPage={isLoading ? "Loading..." : plantData?.english_name}/>
+            <Navbar currentPage={isLoading ? "Loading..." : plantData?.english_name}/>
+
+            <Section>
+                <PageHeader size={"small"}>
+                    <h1>Plant ID: {isLoading ? "Loading..." : plantData?.english_name}</h1>
+                </PageHeader>
+            </Section>
+
 
             {/*
-
-
-                    <Navbar/>  - This sticky
-
-                    <Section>
-                        <PageHeader>
-                            - Plant Header
-                        </PageHeader>
-                    </Section>
-
                     <Section>
                       - Plant Intro
                     </Section>
@@ -61,11 +68,14 @@ export default function PlantPage() {
 
                     - Auto Generated Sections (map loop into a AutoSection component)
 
-                    <Section>
-                        <Footer/>
-                    </Section>
-
             */}
+
+            {/* Page footer */}
+            <Section>
+                <Footer/>
+            </Section>
+
+            <Credits/>
         </>
     );
 }

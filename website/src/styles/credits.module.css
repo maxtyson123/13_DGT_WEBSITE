@@ -1,0 +1,38 @@
+.creditsContainer{
+    position: fixed;
+    bottom: 0;
+    right: 2.5%;
+    color: #FFFFFF;
+    background-color: #0a670a;
+    z-index: 3;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.hidden{
+
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+.contentContainer{
+    opacity: 1;
+    height: auto;
+}
+
+.item{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00B4D8;
+    text-decoration: underline;
+
+}
+
+
+.item a{
+    margin-left: 5px;
+}

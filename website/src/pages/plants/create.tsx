@@ -15,6 +15,7 @@ import Image from "next/image";
 import {PlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
+import Credits from "@/components/credits";
 
 // Constants
 const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
@@ -1734,6 +1735,8 @@ export default function CreatePlant() {
             <Section>
                 <Footer/>
             </Section>
+
+            <Credits/>
         </>
     )
 
