@@ -7,7 +7,7 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-   return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
+    return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -20,7 +20,7 @@ export default async function handler(
 
     // Try uploading the data to the database
     try {
-        const {
+        let {
             preferred_name,
             english_name,
             maori_name,
@@ -47,7 +47,12 @@ export default async function handler(
             source_types,
             source_data,
             custom_titles,
-            custom_text
+            custom_text,
+            attachment_paths,
+            attachment_types,
+            attachment_names,
+            attachment_downloadable,
+            attachment_flags
 
         } = request.body;
 
@@ -82,7 +87,18 @@ export default async function handler(
         if(source_data === null)                { return response.status(missingParametersErrorCode).json({ error: 'Source data parameter not found' }); }
         if(custom_titles === null)              { return response.status(missingParametersErrorCode).json({ error: 'Custom titles parameter not found' }); }
         if(custom_text === null)                { return response.status(missingParametersErrorCode).json({ error: 'Custom text parameter not found' }); }
+        if(attachment_paths === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment paths parameter not found' }); }
+        if(attachment_types === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment types parameter not found' }); }
+        if(attachment_names === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment names parameter not found' }); }
+        if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
+        if(attachment_flags === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment flags parameter not found' }); }
 
+        // If the flags array is empty, set it to null
+        for (let i = 0; i < attachment_flags.length; i++) {
+            if(attachment_flags[i].length === 0) {
+                attachment_flags[i] = null;
+            }
+        }
 
         // Create the query
         let query = ``;
@@ -217,6 +233,29 @@ export default async function handler(
             }
         }
 
+        // If there are attachments, add them to the query
+        if(attachment_paths.length > 0) {
+
+            // Tell the query that we are adding to the attachments table
+            query += `INSERT INTO attachments (plant_id, path, type, name, downloadable, flags) VALUES `;
+
+            // Loop through each of the attachments
+            for(let i = 0; i < attachment_paths.length; i++) {
+
+                // Add the data to the query
+                query += `((SELECT id FROM new_plant), '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]}, ${attachment_flags[i]})`;
+
+                // If this is not the last item, add a comma otherwise add a semicolon
+                if(i < attachment_paths.length - 1) {
+                    query += `, `;
+                } else {
+                    query += `;`;
+                }
+
+            }
+            
+        }
+
         console.log("=====================================")
         console.log(query);
         console.log("=====================================")
@@ -225,6 +264,7 @@ export default async function handler(
         const data  = await client.query(query);
 
         // Get the id of the new plant
+        // @ts-ignore (has to be like this data[0] is an object)
         const id = data[0].rows[0].id;
 
         // If there is no id, return an error

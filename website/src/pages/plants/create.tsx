@@ -1384,11 +1384,9 @@ export default function CreatePlant() {
             return;
         }
 
-        const url = "/plants/" + result.data.id
-        console.log(url);
-
-        // If the upload was successful, redirect to the plant page
-        if(result.status === 200){
+        if(result.data.id !== undefined){
+            const url = "/plants/" + result.data.id
+            console.log(url);
             window.location.href = url;
         }
 

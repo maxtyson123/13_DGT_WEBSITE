@@ -1,6 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: Get the plants from the database for the featured plants (random plants)
+// TODO: Fix image uplaoding
 // TODO: Comment Code
 // TODO: Plant page for the plants
 // TODO: Plant index page for all the plants

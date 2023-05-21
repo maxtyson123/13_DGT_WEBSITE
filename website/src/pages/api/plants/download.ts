@@ -163,8 +163,32 @@ export default async function handler(
                                 FROM custom
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
-                                ) custom ON plants.id = custom.plant_id
-                                WHERE plants.id = ${id}`;
+                                ) custom ON plants.id = custom.plant_id`;
+
+                    break;
+
+                case 'attachments':
+
+                    // Select all the attachments data and make them into an array
+                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_names, attachments.attachment_downloadable, attachments.attachment_flags,`;
+
+                    // Join the attachments table
+                    joiner += ` LEFT JOIN (
+                                SELECT
+                                plant_id,
+                                array_agg(path) AS attachment_paths,
+                                array_agg(type) AS attachment_types,
+                                array_agg(name) AS attachment_names,
+                                array_agg(downloadable) AS attachment_downloadable,
+                                array_agg(flags) AS attachment_flags
+                                FROM attachments
+                                WHERE plant_id = ${id}
+                                GROUP BY plant_id
+                                ) attachments ON plants.id = attachments.plant_id`;
+                    break
+
+                default:
+                    break;
             }
 
         }
@@ -175,6 +199,9 @@ export default async function handler(
 
         // Remove the last comma from the selector
         selector = selector.slice(0, -1);
+
+        // Add to the joiner
+        joiner += ` WHERE plants.id = ${id}`;
 
         // Create the query
         const query = `

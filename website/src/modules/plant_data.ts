@@ -52,6 +52,12 @@ export interface PlantDataApi {
     source_data:                string[];
     custom_titles:              string[];
     custom_text:                string[];
+    attachment_paths:           string[];
+    attachment_types:           string[];
+    attachment_names:           string[];
+    attachment_downloadable:    boolean[];
+    attachment_flags:           string[][];
+
 }
 
 export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
@@ -100,6 +106,15 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.custom_text     = [];
     }
 
+    // If this plant has no attachment section, set the attachment paths to an empty array
+    if (apiData.attachment_paths == null) {
+        apiData.attachment_paths        = [];
+        apiData.attachment_types        = [];
+        apiData.attachment_names        = [];
+        apiData.attachment_downloadable = [];
+        apiData.attachment_flags        = [];
+    }
+
     return apiData;
 }
 
@@ -132,6 +147,11 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.source_data                  == null
         || apiData.custom_titles                == null
         || apiData.custom_text                  == null
+        || apiData.attachment_paths             == null
+        || apiData.attachment_types             == null
+        || apiData.attachment_names             == null
+        || apiData.attachment_downloadable      == null
+        || apiData.attachment_flags             == null
     );
 }
 
@@ -184,7 +204,22 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.long_description  = apiData.long_description;
 
     // Image info
-    //TODO: Shit forgot to do attachments
+    for(let i = 0; i < apiData.attachment_paths.length; i++) {
+        let imageInfoOBJ = {
+            path: "",
+            type: "image",
+            name: "",
+            downloadable: false,
+            flags: [""],
+        }
+
+        imageInfoOBJ.path           = apiData.attachment_paths[i];
+        imageInfoOBJ.type           = apiData.attachment_types[i];
+        imageInfoOBJ.name           = apiData.attachment_names[i];
+        imageInfoOBJ.downloadable   = apiData.attachment_downloadable[i];
+        imageInfoOBJ.flags          = apiData.attachment_flags[i];
+
+    }
 
     // Date info
     for(let i = 0; i < apiData.months_ready_events.length; i++) {
@@ -313,6 +348,11 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         source_data:                [],
         custom_titles:              [],
         custom_text:                [],
+        attachment_paths:           [],
+        attachment_types:           [],
+        attachment_names:           [],
+        attachment_downloadable:    [],
+        attachment_flags:           [],
     };
 
     // Basic info
@@ -329,6 +369,15 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         apiData.months_ready_events.push(plantData.months_ready_for_use[i].event);
         apiData.months_ready_start_months.push(plantData.months_ready_for_use[i].start_month);
         apiData.months_ready_end_months.push(plantData.months_ready_for_use[i].end_month);
+    }
+
+    // Attachment info
+    for(let i = 0; i < plantData.attachments.length; i++) {
+        apiData.attachment_paths.push(plantData.attachments[i].path);
+        apiData.attachment_types.push(plantData.attachments[i].type);
+        apiData.attachment_names.push(plantData.attachments[i].name);
+        apiData.attachment_downloadable.push(plantData.attachments[i].downloadable);
+        apiData.attachment_flags.push(plantData.attachments[i].flags);
     }
 
     // Loop through the sections

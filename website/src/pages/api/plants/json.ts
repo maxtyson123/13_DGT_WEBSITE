@@ -49,12 +49,12 @@ export default async function handler(
                 }
 
                 // Download the data from the database using the download API with the ID and table
-                let plantsInfo = await axios.get(`${url}/api/plants/download?id=${id}&table=plants&table=months_ready_for_use&table=edible&table=medical&table=craft&table=source&table=custom`);
+                let plantsInfo = await axios.get(`${url}/api/plants/download?id=${id}&table=plants&table=months_ready_for_use&table=edible&table=medical&table=craft&table=source&table=custom&table=attachments`);
                 plantsInfo = plantsInfo.data;
 
                 // If there is no plant data, return an error
-                if(plantsInfo.error){
-                    return response.status(404).json({ error: plantsInfo.error });
+                if (plantsInfo.data.error) {
+                    return response.status(404).json({ error: plantsInfo.data.error });
                 }
 
                 let apiData = plantsInfo.data as PlantDataApi;
