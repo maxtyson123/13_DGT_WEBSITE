@@ -1,10 +1,10 @@
 .creditsContainer{
     position: fixed;
     bottom: 0;
-    right: 2.5%;
+    left: 2.5%;
     color: #FFFFFF;
     background-color: #0a670a;
-    z-index: 3;
+    z-index: 999;
     padding: 10px;
     border-radius: 10px 10px 0 0;
     cursor: pointer;

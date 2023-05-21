@@ -15,7 +15,7 @@ import Image from "next/image";
 import {PlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
+import ScrollToTop from "@/components/scroll_to_top";
 
 // Constants
 const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Whole Plant"];
@@ -958,10 +958,7 @@ export default function CreatePlant() {
     // Page Constants
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
-
-    // Add a state variable to trigger a re-render
-    const [renderKey, setRenderKey] = useState(0);
-
+    
     // Value Setters
     const [imageInfo, setImageInfo]                 = useState<ImageInfo[]>([]);
     const [englishName, setEnglishName]             = useState("")
@@ -1491,7 +1488,7 @@ export default function CreatePlant() {
                             {edibleInfo.map((value : EdibleInfo, index) => {
 
                                 return (
-                                    <div key={index + renderKey} className={styles.formItem} id={`edible-info-${index}`}>
+                                    <div key={index} className={styles.formItem} id={`edible-info-${index}`}>
                                         <div className={styles.formContainer}>
                                             {/* Add some space */}
                                             <br/>
@@ -1736,7 +1733,9 @@ export default function CreatePlant() {
                 <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
+
+           
         </>
     )
 

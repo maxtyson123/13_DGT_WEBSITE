@@ -3,7 +3,7 @@ import HtmlHeader from "@/components/html_header";
 import React from "react";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
+import ScrollToTop from "@/components/scroll_to_top";
 
 type CalenderRef = React.ForwardedRef<HTMLDivElement>
 export default function Calender(ref: CalenderRef){
@@ -21,7 +21,9 @@ export default function Calender(ref: CalenderRef){
                 <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
+
+           
         </>
     )
 }

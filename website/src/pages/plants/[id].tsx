@@ -4,10 +4,10 @@ import {getLocalData} from "@/components/plant_card";
 import {PlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 import PageHeader from "@/components/page_header";
+import ScrollToTop from "@/components/scroll_to_top";
 
 
 export default function PlantPage() {
@@ -39,7 +39,7 @@ export default function PlantPage() {
             setLoading(false)
         })
 
-    }, [router.query])
+    }, [id, router.query])
 
 
     return (
@@ -75,7 +75,9 @@ export default function PlantPage() {
                 <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
+                
+           
         </>
     );
 }

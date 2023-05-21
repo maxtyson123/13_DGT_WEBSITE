@@ -1,9 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Credits card
-// TODO: Scroll to top button
-// TODO: Comment Code
 // TODO: Get the plants from the database for the featured plants (random plants)
+// TODO: Comment Code
 // TODO: Plant page for the plants
 // TODO: Plant index page for all the plants
 // TODO: Search page to search for plants
@@ -32,7 +30,7 @@ import {PlantData} from "@/modules/plant_data";
 import Image from "next/image";
 import Stats from "@/components/stats";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
+import ScrollToTop from "@/components/scroll_to_top";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -142,7 +140,7 @@ export default function Home(ref: HomeRef) {
                     <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
         </>
     );
 }

@@ -3,7 +3,7 @@ import HtmlHeader from "@/components/html_header";
 import React from "react";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
+import ScrollToTop from "@/components/scroll_to_top";
 
 type SearchRef = React.ForwardedRef<HTMLDivElement>
 export default function Search(ref: SearchRef){
@@ -19,7 +19,9 @@ export default function Search(ref: SearchRef){
                 <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
+
+           
         </>
     )
 }

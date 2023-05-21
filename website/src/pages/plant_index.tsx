@@ -3,7 +3,7 @@ import HtmlHeader from "@/components/html_header";
 import React from "react";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
-import Credits from "@/components/credits";
+import ScrollToTop from "@/components/scroll_to_top";
 
 type IndexRef = React.ForwardedRef<HTMLDivElement>
 export default function PlantIndex(ref: IndexRef){
@@ -19,7 +19,9 @@ export default function PlantIndex(ref: IndexRef){
                 <Footer/>
             </Section>
 
-            <Credits/>
+            <ScrollToTop/>
+
+           
         </>
     )
 }

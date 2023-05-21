@@ -18,7 +18,7 @@ export default function Credits(){
                 <div className={ expanded ? styles.contentContainer : styles.hidden}>
                     <div className={styles.item}>
                         <FontAwesomeIcon icon={faCodeBranch} />
-                        <a href="https://github.com/maxtyson123/13_DGT_WEBSITE">Source</a>
+                        <a target="_blank" href="https://github.com/maxtyson123/13_DGT_WEBSITE">Source</a>
                     </div>
                 </div>
             </div>
