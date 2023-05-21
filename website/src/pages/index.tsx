@@ -1,6 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: Comment Code
+// TODO: Redo the images for the plants
 // TODO: Plant page for the plants
 // TODO: Plant index page for all the plants
 // TODO: Search page to search for plants
@@ -36,13 +37,13 @@ type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
     const pageName = "Home"
 
+    // Stats for the featured plants
     const [isLoading, setIsLoading] = React.useState(true)
     const [plantIds, setPlantIds] = React.useState([0,0,0])
 
+    // Get the plant ids when the page loads
     useEffect(() => {
-
         getPlantIDs();
-
     }, [])
 
     const getPlantIDs = async () => {
@@ -61,12 +62,13 @@ export default function Home(ref: HomeRef) {
                 // Make the api call
                 const response = await axios.get("/api/plants/random?amount=3")
 
-                // API returns the data as "data" which axios also uses so we need to use response.data.data
+                // API returns the data as "data" which axios also uses, so we need to use response.data.data
                 const data = response.data.data
 
+                // Create an array to store the ids
                 let ids = [0,0,0]
 
-                // Loop through the data and get the ids
+                // Loop through the data and set the ids
                 for (let i = 0; i < data.length; i++) {
                     ids[i] = data[i].id
                 }
@@ -134,26 +136,26 @@ export default function Home(ref: HomeRef) {
                     {
                         isLoading ?
                         <>
+                            {/* While the data is being fetched, display the loading cards */}
                             <PlantCardLoading/>
                             <PlantCardLoading/>
                             <PlantCardLoading/>
                         </>
                         :
                         <>
+                            {/* Once the data has been fetched, load the individual card's data */}
                             <PlantCardApi id={plantIds[0]}/>
                             <PlantCardApi id={plantIds[1]}/>
                             <PlantCardApi id={plantIds[2]}/>
                         </>
 
                     }
-
-
-
                 </div>
             </Section>
 
 
             <Section autoPadding>
+                {/* A page break to give the user a break from the content */}
                 <div className={styles.pageBreakContainer}>
                     <div className={styles.pageBreak}>
                         <Image
@@ -176,7 +178,11 @@ export default function Home(ref: HomeRef) {
 
             {/* Section for the plant stats */}
             <Section autoPadding>
+
+                {/* Container for the stats */}
                 <div className={styles.pageBreakContainer}>
+
+                    {/* Display the stats */}
                     <Stats/>
                 </div>
             </Section>
@@ -186,6 +192,7 @@ export default function Home(ref: HomeRef) {
                     <Footer/>
             </Section>
 
+            {/* Allow the user to scroll to the top of the page easily*/}
             <ScrollToTop/>
         </>
     );

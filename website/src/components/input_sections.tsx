@@ -5,7 +5,7 @@ import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 
 
-// States
+// States for the input (as type bc its typescript)
 export type ValidationState = "normal" | "error" | "success";
 
 export function useInputState(initialValue: string, required: boolean, state: ValidationState, setThisState: (state: ValidationState) => void, setThisRequired: (required: boolean) => void) {
@@ -45,6 +45,7 @@ export function useInputState(initialValue: string, required: boolean, state: Va
     const handleInputFocus = () => setIsInputFocused(true);
     const handleInputBlur = () => setIsInputFocused(false);
 
+    // Return the states and functions
     return {
         inputValue,
         setInputValue,
@@ -55,6 +56,7 @@ export function useInputState(initialValue: string, required: boolean, state: Va
     };
 }
 
+// Define the props needed and their types for the small input
 type SmallInputProps = {
     placeHolder: string;
     required: boolean;
@@ -69,7 +71,7 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
 
-
+    // Get the states and functions from the hook
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
         "",
         required,
@@ -125,6 +127,7 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
                         onBlur={handleInputBlur}
                     />
                 </div>
+
                 {/* Show the success icon if the state is in success and if the input is not focused */}
                 {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
@@ -137,6 +140,7 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
 
 }
 
+// Define the props needed and their types for the dropdown input
 type DropdownInputProps = {
     placeHolder: string;
     required: boolean;
@@ -153,7 +157,7 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
     const [thisRequired, setThisRequired] = useState(required);
     const [customOption, setCustomOption] = useState(false)
 
-
+    // Get the states and functions from the hook
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
         "",
         required,
@@ -184,6 +188,7 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
 
     return(
         <>
+            {/* The dropdown input section */}
             <div className={styles.dropdownInput + " " + stateClass} ref={inputRef}>
 
                 {/* Show the required text if the input is not focused */}
@@ -266,7 +271,7 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
     )
 }
 
-
+// Define the props needed and their types for the simple text area
 type SimpleTextAreaProps = {
     placeHolder: string;
     required: boolean;
@@ -280,7 +285,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
 
-
+    // Get the states and functions from the hook
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
         "",
         required,
@@ -307,6 +312,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
 
     return(
         <>
+            {/*  The simple text area section */}
             <div className={styles.simpleTextArea + " " + stateClass} ref={inputRef}>
 
                 {/* Show the required text if the input is not focused */}
@@ -314,7 +320,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
                     {thisRequired ? 'Required' : ''}
                 </p>
 
-                {/* Text Are input */}
+                {/* Text Area input */}
                 <textarea
                     className={styles.simpleTextAreaTA}
                     onFocus={handleInputFocus}
@@ -346,6 +352,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
     )
 }
 
+// Define the props needed and their types for the render quill
 interface RenderQuillProps {
     className?: string;
     theme?: string;
@@ -356,11 +363,13 @@ interface RenderQuillProps {
     placeholder?: string;
 }
 
+// Dynamically load the quill component as it requires access to the window object and cannot be server side rendered
 const QuillNoSSRWrapper = dynamic(
     () =>  import('react-quill'),
     { ssr: false, loading: () => <p>Loading ...</p> },
 )
 
+// Define the render quill component using the dynamic component
 class RenderQuill extends React.Component<RenderQuillProps>{
     render () {
         const { className, theme, onFocus, onBlur, value, onChange, placeholder} = this.props;
@@ -378,13 +387,14 @@ class RenderQuill extends React.Component<RenderQuillProps>{
     }
 }
 
+// Advanced text area uses the same props as the simple text area
 export function AdvandcedTextArea({placeHolder, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
 
     // States to track
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
-    const editorRef = useRef(null);
 
+    // Get the states and functions from the hook
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
         "",
         required,
@@ -410,6 +420,7 @@ export function AdvandcedTextArea({placeHolder, required, state, errorText = "",
     }
     return(
         <>
+            {/* The advanced text area section */}
             <div className={styles.advancedTextArea + " " + stateClass} ref={inputRef}>
 
                 <div className={styles.selectBorder}>
@@ -449,93 +460,6 @@ export function AdvandcedTextArea({placeHolder, required, state, errorText = "",
                 </div>
             </div>
         </>
-    )
-
-}
-
-
-type DateSelectorProps = {
-    placeHolder: string;
-    required: boolean;
-    state: ValidationState;
-    errorText?: string;
-    changeEventHandler?: (value: string) => void;
-};
-
-export function DateSelector({placeHolder, required, state, errorText = "", changeEventHandler}: DateSelectorProps){
-
-    // States to track
-    const [thisState, setThisState] = useState(state);
-    const [thisRequired, setThisRequired] = useState(required);
-
-
-    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
-        "",
-        required,
-        state,
-        setThisState,
-        setThisRequired
-    );
-
-    // Set the state class based on the state
-    let stateClass = "";
-    switch (thisState) {
-        case "normal":
-            stateClass = styles.normal;
-            break;
-
-        case "error":
-            stateClass = styles.error;
-            break;
-
-        case "success":
-            stateClass = styles.success;
-            break;
-    }
-
-    return(
-        <>
-            {/* The input section */}
-            <div className={styles.dateInput + " " + stateClass} ref={inputRef}>
-
-                <p className={styles.tooltip} >{placeHolder}</p>
-
-                {/* Show the required text if the input is not focused */}
-                <p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
-                    {thisRequired ? 'Required' : ''}
-                </p>
-
-                {/* The input element, has a placeholder from the props, and a value from the state */}
-                <div className={styles.selectBorder}>
-                    <input
-                        type="date"
-                        placeholder={placeHolder}
-                        value={inputValue}
-                        onChange={(e) => {
-                            setInputValue(e.target.value);
-
-                            // User has changed the value, so the previous state is no longer valid
-                            setThisState("normal");
-
-                            // Pass to the handler if it exists
-                            if (changeEventHandler) {
-                                changeEventHandler(e.target.value);
-                            }
-                        }}
-                        onFocus={handleInputFocus}
-                        onBlur={handleInputBlur}
-                    />
-                </div>
-
-                {/* Show the success icon if the state is in success and if the input is not focused */}
-                {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
-
-
-                {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
-            </div>
-        </>
-
     )
 
 }

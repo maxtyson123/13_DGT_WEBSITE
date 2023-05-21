@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
-import {getLocalData} from "@/components/plant_card";
 import {PlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
@@ -28,16 +27,7 @@ export default function PlantPage() {
 
         // Set the loading state
         setLoading(true)
-
-        // Get the plant data
-        getLocalData(id).then((data) => {
-
-            // Set the plant data
-            setPlantData(data)
-
-            // Set the loading state
-            setLoading(false)
-        })
+        
 
     }, [id, router.query])
 

@@ -14,6 +14,7 @@ export default function Stats(){
     const [numberOfMedicalPlants, setNumberOfMedicalPlants] = useState(0)
     const [numberOfCraftPlants, setNumberOfCraftPlants] = useState(0)
 
+    // Store the start time of the request
     const startTime = Date.now()
     const [duration, setDuration] = useState(0);
 
@@ -48,6 +49,7 @@ export default function Stats(){
 
                 const data = res.data;
 
+                // Variables to store the number of plants for each use
                 let plants = 0;
                 let edible = 0;
                 let medical = 0;
@@ -93,27 +95,35 @@ export default function Stats(){
     return(
         <>
             <div className={styles.statsSection}>
+                {/* Title and time */}
                 <h1> Stats </h1>
                 <p> Request time: {duration} ms </p>
+
+                {/* Put the stats in a row */}
                 <div className={styles.statsRowContainer}>
+
+                    {/* Each stat is a div with the number central and the icon and value inline */}
                     <div className={styles.stat}>
                         <h2> {numberOfPlants} </h2>
                         <FontAwesomeIcon icon={faSeedling} className={styles.inline}/>
                         <p className={styles.inline}> Plants </p>
                     </div>
 
+                    {/* Each stat is a div with the number central and the icon and value inline */}
                     <div className={styles.stat}>
                         <h2> {numberOfEdiblePlants} </h2>
                         <FontAwesomeIcon icon={faBowlFood} className={styles.inline}/>
                         <p className={styles.inline}> Edible </p>
                     </div>
 
+                    {/* Each stat is a div with the number central and the icon and value inline */}
                     <div className={styles.stat}>
                         <h2> {numberOfMedicalPlants} </h2>
                         <FontAwesomeIcon icon={faBookMedical} className={styles.inline}/>
                         <p className={styles.inline}> Medical </p>
                     </div>
 
+                    {/* Each stat is a div with the number central and the icon and value inline */}
                     <div className={styles.stat}>
                         <h2> {numberOfCraftPlants} </h2>
                         <FontAwesomeIcon icon={faTools} className={styles.inline}/>

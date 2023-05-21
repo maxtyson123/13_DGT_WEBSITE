@@ -14,6 +14,7 @@ export default function Footer() {
 
                 {/* Make the image container go behind the content*/}
                 {/* Apply the styling to the div as <Image> uses fit="cover" to make image the size of the div */}
+                {/* Blur data is a low res blurred image that is shown while the image is loading, stored in base64 */}
                 <div className={"absolute -z-10 "+ styles.footerBackgroundImage}>
                     {/* Background Image using Next.js Image Component, with blur placeholder for when the image is loading*/}
                     <Image
@@ -35,10 +36,8 @@ export default function Footer() {
 
                 {/* Links to the other pages */}
                 <div className={styles.linksContainer}>
-
                     <div className={styles.links}>
                         <h1> Rongoa </h1>
-
                         <ul>
                             {/* Loop through the pageNames array and create a link for each page*/}
                             {pageNames.map((page, index) => (

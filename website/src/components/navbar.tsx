@@ -7,6 +7,7 @@ import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {faBook, faCalendar, faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
 
 // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
+// Export it so that it can be used in the footer, that way it is easier to keep the navbar and footer in sync with what links they have
 export const pageNames = [
     ["Home", faHome, "/"],
     ["Plant Index", faBook, "/plant_index"],

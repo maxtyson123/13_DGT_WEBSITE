@@ -5,18 +5,10 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {getFromCache, saveToCache} from "@/modules/cache";
 
+// Define the props for the plant card and the types for the plant data
 type PlantCardProps = {
-    data: PlantData | null
+    data: PlantData
 };
-
-
-export async function getLocalData(plantId: any) {
-    // Get the path of the json file
-    const filePath = "/data/plants/" + plantId + ".json";
-
-    // Return the json data
-    return await fetch(filePath).then((res) => res.json())
-}
 
 export default function PlantCardData({ data }: PlantCardProps){
     return(
@@ -58,16 +50,17 @@ export default function PlantCardData({ data }: PlantCardProps){
     )
 }
 
-
+// Define the props for the plant card and their types
 type PlantCardApiProps = {
     id: number
 };
 
 export function PlantCardApi({id}: PlantCardApiProps) {
 
-    const [plantData, setPlantData] = useState<PlantData | null>(null);
+    // Define the state for the plant data and the plant card
     const [plantCard, setPlantCard] = useState(<PlantCardLoading/>);
 
+    // Fetch the plant data from the api for this plant on load
     useEffect(() => {
         fetchPlant();
     }, []);
@@ -80,59 +73,49 @@ export function PlantCardApi({id}: PlantCardApiProps) {
         if(plantOBJ === null) {
 
             try {
-
-                console.log("Fetching plant data from api")
                 // Get the plant data from the api
                 const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
-                console.log(res)
                 const plantData = res.data.data
 
+                // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
                 plantOBJ = plantData as PlantData
-                plantOBJ.id = id
 
-                console.log("Saving plant data to cache")
-                console.log(plantOBJ)
+                // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
+                plantOBJ.id = id
 
                 // Set the plant data in the cache
                 saveToCache("plant_" + id, plantOBJ)
 
 
             } catch (e) {
+
+                // If there is an error just log it and set the plant card to the loading card
                 console.log("Error fetching plant data from api")
-                setPlantData("error")
                 setPlantCard(<PlantCardLoading/>)
+
+                //TODO: Should probably do smth abt this but so far no incorrect ids should b passed in because only its only called using data returned from the api
                 return;
             }
         }
 
         // Set the plant data
-        setPlantData(plantOBJ)
         setPlantCard(<PlantCardData data={plantOBJ}/>)
     }
-
-
-
-
 
     return (
         <>
             {plantCard}
         </>
     );
-
-
-
-
-
 }
 
 export function PlantCardLoading(){
     return(
         <>
-            {/* Shadowed div that holds the card contents*/}
+            {/* Shadowed div that holds the card contents, add a pulse effect*/}
             <div className={styles.card + " animate-pulse"}>
 
-                {/* Image of the plant, grabbed from the image attacments of the pant data (TODO) */}
+              {/* Placeholder loading gif */}
                <div className={styles.imageContainer}>
                    <img
                         src={"/media/images/loading.gif"}
@@ -143,9 +126,9 @@ export function PlantCardLoading(){
                 </div>
 
                 {/* Title, category, description*/}
-                <h1 className={styles.title}> LOADING... </h1>
-                <h3 className={styles.category}> LOADING... </h3>
-                <p className={styles.description}> LOADING... </p>
+                <h1 className={styles.title}>       LOADING... </h1>
+                <h3 className={styles.category}>    LOADING... </h3>
+                <p className={styles.description}>  LOADING... </p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
                 <Link scroll={false} className={styles.button} href={"#"}>
