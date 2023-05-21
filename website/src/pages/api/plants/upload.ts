@@ -7,7 +7,7 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-    return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
+    //return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
