@@ -896,7 +896,7 @@ class DateInfo {
 
 }
 
-
+// Define the type of the props for the Date Info Section
 type DateInfoSectionProps = {
     eventHandler:       (value: string) => void;
     startDateHandler:   (value: string) => void;
@@ -1022,6 +1022,7 @@ export default function CreatePlant() {
         }
     }, [englishName, moariName, latinName, preferredName]);
 
+    // Validate the input
     const validateInput = () => {
 
         //Allow for multiple invalid inputs
@@ -1165,6 +1166,8 @@ export default function CreatePlant() {
     }
 
     const generateJSON = () => {
+
+        // Create the JSON object
         let plantOBJ : PlantData = {
             id: 1,
             preferred_name: "",
@@ -1340,10 +1343,12 @@ export default function CreatePlant() {
 
     const downloadPlant = () => {
 
+        // Make sure all the required fields are filled in
         if(!validateInput()){
             return
         }
 
+        // Generate the JSON file
         const plantOBJ = generateJSON();
 
         // Download the JSON file
@@ -1360,6 +1365,7 @@ export default function CreatePlant() {
 
     const uploadPlant = async () => {
 
+        // Make sure all the required fields are filled in
         if(!validateInput()){
             return
         }
@@ -1373,6 +1379,8 @@ export default function CreatePlant() {
         let result;
 
         try{
+            //TODO: Show a loading screen
+
             // Upload the data to the database using the upload API by passing each json key as params
             result = await axios.post(`/api/plants/upload`, uploadApiData);
 
@@ -1383,16 +1391,15 @@ export default function CreatePlant() {
             return;
         }
 
+        // Redirect to the plant page
         if(result.data.id !== undefined){
             const url = "/plants/" + result.data.id
             console.log(url);
             window.location.href = url;
         }
 
+        // Debug the result (this is for if the redirect doesn't work or smth else goes wrong)
         console.log(result);
-
-
-
     }
 
     return (
@@ -1716,7 +1723,7 @@ export default function CreatePlant() {
                         </div>
                     </div>
 
-                    {/* Right Hand Collumn */}
+                    {/* Right Hand Column */}
                     <div className={styles.column}>
 
                         {/*Images Section */}
@@ -1783,7 +1790,3 @@ export default function CreatePlant() {
     )
 
 }
-
-
-
-//TODO: Upload to server, New API to upload image that hides the API key

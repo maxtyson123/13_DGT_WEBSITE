@@ -1,0 +1,68 @@
+.header h1{
+    font-size: 64px;
+    line-height: 103%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.topBar{
+    width: 100%;
+    background-color: #0a670a;
+    text-align: center;
+    color: #FFFFFF;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    padding: 20px;
+    box-shadow: 0 8px 24px 10px rgba(0, 0, 0, 0.2);
+}
+
+.topBar h1{
+    font-size: 32px;
+}
+
+.contentsLinks{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.contentsLinks p{
+    margin: 2px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    background-color: #094d09;
+    border-radius: 5px;
+    padding: 5px 15px 5px 15px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.contentsLinks p:hover{
+    background-color: rgba(9, 77, 9, 0.8);
+}
+
+.letterContainer{
+
+}
+
+.letterContainer h2{
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 32px;
+
+}
+
+.letterContainer li{
+    color: #5E6366;
+    border-left: #5E6366 solid 5px;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.letterContainer li:hover{
+    background-color: #5E6366;
+    color: white;
+}

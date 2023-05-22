@@ -175,6 +175,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         return null;
     }
 
+    // Create the plant data object
     let plantData : PlantData = {
         id:                     1,
         preferred_name:         "",
@@ -313,6 +314,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         return null;
     }
 
+    // Create the api data object
     let apiData : PlantDataApi = {
         preferred_name:             "",
         english_name:               "",

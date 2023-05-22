@@ -1,9 +1,9 @@
 import styles from "@/styles/stats.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-solid-svg-icons";
-import React, {useEffect, useState} from "react";
-import axios from "axios";
+import React, {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/modules/cache";
+import axios from "axios";
 
 export default function Stats(){
 
@@ -18,79 +18,88 @@ export default function Stats(){
     const startTime = Date.now()
     const [duration, setDuration] = useState(0);
 
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
+
     useEffect( () => {
-        async function fetchData() {
-            try {
 
-                let res = null;
-
-                const storedData = getFromCache("plant_stats");
-
-                // Check if the data is already in the session storage (this is to prevent the data from being fetched multiple times)
-                if (storedData !== null) {
-                    // Get the data from the session storage
-                    res = storedData;
-
-                }else{
-
-                    // Get the data from the API
-                    res = await axios.get('/api/plants/uses');
-
-                    // Get the contents of the response
-                    res = res.data;
-
-                    // Store in the cache
-                    saveToCache("plant_stats", res)
-                }
-
-                // Set the duration it took to fetch the data
-                setDuration(Date.now() - startTime);
-
-
-                const data = res.data;
-
-                // Variables to store the number of plants for each use
-                let plants = 0;
-                let edible = 0;
-                let medical = 0;
-                let craft = 0;
-
-                for (let key in data) {
-
-                    // Update the number of plants
-                    plants += 1;
-
-                    // Update the number of plants for each use
-                    for (let i = 0; i < data[key].length; i++) {
-                        switch (data[key][i]) {
-                            case "craft":
-                                craft += 1
-                                break
-                            case "medical":
-                                medical += 1
-                                break
-                            case "edible":
-                                edible += 1
-                                break
-
-                        }
-                    }
-                }
-
-                // Set the stats
-                setNumberOfPlants(plants)
-                setNumberOfEdiblePlants(edible)
-                setNumberOfMedicalPlants(medical)
-                setNumberOfCraftPlants(craft)
-
-            } catch (err) {
-                console.log(err);
-            }
-
-        }
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
 
         fetchData();
     }, []);
+
+    async function fetchData() {
+        try {
+
+            let res = null;
+
+            const storedData = getFromCache("plant_stats");
+
+            // Check if the data is already in the session storage (this is to prevent the data from being fetched multiple times)
+            if (storedData !== null) {
+                // Get the data from the session storage
+                res = storedData;
+
+            }else{
+
+                // Get the data from the API
+                res = await axios.get('/api/plants/uses');
+
+                // Get the contents of the response
+                res = res.data;
+
+                // Store in the cache
+                saveToCache("plant_stats", res)
+            }
+
+            // Set the duration it took to fetch the data
+            setDuration(Date.now() - startTime);
+
+
+            const data = res.data;
+
+            // Variables to store the number of plants for each use
+            let plants = 0;
+            let edible = 0;
+            let medical = 0;
+            let craft = 0;
+
+            for (let key in data) {
+
+                // Update the number of plants
+                plants += 1;
+
+                // Update the number of plants for each use
+                for (let i = 0; i < data[key].length; i++) {
+                    switch (data[key][i]) {
+                        case "craft":
+                            craft += 1
+                            break
+                        case "medical":
+                            medical += 1
+                            break
+                        case "edible":
+                            edible += 1
+                            break
+
+                    }
+                }
+            }
+
+            // Set the stats
+            setNumberOfPlants(plants)
+            setNumberOfEdiblePlants(edible)
+            setNumberOfMedicalPlants(medical)
+            setNumberOfCraftPlants(craft)
+
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
 
     return(
         <>

@@ -18,7 +18,8 @@ export default async function handler(
     // Get the ID and table from the query string
     const {
         amount,
-        name
+        name,
+        getNames
     } = request.query;
 
     // Try querying the database
@@ -27,22 +28,26 @@ export default async function handler(
         // Assemble the query
         let query = ``;
 
+        let shouldGetNames = ``;
+
+        if(getNames){
+            shouldGetNames = `, english_name, maori_name, latin_name`;
+        }
+
         // Get the plant id from the plants database
-        query += ` SELECT id FROM plants`;
+        query += ` SELECT id ${shouldGetNames} FROM plants`;
 
         // Select what the user entered
         if(name){
-            //TODO: Not use "enlgish_name" use preferred
             query += ` WHERE english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
         }
-
 
         // Only get a certain amount
         if(amount){
             query += ` LIMIT ${amount}`
         }
 
-        // Get x random plant ids from the database
+        // Return the plants that match the query
         const plantIds = await client.query(query);
 
         // If there are no plants, return an error

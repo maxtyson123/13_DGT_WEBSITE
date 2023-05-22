@@ -90,6 +90,7 @@ export default async function handler(
         if(attachment_types === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment types parameter not found' }); }
         if(attachment_names === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment names parameter not found' }); }
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
+
         // Create the query
         let query = ``;
 
@@ -246,6 +247,7 @@ export default async function handler(
             
         }
 
+        // Log the query
         console.log("=====================================")
         console.log(query);
         console.log("=====================================")

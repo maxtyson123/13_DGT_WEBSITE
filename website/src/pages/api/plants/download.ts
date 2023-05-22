@@ -20,20 +20,27 @@ export default async function handler(
     // Try downloading the data from the database
     try {
 
+        // If there is no table parameter, return an error
         if(!table){
             return response.status(404).json({ error: 'Table parameter not found' });
         }
 
-        console.log(table);
+        // If there is no ID parameter, return an error
+        if(!id){
+            return response.status(404).json({ error: 'ID parameter not found' });
+        }
 
-        // Cover the table to an array if its just one table
+        // Convert the table to an array if its just one table
         let tableArray = table;
         if(typeof table === 'string'){
             tableArray = [table];
         }
 
+        // Create the selector and joiner
         let selector = '';
         let joiner = '';
+
+        // Create an array of tables that have already been selected
         let selectedAlready : string[] = [];
 
         for(let i = 0; i < tableArray.length; i++) {
@@ -192,6 +199,7 @@ export default async function handler(
 
         }
 
+        // If the selector is empty, return an error
         if(selector === ''){
             return response.status(404).json({ error: 'No tables of requested found' });
         }
@@ -210,8 +218,10 @@ export default async function handler(
             ${joiner};
         `;
 
+        // Log the query
         console.log("=====================================")
         console.log(query);
+        console.log("=====================================")
 
         // Get the data from the database
         const data = await client.query(query);

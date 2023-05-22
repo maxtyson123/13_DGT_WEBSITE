@@ -6,7 +6,6 @@
 // TODO: Redo the images for the plants - Make it use a main image for the default
 // TODO: Remove sections on create page
 // TODO: Plant page for the plants
-// TODO: Plant index page for all the plants
 // TODO: Search page to search for plants
 // TODO: Calendar page to show all the plants that are in season
 // TODO: Authentication
@@ -19,7 +18,7 @@
 // TODO: Code Validation
 // TODO: Documentation
 
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/index.module.css"
 import Navbar from "@/components/navbar";
@@ -44,8 +43,17 @@ export default function Home(ref: HomeRef) {
     const [isLoading, setIsLoading] = React.useState(true)
     const [plantIds, setPlantIds] = React.useState([0,0,0])
 
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
+
     // Get the plant ids when the page loads
     useEffect(() => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
         getPlantIDs();
     }, [])
 
