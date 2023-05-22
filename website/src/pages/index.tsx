@@ -1,7 +1,10 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: Comment Code
-// TODO: Redo the images for the plants
+// TODO: Image name, Upload not working
+// TODO: Upload JSON and fill in data
+// TODO: Redo the images for the plants - Make it use a main image for the default
+// TODO: Remove sections on create page
 // TODO: Plant page for the plants
 // TODO: Plant index page for all the plants
 // TODO: Search page to search for plants

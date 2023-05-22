@@ -1,0 +1,61 @@
+import {db} from '@vercel/postgres';
+import {NextApiRequest, NextApiResponse} from 'next';
+
+export default async function handler(
+    request: NextApiRequest,
+    response: NextApiResponse,
+) {
+
+    // If the request is not a GET request, return an error
+    if(request.method !== 'GET') {
+        return response.status(405).json({ error: 'Method not allowed, please use GET' });
+    }
+
+
+    // Connect to the database
+    const client = await db.connect();
+
+    // Get the ID and table from the query string
+    const {
+        amount,
+        name
+    } = request.query;
+
+    // Try querying the database
+    try {
+
+        // Assemble the query
+        let query = ``;
+
+        // Get the plant id from the plants database
+        query += ` SELECT id FROM plants`;
+
+        // Select what the user entered
+        if(name){
+            //TODO: Not use "enlgish_name" use preferred
+            query += ` WHERE english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
+        }
+
+
+        // Only get a certain amount
+        if(amount){
+            query += ` LIMIT ${amount}`
+        }
+
+        // Get x random plant ids from the database
+        const plantIds = await client.query(query);
+
+        // If there are no plants, return an error
+        if (plantIds.rows.length === 0) {
+            return response.status(404).json({ error: 'No plants found' });
+        }
+
+        // Return the plant ids
+        return response.status(200).json({ data: plantIds.rows });
+
+    } catch (error) {
+        // If there is an error, return the error
+        return response.status(500).json({ error:  (error as Error).message });
+    }
+
+}

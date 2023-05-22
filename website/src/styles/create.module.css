@@ -26,6 +26,12 @@
     align-items: center;
 }
 
+@media only screen and (max-width: 1500px) {
+    .column{
+        width: 100%;
+    }
+}
+
 /*
  Clear the column ness
  */
