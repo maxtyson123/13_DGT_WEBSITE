@@ -81,8 +81,6 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
         setThisRequired
     );
 
-
-
     // Set the state class based on the state
     let stateClass = "";
     switch (thisState) {
@@ -158,6 +156,7 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
 // Define the props needed and their types for the dropdown input
 type DropdownInputProps = {
     placeHolder: string;
+    defaultValue?: string;
     required: boolean;
     state: ValidationState;
     errorText?: string;
@@ -165,7 +164,7 @@ type DropdownInputProps = {
     options: string[];
     allowCustom: boolean;
 };
-export function DropdownInput({placeHolder, required, state, errorText = "", options, changeEventHandler, allowCustom}: DropdownInputProps){
+export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler, allowCustom}: DropdownInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -197,9 +196,25 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
             break;
     }
 
-    const changeHandler = () =>{
+    const changeHandler = (value: string) => {
+        setInputValue(value);
 
+        // User has changed the value, so the previous state is no longer valid
+        setThisState("normal");
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
     }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
 
     return(
         <>
@@ -218,29 +233,19 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}
                         onChange={(e) => {
-
-                            // Set if the user has selected custom option
-                            setCustomOption(e.target.value === "Custom");
-
-                            // Update the value
-                            setInputValue(e.target.value);
-
-                            // User has changed the value, so the previous state is no longer valid
-                            setThisState("normal")
-
-                            // Pass to the handler if it exists
-                            if (changeEventHandler) {
-                                changeEventHandler(e.target.value);
-                            }
+                            changeHandler(e.target.value);
                         }}
                     >
 
-                        {/* The placeholder text, shouldn't be selectable */}
-                        <option value="" disabled selected hidden>{placeHolder}</option>
+                        {/*TODO: Custom option with default value*/}
+
+                        {/* The placeholder text, shouldn't be selectable, only show if no default value */}
+                        {defaultValue? "" : <option value="" disabled selected hidden>{placeHolder}</option>}
 
                         {/* Map the options to the select options */}
                         {options.map((option, index) => {
-                            return <option value={option} key={index}>{option}</option>
+                            return <option value={option} key={index} selected={option === defaultValue}> {option} </option>
+
                         })}
 
                         {/* Allow for the user to add a custom choice */}
@@ -289,12 +294,13 @@ export function DropdownInput({placeHolder, required, state, errorText = "", opt
 // Define the props needed and their types for the simple text area
 type SimpleTextAreaProps = {
     placeHolder: string;
+    defaultValue?: string;
     required: boolean;
     state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };
-export function SimpleTextArea({placeHolder, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps){
+export function SimpleTextArea({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -325,6 +331,26 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
             break;
     }
 
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // User has changed the value, so the previous state is no longer valid
+        setThisState("normal");
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
     return(
         <>
             {/*  The simple text area section */}
@@ -344,15 +370,7 @@ export function SimpleTextArea({placeHolder, required, state, errorText = "", ch
                     value={inputValue}
                     onChange={(e) => {
                         // Update the value
-                        setInputValue(e.target.value);
-
-                        // User has changed the value, so the previous state is no longer valid
-                        setThisState("normal")
-
-                        // Pass to the handler if it exists
-                        if (changeEventHandler) {
-                            changeEventHandler(e.target.value);
-                        }
+                        changeHandler(e.target.value);
                     }}
                 />
 
@@ -403,7 +421,7 @@ class RenderQuill extends React.Component<RenderQuillProps>{
 }
 
 // Advanced text area uses the same props as the simple text area
-export function AdvandcedTextArea({placeHolder, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
+export function AdvandcedTextArea({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -433,6 +451,27 @@ export function AdvandcedTextArea({placeHolder, required, state, errorText = "",
             stateClass = styles.success;
             break;
     }
+
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // User has changed the value, so the previous state is no longer valid
+        setThisState("normal");
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
     return(
         <>
             {/* The advanced text area section */}
@@ -455,15 +494,8 @@ export function AdvandcedTextArea({placeHolder, required, state, errorText = "",
                         placeholder={placeHolder}
                         onChange={(e) => {
                             // Update the value
-                            setInputValue(e);
+                            changeHandler(e);
 
-                            // User has changed the value, so the previous state is no longer valid
-                            setThisState("normal")
-
-                            // Pass to the handler if it exists
-                            if (changeEventHandler) {
-                                changeEventHandler(e);
-                            }
                         }}
                     />
 

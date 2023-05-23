@@ -302,39 +302,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     }
 
     // Create the api data object
-    let apiData : PlantDataApi = {
-        preferred_name:             "",
-        english_name:               "",
-        maori_name:                 "",
-        latin_name:                 "",
-        location:                   "",
-        small_description:          "",
-        long_description:           "",
-        months_ready_events:        [],
-        months_ready_start_months:  [],
-        months_ready_end_months:    [],
-        edible_parts:               [],
-        edible_images:              [],
-        edible_nutrition:           [],
-        edible_preparation:         [],
-        edible_preparation_type:    [],
-        medical_types:              [],
-        medical_uses:               [],
-        medical_images:             [],
-        medical_preparation:        [],
-        craft_parts:                [],
-        craft_uses:                 [],
-        craft_images:               [],
-        craft_additional_info:      [],
-        source_types:               [],
-        source_data:                [],
-        custom_titles:              [],
-        custom_text:                [],
-        attachment_paths:           [],
-        attachment_types:           [],
-        attachment_names:           [],
-        attachment_downloadable:    [],
-    };
+    let apiData = emptyPlantApiData()
 
     // Basic info
     apiData.preferred_name    = plantData.preferred_name;
@@ -410,7 +378,7 @@ export function emptyPlantData(){
     const plantData : PlantData = {
         id:                     1,
         preferred_name:         "",
-        english_name:           "asd",
+        english_name:           "",
         moari_name:             "",
         latin_name:             "",
         use:                    [],
@@ -423,4 +391,43 @@ export function emptyPlantData(){
     };
 
     return plantData;
+}
+
+export function emptyPlantApiData(){
+    // Create the api data object
+    let apiData : PlantDataApi = {
+        preferred_name:             "",
+        english_name:               "",
+        maori_name:                 "",
+        latin_name:                 "",
+        location:                   "",
+        small_description:          "",
+        long_description:           "",
+        months_ready_events:        [],
+        months_ready_start_months:  [],
+        months_ready_end_months:    [],
+        edible_parts:               [],
+        edible_images:              [],
+        edible_nutrition:           [],
+        edible_preparation:         [],
+        edible_preparation_type:    [],
+        medical_types:              [],
+        medical_uses:               [],
+        medical_images:             [],
+        medical_preparation:        [],
+        craft_parts:                [],
+        craft_uses:                 [],
+        craft_images:               [],
+        craft_additional_info:      [],
+        source_types:               [],
+        source_data:                [],
+        custom_titles:              [],
+        custom_text:                [],
+        attachment_paths:           [],
+        attachment_types:           [],
+        attachment_names:           [],
+        attachment_downloadable:    [],
+    };
+
+    return apiData;
 }
