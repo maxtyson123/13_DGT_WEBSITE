@@ -1343,47 +1343,56 @@ export default function CreatePlant() {
 
     const importPlant = () =>
     {
-        let el = document.createElement("INPUT");
-        el.type = "file";
-        el.accept = "application/json";
+        // Create a file upload input
+        let fileUploadInput = document.createElement("input") as HTMLInputElement;
+        fileUploadInput.type = "file";
+        fileUploadInput.accept = "application/json";
 
-        // (cancel will not trigger 'change')
-        el.addEventListener('change', function(ev2) {
-            // add first image, if available
-            if (el.files.length) {
+        // When the file upload input changes (ie a file is selected, note canceling doesn't trigger this)
+        fileUploadInput.addEventListener('change', function(ev2) {
 
-                // Get the file and its reader
-                const file = el.files[0];
-                const reader = new FileReader();
-
-                // Wait for the file reader to load
-                reader.onload = (event) => {
-                    if(!event.target){
-                        return;
-                    }
-                    console.log("File Uploaded: ");
-
-                    if (typeof event.target.result === "string") {
-
-                        // Convert the file contents to JSON
-                        const jsonContents = JSON.parse(event.target.result);
-
-                        // Check if it is the valid type of JSON
-                        if(!ValidPlantData(jsonContents)){
-
-                            //TODO: Error Here
-                            console.log("ERROR NOT RIGHT TYPE")
-                            return;
-                        }
-
-                        setImportedJSON(jsonContents)
-                    }
-                };
-                reader.readAsText(file);
+            // If there are files uploaded
+            if (!fileUploadInput.files) {
+                return;
             }
+
+            // Get the first file
+            const file = fileUploadInput.files[0];
+            const reader = new FileReader();
+
+            // When the file is loaded
+            reader.onload = (event) => {
+
+                // Check if there is a result
+                if (!event.target || !event.target.result) {
+                    return;
+                }
+
+                // Make sure it is a string
+                if (typeof event.target.result !== "string") {
+                    return;
+                }
+
+                // Convert the file contents to JSON
+                const jsonContents = JSON.parse(event.target.result);
+
+                // Check if it is the valid type of JSON
+                if (!ValidPlantData(jsonContents)) {
+
+                    //TODO: Error Here
+                    console.log("ERROR NOT RIGHT TYPE")
+                    return;
+                }
+
+                // Set the imported JSON
+                setImportedJSON(jsonContents)
+
+            };
+            reader.readAsText(file);
         });
 
-        el.click(); // open
+        // Click the file upload input
+        fileUploadInput.click();
     }
 
     const downloadPlant = () => {

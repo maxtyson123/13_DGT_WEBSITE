@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
-import React, {useEffect, useRef, useState} from "react";
+import React, {ForwardedRef, useEffect, useRef, useState} from "react";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
@@ -81,6 +81,8 @@ export default function Search(ref: SearchRef){
 
     const getSearchResults = async (name: string) => {
 
+        const startTime = Date.now()
+
         try{
             console.log("Getting search results")
 
@@ -111,17 +113,24 @@ export default function Search(ref: SearchRef){
             // Set the results
             setResults(apiResults)
 
+            // Set the time and amount
+            setDuration(Date.now() - startTime)
+            setAmount(data.length)
 
 
         } catch (e) {
 
             // Set the results to an error div
             setResults([
-                <div className={styles.errorContainer}>
+                <div key={"error"} className={styles.errorContainer}>
                     <h1>Something went wrong</h1>
                     <p>Sorry, we couldnt find any plants with that name.</p>
                 </div>
             ])
+
+            // Set the time and amount
+            setDuration(Date.now() - startTime)
+            setAmount(0)
 
         }
 
@@ -185,7 +194,8 @@ export default function Search(ref: SearchRef){
                     <button
                         className={styles.searchButton}
                         onClick={(e) => {
-                            window.location.href = `/search?query=${document.getElementById("searchBox")?.value}`
+                            const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
+                            window.location.href = `/search?query=${userInput}`
                         }}>
                         <FontAwesomeIcon icon={faSearch}/>
                     </button>

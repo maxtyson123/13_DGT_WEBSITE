@@ -11,6 +11,41 @@ type PlantCardProps = {
 };
 
 export default function PlantCardData({ data }: PlantCardProps){
+
+    const [names, setNames] = useState(["None", "None", "None"])
+
+    // Run on page start
+    useEffect(() => {
+
+        let localNames = ["None", "None", "None"]
+
+        // Set the names based on the preferred name
+        switch (data.preferred_name){
+            case "English":
+                localNames[0] = data.english_name
+                localNames[1] = data.moari_name
+                localNames[2] = data.latin_name
+                break
+
+            case "Moari":
+                localNames[0] = data.moari_name
+                localNames[1] = data.english_name
+                localNames[2] = data.latin_name
+                break
+
+            case "Latin":
+                localNames[0] = data.latin_name
+                localNames[1] = data.english_name
+                localNames[2] = data.moari_name
+                break
+        }
+
+        // Update the names
+        setNames(localNames)
+
+    }, [])
+
+
     return(
         <>
             {/* Shadowed div that holds the card contents*/}
@@ -26,12 +61,12 @@ export default function PlantCardData({ data }: PlantCardProps){
                 </div>
 
                 {/* Title, category, description*/}
-                <h1 className={styles.title}>{data?.english_name}</h1>
-                <h3 className={styles.category}>{convertUseTag(data?.location)}</h3>
-                <p className={styles.description}>{data?.small_description}</p>
+                <h1 className={styles.title}>{names[0]}</h1>
+                <h3 className={styles.category}>{names[1]} | {names[2]}</h3>
+                <p className={styles.description}>{data.small_description}</p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
-                <Link scroll={false} className={styles.button} href={"/plants/" + data?.id}>
+                <Link scroll={false} className={styles.button} href={"/plants/" + data.id}>
                    <p className={styles.button}>More Info</p>
                 </Link>
 
@@ -39,7 +74,7 @@ export default function PlantCardData({ data }: PlantCardProps){
                 <div className={styles.tagsContainer}>
 
                     {/* Map through the tags and display them */}
-                    {data?.use.map((useName, index) => (
+                    {data.use.map((useName, index) => (
                         <p key={index} className={styles.useText}>{
                             convertUseTag(useName)
                         }</p>
