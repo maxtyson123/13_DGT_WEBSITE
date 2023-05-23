@@ -17,6 +17,8 @@ export function getFromCache(id: string){
         // Check if the item has expired
         if(new Date(item.expiry_date) < new Date()){
 
+            console.log("Cache item [" + id + "] has expired");
+
             // If it has expired, remove it from the local storage
             localStorage.removeItem(id);
 

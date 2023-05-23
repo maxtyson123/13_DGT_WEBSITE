@@ -91,7 +91,7 @@ export function PlantCardApi({id}: PlantCardApiProps) {
 
                 // If there is an error just log it and set the plant card to the loading card
                 console.log("Error fetching plant data from api")
-                setPlantCard(<PlantCardLoading/>)
+                setPlantCard(<PlantCardNull/>)
 
                 //TODO: Should probably do smth abt this but so far no incorrect ids should b passed in because only its only called using data returned from the api
                 return;
@@ -129,6 +129,37 @@ export function PlantCardLoading(){
                 <h1 className={styles.title}>       LOADING... </h1>
                 <h3 className={styles.category}>    LOADING... </h3>
                 <p className={styles.description}>  LOADING... </p>
+
+                {/* Button to go to the plant page, automatically gets the id from the plant data */}
+                <Link scroll={false} className={styles.button} href={"#"}>
+                    <p className={styles.button}>More Info</p>
+                </Link>
+
+                {/* Container for the tags*/}
+                <div className={styles.tagsContainer}>
+                    <p className={styles.useText}> TAG </p>
+                    <p className={styles.useText}> TAG </p>
+                    <p className={styles.useText}> TAG </p>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export function PlantCardNull(){
+    return(
+        <>
+            {/* Shadowed div that holds the card contents, add a pulse effect*/}
+            <div className={styles.card + " opacity-60"}>
+                {/* Placeholder loading gif */}
+                <div className={styles.imageContainer}>
+                   <div className={styles.nullImage}/>
+                </div>
+
+                {/* Title, category, description*/}
+                <h1 className={styles.title}> None </h1>
+                <h3 className={styles.category}> N/A </h3>
+                <p className={styles.description}> Short description</p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
                 <Link scroll={false} className={styles.button} href={"#"}>

@@ -1,0 +1,100 @@
+.searchHeaderContainer{
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.searchHeaderContainer h1{
+    font-size: 64px;
+    line-height: 103%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+
+.statsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
+.statContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px;
+
+}
+
+.statContainer p{
+    margin-left: 10px;
+    overflow-wrap: anywhere;
+}
+
+.searchBoxContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.searchBox{
+    width: 60%;
+    height: 75px;
+    border-radius: 10px 00px 0 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: #FFFFFF;
+    padding: 10px;
+    font-size: 32px;
+    line-height: 103%;
+    text-align: center;
+    color: #000000;
+
+}
+
+.searchButton{
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: #0a670a;
+    border-radius: 0 10px 10px 0;
+    padding-left: 30px;
+    color: #FFFFFF;
+    padding-right: 30px;
+}
+
+.searchButton:hover{
+    background-color: rgba(10, 103, 10, 0.8);
+    cursor: pointer;
+}
+
+.searchResultsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.searchResult{
+    padding: 20px;
+}
+
+.errorContainer{
+    width: 100%;
+    background-color: red;
+    color: #FFFFFF;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+
+}
+
+.errorContainer h1{
+    font-size: 32px;
+    line-height: 103%;
+    color: #FFFFFF;
+    font-weight: bold;
+}

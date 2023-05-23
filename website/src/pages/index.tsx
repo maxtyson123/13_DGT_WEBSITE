@@ -1,18 +1,17 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Comment Code
 // TODO: Image name, Upload not working
 // TODO: Upload JSON and fill in data
 // TODO: Redo the images for the plants - Make it use a main image for the default
 // TODO: Remove sections on create page
 // TODO: Plant page for the plants
-// TODO: Search page to search for plants
 // TODO: Calendar page to show all the plants that are in season
-// TODO: Authentication
+// TODO: Grid that shit
 // TODO: Responsive design
-// TODO: Accessibility Settings (Dark mode, font size, etc.)
+// TODO: Authentication
+// TODO: Edit page
+// TODO: Accessibility Settings (Dark mode)
 // TODO: Comment Code
-// TODO: Any extensions to the website
 // TODO: Testing
 // TODO: Code cleanup
 // TODO: Code Validation

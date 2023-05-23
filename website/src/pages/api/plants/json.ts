@@ -1,3 +1,4 @@
+import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {
     CleanAPIData,
@@ -18,7 +19,16 @@ export default async function handler(
     if(request.method !== 'GET') {
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
     }
-    
+
+    // Get the URL of the API
+    const { headers } = request;
+    const protocol = headers['x-forwarded-proto'] || 'http'; // Use the "x-forwarded-proto" header to determine the protocol, defaulting to "http"
+    const host = headers['x-forwarded-host'] || headers['host']; // Use the "x-forwarded-host" header if it exists, otherwise fallback to "host"
+    const url = `${protocol}://${host}`; // Construct the full URL using the protocol, host, and request URL
+
+    // Connect to the database
+    const client = await db.connect();
+
     // Get the ID and table from the query string
     const { operation, json, id } = request.query;
 
@@ -39,7 +49,7 @@ export default async function handler(
                 }
 
                 // Download the data from the database using the download API with the ID and table
-                let plantsInfo = await axios.get(`/api/plants/download?id=${id}&table=plants&table=months_ready_for_use&table=edible&table=medical&table=craft&table=source&table=custom&table=attachments`);
+                let plantsInfo = await axios.get(`${url}/api/plants/download?id=${id}&table=plants&table=months_ready_for_use&table=edible&table=medical&table=craft&table=source&table=custom&table=attachments`);
                 plantsInfo = plantsInfo.data;
 
                 // If there is no plant data, return an error
@@ -96,7 +106,7 @@ export default async function handler(
                 }
 
                 // Upload the data to the database using the upload API by passing each json key as params
-                let result = await axios.post(`/api/plants/upload`, uploadApiData);
+                let result = await axios.post(`${url}/api/plants/upload`, uploadApiData);
 
                 // Return the data
                 return response.status(200).json({ data: result.data });
