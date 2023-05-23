@@ -176,20 +176,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     }
 
     // Create the plant data object
-    let plantData : PlantData = {
-        id:                     1,
-        preferred_name:         "",
-        english_name:           "",
-        moari_name:             "",
-        latin_name:             "",
-        use:                    [],
-        months_ready_for_use:   [],
-        location:               "",
-        small_description:      "",
-        long_description:       "",
-        attachments:            [],
-        sections:               [],
-    };
+    let plantData = emptyPlantData()
 
     // Basic info
     plantData.preferred_name    = apiData.preferred_name;
@@ -417,4 +404,23 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     // Return the data
     return apiData;
 
+}
+
+export function emptyPlantData(){
+    const plantData : PlantData = {
+        id:                     1,
+        preferred_name:         "",
+        english_name:           "asd",
+        moari_name:             "",
+        latin_name:             "",
+        use:                    [],
+        months_ready_for_use:   [],
+        location:               "",
+        small_description:      "",
+        long_description:       "",
+        attachments:            [],
+        sections:               [],
+    };
+
+    return plantData;
 }

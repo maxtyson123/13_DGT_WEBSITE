@@ -196,10 +196,6 @@ interface PlantIndexEntryProps {
     plants: plantEntry[] | null
 }
 function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
-
-    console.log("Rendering letter " + letter)
-    console.log(plants)
-
     return(
         <>
 

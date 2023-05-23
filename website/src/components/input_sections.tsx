@@ -59,13 +59,14 @@ export function useInputState(initialValue: string, required: boolean, state: Va
 // Define the props needed and their types for the small input
 type SmallInputProps = {
     placeHolder: string;
+    defaultValue?: string;
     required: boolean;
     state: ValidationState;
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };
 
-export function SmallInput({placeHolder, required, state, errorText = "", changeEventHandler}: SmallInputProps){
+export function SmallInput({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SmallInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -79,6 +80,8 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
         setThisState,
         setThisRequired
     );
+
+
 
     // Set the state class based on the state
     let stateClass = "";
@@ -95,6 +98,26 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
             stateClass = styles.success;
             break;
     }
+
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // User has changed the value, so the previous state is no longer valid
+        setThisState("normal");
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+
 
     return(
         <>
@@ -113,15 +136,7 @@ export function SmallInput({placeHolder, required, state, errorText = "", change
                         placeholder={placeHolder}
                         value={inputValue}
                         onChange={(e) => {
-                            setInputValue(e.target.value);
-
-                            // User has changed the value, so the previous state is no longer valid
-                            setThisState("normal");
-
-                            // Pass to the handler if it exists
-                            if (changeEventHandler) {
-                                changeEventHandler(e.target.value);
-                            }
+                            changeHandler(e.target.value)
                         }}
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}

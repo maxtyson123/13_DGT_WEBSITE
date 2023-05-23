@@ -12,7 +12,7 @@ import {
 } from "@/components/input_sections";
 import Image from "next/image";
 
-import {ConvertPlantDataIntoApi, PlantData} from "@/modules/plant_data";
+import {ConvertPlantDataIntoApi, emptyPlantData, PlantData, ValidPlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
@@ -960,6 +960,9 @@ export default function CreatePlant() {
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
 
+    // Imported DATA
+    const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
+
     // Value Setters
     const [imageInfo, setImageInfo]                 = useState<ImageInfo[]>([]);
     const [englishName, setEnglishName]             = useState("")
@@ -1336,9 +1339,51 @@ export default function CreatePlant() {
         }
 
         return plantOBJ;
+    }
 
+    const importPlant = () =>
+    {
+        let el = document.createElement("INPUT");
+        el.type = "file";
+        el.accept = "application/json";
 
+        // (cancel will not trigger 'change')
+        el.addEventListener('change', function(ev2) {
+            // add first image, if available
+            if (el.files.length) {
 
+                // Get the file and its reader
+                const file = el.files[0];
+                const reader = new FileReader();
+
+                // Wait for the file reader to load
+                reader.onload = (event) => {
+                    if(!event.target){
+                        return;
+                    }
+                    console.log("File Uploaded: ");
+
+                    if (typeof event.target.result === "string") {
+
+                        // Convert the file contents to JSON
+                        const jsonContents = JSON.parse(event.target.result);
+
+                        // Check if it is the valid type of JSON
+                        if(!ValidPlantData(jsonContents)){
+
+                            //TODO: Error Here
+                            console.log("ERROR NOT RIGHT TYPE")
+                            return;
+                        }
+
+                        setImportedJSON(jsonContents)
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        el.click(); // open
     }
 
     const downloadPlant = () => {
@@ -1423,12 +1468,13 @@ export default function CreatePlant() {
                         <div className={styles.formSection}>
 
                             {/* Section title */}
-                            <h1 className={styles.sectionTitle}> Basic Info</h1>
+                            <h1 className={styles.sectionTitle}>Basic Info</h1>
 
                             {/* Plant name */}
                             <div className={styles.formItem} id={"english-name"}>
                                 <SmallInput
                                     placeHolder={"English Name"}
+                                    defaultValue={importedJSON.english_name}
                                     required={false}
                                     state={englishNameValidationState[0]}
                                     errorText={englishNameValidationState[1]}
@@ -1438,6 +1484,7 @@ export default function CreatePlant() {
                             <div className={styles.formItem} id={"moari-name"}>
                                 <SmallInput
                                     placeHolder={"Moari Name"}
+                                    defaultValue={importedJSON.moari_name}
                                     required={false}
                                     state={moariNameValidationState[0]}
                                     errorText={moariNameValidationState[1]}
@@ -1447,6 +1494,7 @@ export default function CreatePlant() {
                             <div className={styles.formItem} id={"latin-name"}>
                                 <SmallInput
                                     placeHolder={"Latin Name"}
+                                    defaultValue={importedJSON.latin_name}
                                     required={false}
                                     state={latinNameValidationState[0]}
                                     errorText={latinNameValidationState[1]}
@@ -1764,6 +1812,12 @@ export default function CreatePlant() {
                 <div className={styles.row}>
 
                     <div className={styles.submitButtonsContainer}>
+
+                        {/* Upload to DB */}
+                        <div className={styles.formItem}>
+                            <button onClick={importPlant} className={styles.submitDataButton}> Import JSON File </button>
+                        </div>
+
                         {/* Generate JSON Button */}
                         <div className={styles.formItem}>
                             <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON File </button>
