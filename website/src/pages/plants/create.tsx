@@ -506,7 +506,7 @@ class MedicalInfo {
     }
 
     constructor() {
-       this.updateSection();
+        this.updateSection();
     }
 
 }
@@ -677,26 +677,26 @@ class EdibleInfo {
 
 // Edible Use Section Props
 type EdibleUseSectionProps = {
-   partOfPlantHandler:      (value: string) => void;
-   nutritionalValueHandler: (value: string) => void;
-   preparationTypeHandler:  (value: string) => void;
-   preparationHandler:      (value: string) => void;
-   valid: {
+    partOfPlantHandler:      (value: string) => void;
+    nutritionalValueHandler: (value: string) => void;
+    preparationTypeHandler:  (value: string) => void;
+    preparationHandler:      (value: string) => void;
+    valid: {
         partOfPlant:        [ValidationState, string];
         nutritionalValue:   [ValidationState, string];
         preparation:        [ValidationState, string];
         preparationType:    [ValidationState, string];
         image:              [ValidationState, string];
 
-   }
-   state: {
+    }
+    state: {
         partOfPlant:        string;
         nutritionalValue:   string;
         preparation:        string;
         preparationType:    string;
         edibleImage:        string;
 
-   }
+    }
 }
 export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
 
@@ -1050,16 +1050,16 @@ export function DateInfoSection({eventHandler, startDateHandler, endDateHandler,
 }
 
 interface infoDisplayerProps{
-    infoRef     : React.MutableRefObject<DateInfo[]>
-                | React.MutableRefObject<EdibleInfo[]>
-                | React.MutableRefObject<MedicalInfo[]>
-                | React.MutableRefObject<CraftInfo[]>
-                | React.MutableRefObject<SourceInfo[]>
-                | React.MutableRefObject<CustomInfo[]>
-                | React.MutableRefObject<ImageInfo[]>
-    newInfo     : () => void
-    name        : string
-    setRenderKey : any
+    infoRef         : React.MutableRefObject<DateInfo[]>
+        | React.MutableRefObject<EdibleInfo[]>
+        | React.MutableRefObject<MedicalInfo[]>
+        | React.MutableRefObject<CraftInfo[]>
+        | React.MutableRefObject<SourceInfo[]>
+        | React.MutableRefObject<CustomInfo[]>
+        | React.MutableRefObject<ImageInfo[]>
+    newInfo         : () => void
+    name            : string
+    setRenderKey    : React.Dispatch<React.SetStateAction<number>>
 }
 function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerProps){
 
@@ -1108,7 +1108,6 @@ export default function CreatePlant() {
     // Page Constants
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
-    const [renderKeyDate, setRenderKeyDate] = useState(0);
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1131,6 +1130,17 @@ export default function CreatePlant() {
     const customInfoRef               = useRef<CustomInfo[]>([]);
     const sourceInfoRef               = useRef<SourceInfo[]>([]);
 
+    // Section Render Keys
+    const [renderKeyDate, setRenderKeyDate] = useState(0);
+    const [renderKeyImage, setRenderKeyImage] = useState(0);
+    const [renderKeyEdible, setRenderKeyEdible] = useState(0);
+    const [renderKeyMedical, setRenderKeyMedical] = useState(0);
+    const [renderKeyCraft, setRenderKeyCraft] = useState(0);
+    const [renderKeyCustom, setRenderKeyCustom] = useState(0);
+    const [renderKeySource, setRenderKeySource] = useState(0);
+
+
+
     // Value Handlers
     const handleEnglishNameChange = (value : string) => { setEnglishName(value);
         console.log(value) };
@@ -1142,13 +1152,13 @@ export default function CreatePlant() {
     const handleLocationChange = (value : string) => { setLocation(value) };
 
     // New Section Setters
-    const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()];}
-    const newImage = () => { imageInfoRef.current = [...imageInfoRef.current, new ImageInfo()]; }
-    const newEdibleInfo = () => { edibleInfoRef.current = [...edibleInfoRef.current, new EdibleInfo()]; }
-    const newMedicalInfo = () => { medicalInfoRef.current = [...medicalInfoRef.current, new MedicalInfo()];}
-    const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; }
-    const newCustomInfo = () => { customInfoRef.current = [...customInfoRef.current, new CustomInfo()]; }
-    const newSourceInfo = () => { sourceInfoRef.current = [...sourceInfoRef.current, new SourceInfo()]; }
+    const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKeyDate(prevState => prevState + 1)}
+    const newImage = () => { imageInfoRef.current = [...imageInfoRef.current, new ImageInfo()]; setRenderKeyImage(prevState => prevState + 1)}
+    const newEdibleInfo = () => { edibleInfoRef.current = [...edibleInfoRef.current, new EdibleInfo()]; setRenderKeyEdible(prevState => prevState + 1)}
+    const newMedicalInfo = () => { medicalInfoRef.current = [...medicalInfoRef.current, new MedicalInfo()]; setRenderKeyMedical(prevState => prevState + 1)}
+    const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; setRenderKeyCraft(prevState => prevState + 1)}
+    const newCustomInfo = () => { customInfoRef.current = [...customInfoRef.current, new CustomInfo()]; setRenderKeyCustom(prevState => prevState + 1)}
+    const newSourceInfo = () => { sourceInfoRef.current = [...sourceInfoRef.current, new SourceInfo()]; setRenderKeySource(prevState => prevState + 1)}
 
     // Section States
     const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
@@ -1834,27 +1844,63 @@ export default function CreatePlant() {
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Date"} infoRef={dateInfoRef} newInfo={newDateInfo} key={renderKeyDate} setRenderKey={setRenderKeyDate}/>
+                            <InfoDisplayer
+                                name={"Date"}
+                                infoRef={dateInfoRef}
+                                newInfo={newDateInfo}
+                                key={renderKeyDate}
+                                setRenderKey={setRenderKeyDate}
+                            />
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Edible Use"} infoRef={edibleInfoRef} newInfo={newEdibleInfo}/>
+                            <InfoDisplayer
+                                name={"Edible Use"}
+                                infoRef={edibleInfoRef}
+                                newInfo={newEdibleInfo}
+                                key={renderKeyEdible}
+                                setRenderKey={setRenderKeyEdible}
+                            />
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Medical Use"} infoRef={medicalInfoRef} newInfo={newMedicalInfo}/>
+                            <InfoDisplayer
+                                name={"Medical Use"}
+                                infoRef={medicalInfoRef}
+                                newInfo={newMedicalInfo}
+                                key={renderKeyMedical}
+                                setRenderKey={setRenderKeyMedical}
+                            />
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Craft Use"} infoRef={craftInfoRef} newInfo={newCraftInfo}/>
+                            <InfoDisplayer
+                                name={"Craft Use"}
+                                infoRef={craftInfoRef}
+                                newInfo={newCraftInfo}
+                                key={renderKeyCraft}
+                                setRenderKey={setRenderKeyCraft}
+                            />
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Source"} infoRef={sourceInfoRef} newInfo={newSourceInfo}/>
+                            <InfoDisplayer
+                                name={"Source"}
+                                infoRef={sourceInfoRef}
+                                newInfo={newSourceInfo}
+                                key={renderKeySource}
+                                setRenderKey={setRenderKeySource}
+                            />
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Custom Section"} infoRef={customInfoRef} newInfo={newCustomInfo}/>
+                            <InfoDisplayer
+                                name={"Custom Section"}
+                                infoRef={customInfoRef}
+                                newInfo={newCustomInfo}
+                                key={renderKeyCustom}
+                                setRenderKey={setRenderKeyCustom}
+                            />
                         </div>
                     </div>
 
@@ -1862,7 +1908,13 @@ export default function CreatePlant() {
                     <div className={styles.column} >
 
                         {/*Images Section */}
-                        <InfoDisplayer name={"Image"} infoRef={imageInfoRef} newInfo={newImage}/>
+                        <InfoDisplayer
+                            name={"Image"}
+                            infoRef={imageInfoRef}
+                            newInfo={newImage}
+                            key={renderKeyImage}
+                            setRenderKey={setRenderKeyImage}
+                        />
                     </div>
                 </div>
 
@@ -1897,7 +1949,7 @@ export default function CreatePlant() {
 
             <ScrollToTop/>
 
-           
+
         </>
     )
 

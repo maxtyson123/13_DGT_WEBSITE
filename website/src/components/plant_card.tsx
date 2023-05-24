@@ -1,8 +1,8 @@
 import styles from "@/styles/plant_card.module.css"
 import Link from "next/link";
-import {PlantData} from "@/modules/plant_data";
+import {getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/modules/cache";
 
 // Define the props for the plant card and the types for the plant data
@@ -17,31 +17,8 @@ export default function PlantCardData({ data }: PlantCardProps){
     // Run on page start
     useEffect(() => {
 
-        let localNames = ["None", "None", "None"]
-
-        // Set the names based on the preferred name
-        switch (data.preferred_name){
-            case "English":
-                localNames[0] = data.english_name
-                localNames[1] = data.moari_name
-                localNames[2] = data.latin_name
-                break
-
-            case "Moari":
-                localNames[0] = data.moari_name
-                localNames[1] = data.english_name
-                localNames[2] = data.latin_name
-                break
-
-            case "Latin":
-                localNames[0] = data.latin_name
-                localNames[1] = data.english_name
-                localNames[2] = data.moari_name
-                break
-        }
-
         // Update the names
-        setNames(localNames)
+        setNames(getNamesInPreference(data))
 
     }, [])
 
@@ -95,8 +72,17 @@ export function PlantCardApi({id}: PlantCardApiProps) {
     // Define the state for the plant data and the plant card
     const [plantCard, setPlantCard] = useState(<PlantCardLoading/>);
 
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
+
     // Fetch the plant data from the api for this plant on load
     useEffect(() => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
         fetchPlant();
     }, []);
 

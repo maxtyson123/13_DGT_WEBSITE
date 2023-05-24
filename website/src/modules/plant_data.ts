@@ -431,3 +431,30 @@ export function emptyPlantApiData(){
 
     return apiData;
 }
+
+export function getNamesInPreference(data: PlantData){
+    let localNames = ["None", "None", "None"]
+
+    // Set the names based on the preferred name
+    switch (data.preferred_name){
+        case "English":
+            localNames[0] = data.english_name
+            localNames[1] = data.moari_name
+            localNames[2] = data.latin_name
+            break
+
+        case "Moari":
+            localNames[0] = data.moari_name
+            localNames[1] = data.english_name
+            localNames[2] = data.latin_name
+            break
+
+        case "Latin":
+            localNames[0] = data.latin_name
+            localNames[1] = data.english_name
+            localNames[2] = data.moari_name
+            break
+    }
+
+    return localNames;
+}

@@ -1,10 +1,8 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Fix Dates validation
-// TODO: Redo the images for the plants - Make it use a main image for the default
-// TODO: Remove sections on create page
 // TODO: Plant page for the plants
 // TODO: Calendar page to show all the plants that are in season
+// TODO: Redo the images for the plants - Make it use a main image for the default
 // TODO: Grid that shit
 // TODO: Responsive design
 // TODO: Authentication
