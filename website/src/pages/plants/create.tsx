@@ -1059,11 +1059,17 @@ interface infoDisplayerProps{
                 | React.MutableRefObject<ImageInfo[]>
     newInfo     : () => void
     name        : string
+    setRenderKey : any
 }
-function InfoDisplayer({infoRef, newInfo, name} : infoDisplayerProps){
+function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerProps){
 
     // Calculate the id of the info
     let id = name.toLowerCase().replace(" ", "-");
+
+    const rm = (id: number) => {
+        infoRef.current.splice(id, 1);
+        setRenderKey(prevState => prevState + 1)
+    }
 
     return(
         <>
@@ -1074,6 +1080,9 @@ function InfoDisplayer({infoRef, newInfo, name} : infoDisplayerProps){
             {infoRef.current.map((value, index) => (
                 <div key={index} className={styles.formItem} id={`${id}-${index}`}>
                     <div className={styles.formContainer}>
+                        {/* Remove Button */}
+                        <button onClick={() => {rm(index);}} className={styles.deleteSectionButton}> X </button>
+
                         {/* Add some space */}
                         <br />
 
@@ -1099,7 +1108,7 @@ export default function CreatePlant() {
     // Page Constants
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
-    const [renderKey, setRenderKey] = useState(0);
+    const [renderKeyDate, setRenderKeyDate] = useState(0);
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1133,13 +1142,13 @@ export default function CreatePlant() {
     const handleLocationChange = (value : string) => { setLocation(value) };
 
     // New Section Setters
-    const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKey(prevKey => prevKey + 1);}
-    const newImage = () => { imageInfoRef.current = [...imageInfoRef.current, new ImageInfo()]; setRenderKey(prevKey => prevKey + 1); }
-    const newEdibleInfo = () => { edibleInfoRef.current = [...edibleInfoRef.current, new EdibleInfo()]; setRenderKey(prevKey => prevKey + 1); }
-    const newMedicalInfo = () => { medicalInfoRef.current = [...medicalInfoRef.current, new MedicalInfo()]; setRenderKey(prevKey => prevKey + 1); }
-    const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; setRenderKey(prevKey => prevKey + 1); }
-    const newCustomInfo = () => { customInfoRef.current = [...customInfoRef.current, new CustomInfo()]; setRenderKey(prevKey => prevKey + 1); }
-    const newSourceInfo = () => { sourceInfoRef.current = [...sourceInfoRef.current, new SourceInfo()]; setRenderKey(prevKey => prevKey + 1); }
+    const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()];}
+    const newImage = () => { imageInfoRef.current = [...imageInfoRef.current, new ImageInfo()]; }
+    const newEdibleInfo = () => { edibleInfoRef.current = [...edibleInfoRef.current, new EdibleInfo()]; }
+    const newMedicalInfo = () => { medicalInfoRef.current = [...medicalInfoRef.current, new MedicalInfo()];}
+    const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; }
+    const newCustomInfo = () => { customInfoRef.current = [...customInfoRef.current, new CustomInfo()]; }
+    const newSourceInfo = () => { sourceInfoRef.current = [...sourceInfoRef.current, new SourceInfo()]; }
 
     // Section States
     const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
@@ -1542,9 +1551,9 @@ export default function CreatePlant() {
                     const dateSection = dateInfoRef.current[dateInfoRef.current.length-1];
 
                     // Update the values
-                    dateSection.handleStartDateChange(jsonContents.months_ready_for_use[i].start_date)
+                    dateSection.handleStartDateChange(jsonContents.months_ready_for_use[i].start_month)
                     dateSection.handleEventChange(jsonContents.months_ready_for_use[i].event)
-                    dateSection.handleEndDateChange(jsonContents.months_ready_for_use[i].end_date)
+                    dateSection.handleEndDateChange(jsonContents.months_ready_for_use[i].end_month)
 
                     // Re-render the section
                     dateSection.reRenderSection()
@@ -1714,6 +1723,8 @@ export default function CreatePlant() {
         console.log(result);
     }
 
+
+
     return (
         <>
             {/* Set up the page header and navbar */}
@@ -1823,7 +1834,7 @@ export default function CreatePlant() {
                         </div>
 
                         <div className={styles.formSection}>
-                            <InfoDisplayer name={"Date"} infoRef={dateInfoRef} newInfo={newDateInfo}/>
+                            <InfoDisplayer name={"Date"} infoRef={dateInfoRef} newInfo={newDateInfo} key={renderKeyDate} setRenderKey={setRenderKeyDate}/>
                         </div>
 
                         <div className={styles.formSection}>

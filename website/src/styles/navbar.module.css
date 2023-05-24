@@ -33,7 +33,7 @@
  Nicer Underlining
  */
 .navbar a p{
-    border-bottom: #FFFFFF 3px double;
+    border-bottom: #FFFFFF 3px solid;
 }
 
 
