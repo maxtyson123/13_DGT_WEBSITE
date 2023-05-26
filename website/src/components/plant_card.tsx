@@ -198,7 +198,7 @@ export function PlantCardNull(){
     )
 }
 
-function convertUseTag(tag: string | undefined) {
+export function  convertUseTag(tag: string | undefined) {
 
     // If the tag is undefined, return an empty string
     if (tag === undefined) {

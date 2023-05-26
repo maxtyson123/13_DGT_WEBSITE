@@ -9,7 +9,11 @@ import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/modules/cache";
 import {getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
-
+import styles from "@/styles/id.module.css";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
+import {convertUseTag} from "@/components/plant_card";
 
 export default function PlantPage() {
 
@@ -112,7 +116,39 @@ export default function PlantPage() {
 
             <Section>
                 <PageHeader size={"small"}>
-                    <h1>Plant ID: {plantNames[0]}</h1>
+                    <div className={styles.plantHeader}>
+                        <div  className={styles.headerItem}>
+                            <p className={styles.plantId}>ID : {plantData  ? plantData.id : "0000"}</p>
+                        </div>
+
+
+                        <div  className={styles.headerItem}>
+                            <p>{plantNames[1]}</p>
+                            <p>{plantNames[2]}</p>
+
+                        </div>
+
+                        <div  className={styles.headerItem}>
+                            <p className={styles.headerTitle}>{plantNames[0]}</p>
+                        </div>
+
+                        <div  className={styles.headerItem}>
+                            <div className={styles.usesContianer}>
+
+                                {plantData && plantData.use.map((use, index) => (
+                                    <div key={index} className={styles.use}>
+                                        <p>{convertUseTag(use)}</p>
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+
+                        <div  className={styles.headerItem}>
+                            <p className={styles.plantId}>{plantData  ? plantData.location : "Location"}</p>
+                        </div>
+
+                    </div>
                 </PageHeader>
             </Section>
 

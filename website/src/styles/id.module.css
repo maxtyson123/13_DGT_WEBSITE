@@ -1,0 +1,35 @@
+.plantHeader{
+    color: #FFFFFF;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: .25fr .75fr 1.75fr .75fr .25fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+
+}
+
+.headerItem{
+
+}
+
+.plantId{
+    transform: rotate(-90deg);
+    font-size: 20px;
+}
+
+.headerTitle{
+    font-size: 40px;
+    word-wrap: break-word;
+}
+
+.eventsContainer h1{
+    font-size: 30px;
+}
+
+.eventsContainer p{
+    text-decoration: #00B4D8  underline;
+}
+
