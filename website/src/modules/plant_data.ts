@@ -191,15 +191,17 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     for(let i = 0; i < apiData.attachment_paths.length; i++) {
         let imageInfoOBJ = {
             path: "",
-            type: "image",
+            type: "",
             name: "",
-            downloadable: false,
+            downloadable: false
         }
 
         imageInfoOBJ.path           = apiData.attachment_paths[i];
         imageInfoOBJ.type           = apiData.attachment_types[i];
         imageInfoOBJ.name           = apiData.attachment_names[i];
         imageInfoOBJ.downloadable   = apiData.attachment_downloadable[i];
+
+        plantData.attachments.push(imageInfoOBJ);
     }
 
     // Date info

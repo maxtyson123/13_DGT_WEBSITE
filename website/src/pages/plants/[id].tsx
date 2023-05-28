@@ -21,6 +21,11 @@ export default function PlantPage() {
     // Store the plant data
     const [plantData, setPlantData] = React.useState<PlantData | null>(null)
     const [plantNames, setPlantNames] = React.useState(["Loading...", "Loading...", "Loading..."])
+
+    // States for the images
+    const [currentImage, setCurrentImage] = React.useState(0)
+    const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
+
     // Set up the router
     const router = useRouter()
 
@@ -110,12 +115,55 @@ export default function PlantPage() {
         setPlantNames(getNamesInPreference(plantOBJ))
     }
 
+    // Update content when the plant data changes
     useEffect(() => {
+
+        // Set the description
         const div = document.getElementById("large_description");
         if (div) {
             div.innerHTML = plantData ? plantData.long_description : "Loading...";
         }
+
+        // Set the main image
+        setMainImageFromIndex(0)
+
     }, [plantData]);
+
+    const changeImage = (index: number) => {
+
+            // Get all the attachments with image type
+            let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+
+            // If there are no images then return
+            if(!images)
+                return
+
+            // If the index is out of bounds then return
+            if(index < 0 || index + currentImage >= images.length - 2)
+                return;
+
+            // Set the current image
+            setCurrentImage(index)
+
+    }
+
+    const setMainImageFromIndex = (index: number) => {
+
+            // Get all the attachments with image type
+            let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+
+            // If there are no images then return
+            if(!images)
+                return
+
+            // If the index is out of bounds then return
+            if(index < 0 || index >= images.length)
+                return;
+
+            // Set the current image
+            setMainImage(images[index].path)
+
+    }
 
     return (
         <>
@@ -178,17 +226,29 @@ export default function PlantPage() {
 
                               <div className={styles.plantImageContainer}>
                                   <div className={styles.mainImage}>
-                                      <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/>
+                                      <Image src={mainImage} alt={`${plantNames[0]} Header Image`} fill style={{objectFit: "contain"}}/>
                                   </div>
 
                                   <div className={styles.bottomImages}>
-                                      <button> <FontAwesomeIcon icon={faArrowLeft}/> </button>
-                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
-                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
-                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
-                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
-                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
-                                      <button> <FontAwesomeIcon icon={faArrowRight}/> </button>
+                                      <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft}/> </button>
+
+                                      {/* Map 5 images in the range of the current image - 2 to the current image + 2 */}
+                                      {plantData && plantData.attachments.filter((attachment, index) => index <= 4 && attachment.type === "image").map((attachment, index) => (
+                                          <button key={index} id={currentImage + index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
+                                                <Image
+                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
+                                                    alt={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].name : "Loading"}
+                                                    fill
+                                                    style={{objectFit: "contain"}}
+
+                                                />
+                                            </button>
+                                        ))}
+
+
+
+
+                                      <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight}/> </button>
                                   </div>
                               </div>
 
@@ -198,16 +258,13 @@ export default function PlantPage() {
                </div>
             </Section>
 
-            {/*
+            <Section autoPadding>
+                Months Slide Show Carousel Thingy
+            </Section>
 
-
-                    <Section>
-                     - Location
-                    </Section>
-
-                    - Auto Generated Sections (map loop into a AutoSection component)
-
-            */}
+            <Section autoPadding>
+                Map sections into an auto section component
+            </Section>
 
             {/* Page footer */}
             <Section>
