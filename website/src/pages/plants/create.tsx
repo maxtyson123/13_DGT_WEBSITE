@@ -1747,10 +1747,10 @@ export default function CreatePlant() {
             </PageHeader>
 
             <Section>
-                <div className={styles.row}>
+                <div className={"row"}>
 
                     {/* Divide the page into a left and right column*/}
-                    <div className={styles.column}>
+                    <div className={"column"}>
 
                         {/* Basic plant information */}
                         <div className={styles.formSection}>
@@ -1905,7 +1905,7 @@ export default function CreatePlant() {
                     </div>
 
                     {/* Right Hand Column */}
-                    <div className={styles.column} >
+                    <div className={"column"} >
 
                         {/*Images Section */}
                         <InfoDisplayer
@@ -1919,7 +1919,7 @@ export default function CreatePlant() {
                 </div>
 
 
-                <div className={styles.row}>
+                <div className={"row"}>
 
                     <div className={styles.submitButtonsContainer}>
 

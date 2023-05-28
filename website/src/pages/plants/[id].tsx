@@ -14,6 +14,7 @@ import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {convertUseTag} from "@/components/plant_card";
+import Image from "next/image";
 
 export default function PlantPage() {
 
@@ -80,7 +81,7 @@ export default function PlantPage() {
                 const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
                 const plantData = res.data.data
 
-                // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
+                // Typecast the plant data to the PlantData type (this is because it is know to return the PlantData type by the api - checking is done there)
                 plantOBJ = plantData as PlantData
 
                 // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
@@ -101,10 +102,20 @@ export default function PlantPage() {
             }
         }
 
+
+        console.log(plantOBJ)
+
         // Set the plant data
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
     }
+
+    useEffect(() => {
+        const div = document.getElementById("large_description");
+        if (div) {
+            div.innerHTML = plantData ? plantData.long_description : "Loading...";
+        }
+    }, [plantData]);
 
     return (
         <>
@@ -152,11 +163,43 @@ export default function PlantPage() {
                 </PageHeader>
             </Section>
 
+            <Section autoPadding>
+               <div className={styles.plantMainInfo}>
+                      <div className={"row"}>
+
+                          <div className={"column"}>
+                              <h1> {plantNames[0]} </h1>
+                              <h2> {plantNames[1]} | {plantNames[2]} </h2>
+
+                             <div className={styles.description} id={"large_description"}> </div>
+                          </div>
+
+                          <div className={"column"}>
+
+                              <div className={styles.plantImageContainer}>
+                                  <div className={styles.mainImage}>
+                                      <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/>
+                                  </div>
+
+                                  <div className={styles.bottomImages}>
+                                      <button> <FontAwesomeIcon icon={faArrowLeft}/> </button>
+                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
+                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
+                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
+                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
+                                      <button> <Image src={"/media/images/loading.gif"} alt={"TEST"} fill style={{objectFit: "contain"}}/> </button>
+                                      <button> <FontAwesomeIcon icon={faArrowRight}/> </button>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </div>
+
+               </div>
+            </Section>
 
             {/*
-                    <Section>
-                      - Plant Intro
-                    </Section>
+
 
                     <Section>
                      - Location
