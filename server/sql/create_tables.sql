@@ -1,116 +1,97 @@
 -- Plants Primary Table
 CREATE TABLE plants (
-    id SERIAL PRIMARY KEY,
-    preferred_name TEXT,
-    english_name TEXT,
-    maori_name TEXT,
-    latin_name TEXT,
-    location TEXT,
-    small_description TEXT,
-    long_description TEXT
+    id int NOT NULL,
+    plants_preferred_name TEXT,
+    plants_english_name TEXT,
+    plants_maori_name TEXT,
+    plants_latin_name TEXT,
+    plants_location TEXT,
+    plants_small_description TEXT,
+    plants_long_description TEXT,
+	PRIMARY KEY (id)
 );
 
 -- Months For Use
 CREATE TABLE months_ready_for_use (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    event TEXT,
-    start_month TEXT,
-    end_month TEXT
+    id int NOT NULL,
+    plant_id int,
+    months_ready_for_use_event TEXT,
+    months_ready_for_use_start_month TEXT,
+    months_ready_for_use_end_month TEXT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
 
-ALTER TABLE months_ready_for_use
-ADD CONSTRAINT fk_mru_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
 
 -- Attachments
 CREATE TABLE attachments (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    path TEXT,
-    type TEXT,
-    name TEXT,
-    downloadable BOOLEAN,
-    flags TEXT[]
+    id int NOT NULL,
+    plant_id int,
+    attachments_path TEXT,
+    attachments_type TEXT,
+    attachments_name TEXT,
+    attachments_downloadable BOOLEAN,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
-
-ALTER TABLE attachments
-ADD CONSTRAINT fk_attachments_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
-
 
 -- Medical Section
 CREATE TABLE medical (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    medical_type TEXT,
-    use TEXT,
-    image TEXT,
-    preparation TEXT
+    id int NOT NULL,
+    plant_id int,
+    medical_medical_type TEXT,
+    medical_use TEXT,
+    medical_image TEXT,
+    medical_preparation TEXT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
 
-ALTER TABLE medical
-ADD CONSTRAINT fk_medical_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
 
 -- Craft Section
-CREATE TABLE edible (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    part_of_plant TEXT,
-    image_of_part TEXT,
-    nutrition TEXT,
-    preparation TEXT,
-    preparation_type TEXT
+CREATE TABLE craft (
+    id int NOT NULL,
+    plant_id int,
+    craft_part_of_plant TEXT,
+    craft_use TEXT,
+    craft_image TEXT,
+    craft_additional_info TEXT
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
 
-ALTER TABLE edible
-ADD CONSTRAINT fk_edible_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
 
 -- Sources Section
 CREATE TABLE source (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
+    id int NOT NULL,
+    plant_id int,
     source_type TEXT,
-    data TEXT
+    source_data TEXT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
 
-ALTER TABLE source
-ADD CONSTRAINT fk_source_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
 
 -- Custom Sections
 CREATE TABLE custom (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    title TEXT,
-    text TEXT
+    id int NOT NULL,
+    plant_id int,
+    custom_title TEXT,
+    custom_text TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
-
-ALTER TABLE custom
-ADD CONSTRAINT fk_custom_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);
 
 
 -- Edible Section
 CREATE TABLE edible (
-    id SERIAL PRIMARY KEY,
-    plant_id INTEGER REFERENCES plants(id),
-    part_of_plant TEXT,
-    image_of_part TEXT,
-    nutrition TEXT,
-    preparation TEXT,
-    preparation_type TEXT
+    id int NOT NULL,
+    plant_id int,
+    edible_part_of_plant TEXT,
+    edible_image_of_part TEXT,
+    edible_nutrition TEXT,
+    edible_preparation TEXT,
+    edible_preparation_type TEXT,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
-
-ALTER TABLE edible
-ADD CONSTRAINT fk_edible_plants
-FOREIGN KEY (plant_id)
-REFERENCES plants(id);

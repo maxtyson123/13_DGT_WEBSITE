@@ -95,7 +95,7 @@ export default async function handler(
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (preferred_name, english_name, maori_name, latin_name, location, small_description, long_description) `;
+        query += `INSERT INTO plants (plants_preferred_name, plants_english_name, plants_maori_name, plants_latin_name, plants_small_description, small_description, plants_long_description) `;
         query += `VALUES ('${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location}', '${small_description}', '${long_description}') RETURNING id;`;
 
         // Create a temporary table to hold the new plant id
@@ -109,7 +109,7 @@ export default async function handler(
         // If there is months ready data, add it to the query
         if(months_ready_events.length > 0) {
             // Tell the query that we are adding to the months ready for use table
-            query += `INSERT INTO months_ready_for_use (plant_id, event, start_month, end_month) VALUES `;
+            query += `INSERT INTO months_ready_for_use (plant_id, months_ready_for_use_event, months_ready_for_use_start_month, months_ready_for_use_end_month) VALUES `;
 
             // Loop through each of the months ready events
             for(let i = 0; i < months_ready_events.length; i++) {
@@ -129,7 +129,7 @@ export default async function handler(
         if(edible_parts.length > 0) {
 
             // Tell the query that we are adding to the edible parts table
-            query += `INSERT INTO edible (plant_id, part_of_plant, image_of_part, nutrition, preparation, preparation_type) VALUES `;
+            query += `INSERT INTO edible (plant_id, edible_part_of_plant, edible_image_of_part, edible_nutrition, edible_preparation, edible_preparation_type) VALUES `;
 
             // Loop through each of the edible parts
             for(let i = 0; i < edible_parts.length; i++) {
@@ -149,7 +149,7 @@ export default async function handler(
         if(medical_types.length > 0) {
 
             // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, medical_type, use, image, preparation) VALUES `;
+            query += `INSERT INTO medical (plant_id, medical_medical_type, medical_use, medical_image, medical_preparation) VALUES `;
 
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
@@ -169,7 +169,7 @@ export default async function handler(
         if(craft_parts.length > 0) {
 
             // Tell the query that we are adding to the craft parts table
-            query += `INSERT INTO craft (plant_id, part_of_plant, use, image, additional_info) VALUES `;
+            query += `INSERT INTO craft (plant_id, craft_part_of_plant, craft_use, craft_image, craft_additional_info) VALUES `;
 
             // Loop through each of the craft parts
             for(let i = 0; i < craft_parts.length; i++) {
@@ -189,7 +189,7 @@ export default async function handler(
         if(source_types.length > 0) {
             // Tell the query that we are adding to the source types table
 
-            query += `INSERT INTO source (plant_id, source_type, data) VALUES `;
+            query += `INSERT INTO source (plant_id, source_type, source_data) VALUES `;
 
             // Loop through each of the source types
             for(let i = 0; i < source_types.length; i++) {
@@ -208,7 +208,7 @@ export default async function handler(
         // If there is custom section, add it to the query
         if(custom_titles.length > 0) {
             // Tell the query that we are adding to the custom table
-            query += `INSERT INTO custom (plant_id, title, text) VALUES `;
+            query += `INSERT INTO custom (plant_id, custom_title, custom_text) VALUES `;
 
             // Loop through each of the custom titles
             for(let i = 0; i < custom_titles.length; i++) {
@@ -228,7 +228,7 @@ export default async function handler(
         if(attachment_paths.length > 0) {
 
             // Tell the query that we are adding to the attachments table
-            query += `INSERT INTO attachments (plant_id, path, type, name, downloadable) VALUES `;
+            query += `INSERT INTO attachments (plant_id, attachments_path, attachments_type, attachments_name, attachments_downloadable) VALUES `;
 
             // Loop through each of the attachments
             for(let i = 0; i < attachment_paths.length; i++) {

@@ -234,7 +234,7 @@ export default function PlantPage() {
 
                                       {/* Map 5 images in the range of the current image - 2 to the current image + 2 */}
                                       {plantData && plantData.attachments.filter((attachment, index) => index <= 4 && attachment.type === "image").map((attachment, index) => (
-                                          <button key={index} id={currentImage + index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
+                                          <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
                                                 <Image
                                                     src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
                                                     alt={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].name : "Loading"}
