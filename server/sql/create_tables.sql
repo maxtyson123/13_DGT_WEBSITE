@@ -1,13 +1,13 @@
 -- Plants Primary Table
 CREATE TABLE plants (
     id int NOT NULL,
-    plants_preferred_name TEXT,
-    plants_english_name TEXT,
-    plants_maori_name TEXT,
-    plants_latin_name TEXT,
-    plants_location TEXT,
-    plants_small_description TEXT,
-    plants_long_description TEXT,
+    preferred_name TEXT,
+    english_name TEXT,
+    maori_name TEXT,
+    latin_name TEXT,
+    location_found TEXT,
+    small_description TEXT,
+    long_description TEXT,
 	PRIMARY KEY (id)
 );
 
@@ -15,9 +15,9 @@ CREATE TABLE plants (
 CREATE TABLE months_ready_for_use (
     id int NOT NULL,
     plant_id int,
-    months_ready_for_use_event TEXT,
-    months_ready_for_use_start_month TEXT,
-    months_ready_for_use_end_month TEXT,
+    months_event TEXT,
+    months_start_month TEXT,
+    months_end_month TEXT,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
@@ -88,7 +88,7 @@ CREATE TABLE edible (
     id int NOT NULL,
     plant_id int,
     edible_part_of_plant TEXT,
-    edible_image_of_part TEXT,
+    edible_image TEXT,
     edible_nutrition TEXT,
     edible_preparation TEXT,
     edible_preparation_type TEXT,

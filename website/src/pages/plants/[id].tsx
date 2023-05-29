@@ -204,7 +204,7 @@ export default function PlantPage() {
                         </div>
 
                         <div  className={styles.headerItem}>
-                            <p className={styles.plantId}>{plantData  ? plantData.location : "Location"}</p>
+                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "location_found"}</p>
                         </div>
 
                     </div>

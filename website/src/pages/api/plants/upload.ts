@@ -1,5 +1,6 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
+import {PostgresSQL, SQLDatabase} from "@/modules/databse";
 
 
 export default async function handler(
@@ -25,7 +26,7 @@ export default async function handler(
             english_name,
             maori_name,
             latin_name,
-            location,
+            location_found,
             small_description,
             long_description,
             months_ready_events,
@@ -63,7 +64,7 @@ export default async function handler(
         if(english_name === null)               { return response.status(missingParametersErrorCode).json({ error: 'English name parameter not found' }); }
         if(maori_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Maori name parameter not found' }); }
         if(latin_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Latin name parameter not found' }); }
-        if(location === null)                   { return response.status(missingParametersErrorCode).json({ error: 'Location parameter not found' }); }
+        if(location_found === null)                   { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
         if(small_description === null)          { return response.status(missingParametersErrorCode).json({ error: 'Small description parameter not found' }); }
         if(long_description === null)           { return response.status(missingParametersErrorCode).json({ error: 'Long description parameter not found' }); }
         if(months_ready_events === null)        { return response.status(missingParametersErrorCode).json({ error: 'Months ready events parameter not found' }); }
@@ -91,12 +92,21 @@ export default async function handler(
         if(attachment_names === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment names parameter not found' }); }
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
 
+        // Check if the data is being downloaded from the Postgres database
+        const usePostgres = true;
+        let tables = new SQLDatabase();
+
+        // Set the tables to use
+        if(usePostgres) {
+            tables = new PostgresSQL();
+        }
+
         // Create the query
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (plants_preferred_name, plants_english_name, plants_maori_name, plants_latin_name, plants_small_description, small_description, plants_long_description) `;
-        query += `VALUES ('${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location}', '${small_description}', '${long_description}') RETURNING id;`;
+        query += `INSERT INTO plants (${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
+        query += `VALUES ('${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS (
@@ -109,7 +119,7 @@ export default async function handler(
         // If there is months ready data, add it to the query
         if(months_ready_events.length > 0) {
             // Tell the query that we are adding to the months ready for use table
-            query += `INSERT INTO months_ready_for_use (plant_id, months_ready_for_use_event, months_ready_for_use_start_month, months_ready_for_use_end_month) VALUES `;
+            query += `INSERT INTO months_ready_for_use (plant_id, ${tables.months_event}, ${tables.months_start_month}, ${tables.months_end_month}) VALUES `;
 
             // Loop through each of the months ready events
             for(let i = 0; i < months_ready_events.length; i++) {
@@ -129,7 +139,7 @@ export default async function handler(
         if(edible_parts.length > 0) {
 
             // Tell the query that we are adding to the edible parts table
-            query += `INSERT INTO edible (plant_id, edible_part_of_plant, edible_image_of_part, edible_nutrition, edible_preparation, edible_preparation_type) VALUES `;
+            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_image_of_part}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
 
             // Loop through each of the edible parts
             for(let i = 0; i < edible_parts.length; i++) {
@@ -149,7 +159,7 @@ export default async function handler(
         if(medical_types.length > 0) {
 
             // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, medical_medical_type, medical_use, medical_image, medical_preparation) VALUES `;
+            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}) VALUES `;
 
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
@@ -169,7 +179,8 @@ export default async function handler(
         if(craft_parts.length > 0) {
 
             // Tell the query that we are adding to the craft parts table
-            query += `INSERT INTO craft (plant_id, craft_part_of_plant, craft_use, craft_image, craft_additional_info) VALUES `;
+            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use}, ${tables.craft_image}, ${tables.craft_additional_info}) VALUES `;
+
 
             // Loop through each of the craft parts
             for(let i = 0; i < craft_parts.length; i++) {
@@ -189,7 +200,7 @@ export default async function handler(
         if(source_types.length > 0) {
             // Tell the query that we are adding to the source types table
 
-            query += `INSERT INTO source (plant_id, source_type, source_data) VALUES `;
+            query += `INSERT INTO source (plant_id, ${tables.source_type}, ${tables.source_data}) VALUES `;
 
             // Loop through each of the source types
             for(let i = 0; i < source_types.length; i++) {
@@ -208,7 +219,7 @@ export default async function handler(
         // If there is custom section, add it to the query
         if(custom_titles.length > 0) {
             // Tell the query that we are adding to the custom table
-            query += `INSERT INTO custom (plant_id, custom_title, custom_text) VALUES `;
+            query += `INSERT INTO custom (plant_id, ${tables.custom_title}, ${tables.custom_text}) VALUES `;
 
             // Loop through each of the custom titles
             for(let i = 0; i < custom_titles.length; i++) {
@@ -228,7 +239,7 @@ export default async function handler(
         if(attachment_paths.length > 0) {
 
             // Tell the query that we are adding to the attachments table
-            query += `INSERT INTO attachments (plant_id, attachments_path, attachments_type, attachments_name, attachments_downloadable) VALUES `;
+            query += `INSERT INTO attachments (plant_id, ${tables.attachment_path}, ${tables.attachment_type}, ${tables.attachment_name}, ${tables.attachment_downloadable}) VALUES `;
 
             // Loop through each of the attachments
             for(let i = 0; i < attachment_paths.length; i++) {

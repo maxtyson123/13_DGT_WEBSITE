@@ -1,5 +1,5 @@
 -- Insert data into plants table
-INSERT INTO plants (preferred_name, english_name, maori_name, latin_name, location, small_description, long_description)
+INSERT INTO plants (preferred_name, english_name, maori_name, latin_name, location_found, small_description, long_description)
 VALUES ('Moari', 'Christmas Tree', 'Pohutukawa', 'Metrosideros excelsa', 'Coastal', 'N/A', '<p>A large spreading tree up to 25 metres high, with a dark grey gnarled trunk.</p><p>The leaves are 2-10 cm long and velvety white beneath, to defend the tree against any excess of salt in the air or sea spray.</p><p>The tree bears spectacular tufted red flowers.</p><p>The Pohutukawa is found along cliffs and in coastal forest. North of Lake Taupo only.</p><p>Pohutukawa is said to mean "splashed by the spray". Its roots are sometimes anchor for the northern rock oyster and its branches are home to seabirds.</p>');
 
 -- Create temporary table to hold new plant ID

@@ -11,7 +11,7 @@ export interface PlantData {
         start_month:    string,
         end_month:      string,
     }[];
-    location:           string;
+    location_found:           string;
     small_description:  string;
     long_description:   string;
     attachments: {
@@ -28,7 +28,7 @@ export interface PlantDataApi {
     english_name:               string;
     maori_name:                 string;
     latin_name:                 string;
-    location:                   string;
+    location_found:                   string;
     small_description:          string;
     long_description:           string;
     months_ready_events:        string[];
@@ -121,7 +121,7 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.english_name                 == null
         || apiData.maori_name                   == null
         || apiData.latin_name                   == null
-        || apiData.location                     == null
+        || apiData.location_found               == null
         || apiData.small_description            == null
         || apiData.long_description             == null
         || apiData.months_ready_events          == null
@@ -157,7 +157,7 @@ export function ValidPlantData(plantData : PlantData) : boolean {
         || plantData.english_name           == null
         || plantData.moari_name             == null
         || plantData.latin_name             == null
-        || plantData.location               == null
+        || plantData.location_found         == null
         || plantData.small_description      == null
         || plantData.long_description       == null
         || plantData.months_ready_for_use   == null
@@ -183,7 +183,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.english_name      = apiData.english_name;
     plantData.moari_name        = apiData.maori_name;
     plantData.latin_name        = apiData.latin_name;
-    plantData.location          = apiData.location;
+    plantData.location_found    = apiData.location_found;
     plantData.small_description = apiData.small_description;
     plantData.long_description  = apiData.long_description;
 
@@ -311,7 +311,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.english_name      = plantData.english_name;
     apiData.maori_name        = plantData.moari_name;
     apiData.latin_name        = plantData.latin_name;
-    apiData.location          = plantData.location;
+    apiData.location_found    = plantData.location_found;
     apiData.small_description = plantData.small_description;
     apiData.long_description  = plantData.long_description;
 
@@ -385,7 +385,7 @@ export function emptyPlantData(){
         latin_name:             "",
         use:                    [],
         months_ready_for_use:   [],
-        location:               "",
+        location_found:         "",
         small_description:      "",
         long_description:       "",
         attachments:            [],
@@ -402,7 +402,7 @@ export function emptyPlantApiData(){
         english_name:               "",
         maori_name:                 "",
         latin_name:                 "",
-        location:                   "",
+        location_found:             "",
         small_description:          "",
         long_description:           "",
         months_ready_events:        [],

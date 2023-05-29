@@ -5,7 +5,7 @@ CREATE TABLE plants (
     english_name TEXT,
     maori_name TEXT,
     latin_name TEXT,
-    location TEXT,
+    location_found TEXT,
     small_description TEXT,
     long_description TEXT
 );
@@ -57,18 +57,17 @@ FOREIGN KEY (plant_id)
 REFERENCES plants(id);
 
 -- Craft Section
-CREATE TABLE edible (
+CREATE TABLE craft (
     id SERIAL PRIMARY KEY,
     plant_id INTEGER REFERENCES plants(id),
     part_of_plant TEXT,
-    image_of_part TEXT,
-    nutrition TEXT,
-    preparation TEXT,
-    preparation_type TEXT
+    use TEXT,
+    image TEXT,
+    additional_info TEXT
 );
 
-ALTER TABLE edible
-ADD CONSTRAINT fk_edible_plants
+ALTER TABLE craft
+ADD CONSTRAINT fk_craft_plants
 FOREIGN KEY (plant_id)
 REFERENCES plants(id);
 

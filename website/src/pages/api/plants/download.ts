@@ -1,5 +1,7 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
+import {PostgresSQL, SQLDatabase} from "@/modules/databse";
+
 
 export default async function handler(
     request: NextApiRequest,
@@ -16,6 +18,14 @@ export default async function handler(
 
     // Get the ID and table from the query string
     const { id, table } = request.query;
+
+    const usePostgres = true;
+    let tables = new SQLDatabase();
+
+    // If the data is being downloaded from the Postgres database
+    if(usePostgres) {
+        tables = new PostgresSQL();
+    }
 
     // Try downloading the data from the database
     try {
@@ -56,7 +66,7 @@ export default async function handler(
             switch (tableArray[i]) {
                 case 'plants':
                     // Select all the plant data
-                    selector += ` plants.preferred_name, plants.english_name, plants.maori_name, plants.latin_name, plants.location, plants.small_description, plants.long_description,`;
+                    selector += ` plants.preferred_name, plants.english_name, plants.maori_name, plants.latin_name, plants.location_found, plants.small_description, plants.long_description,`;
                     break;
 
                 case 'months_ready_for_use':
@@ -87,11 +97,11 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(part_of_plant) AS edible_parts,
-                                array_agg(image_of_part) AS edible_images,
-                                array_agg(nutrition) AS edible_nutrition,
-                                array_agg(preparation) AS edible_preparation,
-                                array_agg(preparation_type) AS edible_preparation_type
+                                array_agg(${tables.edible_part_of_plant}) AS edible_parts,
+                                array_agg(${tables.edible_image_of_part}) AS edible_images,
+                                array_agg(${tables.edible_nutrition}) AS edible_nutrition,
+                                array_agg(${tables.edible_preparation}) AS edible_preparation,
+                                array_agg(${tables.edible_preparation_type}) AS edible_preparation_type
                                 FROM edible
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -108,10 +118,10 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(medical_type) AS medical_types,
-                                array_agg(use) AS medical_uses,
-                                array_agg(image) AS medical_images,
-                                array_agg(preparation) AS medical_preparation
+                                array_agg(${tables.medical_type}) AS medical_types,
+                                array_agg(${tables.medical_use}) AS medical_uses,
+                                array_agg(${tables.medical_image}) AS medical_images,
+                                array_agg(${tables.medical_preparation}) AS medical_preparation
                                 FROM medical
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -128,10 +138,10 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(part_of_plant) AS craft_parts,
-                                array_agg(use) AS craft_uses,
-                                array_agg(image) AS craft_images,
-                                array_agg(additional_info) AS craft_additional_info
+                                array_agg(${tables.craft_part_of_plant}) AS craft_parts,
+                                array_agg(${tables.craft_use}) AS craft_uses,
+                                array_agg(${tables.craft_image}) AS craft_images,
+                                array_agg(${tables.craft_additional_info}) AS craft_additional_info
                                 FROM craft
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -148,8 +158,8 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(source_type) AS source_types,
-                                array_agg(data) AS source_data
+                                array_agg(${tables.source_type}) AS source_types,
+                                array_agg(${tables.source_data}) AS source_data
                                 FROM source
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -165,8 +175,8 @@ export default async function handler(
                     joiner += ` LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(title) AS custom_titles,
-                                array_agg(text) AS custom_text
+                                array_agg(${tables.custom_title}) AS custom_titles,
+                                array_agg(${tables.custom_text}) AS custom_text
                                 FROM custom
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
