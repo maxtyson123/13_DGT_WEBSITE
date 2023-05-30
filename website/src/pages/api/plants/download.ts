@@ -1,25 +1,44 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {PostgresSQL, SQLDatabase} from "@/modules/databse";
-
+import mysql from 'serverless-mysql';
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
+    const usePostgres = true;
+
     // If the request is not a GET request, return an error
     if(request.method !== 'GET') {
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
     }
 
+    // Select what database is being used
+    let dataBase : any = mysql({
+        config: {
+            host: process.env.MYSQL_HOST,
+            port: process.env.MYSQL_PORT,
+            database: process.env.MYSQL_DATABASE,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD
+        }
+    });
+
+    // If postgres use that
+    if(usePostgres){
+        dataBase = db
+    }
+
     // Connect to the database
-    const client = await db.connect();
+    const client = await dataBase.connect();
+
+
 
     // Get the ID and table from the query string
     const { id, table } = request.query;
 
-    const usePostgres = true;
     let tables = new SQLDatabase();
 
     // If the data is being downloaded from the Postgres database

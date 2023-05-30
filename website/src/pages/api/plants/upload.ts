@@ -1,13 +1,14 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {PostgresSQL, SQLDatabase} from "@/modules/databse";
-
+import mysql from 'serverless-mysql';
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
+    const usePostgres = false
     //return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
 
     // If the request is not a POST request, return an error
@@ -15,8 +16,24 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use POST' });
     }
 
+    // Select what database is being used
+    let dataBase : any = mysql({
+        config: {
+            host: process.env.MYSQL_HOST,
+            port: process.env.MYSQL_PORT,
+            database: process.env.MYSQL_DATABASE,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD
+        }
+    });
+
+    // If postgres use that
+    if(usePostgres){
+        dataBase = db
+    }
+
     // Connect to the database
-    const client = await db.connect();
+    const client = await dataBase.connect();
 
 
     // Try uploading the data to the database
@@ -93,7 +110,6 @@ export default async function handler(
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
 
         // Check if the data is being downloaded from the Postgres database
-        const usePostgres = true;
         let tables = new SQLDatabase();
 
         // Set the tables to use
@@ -275,14 +291,15 @@ export default async function handler(
             return response.status(500).json({ error: "Error creating plant (id not returned)" });
         }
 
-
+        client.end();
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     } finally {
 
-        // Disconnect from the database
-        client.release();
+
+
+
     }
 }

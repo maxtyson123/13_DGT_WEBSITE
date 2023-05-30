@@ -1340,7 +1340,7 @@ export default function CreatePlant() {
         plantOBJ.english_name = englishName;
         plantOBJ.moari_name = moariName;
         plantOBJ.latin_name = latinName;
-        plantOBJ.location = location;
+        plantOBJ.location_found = location;
         plantOBJ.small_description = smallDescription;
         plantOBJ.long_description = largeDescription;
 
@@ -1832,7 +1832,7 @@ export default function CreatePlant() {
                             <div className={styles.formItem} id={"location"}>
                                 <DropdownInput
                                     placeHolder={"Location"}
-                                    defaultValue={importedJSON.location}
+                                    defaultValue={importedJSON.location_found}
                                     required={true}
                                     state={locationValidationState[0]}
                                     errorText={locationValidationState[1]}

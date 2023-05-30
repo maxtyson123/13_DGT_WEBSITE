@@ -1,6 +1,6 @@
 -- Plants Primary Table
 CREATE TABLE plants (
-    id int NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     preferred_name TEXT,
     english_name TEXT,
     maori_name TEXT,
@@ -13,8 +13,8 @@ CREATE TABLE plants (
 
 -- Months For Use
 CREATE TABLE months_ready_for_use (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     months_event TEXT,
     months_start_month TEXT,
     months_end_month TEXT,
@@ -25,8 +25,8 @@ CREATE TABLE months_ready_for_use (
 
 -- Attachments
 CREATE TABLE attachments (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     attachments_path TEXT,
     attachments_type TEXT,
     attachments_name TEXT,
@@ -37,9 +37,9 @@ CREATE TABLE attachments (
 
 -- Medical Section
 CREATE TABLE medical (
-    id int NOT NULL,
-    plant_id int,
-    medical_medical_type TEXT,
+    id INT NOT NULL,
+    plant_id INT,
+    medical_type TEXT,
     medical_use TEXT,
     medical_image TEXT,
     medical_preparation TEXT,
@@ -50,12 +50,12 @@ CREATE TABLE medical (
 
 -- Craft Section
 CREATE TABLE craft (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     craft_part_of_plant TEXT,
     craft_use TEXT,
     craft_image TEXT,
-    craft_additional_info TEXT
+    craft_additional_info TEXT,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
@@ -63,8 +63,8 @@ CREATE TABLE craft (
 
 -- Sources Section
 CREATE TABLE source (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     source_type TEXT,
     source_data TEXT,
 	PRIMARY KEY (id),
@@ -74,8 +74,8 @@ CREATE TABLE source (
 
 -- Custom Sections
 CREATE TABLE custom (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     custom_title TEXT,
     custom_text TEXT,
     PRIMARY KEY (id),
@@ -85,8 +85,8 @@ CREATE TABLE custom (
 
 -- Edible Section
 CREATE TABLE edible (
-    id int NOT NULL,
-    plant_id int,
+    id INT NOT NULL,
+    plant_id INT,
     edible_part_of_plant TEXT,
     edible_image TEXT,
     edible_nutrition TEXT,
