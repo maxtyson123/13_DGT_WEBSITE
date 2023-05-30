@@ -2,13 +2,13 @@ import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {PostgresSQL, SQLDatabase} from "@/modules/databse";
 import mysql from 'serverless-mysql';
+import{USE_POSTGRES} from "@/modules/constants";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    const usePostgres = false
     //return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
 
     // If the request is not a POST request, return an error
@@ -28,7 +28,7 @@ export default async function handler(
     });
 
     // If postgres use that
-    if(usePostgres){
+    if(USE_POSTGRES){
         dataBase = db
     }
 
@@ -113,7 +113,7 @@ export default async function handler(
         let tables = new SQLDatabase();
 
         // Set the tables to use
-        if(usePostgres) {
+        if(USE_POSTGRES) {
             tables = new PostgresSQL();
         }
 

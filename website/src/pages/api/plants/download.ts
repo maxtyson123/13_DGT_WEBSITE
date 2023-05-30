@@ -2,13 +2,12 @@ import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {PostgresSQL, SQLDatabase} from "@/modules/databse";
 import mysql from 'serverless-mysql';
+import{USE_POSTGRES} from "@/modules/constants";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
-
-    const usePostgres = true;
 
     // If the request is not a GET request, return an error
     if(request.method !== 'GET') {
@@ -27,7 +26,7 @@ export default async function handler(
     });
 
     // If postgres use that
-    if(usePostgres){
+    if(USE_POSTGRES){
         dataBase = db
     }
 
@@ -42,7 +41,7 @@ export default async function handler(
     let tables = new SQLDatabase();
 
     // If the data is being downloaded from the Postgres database
-    if(usePostgres) {
+    if(USE_POSTGRES) {
         tables = new PostgresSQL();
     }
 

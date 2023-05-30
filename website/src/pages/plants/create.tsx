@@ -18,11 +18,7 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import axios from "axios";
 
-// Constants
-const PLANT_PARTS   = ["Stem", "Leaf", "Root", "Heart", "Flower", "Petals", "Fruit", "Bark", "Inner Bark", "Seeds", "Shoot", "Pollen", "Wood", "Gum", "Whole Plant"];
-const MONTHS        = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "December"];
-
-
+import {MONTHS, PLANT_PARTS} from "@/modules/constants"
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 

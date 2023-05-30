@@ -1,0 +1,89 @@
+.title{
+    color: white;
+    text-align: center;
+    font-size: 64px;
+}
+
+.calenderContainer{
+    width: 100%;
+    color: white;
+}
+
+.month{
+    width: 100%;
+    background-color: #0a670a;
+    display: grid;
+    grid-template-columns: .25fr 2.5fr .25fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 32px;
+    padding: 2%;
+    border-radius: 10px;
+    box-shadow: 4px 4px 25px 2px rgba(0,0,0,0.75);
+    margin-bottom: 20px;
+}
+
+.month button{
+    background-color: rgba(8, 72, 8, 0.63);
+    border: #084808 2px solid;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.month button:hover{
+    border: rgba(8, 72, 8, 0.63) 2px solid;
+    background-color: #084808;
+}
+
+.plants{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.plant{
+    padding: 5px;
+    display: grid;
+    grid-template-columns: .25fr repeat(2, 1.75fr) .25fr;
+    grid-template-rows: 1fr;
+    line-height: 2em;
+    text-align: center;
+
+}
+
+.plant button{
+    border-radius: 25px;
+    border: white 2px solid;
+}
+
+.plant button:hover{
+    border: black 2px solid;
+}
+
+.start{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    background-color: green;
+    border-radius: 10px 0px 0px 10px;
+    box-shadow: 10px 0 8px -8px black;
+}
+
+.end{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background-color: red;
+    border-radius: 0px 10px 10px 0px;
+    box-shadow: -10px 0 8px -8px black;
+}
+
+.onGoing{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    background-color: gray;
+    box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
+}
