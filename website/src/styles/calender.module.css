@@ -53,7 +53,10 @@
     grid-template-rows: 1fr;
     line-height: 2em;
     text-align: center;
+}
 
+.plant h1{
+    text-decoration: underline;
 }
 
 .plant button{
@@ -85,5 +88,13 @@
     grid-column-start: 1;
     grid-column-end: 4;
     background-color: gray;
+    box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
+}
+
+.startEnd{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    background: orange;
+    background: linear-gradient(90deg, green 0%, red 100%);
     box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
 }

@@ -12,6 +12,7 @@ import {MONTHS} from "@/modules/constants"
 import {getFromCache, saveToCache} from "@/modules/cache";
 import axios from "axios";
 import {getNamesInPreference, PlantData} from "@/modules/plant_data";
+import Link from "next/link";
 
 interface MonthEntry {
     id: number,
@@ -89,7 +90,7 @@ export default function Calender(ref: CalenderRef){
             console.log(data);
 
             // Create an array to store the month entries
-            const monthEntries: MonthEntry[] = []
+            const entries: MonthEntry[] = []
 
             // Convert the data into an array of month entries
             for (let i = 0; i < data.length; i++) {
@@ -109,8 +110,10 @@ export default function Calender(ref: CalenderRef){
 
                 console.log(monthEntry);
 
-                monthEntries.push(monthEntry)
+                entries.push(monthEntry)
             }
+
+            setMonthEntries(entries)
 
 
         } catch (err) {
@@ -144,36 +147,18 @@ export default function Calender(ref: CalenderRef){
                     </div>
 
                     <div className={styles.plants}>
-                        {/* Map the month entries to the calender, if the current month is in their start and end month range */}
+
+                        {/* Map the months that start */}
                         {monthEntries
-                            .filter(entry => {
-                                return month >= entry.startMonth && month <= entry.endMonth; // Check if current month is within range
-                            })
                             .map((entry, index) => {
-                                // Map the filtered entries to the calendar
-                                return (
-                                    <div key={entry.plant} className={styles.plant + " " + styles.onGoing}>
-                                        <button onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button>
-                                        <h1>{entry.plant} | {entry.event}</h1>
-                                        <h2> ON-GOING </h2>
-                                        <button onClick={nextMonth}> <FontAwesomeIcon icon={faArrowRight}/> </button>
-                                    </div>
-                                );
-                            })}
 
-                        <div className={styles.plant + " " + styles.end}>
-                            <button onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button>
-                            <h1>Plant | EVENT</h1>
-                            <h2> END </h2>
-                            <div></div>
-                        </div>
+                               return <EventEntryDisplayer key={entry.plant} entry={entry} month={month}/>;
 
-                        <div className={styles.plant + " " + styles.start}>
-                            <div></div>
-                            <h1>Plant | EVENT</h1>
-                            <h2> START </h2>
-                            <button onClick={nextMonth}> <FontAwesomeIcon icon={faArrowRight}/> </button>
-                        </div>
+                        })}
+
+
+
+
 
 
                     </div>
@@ -193,4 +178,58 @@ export default function Calender(ref: CalenderRef){
            
         </>
     )
+}
+
+interface EventEntryDisplayerProps{
+    entry: MonthEntry,
+    month: number
+}
+function EventEntryDisplayer({entry, month}: EventEntryDisplayerProps){
+
+    let type = ""
+    let style = null
+
+    if (entry.startMonth === entry.endMonth) {
+        if (entry.startMonth === month) {
+            type = "Start/End";
+            style = styles.startEnd;
+        }
+    }else if (entry.startMonth === month){
+        type = "Start"
+        style = styles.start
+    }else if (entry.endMonth === month){
+        type = "End"
+        style = styles.end
+    }else if (month > entry.startMonth && month < entry.endMonth){
+        type = "OnGoing"
+        style = styles.onGoing
+    }else{
+        if(entry.endMonth < entry.startMonth){
+            if ((month >= entry.startMonth && month <= 12) || (month >= 1 && month < entry.endMonth)) {
+                type = "OnGoing";
+                style = styles.onGoing;
+            }
+        }
+    }
+
+
+    if (type === "") {
+        return null;
+    }
+
+
+    // Map the filtered entries to the calendar
+    return (
+        <div className={styles.plant + " " + style}>
+            <div></div>
+            <Link href={`/plants/${entry.id}`}>
+                <h1>{entry.plant} | {entry.event}</h1>
+            </Link>
+            <h2> {type} </h2>
+
+            <div></div>
+        </div>
+
+    )
+
 }
