@@ -88,3 +88,33 @@
 .bottomImage{
 
 }
+
+.monthsContainer{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.monthsContainer .title{
+    font-size: 64px;
+    text-align: center;
+    grid-column-start: 1;
+    grid-column-end: 4;
+
+}
+
+.month{
+    background: #0A670A;
+    box-shadow: -5px 5px 4px 5px rgba(0, 0, 0, 0.43);
+    border-radius: 50px;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.month h1{
+    font-size: 32px;
+}

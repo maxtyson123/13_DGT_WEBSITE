@@ -25,7 +25,7 @@ interface MonthEntry {
 type CalenderRef = React.ForwardedRef<HTMLDivElement>
 export default function Calender(ref: CalenderRef){
     const pageName = "Calender"
-    const [month, setMonth] = React.useState(0)
+    const [month, setMonth] = React.useState(new Date().getMonth())
     const [monthName, setMonthName] = React.useState(MONTHS[month])
     const [monthEntries, setMonthEntries] = React.useState<MonthEntry[]>([])
 
@@ -155,12 +155,6 @@ export default function Calender(ref: CalenderRef){
                                return <EventEntryDisplayer key={entry.plant} entry={entry} month={month}/>;
 
                         })}
-
-
-
-
-
-
                     </div>
                 </div>
 

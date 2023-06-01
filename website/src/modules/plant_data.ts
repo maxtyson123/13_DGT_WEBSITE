@@ -270,17 +270,6 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         plantData.sections.push(craftInfoOBJ);
     }
 
-    // Source info
-    for(let i = 0; i < apiData.source_types.length; i++) {
-         let sourceInfoOBJ = {
-            type: "source",
-            source_type:    apiData.source_types[i],
-            data:           apiData.source_data[i],
-        }
-
-        plantData.sections.push(sourceInfoOBJ);
-    }
-
     // Custom info
     for (let i = 0; i < apiData.custom_titles.length; i++) {
         let customInfoOBJ = {
@@ -290,6 +279,17 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         }
 
         plantData.sections.push(customInfoOBJ);
+    }
+
+    // Source info
+    for(let i = 0; i < apiData.source_types.length; i++) {
+        let sourceInfoOBJ = {
+            type: "source",
+            source_type:    apiData.source_types[i],
+            data:           apiData.source_data[i],
+        }
+
+        plantData.sections.push(sourceInfoOBJ);
     }
 
     return plantData;
@@ -356,14 +356,14 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
                 apiData.craft_additional_info.push(plantData.sections[i].additonal_info);
                 break;
 
-            case "source":
-                apiData.source_types.push(plantData.sections[i].source_type);
-                apiData.source_data.push(plantData.sections[i].data);
-                break;
-
             case "custom":
                 apiData.custom_titles.push(plantData.sections[i].title);
                 apiData.custom_text.push(plantData.sections[i].text);
+                break;
+
+            case "source":
+                apiData.source_types.push(plantData.sections[i].source_type);
+                apiData.source_data.push(plantData.sections[i].data);
                 break;
 
             default:

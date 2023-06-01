@@ -10,11 +10,11 @@ import {getFromCache, saveToCache} from "@/modules/cache";
 import {getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
 import styles from "@/styles/id.module.css";
-import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {convertUseTag} from "@/components/plant_card";
 import Image from "next/image";
+import {AutoSection} from "@/components/plant_sections";
 
 export default function PlantPage() {
 
@@ -25,6 +25,9 @@ export default function PlantPage() {
     // States for the images
     const [currentImage, setCurrentImage] = React.useState(0)
     const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
+
+    // States for the months
+    const [currentMonth, setCurrentMonth] = React.useState(0)
 
     // Set up the router
     const router = useRouter()
@@ -40,7 +43,7 @@ export default function PlantPage() {
             return
         dataFetch.current = true
 
-        fetchPlant(); //TODO: Fetch plant data should probaly be made in a function in the plant_data module
+        fetchPlant(); //TODO: Fetch plant data should probably be made in a function in the plant_data module
 
 
     }, []);
@@ -259,11 +262,25 @@ export default function PlantPage() {
             </Section>
 
             <Section autoPadding>
-                Months Slide Show Carousel Thingy
+                <div className={styles.monthsContainer}>
+
+                    <h1 className={styles.title}> Events </h1>
+
+                    {plantData?.months_ready_for_use.map((month, index) => (
+                        <div key={index} className={styles.month}>
+                            <h1>{month.event}</h1>
+                            <p>{month.start_month} - {month.end_month}</p>
+                        </div>
+                    ))}
+                </div>
             </Section>
 
             <Section autoPadding>
-                Map sections into an auto section component
+                <div className={styles.sectionsContainer}>
+                    {plantData?.sections.map((section, index) => (
+                        <AutoSection section={section} images={plantData?.attachments} isLeft={index % 2 === 0} key={index}/>
+                    ))}
+                </div>
             </Section>
 
             {/* Page footer */}
