@@ -31,6 +31,7 @@
 .imageContainer{
     width: 400px;
     height: 400px;
+    position: relative;
 }
 
 /*
@@ -38,6 +39,7 @@
  Give it a font-weight of 700 and a font-size of 32px to make it stand out.
  */
 .title{
+    padding-top: 10%;
     align-self: start;
     font-weight: 700;
     font-size: 32px;
@@ -138,5 +140,5 @@
     margin-left: 10%;
     margin-top: 10%;
     border-radius: 20px;
-    background-color: #5E6366;
+    background-color: #D9D9D9;
 }

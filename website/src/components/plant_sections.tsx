@@ -1,5 +1,6 @@
-import {inspect} from "util";
 import styles from "@/styles/plant_sections.module.css"
+import React, {useEffect, useRef} from "react";
+import Image from "next/image";
 
 interface AutoSectionProps{
     section: any
@@ -49,23 +50,63 @@ interface EdibleSectionProps{
 }
 export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 
+    // Store the nutrition amd preparation section in a ref
+    const nutritionRef = useRef<HTMLParagraphElement>(null)
+    const preparationRef = useRef<HTMLParagraphElement>(null)
+
+    // Get the image of the part of the plant
+    let image_index = parseInt(section.image_of_part.split(" ")[1])
+
+    if (isNaN(image_index)){
+        image_index = 0
+    }else{
+        image_index -= 1
+    }
+
+    // Check that it is a valid index
+    if (image_index < 0 || image_index >= images.length){
+        image_index = 0
+    }
+
+
     const imageDiv = (
         <>
-            <p>IMAGE</p>
+            <div className={styles.imageContainer}>
+                <Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
+            </div>
         </>
     )
 
     const textDiv = (
         <>
-            <div>
+            <div className={styles.infoDiv}>
                 <h1> Edible Use </h1>
-                <p> Part of Plant: {section.part_of_plant} </p>
-                <p> Nutrition: {section.nutrition} </p>
-                <p> Preparation: {section.preparation} </p>
-                <p> Preparation Type: {section.preparation_type} </p>
+                <h3> Part of Plant: </h3> <p> {section.part_of_plant} </p>
+                <div ref={nutritionRef} ></div>
+                <h3> Preparation Type: </h3> <p> {section.preparation_type}</p>
+                <div ref={preparationRef}> </div>
             </div>
         </>
     )
+
+    // Set the inner html of the nutrition and preparation sections with a useEffect
+    useEffect(() => {
+
+        if (nutritionRef.current != null){
+            nutritionRef.current.innerHTML = "<h3> Nutrition: </h3> " + section.nutrition
+        }
+
+        if (preparationRef.current != null){
+            preparationRef.current.innerHTML = "<h3> Preparation: </h3> " + section.preparation
+        }
+    }, [nutritionRef, preparationRef, section.nutrition, section.preparation])
+
 
     return(
         <>
@@ -94,21 +135,62 @@ interface MedicalSectionProps{
     isLeft:                 boolean
 }
 export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
-   const imageDiv = (
-        <>
-            <p>IMAGE</p>
-        </>
-    )
 
-    const textDiv = (
+    // Store the use and preparation in a ref to set the contents with html later
+    const meduseRef = useRef<HTMLDivElement>(null)
+    const preparationRef = useRef<HTMLDivElement>(null)
+
+    // Get the image of the part of the plant
+    let image_index = parseInt(section.image.split(" ")[1])
+
+    if (isNaN(image_index)){
+        image_index = 0
+    }else{
+        image_index -= 1
+    }
+
+    // Check that it is a valid index
+    if (image_index < 0 || image_index >= images.length){
+        image_index = 0
+    }
+
+
+    const imageDiv = (
         <>
-            <div>
-                <h1> {section.medical_type} Medical Use </h1>
-                <p> Use: {section.use} </p>
-                <p> Preparation: {section.preparation} </p>
+            <div className={styles.imageContainer}>
+                <Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
             </div>
         </>
     )
+
+   const textDiv = (
+        <>
+            <div className={styles.infoDiv}>
+                <h1> {section.medical_type} Medical Use </h1>
+                <div ref={meduseRef}></div>
+                <div ref={preparationRef}></div>
+            </div>
+        </>
+    )
+
+    // Set the inner html of the use and preparation sections with a useEffect
+    useEffect(() => {
+
+        if (meduseRef.current != null){
+            meduseRef.current.innerHTML = "<h3> Use: </h3> " + section.use
+        }
+
+        if (preparationRef.current != null){
+            preparationRef.current.innerHTML = "<h3> Preparation: </h3> " + section.preparation
+        }
+
+    }, [meduseRef, preparationRef, section.use, section.preparation])
 
     return(
         <>
@@ -137,22 +219,63 @@ interface CraftSectionProps{
     isLeft:                 boolean
 }
 export function CraftSection({section, images, isLeft} : CraftSectionProps){
-   const imageDiv = (
+
+    // Store the use and additional info in a ref to set the contents with html later
+    const craft_useRef = useRef<HTMLDivElement>(null)
+    const additional_infoRef = useRef<HTMLDivElement>(null)
+
+    // Get the image of the part of the plant
+    let image_index = parseInt(section.image.split(" ")[1])
+
+    if (isNaN(image_index)){
+        image_index = 0
+    }else{
+        image_index -= 1
+    }
+
+    // Check that it is a valid index
+    if (image_index < 0 || image_index >= images.length){
+        image_index = 0
+    }
+
+
+    const imageDiv = (
         <>
-            <p>IMAGE</p>
+            <div className={styles.imageContainer}>
+                <Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
+            </div>
         </>
     )
 
     const textDiv = (
         <>
-            <div>
+            <div className={styles.infoDiv}>
                 <h1> Craft Use </h1>
-                <p> Part of Plant: {section.part_of_plant} </p>
-                <p> Use: {section.use} </p>
-                <p> Additional Info: {section.additonal_info} </p>
+                <h3> Part of Plant: </h3> <p> {section.part_of_plant} </p>
+                <div ref={craft_useRef}></div>
+                <div ref={additional_infoRef}></div>
             </div>
         </>
     )
+
+    // Set the inner html of the use and additional info sections with a useEffect
+    useEffect(() => {
+
+        if (craft_useRef.current != null){
+            craft_useRef.current.innerHTML = "<h3> Use: </h3> " + section.use
+        }
+
+        if (additional_infoRef.current != null){
+            additional_infoRef.current.innerHTML = "<h3> Additional Info: </h3> " + section.additonal_info
+        }
+
+    }, [craft_useRef, additional_infoRef, section.use, section.additonal_info])
 
     return(
         <>
@@ -172,7 +295,6 @@ interface SourceSectionProps{
     }
 }
 export function SourceSection({section} : SourceSectionProps){
-
     let sourceItem = (
         <>
         </>
@@ -182,7 +304,7 @@ export function SourceSection({section} : SourceSectionProps){
         case "Internet":
             sourceItem = (
                 <>
-                    <li> Internet: <a href={section.data}>{section.data}</a></li>
+                    <li> Source (Internet): <a href={section.data}>{section.data}</a></li>
                 </>
             )
             break;
@@ -192,7 +314,7 @@ export function SourceSection({section} : SourceSectionProps){
         default:
             sourceItem = (
                 <>
-                    <li> {section.source_type}: {section.data}</li>
+                    <li> Source ({section.source_type}): {section.data}</li>
                 </>
             )
     }
@@ -217,11 +339,23 @@ interface CustomSectionProps{
 }
 export function CustomSection({section} : CustomSectionProps){
 
+    // Store the text in a ref to set the contents with html later
+    const textRef = useRef<HTMLDivElement>(null)
+
+    // Set the inner html of the text section with a useEffect
+    useEffect(() => {
+
+            if (textRef.current != null){
+                textRef.current.innerHTML = section.text
+            }
+
+    }, [textRef, section.text])
+
     return(
         <>
             <div className={styles.sectionContainer}>
                 <h1> {section.title} </h1>
-                <p> {section.text} </p>
+                <div ref={textRef}></div>
             </div>
 
         </>

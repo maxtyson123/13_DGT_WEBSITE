@@ -55,14 +55,13 @@
 }
 
 .letterContainer li{
-    color: #5E6366;
-    border-left: #5E6366 solid 5px;
+    color: black;
+    border-left: #D9D9D9 solid 5px;
     padding: 10px;
     margin: 5px;
     cursor: pointer;
 }
 
 .letterContainer li:hover{
-    background-color: #5E6366;
-    color: white;
+    background-color: #D9D9D9;
 }

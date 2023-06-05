@@ -4,12 +4,50 @@
     grid-template-rows: 1fr;
     grid-column-gap: 0;
     align-items: center;
-    justify-content: center;
+    justify-items: center;
     padding: 2.5%;
+    color: black;
 
+}
+
+.sectionContainer h1{
+    font-size: 64px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.sectionContainer h3{
+    margin-top: 10px;
+    font-size: 22px;
+}
+
+.sectionContainer a{
+    color: #00B4D8;
+    text-decoration: underline;
+}
+
+.infoDiv{
+    width: 80%;
+}
+
+.imageContainer{
+    background-color: #D9D9D9;
+    width: 80%;
+    height: 100%;
+    border-radius: 20px;
+    min-height: 400px;
+    position: relative;
 }
 
 .split{
     grid-template-columns: .5fr .5fr;
     grid-column-gap: 75px;
+}
+
+@media only screen and (max-width: 1500px) {
+    .split{
+        grid-template-columns: 1fr;
+        grid-row-gap: 75px;
+    }
+
 }

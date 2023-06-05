@@ -1,13 +1,13 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Plant page for the plants
-// TODO: Redo the images for the plants - Make it use a main image for the default
+// TODO: Redo the images for the plants
 // TODO: Grid that shit
 // TODO: Responsive design
 // TODO: Use SQL
 // TODO: Authentication
 // TODO: Edit page
 // TODO: Accessibility Settings (Dark mode)
+// TODO: Re do css
 // TODO: Comment Code
 // TODO: Testing
 // TODO: Code cleanup

@@ -4,6 +4,7 @@ import {getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
 import {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/modules/cache";
+import Image from "next/image";
 
 // Define the props for the plant card and the types for the plant data
 type PlantCardProps = {
@@ -22,18 +23,27 @@ export default function PlantCardData({ data }: PlantCardProps){
 
     }, [])
 
+    // Store all the images
+    const images = data.attachments.filter((attachment) => attachment.type === "image")
+
+    // Get a random image index
+    const image_index = Math.floor(Math.random() * images.length)
+
+
+
 
     return(
         <>
             {/* Shadowed div that holds the card contents*/}
             <div className={styles.card}>
 
-                {/* Image of the plant, grabbed from the image attacments of the pant data (TODO) */}
+                {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
-                    <img
-                        src={"/media/images/plants/example_transparent.png"}
-                        alt={"Loading..."}
-                        className={styles.image}
+                    <Image
+                         src={images[0] ? images[image_index].path : "/media/images/loading.gif"}
+                         alt={images[0] ? images[image_index].name : "Loading"}
+                         fill
+                         style={{objectFit: "contain"}}
                     />
                 </div>
 
@@ -138,11 +148,11 @@ export function PlantCardLoading(){
 
               {/* Placeholder loading gif */}
                <div className={styles.imageContainer}>
-                   <img
-                        src={"/media/images/loading.gif"}
-                        alt={"Loading..."}
-                        className={styles.image}
-                        style={{padding: 100}}  // Make the image smaller
+                   <Image
+                       src={"/media/images/loading.gif"}
+                       alt={"Loading"}
+                       fill
+                       style={{objectFit: "contain"}}
                    />
                 </div>
 

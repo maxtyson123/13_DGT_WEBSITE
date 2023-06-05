@@ -248,9 +248,6 @@ export default function PlantPage() {
                                             </button>
                                         ))}
 
-
-
-
                                       <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight}/> </button>
                                   </div>
                               </div>
@@ -264,7 +261,10 @@ export default function PlantPage() {
             <Section autoPadding>
                 <div className={styles.monthsContainer}>
 
+                    {/* If there are no events then there shouldn't be a title */}
+                    {plantData?.months_ready_for_use.length > 0 &&
                     <h1 className={styles.title}> Events </h1>
+                    }
 
                     {plantData?.months_ready_for_use.map((month, index) => (
                         <div key={index} className={styles.month}>
