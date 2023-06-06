@@ -98,3 +98,16 @@
     background: linear-gradient(90deg, green 0%, red 100%);
     box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
 }
+
+
+
+@media only screen and (max-width: 500px) {
+    .plant {
+        grid-template-columns: 1fr;
+    }
+
+    .monthElmentButton{
+        display: none;
+    }
+
+}

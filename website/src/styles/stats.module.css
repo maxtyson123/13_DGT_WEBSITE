@@ -48,3 +48,10 @@
 .inline{
     display: inline;
 }
+
+@media only screen and (max-width: 800px) {
+    .statsRowContainer {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}

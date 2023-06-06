@@ -87,3 +87,29 @@
     grid-column-end: 3;
     width: 60%;
 }
+
+@media only screen and (max-width: 1500px) {
+    .cardsContainer {
+        grid-template-columns: 2fr;
+    }
+
+}
+
+@media only screen and (max-width: 1000px) {
+    .welcomeContainer{
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .plantContainer{
+        grid-row: 1
+    }
+
+    .searchBox{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        width: 100%;
+    }
+
+
+}

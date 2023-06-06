@@ -1,8 +1,8 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Responsive design
-// TODO: Redo the images for the plants
+// TODO: Responsive navbar
 // TODO: Accessibility Settings (Dark mode)
+// TODO: Redo the images for the plants
 // TODO: Use SQL
 // TODO: Authentication
 // TODO: Edit page - Download data into the create page and then when edit is complete then remove that id and insert with this id

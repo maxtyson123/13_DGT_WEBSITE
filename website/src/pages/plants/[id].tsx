@@ -233,7 +233,7 @@ export default function PlantPage() {
                                   </div>
 
                                   <div className={styles.bottomImages}>
-                                      <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft}/> </button>
+                                      <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/> </button>
 
                                       {/* Map 5 images in the range of the current image - 2 to the current image + 2 */}
                                       {plantData && plantData.attachments.filter((attachment, index) => index <= 4 && attachment.type === "image").map((attachment, index) => (
@@ -248,7 +248,7 @@ export default function PlantPage() {
                                             </button>
                                         ))}
 
-                                      <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight}/> </button>
+                                      <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/> </button>
                                   </div>
                               </div>
 

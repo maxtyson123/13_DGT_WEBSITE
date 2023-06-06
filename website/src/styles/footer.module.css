@@ -38,3 +38,13 @@
 .link p{
     margin: 10px;
 }
+
+@media only screen and (max-width: 800px) {
+    .footer {
+        grid-template-columns: 1fr;
+    }
+
+    .searchBoxContainer{
+        display: none;
+    }
+}

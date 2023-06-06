@@ -152,7 +152,7 @@ export default function Calender(ref: CalenderRef){
                         {monthEntries
                             .map((entry, index) => {
 
-                               return <EventEntryDisplayer key={entry.plant} entry={entry} month={month}/>;
+                               return <EventEntryDisplayer key={entry.plant} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
 
                         })}
                     </div>
@@ -177,8 +177,10 @@ export default function Calender(ref: CalenderRef){
 interface EventEntryDisplayerProps{
     entry: MonthEntry,
     month: number
+    prevMonth: () => void,
+    nextMonth: () => void
 }
-function EventEntryDisplayer({entry, month}: EventEntryDisplayerProps){
+function EventEntryDisplayer({entry, month, prevMonth, nextMonth}: EventEntryDisplayerProps){
 
     let type = ""
     let style = null
@@ -215,13 +217,12 @@ function EventEntryDisplayer({entry, month}: EventEntryDisplayerProps){
     // Map the filtered entries to the calendar
     return (
         <div className={styles.plant + " " + style}>
-            <div></div>
+            {type === "End" || type === "OnGoing" ? <button className={styles.monthElmentButton} onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button> : <div/>}
             <Link href={`/plants/${entry.id}`}>
                 <h1>{entry.plant} | {entry.event}</h1>
             </Link>
             <h2> {type} </h2>
-
-            <div></div>
+            {type === "Start" || type === "OnGoing" ? <button className={styles.monthElmentButton} onClick={nextMonth}><FontAwesomeIcon icon={faArrowRight} /></button> : <div/>}
         </div>
 
     )

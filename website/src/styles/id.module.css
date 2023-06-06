@@ -61,9 +61,8 @@
     height: 200px;
     display: grid;
     grid-template-columns: .5fr repeat(5, 1fr) .5fr;
-    grid-template-rows: 1fr;
     grid-column-gap: 10px;
-    grid-row-gap: 0;
+    grid-row-gap: 10px;
     align-items: center;
     justify-content: center;
 
@@ -117,4 +116,29 @@
 
 .month h1{
     font-size: 32px;
+}
+
+@media only screen and (max-width: 500px) {
+    .monthsContainer, .plantHeader{
+        grid-template-columns: 1fr;
+    }
+
+    .plantId{
+        transform: rotate(0deg);
+    }
+
+    .monthsContainer .title{
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+
+    .bottomImages{
+        grid-template-columns: 1fr;
+        height: 1400px;
+    }
+    
+    .bottomImages .arrow{
+        rotate: 90deg;
+    }
+
 }
