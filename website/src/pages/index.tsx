@@ -1,13 +1,12 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Redo the images for the plants
-// TODO: Grid that shit
 // TODO: Responsive design
+// TODO: Redo the images for the plants
+// TODO: Accessibility Settings (Dark mode)
 // TODO: Use SQL
 // TODO: Authentication
-// TODO: Edit page
-// TODO: Accessibility Settings (Dark mode)
-// TODO: Re do css
+// TODO: Edit page - Download data into the create page and then when edit is complete then remove that id and insert with this id
+// TODO: Redo css
 // TODO: Comment Code
 // TODO: Testing
 // TODO: Code cleanup
@@ -22,7 +21,6 @@ import HtmlHeader from "@/components/html_header";
 import Section from "@/components/section";
 import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
-import ScrollingPlant from "@/components/scrolling_plant";
 import {PlantCardApi, PlantCardLoading} from "@/components/plant_card";
 import Image from "next/image";
 import Stats from "@/components/stats";
@@ -30,6 +28,7 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/modules/cache";
 import axios from "axios";
+import ScrollingPlant from "@/components/scrolling_plant";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -113,23 +112,24 @@ export default function Home(ref: HomeRef) {
                   {/* Container for the welcome message and search box */}
                    <div className={styles.welcomeContainer}>
 
-                       {/* Place the title and description on the left */}
-                       <div className={styles.titleContainer}>
-                           <h1 className={styles.title}> Rongoa </h1>
-                           <p className={styles.description}>Site description ... ... ... ... ... ... ... ... ... ... ... ...
-                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  </p>
-                       </div>
-
-                      {/* Place the plant model on the right */}
+                       {/* Place the plant model on the right */}
                        <div className={styles.plantContainer}>
                            <ScrollingPlant/>
                        </div>
-                   </div>
 
-                    {/* Search is to be below the welcome message so don't include it in the flex div*/}
-                    <SearchBox/>
+                       {/* Place the title and description on the left */}
+                       <h1 className={styles.title}> Rongoa </h1>
+
+                       <p className={styles.description}>Site description ... ... ... ... ... ... ... ... ... ... ... ...
+                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
+                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
+                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  </p>
+
+                       <div className={styles.searchBox}>
+                        <SearchBox/>
+                       </div>
+
+                   </div>
                 </PageHeader>
             </Section>
 
@@ -170,14 +170,12 @@ export default function Home(ref: HomeRef) {
                             alt={"fern"}
                             width={400}
                             height={400}
-                            className={styles.image}
                         />
                         <Image
                             src={"/media/images/kowhai.png"}
                             alt={"kowhai"}
                             width={400}
                             height={400}
-                            className={styles.image}
                         />
                     </div>
                 </div>

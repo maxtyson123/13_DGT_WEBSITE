@@ -14,9 +14,8 @@
 
 .formSection{
     width: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
     align-items: center;
 }
 
@@ -82,9 +81,8 @@
 
 .submitButtonsContainer{
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
     align-items: center;
 }
 

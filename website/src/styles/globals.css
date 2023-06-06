@@ -36,6 +36,7 @@
     --secondary-2: var(--dark-secondary-2);
     --secondary-3: var(--dark-secondary-3);
 
+    --wide-screen: 1500;
 
 }
 
@@ -68,9 +69,8 @@ body{
     float: left;
     width: 50%;
     padding: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
     align-items: center;
 }
 

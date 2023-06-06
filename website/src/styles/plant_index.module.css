@@ -65,3 +65,11 @@
 .letterContainer li:hover{
     background-color: #D9D9D9;
 }
+
+.statsContainer{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    scale: 0.8;
+}

@@ -54,7 +54,7 @@ export default function PlantCardData({ data }: PlantCardProps){
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
                 <Link scroll={false} className={styles.button} href={"/plants/" + data.id}>
-                   <p className={styles.button}>More Info</p>
+                   <p>More Info</p>
                 </Link>
 
                 {/* Container for the tags*/}
@@ -163,7 +163,7 @@ export function PlantCardLoading(){
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
                 <Link scroll={false} className={styles.button} href={"#"}>
-                    <p className={styles.button}>More Info</p>
+                    <p >More Info</p>
                 </Link>
 
                 {/* Container for the tags*/}
@@ -194,7 +194,7 @@ export function PlantCardNull(){
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
                 <Link scroll={false} className={styles.button} href={"#"}>
-                    <p className={styles.button}>More Info</p>
+                    <p >More Info</p>
                 </Link>
 
                 {/* Container for the tags*/}

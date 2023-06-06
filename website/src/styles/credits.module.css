@@ -24,9 +24,6 @@
 
 .item{
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: #00B4D8;
     text-decoration: underline;
 

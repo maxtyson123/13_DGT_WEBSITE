@@ -7,6 +7,7 @@ import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/plant_index.module.css";
 import axios from "axios";
+import Stats from "@/components/stats";
 
 type IndexRef = React.ForwardedRef<HTMLDivElement>
 
@@ -118,6 +119,13 @@ export default function PlantIndex(ref: IndexRef){
                 </div>
 
             </PageHeader>
+
+            {/* Stats */}
+            <Section autoPadding>
+                <div className={styles.statsContainer}>
+                    <Stats/>
+                </div>
+            </Section>
 
             {/* Ids */}
             <Section autoPadding>

@@ -12,27 +12,21 @@
 
 
 .statsContainer{
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
 
 }
 
 .statContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 10px;
 
 }
 
 .statContainer p{
     margin-left: 10px;
     overflow-wrap: anywhere;
+    display: inline;
 }
 
 .searchBoxContainer{

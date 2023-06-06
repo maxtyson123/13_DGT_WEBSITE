@@ -35,25 +35,23 @@ export default function Footer() {
 
 
                 {/* Links to the other pages */}
-                <div className={styles.linksContainer}>
-                    <div className={styles.links}>
-                        <h1> Rongoa </h1>
-                        <ul>
-                            {/* Loop through the pageNames array and create a link for each page*/}
-                            {pageNames.map((page, index) => (
-                                <li key={index}>
-                                    <Link scroll={false} href={String(page[2])} className={styles.link}>
-                                        <FontAwesomeIcon className={"inline"} icon={page[1] as IconProp}/>
-                                        <p className={"inline"}>{String(page[0])}</p>
-                                        {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
-                                        {/* It Contains the icon and the name of the page*/}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
 
+                <div className={styles.links}>
+                    <h1> Rongoa </h1>
+                    <ul>
+                        {/* Loop through the pageNames array and create a link for each page*/}
+                        {pageNames.map((page, index) => (
+                            <li key={index}>
+                                <Link scroll={false} href={String(page[2])} className={styles.link}>
+                                    <FontAwesomeIcon className={"inline"} icon={page[1] as IconProp}/>
+                                    <p className={"inline"}>{String(page[0])}</p>
+                                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
+                                    {/* It Contains the icon and the name of the page*/}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </>
     )

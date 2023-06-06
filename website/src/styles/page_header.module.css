@@ -23,8 +23,8 @@
  Size the header container to be the same size as the mainBG.
  */
 .headerContainer{
-    display: flex;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
     align-items: center;
     width: 100vw;
     height: var(--headerHeight);

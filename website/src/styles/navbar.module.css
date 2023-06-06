@@ -12,6 +12,12 @@
     width: 100vw;
     top: 0;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.466);
+    display: grid;
+    grid-template-columns: repeat(2, .15fr) 1fr repeat(4, .15fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 20px;
+    align-items: center;
+    min-height: 75px;
 }
 
 /*
@@ -29,19 +35,14 @@
 
 }
 
-/*
- Nicer Underlining
- */
-.navbar a p{
-    border-bottom: #FFFFFF 3px solid;
-}
 
 
 /*
  Change bg and font colour on hover
  */
 .navbar a:hover {
-    background-color: rgba(10, 44, 9, 0.8);
+    border-bottom: 4px solid lightgreen;
+    color: lightgreen;
 }
 
 /*
@@ -52,11 +53,6 @@
 .title{
     font-size: 30px;
     font-weight: bold;
-    color: white;
-    text-align: center;
-    padding: 14px 16px 0;
-    text-decoration: none;
-    display: inline;
 }
 
 /*
@@ -66,34 +62,16 @@
     display: inline;
 }
 
-/*
- Contains the Title and Logo
- Position it to the left of the navbar
- */
-.homeContainer{
-    float: left;
-    height: 100%;
-    padding: 12.5px;
-}
+
 
 /*
  Make the current page visible to the user
  */
 .activePage{
-    background-color: green;
+    border-bottom: 4px solid green;
 }
 
-/*
- Right-aligned section inside the top navigation
- */
-.navright {
-    float: right;
-    height: 100%;
-}
+.navItem{
+    border-bottom: 4px solid white;
 
-/*
- Give the <a> links in the navright section some padding
- */
-.navright a{
-    padding: 14px 16px;
 }
