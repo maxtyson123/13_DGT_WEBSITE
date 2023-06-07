@@ -52,7 +52,7 @@
 
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
     .sectionContainer h1{
         font-size: 42px;
 

@@ -162,9 +162,9 @@ export function PlantCardLoading(){
                 <p className={styles.description}>  LOADING... </p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
-                <Link scroll={false} className={styles.button} href={"#"}>
+                <a className={styles.button} href={"#"}>
                     <p >More Info</p>
-                </Link>
+                </a>
 
                 {/* Container for the tags*/}
                 <div className={styles.tagsContainer}>
@@ -193,9 +193,9 @@ export function PlantCardNull(){
                 <p className={styles.description}> Short description</p>
 
                 {/* Button to go to the plant page, automatically gets the id from the plant data */}
-                <Link scroll={false} className={styles.button} href={"#"}>
+                <a className={styles.button} href={"#"}>
                     <p >More Info</p>
-                </Link>
+                </a>
 
                 {/* Container for the tags*/}
                 <div className={styles.tagsContainer}>

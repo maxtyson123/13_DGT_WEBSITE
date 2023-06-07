@@ -35,6 +35,10 @@
 
 }
 
+.mobileNav{
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 25px;
+}
 
 
 /*
@@ -73,5 +77,29 @@
 
 .navItem{
     border-bottom: 4px solid white;
+
+}
+
+@media only screen and (max-width: 600px) {
+}
+
+.expanded{
+    grid-template-columns: 1fr;
+    background-color: rgba(10, 44, 9, 0.9);
+}
+
+.collapsed{
+
+}
+
+@media only screen and (max-width: 600px) {
+    .expanded .activePage, .expanded .navItem{
+        border-bottom: 0;
+
+    }
+
+    .close{
+        border-bottom: 2px solid white;
+    }
 
 }

@@ -118,7 +118,7 @@
     font-size: 32px;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
     .monthsContainer, .plantHeader{
         grid-template-columns: 1fr;
     }
