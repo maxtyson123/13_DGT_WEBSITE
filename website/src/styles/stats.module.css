@@ -20,7 +20,7 @@
     font-size: 74px;
     line-height: 75px;
     width: 100%;
-    color: #000000;
+    color: var(--text-dark);
 
 }
 
@@ -35,7 +35,7 @@
 .stat{
     font-size: 40px;
     line-height: 47px;
-    color: #000000;
+    color: var(--text-dark);
 
 }
 

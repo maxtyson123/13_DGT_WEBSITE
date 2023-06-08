@@ -1,5 +1,5 @@
 .selectBorder{
-    border: 2px solid #CFD3D5;
+    border: 2px solid var(--secondary-gray);
     border-radius: 8px;
 }
 
@@ -133,7 +133,7 @@
     font-size: 16px;
     line-height: 19px;
     width: 100%;
-    border: 2px solid #CFD3D5;
+    border: 2px solid var(--secondary-gray);
     border-radius: 8px;
     height: 120px;
 }
@@ -168,7 +168,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #CFD3D5;
+    border-bottom: 2px solid var(--secondary-gray);
     padding-right: 16px;
 }
 
@@ -182,7 +182,7 @@
 
 
 .topBarButton:hover{
-    background-color: #CFD3D5;
+    background-color: var(--main-background);
 }
 
 .editableDiv {

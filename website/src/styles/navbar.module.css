@@ -72,7 +72,7 @@
  Make the current page visible to the user
  */
 .activePage{
-    border-bottom: 4px solid green;
+    border-bottom: 4px solid var(--main-green);
 }
 
 .navItem{

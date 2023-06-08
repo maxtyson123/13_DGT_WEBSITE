@@ -8,15 +8,42 @@
  Defines Some Global CSS Variables for the theme
  */
 :root{
-    --main-background: #ffffff;
-    --darker-main-background: #CFD3D5;
-    --text-light: #FFFFFF;
-    --text-dark: #000000;
-    --main-green: green;
-    --darker-main-green: #0a670a;
-    --secondary-gray: #CFD3D5;
-    --darker-secondary-gray: #A0A4A6;
-    --blue: #00B4D8;
+    --LIGHT-main-background: #ffffff;
+    --LIGHT-darker-main-background: #CFD3D5;
+    --LIGHT-text-light: #FFFFFF;
+    --LIGHT-text-dark: #000000;
+    --LIGHT-main-green: green;
+    --LIGHT-darker-main-green: #0A670A;
+    --LIGHT-secondary-gray: #CFD3D5;
+    --LIGHT-darker-secondary-gray: #A0A4A6;
+    --LIGHT-blue: #00B4D8;
+    --LIGHT-shadow: -10px 0 8px -8px black;
+    --LIGHT-shadow-lesser: 0 8px 24px 10px rgba(0, 0, 0, 0.2);
+
+    --DARK-main-background: #000000;
+    --DARK-darker-main-background: #383535;
+    --DARK-text-light: #000000;
+    --DARK-text-dark: #FFFFFF;
+    --DARK-main-green: green;
+    --DARK-darker-main-green: #0A670A;
+    --DARK-secondary-gray: #CFD3D5;
+    --DARK-darker-secondary-gray: #A0A4A6;
+    --DARK-blue: #01424f;
+    --DARK-shadow: -10px 0 8px -8px white;
+    --DARK-shadow-lesser: 0 8px 24px 10px rgba(255, 255, 255, 0.2);
+
+    --main-background: var(--DARK-main-background);
+    --darker-main-background: var(--DARK-darker-main-background);
+    --text-light: var(--DARK-text-light);
+    --text-dark: var(--DARK-text-dark);
+    --main-green: var(--DARK-main-green);
+    --darker-main-green: var(--DARK-darker-main-green);
+    --secondary-gray: var(--DARK-secondary-gray);
+    --darker-secondary-gray: var(--DARK-darker-secondary-gray);
+    --blue: var(--DARK-blue);
+    --shadow: var(--DARK-shadow);
+    --shadow-lesser: var(--DARK-shadow-lesser);
+
 
 }
 

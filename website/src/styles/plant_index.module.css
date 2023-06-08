@@ -7,7 +7,7 @@
 
 .topBar{
     width: 100%;
-    background-color: #0a670a;
+    background-color: var(--darker-main-green);
     text-align: center;
     color: var(--text-light);
     border-radius: 20px;

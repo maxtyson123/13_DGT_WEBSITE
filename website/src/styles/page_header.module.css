@@ -37,7 +37,7 @@
  Inset box shadow to add depth to the blue of the container.
  */
 .contentContainer{
-    background: #00B4D8;
+    background: var(--blue);
     padding: 2.5%;
     width: 80%;
     position: relative;

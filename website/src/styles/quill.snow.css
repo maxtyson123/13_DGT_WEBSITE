@@ -615,7 +615,7 @@
   text-decoration: underline;
 }
 .ql-snow .ql-editor blockquote {
-  border-left: 4px solid #CFD3D5;
+  border-left: 4px solid var(--secondary-gray);
   margin-bottom: 5px;
   margin-top: 5px;
   padding-left: 16px;
@@ -682,14 +682,14 @@
   padding-top: 5px;
 }
 .ql-snow .ql-picker.ql-expanded .ql-picker-label {
-  color: #CFD3D5;
+  color: var(--secondary-gray);
   z-index: 2;
 }
 .ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-fill {
-  fill: #CFD3D5;
+  fill: var(--secondary-gray);
 }
 .ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
-  stroke: #CFD3D5;
+  stroke: var(--secondary-gray);
 }
 .ql-snow .ql-picker.ql-expanded .ql-picker-options {
   display: block;
@@ -849,7 +849,7 @@
   background-color: #000;
 }
 .ql-toolbar.ql-snow {
-  border-bottom: 2px solid #CFD3D5;
+  border-bottom: 2px solid var(--secondary-gray);
   box-sizing: border-box;
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 8px;
@@ -868,10 +868,10 @@
   box-shadow: rgba(0,0,0,0.2) 0 2px 8px;
 }
 .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
-  border-color: #CFD3D5;
+  border-color: var(--secondary-gray);
 }
 .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
-  border-color: #CFD3D5;
+  border-color: var(--secondary-gray);
 }
 .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item.ql-selected,
 .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item:hover {
@@ -882,7 +882,7 @@
 }
 .ql-snow .ql-tooltip {
   background-color: #fff;
-  border: 2px solid #CFD3D5;
+  border: 2px solid var(--secondary-gray);
   box-shadow: 0px 0px 5px #ddd;
   color: #444;
   padding: 5px 12px;
@@ -895,7 +895,7 @@
 }
 .ql-snow .ql-tooltip input[type=text] {
   display: none;
-  border: 2px solid #CFD3D5;
+  border: 2px solid var(--secondary-gray);
   font-size: 13px;
   height: 26px;
   margin: 0px;
@@ -910,7 +910,7 @@
   vertical-align: top;
 }
 .ql-snow .ql-tooltip a.ql-action::after {
-  border-right: 2px solid #CFD3D5;
+  border-right: 2px solid var(--secondary-gray);
   content: 'Edit';
   margin-left: 16px;
   padding-right: 8px;

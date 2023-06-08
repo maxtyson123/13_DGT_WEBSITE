@@ -3,7 +3,7 @@
     bottom: 0;
     left: 2.5%;
     color: var(--text-light);
-    background-color: #0a670a;
+    background-color: var(--darker-main-green);
     z-index: 999;
     padding: 10px;
     border-radius: 10px 10px 0 0;
@@ -24,7 +24,7 @@
 
 .item{
     width: 100%;
-    color: #00B4D8;
+    color: var(--blue);
     text-decoration: underline;
 
 }

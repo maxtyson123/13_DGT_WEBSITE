@@ -26,7 +26,7 @@
     font-size: 64px;
     line-height: 103%;
     text-align: center;
-    color: #000000;
+    color: var(--text-dark);
     padding: 30px;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .addSectionButton:hover{
-    background-color: #CFD3D5;
+    background-color: var(--main-background);
 }
 
 .submitDataButton{
@@ -75,7 +75,7 @@
 }
 
 .submitDataButton:hover{
-    background-color: #0a670a;
+    background-color: var(--darker-main-green);
 }
 
 

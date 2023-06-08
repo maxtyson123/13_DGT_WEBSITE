@@ -11,7 +11,7 @@
 
 .month{
     width: 100%;
-    background-color: #0a670a;
+    background-color: var(--darker-main-green);
     display: grid;
     grid-template-columns: .25fr 2.5fr .25fr;
     grid-template-rows: 1fr;
@@ -71,9 +71,9 @@
 .start{
     grid-column-start: 2;
     grid-column-end: 4;
-    background-color: green;
+    background-color: var(--main-green);
     border-radius: 10px 0px 0px 10px;
-    box-shadow: 10px 0 8px -8px black;
+    box-shadow: var(--shadow);
 }
 
 .end{
@@ -81,22 +81,22 @@
     grid-column-end: 3;
     background-color: red;
     border-radius: 0px 10px 10px 0px;
-    box-shadow: -10px 0 8px -8px black;
+    box-shadow: var(--shadow);
 }
 
 .onGoing{
     grid-column-start: 1;
     grid-column-end: 4;
     background-color: gray;
-    box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
+    box-shadow: var(--shadow), 10px 0 8px -8px black;
 }
 
 .startEnd{
     grid-column-start: 1;
     grid-column-end: 4;
     background: orange;
-    background: linear-gradient(90deg, green 0%, red 100%);
-    box-shadow: -10px 0 8px -8px black, 10px 0 8px -8px black;
+    background: linear-gradient(90deg, var(--main-green) 0%, red 100%);
+    box-shadow: var(--shadow), 10px 0 8px -8px black;
 }
 
 

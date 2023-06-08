@@ -8,11 +8,11 @@
     padding: 10px;
     cursor: pointer;
     box-shadow: 0 8px 24px 2px rgba(0, 0, 0, 0.2);
-    color: #0a670a;
+    color: var(--darker-main-green);
 
 }
 
 .scrollButton:hover{
-    background-color: #0a670a;
+    background-color: var(--darker-main-green);
     color: var(--text-light);
 }
