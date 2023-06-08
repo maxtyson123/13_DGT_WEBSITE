@@ -8,35 +8,15 @@
  Defines Some Global CSS Variables for the theme
  */
 :root{
-    --main-bg: #000000;
-    --main-bg-secondary: #302626;
-    --main-text: #ffffff;
-
-    --dark-main-1: #00377E;
-    --dark-main-2: #002D67;
-    --dark-main-3: #002657;
-
-    --dark-secondary-1: #00132D;
-    --dark-secondary-2: #00193B;
-    --dark-secondary-3: #001E45;
-
-    --light-main-1: #CAF0F8;
-    --light-main-2: #90E0EF;
-    --light-main-3: #00B4D8;
-
-    --light-secondary-1: #03045E;
-    --light-secondary-2: #0077B6;
-    --light-secondary-3: #00B4D8;
-
-    --main-1: var(--dark-main-1);
-    --main-2: var(--dark-main-2);
-    --main-3: var(--dark-main-3);
-
-    --secondary-1: var(--dark-secondary-1);
-    --secondary-2: var(--dark-secondary-2);
-    --secondary-3: var(--dark-secondary-3);
-
-    --wide-screen: 1500;
+    --main-background: #ffffff;
+    --darker-main-background: #CFD3D5;
+    --text-light: #FFFFFF;
+    --text-dark: #000000;
+    --main-green: green;
+    --darker-main-green: #0a670a;
+    --secondary-gray: #CFD3D5;
+    --darker-secondary-gray: #A0A4A6;
+    --blue: #00B4D8;
 
 }
 
@@ -55,7 +35,7 @@
  The overflow-x is hidden to prevent the horizontal scroll bar from appearing
  */
 body{
-    background: whitesmoke;
+    background: var(--main-background);
     overflow-x: hidden;
     font-family: 'Archivo', sans-serif;
 }

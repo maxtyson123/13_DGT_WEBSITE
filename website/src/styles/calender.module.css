@@ -1,12 +1,12 @@
 .title{
-    color: white;
+    color: var(--text-light);
     text-align: center;
     font-size: 64px;
 }
 
 .calenderContainer{
     width: 100%;
-    color: white;
+    color: var(--text-light);
 }
 
 .month{

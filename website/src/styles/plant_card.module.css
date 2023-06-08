@@ -94,7 +94,7 @@
  */
 .button:hover{
     background-color: #61A5FA;
-    color: #FFFFFF;
+    color: var(--text-light);
 }
 
 /*

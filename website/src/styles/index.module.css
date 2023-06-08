@@ -2,7 +2,7 @@
  Make the text in the welcome container white and any child elements should be flex to align them horizontally.
  */
 .welcomeContainer{
-    color: #FFFFFF;
+    color: var(--text-light);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: .5fr 2fr .5fr;

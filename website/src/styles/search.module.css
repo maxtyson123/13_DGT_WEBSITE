@@ -1,13 +1,13 @@
 .searchHeaderContainer{
     text-align: center;
-    color: #FFFFFF;
+    color: var(--text-light);
 }
 
 .searchHeaderContainer h1{
     font-size: 64px;
     line-height: 103%;
     text-align: center;
-    color: #FFFFFF;
+    color: var(--text-light);
 }
 
 
@@ -41,7 +41,7 @@
     height: 75px;
     border-radius: 10px 00px 0 10px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    background-color: #FFFFFF;
+    background-color: var(--main-background);
     padding: 10px;
     font-size: 32px;
     line-height: 103%;
@@ -55,7 +55,7 @@
     background-color: #0a670a;
     border-radius: 0 10px 10px 0;
     padding-left: 30px;
-    color: #FFFFFF;
+    color: var(--text-light);
     padding-right: 30px;
 }
 
@@ -79,7 +79,7 @@
 .errorContainer{
     width: 100%;
     background-color: red;
-    color: #FFFFFF;
+    color: var(--text-light);
     border-radius: 20px;
     padding: 20px;
     text-align: center;
@@ -89,7 +89,7 @@
 .errorContainer h1{
     font-size: 32px;
     line-height: 103%;
-    color: #FFFFFF;
+    color: var(--text-light);
     font-weight: bold;
 }
 

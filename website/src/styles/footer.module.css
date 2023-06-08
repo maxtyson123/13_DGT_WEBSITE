@@ -26,13 +26,13 @@
     font-weight: 500;
     font-size: 64px;
     line-height: 75px;
-    color: #FFFFFF;
+    color: var(--text-light);
 }
 
 .link{
     font-size: 22px;
     line-height: 38px;
-    color: #FFFFFF;
+    color: var(--text-light);
 }
 
 .link p{

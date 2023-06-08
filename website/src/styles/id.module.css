@@ -1,5 +1,5 @@
 .plantHeader{
-    color: #FFFFFF;
+    color: var(--text-light);
     text-align: center;
     align-items: center;
     justify-content: center;

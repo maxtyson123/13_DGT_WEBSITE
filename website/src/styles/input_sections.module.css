@@ -156,7 +156,7 @@
 
 .advancedTextArea{
     color: #ABAFB1;
-    background-color: #FFFFFF;
+    background-color: var(--main-background);
     border-radius: 8px;
     --top-spacing: 16px;
     width: 100%;
