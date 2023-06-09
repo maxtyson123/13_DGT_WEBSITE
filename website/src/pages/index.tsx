@@ -1,10 +1,9 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Accessibility Settings (Dark mode)
+// TODO: Edit page - Download data into the create page and then when edit is complete then remove that id and insert with this id
 // TODO: Redo the images for the plants
 // TODO: Use SQL
 // TODO: Authentication - Google login - check on data base if approved
-// TODO: Edit page - Download data into the create page and then when edit is complete then remove that id and insert with this id
 // TODO: Redo css
 // TODO: Comment Code
 // TODO: Testing

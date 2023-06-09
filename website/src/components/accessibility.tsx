@@ -1,22 +1,71 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
+
+interface ToggleAccessibilityProps {
+    setting: string
+    setter: (value: boolean) => void
+}
+export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilityProps) {
+    const toggleRef = useRef<HTMLInputElement>(null)
+
+    const loader = () => {
+        let loadedMode = localStorage.getItem(setting)
+        let mode = false
+
+        // If the mode is loaded as true, otherwise it must be false or incorrect
+        if(loadedMode === "true"){
+            mode = true
+        }
+
+        return mode
+    }
+
+    const toggle = () => {
+
+        // Get the current mode
+        const mode = loader()
+
+        // Toggle the mode
+        const newMode = !mode
+
+        // Update the toggle
+        toggleRef.current!.checked = newMode
+
+        // Save the mode
+        localStorage.setItem(setting, newMode.toString())
+
+        // Update the state
+        setter(newMode)
+    }
+
+    useEffect(() => {
+        const mode = loader()
+
+        // Load the mode when the component is mounted
+        setter(mode)
+
+        // Update the toggle
+        toggleRef.current!.checked = mode
+    }, [toggleRef.current])
+
+    return (
+        <>
+            <div className="toggle-container" onClick={toggle}>
+                <input ref={toggleRef} type="checkbox"/>
+                <button className={"m-1"}>{setting}</button>
+            </div>
+        </>
+    )
+
+}
 
 export function DarkMode(){
 
-    const [darkMode, setDarkMode] = useState(false)
 
-    const toggleDarkMode = () => {
-        console.log("Toggling dark mode")
-
-        // Toggle the dark mode
-        setDarkMode(!darkMode)
-
+    const loadTheme = (isDark: boolean) => {
         // Get the root element
         const root = document.documentElement
 
-        // Get the current theme
-        const theme = darkMode ? "DARK" : "LIGHT"
-
-        console.log(root.style.getPropertyValue("--LIGHT-dark-background"))
+        const theme = isDark ? "DARK" : "LIGHT"
 
         switch (theme) {
             case "LIGHT":
@@ -56,9 +105,29 @@ export function DarkMode(){
         }
     }
 
+
+    return(
+        <ToggleAccessibilitySetting setting={"Dark Mode"} setter={loadTheme}/>
+    )
+}
+
+export function Dyslexic(){
+
+    const toggleDyslexic = (isEnabled : boolean) => {
+
+
+        // Get the root element
+        const root = document.documentElement
+
+        // Set the dyslexic mode
+        root.style.setProperty('--site-font', isEnabled ? "Open-Dyslexic" : "Archivo")
+
+
+    }
+
     return(
         <>
-            <button onClick={toggleDarkMode}>Toggle Dark Mode</button>
+            <ToggleAccessibilitySetting setting={"Dyslexic Mode"} setter={toggleDyslexic}/>
         </>
     )
 

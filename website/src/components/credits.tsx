@@ -2,7 +2,7 @@ import styles from "@/styles/credits.module.css";
 import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCodeBranch} from "@fortawesome/free-solid-svg-icons";
-import {DarkMode} from "@/components/accessibility";
+import {DarkMode, Dyslexic} from "@/components/accessibility";
 
 export default function Credits(){
 
@@ -33,6 +33,9 @@ export default function Credits(){
                     </div>
                     <div className={styles.item}>
                         <DarkMode/>
+                    </div>
+                    <div className={styles.item}>
+                        <Dyslexic/>
                     </div>
                 </div>
             </div>
