@@ -8,7 +8,6 @@
     width: 100vw;
     height: 30vh;
     bottom: 0;
-    color: white;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
@@ -26,13 +25,13 @@
     font-weight: 500;
     font-size: 64px;
     line-height: 75px;
-    color: var(--text-light);
+    color: white; /* Does not use themeing */
 }
 
 .link{
     font-size: 22px;
     line-height: 38px;
-    color: var(--text-light);
+    color: white; /* Does not use themeing */
 }
 
 .link p{

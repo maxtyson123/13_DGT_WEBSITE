@@ -2,6 +2,7 @@ import styles from "@/styles/credits.module.css";
 import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCodeBranch} from "@fortawesome/free-solid-svg-icons";
+import {DarkMode} from "@/components/accessibility";
 
 export default function Credits(){
 
@@ -29,6 +30,9 @@ export default function Credits(){
 
                         {/* Target the link to a new tab */}
                         <a target="_blank" href="https://github.com/maxtyson123/13_DGT_WEBSITE">Source</a>
+                    </div>
+                    <div className={styles.item}>
+                        <DarkMode/>
                     </div>
                 </div>
             </div>

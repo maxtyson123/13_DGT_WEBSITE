@@ -2,7 +2,7 @@
  Font styling that should be consistent across the search box: Size 23px, color #838383
  */
 .searchContainer{
-    color: #838383;
+    color: var(--secondary-gray);
     font-size: 23px;
     width: 100%;
 }
@@ -15,9 +15,9 @@
     padding: 6px;
     margin-top: 8px;
     border: none;
-    background: #C2C2C2;
+    background: var(--main-background);
     border-radius: 10px 0 0 10px;
-    box-shadow: 0px 8px 24px 2px rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 8px 24px 2px var(--shadow-min);
     width: 80%;
 
 }
@@ -35,14 +35,14 @@
     margin-right: 16px;
     border: none;
     cursor: pointer;
-    background: linear-gradient(180deg, #12400C 0%, #081E05 100%);
+    background: linear-gradient(180deg, var(--darker-main-green) 0%, var(--dark-green) 100%);
     border-radius: 0 10px 10px 0;
-    box-shadow: 0px 8px 24px 2px rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 8px 24px 2px var(--shadow-min);
 }
 
 /*
  Invert the gradient on hover to show the user that the button is being hovered over
  */
 .searchContainer button:hover {
-    background: linear-gradient(180deg, #081E05 0%, #12400C 100%);
+    background: linear-gradient(180deg, var(--dark-green) 0%, var(--darker-main-green) 100%);
 }

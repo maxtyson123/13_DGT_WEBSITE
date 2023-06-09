@@ -21,21 +21,21 @@
     font-size: 32px;
     padding: 2%;
     border-radius: 10px;
-    box-shadow: 4px 4px 25px 2px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 25px 2px var(--shadow-less);
     margin-bottom: 20px;
 }
 
 .month button{
-    background-color: rgba(8, 72, 8, 0.63);
-    border: #084808 2px solid;
+    background-color: var(--dark-green);
+    border: var(--main-green) 2px solid;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .month button:hover{
-    border: rgba(8, 72, 8, 0.63) 2px solid;
-    background-color: #084808;
+    border: var(--dark-green) 2px solid;
+    background-color: var(--main-green);
 }
 
 .plants{
@@ -61,11 +61,12 @@
 
 .plant button{
     border-radius: 25px;
-    border: white 2px solid;
+    border: var(--main-background) 2px solid;
 }
 
 .plant button:hover{
-    border: black 2px solid;
+    border: var(--text-dark) 2px solid;
+    color:  var(--text-dark);
 }
 
 .start{
@@ -73,7 +74,7 @@
     grid-column-end: 4;
     background-color: var(--main-green);
     border-radius: 10px 0px 0px 10px;
-    box-shadow: var(--shadow);
+    box-shadow: -10px 0 8px -8px var(--shadow);
 }
 
 .end{
@@ -81,14 +82,14 @@
     grid-column-end: 3;
     background-color: red;
     border-radius: 0px 10px 10px 0px;
-    box-shadow: var(--shadow);
+    box-shadow: -10px 0 8px -8px var(--shadow);
 }
 
 .onGoing{
     grid-column-start: 1;
     grid-column-end: 4;
-    background-color: gray;
-    box-shadow: var(--shadow), 10px 0 8px -8px black;
+    background-color: var(--secondary-gray);
+    box-shadow: -10px 0 8px -8px var(--shadow), 10px 0 8px -8px var(--shadow);
 }
 
 .startEnd{
@@ -96,7 +97,7 @@
     grid-column-end: 4;
     background: orange;
     background: linear-gradient(90deg, var(--main-green) 0%, red 100%);
-    box-shadow: var(--shadow), 10px 0 8px -8px black;
+    box-shadow: -10px 0 8px -8px var(--shadow), 10px 0 8px -8px var(--shadow);
 }
 
 

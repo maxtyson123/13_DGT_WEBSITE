@@ -11,8 +11,8 @@
 
 }
 
-.headerItem{
-
+.plantMainInfo{
+    color: var(--text-dark);
 }
 
 .plantId{
@@ -48,7 +48,7 @@
 }
 
 .mainImage{
-    background-color: #D9D9D9;
+    background-color: var(--secondary-gray);
     width: 100%;
     height: 400px;
     position: relative;
@@ -71,7 +71,7 @@
 .bottomImages button{
     position: relative;
     cursor: pointer;
-    background-color: #D9D9D9;
+    background-color: var(--secondary-gray);
     border: none;
     width: 100%;
     height: 100%;
@@ -81,7 +81,7 @@
 }
 
 .bottomImages button:hover{
-    background-color: #b2b0b0;
+    background-color: var(--darker-secondary-gray);
 }
 
 .bottomImage{
@@ -106,10 +106,10 @@
 
 .month{
     background: var(--darker-main-green);
-    box-shadow: -5px 5px 4px 5px rgba(0, 0, 0, 0.43);
+    box-shadow: -5px 5px 4px 5px var(--shadow-min); /* Dark mode shadow would not work */
     border-radius: 50px;
     text-align: center;
-    color: white;
+    color: var(--text-light);
     padding: 20px;
     font-size: 20px;
 }

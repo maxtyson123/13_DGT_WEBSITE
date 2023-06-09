@@ -7,7 +7,7 @@
     border-radius: 10%;
     padding: 10px;
     cursor: pointer;
-    box-shadow: 0 8px 24px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 24px 2px var(--shadow-min);
     color: var(--darker-main-green);
 
 }

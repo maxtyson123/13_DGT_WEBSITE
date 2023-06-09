@@ -40,7 +40,7 @@
     width: 60%;
     height: 75px;
     border-radius: 10px 00px 0 10px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px var(--shadow-min);
     background-color: var(--main-background);
     padding: 10px;
     font-size: 32px;
@@ -51,7 +51,7 @@
 }
 
 .searchButton{
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px var(--shadow-min);
     background-color: var(--darker-main-green);
     border-radius: 0 10px 10px 0;
     padding-left: 30px;
@@ -60,7 +60,7 @@
 }
 
 .searchButton:hover{
-    background-color: rgba(10, 103, 10, 0.8);
+    background-color: var(--dark-green);
     cursor: pointer;
 }
 

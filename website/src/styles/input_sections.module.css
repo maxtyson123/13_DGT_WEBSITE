@@ -25,7 +25,7 @@
  Smaller font to suggest insignifacance and to not distract from the input
  */
 .required{
-    color: #5E6366;
+    color: var(--text-dark);
     font-size: 12px;
     line-height: 15px;
     position: absolute;
@@ -103,6 +103,8 @@
     padding: var(--top-spacing) 16px 8px 16px;
     border-radius: 8px;
     width: 100%;
+    background: var(--main-background);
+
 }
 
 .dropdownInput {
@@ -116,9 +118,10 @@
     border-radius: 8px;
     box-sizing: border-box;
     width: 100%;
-    color: #ABAFB1;
+    color: #ABAFB1; /* Input can have its own gray the works with most themes */
     font-size: 16px;
     line-height: 19px;
+    background: var(--main-background);
 }
 
 
@@ -136,6 +139,7 @@
     border: 2px solid var(--secondary-gray);
     border-radius: 8px;
     height: 120px;
+    background: var(--main-background);
 }
 
 .simpleTextArea .required{
@@ -172,18 +176,7 @@
     padding-right: 16px;
 }
 
-.topBarButton{
-    color: black;
-    border: none;
-    margin-left: 8px;
-    padding: 8px;
-    cursor: pointer;
-}
 
-
-.topBarButton:hover{
-    background-color: var(--main-background);
-}
 
 .editableDiv {
     padding-top: var(--top-spacing);
