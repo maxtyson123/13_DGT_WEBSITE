@@ -7,7 +7,7 @@ import Navbar from "@/components/navbar";
 import PageHeader from "@/components/page_header";
 import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/modules/cache";
-import {getNamesInPreference, PlantData} from "@/modules/plant_data";
+import {fetchPlant, getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
 import styles from "@/styles/id.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -43,12 +43,12 @@ export default function PlantPage() {
             return
         dataFetch.current = true
 
-        fetchPlant(); //TODO: Fetch plant data should probably be made in a function in the plant_data module
+        getData();
 
 
     }, []);
 
-    const fetchPlant = async () => {
+    const getData = async () => {
 
         console.log("Fetching plant data")
 
@@ -75,46 +75,15 @@ export default function PlantPage() {
             return
         }
 
-
-        console.log(localId)
-
-
-        // Check if the plant data has already been fetched
-        let plantOBJ = getFromCache("plant_" + id) as PlantData | null
-
-        if(plantOBJ === null) {
-
-            try {
-                // Get the plant data from the api
-                const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
-                const plantData = res.data.data
-
-                // Typecast the plant data to the PlantData type (this is because it is know to return the PlantData type by the api - checking is done there)
-                plantOBJ = plantData as PlantData
-
-                // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
-                plantOBJ.id = localId
-
-                // Set the plant data in the cache
-                saveToCache("plant_" + id, plantOBJ)
-
-
-            } catch (e) {
-
-                // If there is an error just log it and set the plant card to the loading card
-                console.log("Error fetching plant data from api")
-                setPlantData(null)
-
-                //TODO: ERORR PAGE
-                return;
-            }
-        }
+        const plantOBJ = await fetchPlant(localId)
 
 
         console.log(plantOBJ)
 
         // Set the plant data
         setPlantData(plantOBJ)
+
+        if(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
     }
 

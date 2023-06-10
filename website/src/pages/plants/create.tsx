@@ -12,7 +12,7 @@ import {
 } from "@/components/input_sections";
 import Image from "next/image";
 
-import {ConvertPlantDataIntoApi, emptyPlantData, PlantData, ValidPlantData} from "@/modules/plant_data";
+import {ConvertPlantDataIntoApi, emptyPlantData, fetchPlant, PlantData, ValidPlantData} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
@@ -1723,50 +1723,51 @@ export default function CreatePlant() {
         const {id} = router.query;
 
         // Check if the id is valid
-        if(!id){
-            return;
-        }
+        if(id){
 
-        // Convert to a number
-        let idNum = parseInt(id);
+            // Convert to a number
+            let idNum = parseInt(id);
 
-        // Check if the id is valid
-        if(isNaN(idNum)){
-            idNum = -1
-        }
-
-        const isEdit = idNum !== -1
-        console.log(isEdit)
-
-        // Check if this plant is being edited
-        if(isEdit){
-            console.log("EDITING PLANT")
-
-            // Remove the plant from the database
-            try{
-
-               // Remove the plant from the database
-                result = await axios.get(`/api/plants/remove?id=${plantID}`)
-                console.log(result)
-
-            } catch (err) {
-                console.log(err);
-
-                //TODO: Error handling
-                return;
+            // Check if the id is valid
+            if(isNaN(idNum)){
+                idNum = -1
             }
 
-            // Remove the plant from the local storage
-            localStorage.removeItem("plant_" + plantID)
+            const isEdit = idNum !== -1
+            console.log(isEdit)
 
-            // Add the id to the upload data
-            console.log("SETTING ID")
-            uploadApiData.edit_id = plantID;
-            console.log(uploadApiData)
+            // Check if this plant is being edited
+            if(isEdit){
+                console.log("EDITING PLANT")
+
+                // Remove the plant from the database
+                try{
+
+                   // Remove the plant from the database
+                    console.log("REMOVING PLANT")
+                    result = await axios.get(`/api/plants/remove?id=${idNum}`)
+                    console.log(result)
+
+                } catch (err) {
+                    console.log(err);
+
+                    //TODO: Error handling
+                    return;
+                }
+
+                // Remove the plant from the local storage
+                localStorage.removeItem("plant_" + idNum)
+
+                // Add the id to the upload data
+                console.log("SETTING ID")
+                uploadApiData.edit_id = idNum;
+                console.log(uploadApiData)
+            }
         }
 
         try{
 
+            console.log("UPLOADING PLANT")
             // Upload the data to the database using the upload API by passing each json key as params
             result = await axios.post(`/api/plants/upload`, uploadApiData);
 
@@ -1805,11 +1806,34 @@ export default function CreatePlant() {
             return;
         }
 
-        // Set the plant id
-        setPlantID(idNum);
+        setPlantID(idNum)
+
+        getEditData(idNum)
 
 
     }, [router.query]);
+
+    const getEditData = async (idNum: number) => {
+        // Download the plant data
+        const plantOBJ = await fetchPlant(idNum);
+
+        // Check if the plant data is valid
+        if(!plantOBJ){
+            //TODO: error here
+            return;
+        }
+
+        // Load the plant data
+        loadJson(plantOBJ)
+
+        // Scroll to the top of the page
+        const element = document.getElementById("english-name");
+        if (element) {
+            let dims = element.getBoundingClientRect();
+            window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+        }
+
+    }
 
     return (
         <>

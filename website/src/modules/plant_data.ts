@@ -1,4 +1,7 @@
 // Define the data for the plant
+import {getFromCache, saveToCache} from "@/modules/cache";
+import axios from "axios";
+
 export interface PlantData {
     id:                 number;
     preferred_name:     string;
@@ -459,4 +462,40 @@ export function getNamesInPreference(data: PlantData){
     }
 
     return localNames;
+}
+
+export async function fetchPlant (id: number) {
+
+    // Check if the plant data has already been fetched
+    let plantOBJ = getFromCache("plant_" + id) as PlantData | null
+
+    if(plantOBJ === null) {
+
+        try {
+            // Get the plant data from the api
+            const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
+            const plantData = res.data.data
+
+            // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
+            plantOBJ = plantData as PlantData
+
+            // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
+            plantOBJ.id = id
+
+            // Set the plant data in the cache
+            saveToCache("plant_" + id, plantOBJ)
+
+
+        } catch (e) {
+
+            // If there is an error just log it and set the plant card to the loading card
+            console.log("Error fetching plant data from api")
+            return null;
+
+            //TODO: Should probably do smth abt this but so far no incorrect ids should b passed in because only its only called using data returned from the api
+        }
+    }
+
+    // Set the plant data
+    return plantOBJ;
 }

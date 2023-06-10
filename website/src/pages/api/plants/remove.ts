@@ -57,6 +57,9 @@ export default async function handler(
         // Remove the information for the custom data
         query += `DELETE FROM custom WHERE plant_id = ${id};`;
 
+        // Remove the information for the edible data
+        query += `DELETE FROM edible WHERE plant_id = ${id};`;
+
         // Remove the information for the medical data
         query += `DELETE FROM medical WHERE plant_id = ${id};`;
 
