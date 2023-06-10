@@ -39,6 +39,7 @@ export default async function handler(
     // Try uploading the data to the database
     try {
         let {
+            edit_id,
             preferred_name,
             english_name,
             maori_name,
@@ -73,6 +74,7 @@ export default async function handler(
 
         } = request.body;
 
+        console.log("API/Upload")
         console.log(request.body);
 
         // Return what parameters are missing
@@ -81,7 +83,7 @@ export default async function handler(
         if(english_name === null)               { return response.status(missingParametersErrorCode).json({ error: 'English name parameter not found' }); }
         if(maori_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Maori name parameter not found' }); }
         if(latin_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Latin name parameter not found' }); }
-        if(location_found === null)                   { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
+        if(location_found === null)             { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
         if(small_description === null)          { return response.status(missingParametersErrorCode).json({ error: 'Small description parameter not found' }); }
         if(long_description === null)           { return response.status(missingParametersErrorCode).json({ error: 'Long description parameter not found' }); }
         if(months_ready_events === null)        { return response.status(missingParametersErrorCode).json({ error: 'Months ready events parameter not found' }); }
@@ -117,12 +119,20 @@ export default async function handler(
             tables = new PostgresSQL();
         }
 
+        let insertQuery = "";
+        let insetQueryValues = "";
+
+        if(edit_id){
+            insertQuery += `${tables.id}, `;
+            insetQueryValues += `${edit_id}, `;
+        }
+
         // Create the query
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
-        query += `VALUES ('${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
+        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
+        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS (

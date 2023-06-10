@@ -19,6 +19,7 @@ import ScrollToTop from "@/components/scroll_to_top";
 import axios from "axios";
 
 import {MONTHS, PLANT_PARTS} from "@/modules/constants"
+import {useRouter} from "next/router";
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 
@@ -1101,9 +1102,13 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerPro
 
 export default function CreatePlant() {
 
+    // Set up the router
+    const router = useRouter();
+
     // Page Constants
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
+    const [plantID, setPlantID] = useState(-1)
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1486,6 +1491,133 @@ export default function CreatePlant() {
         return plantOBJ;
     }
 
+    const loadJson = (jsonContents: PlantData) => {
+        // Set the imported JSON (updates the basic info)
+        setImportedJSON(jsonContents)
+
+        // Clear the current sections
+        dateInfoRef.current     = [];
+        edibleInfoRef.current   = [];
+        medicalInfoRef.current  = [];
+        craftInfoRef.current    = [];
+        sourceInfoRef.current   = [];
+        customInfoRef.current   = [];
+
+
+        // Create the months ready for ues
+        for (let i = 0; i < jsonContents.months_ready_for_use.length; i++) {
+            // Create the new section
+            newDateInfo()
+
+            // Get the new section
+            const dateSection = dateInfoRef.current[dateInfoRef.current.length-1];
+
+            // Update the values
+            dateSection.handleStartDateChange(jsonContents.months_ready_for_use[i].start_month)
+            dateSection.handleEventChange(jsonContents.months_ready_for_use[i].event)
+            dateSection.handleEndDateChange(jsonContents.months_ready_for_use[i].end_month)
+
+            // Re-render the section
+            dateSection.reRenderSection()
+        }
+
+
+
+        // Create the other sections from the imported JSON
+        for(let i = 0; i < jsonContents.sections.length; i++){
+
+            // Create the section based on the type
+            switch (jsonContents.sections[i].type) {
+                case "edible":
+
+                    // Create the new section
+                    newEdibleInfo();
+
+                    // Get the new section
+                    const edibleSection = edibleInfoRef.current[edibleInfoRef.current.length-1];
+
+                    // Update the values
+                    edibleSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
+                    edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutritional_value)
+                    edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
+                    edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
+
+                    // Re-render the section
+                    edibleSection.reRenderSection()
+
+                    break
+
+                case "medical":
+                    // Create the new section
+                    newMedicalInfo();
+
+                    // Get the new section
+                    const medicalSection = medicalInfoRef.current[medicalInfoRef.current.length-1];
+
+                    // Update the values
+                    medicalSection.handleTypeChange(jsonContents.sections[i].medical_type)
+                    medicalSection.handlePreparationChange(jsonContents.sections[i].preparation)
+                    medicalSection.handeUseValueChange(jsonContents.sections[i].use)
+
+                    // Re-render the section
+                    medicalSection.reRenderSection()
+
+                    break
+
+                case "craft":
+                    // Create the new section
+                    newCraftInfo();
+
+                    // Get the new section
+                    const craftSection = craftInfoRef.current[craftInfoRef.current.length-1];
+
+                    // Update the values
+                    craftSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
+                    craftSection.handleUseValueChange(jsonContents.sections[i].use)
+                    craftSection.handleAdditionalInfoChange(jsonContents.sections[i].additonal_info)
+
+                    // Re-render the section
+                    craftSection.reRenderSection()
+
+                    break
+
+                case "source":
+                    // Create the new section
+                    newSourceInfo();
+
+                    // Get the new section
+                    const sourceSection = sourceInfoRef.current[sourceInfoRef.current.length-1];
+
+                    // Update the values
+                    sourceSection.handleDataChange(jsonContents.sections[i].data)
+                    sourceSection.handleTypeChange(jsonContents.sections[i].source_type)
+
+                    // Re-render the section
+                    sourceSection.reRenderSection()
+
+                    break
+
+                case "custom":
+                    // Create the new section
+                    newCustomInfo();
+
+                    // Get the new section
+                    const customSection = customInfoRef.current[customInfoRef.current.length-1];
+
+                    // Update the values
+                    customSection.handleTextChange(jsonContents.sections[i].text)
+                    customSection.handleTitleChange(jsonContents.sections[i].title)
+
+                    // Re-render the section
+                    customSection.reRenderSection()
+
+                    break
+
+
+            }
+        }
+    }
+
     const importPlant = () =>
     {
         // Create a file upload input
@@ -1536,130 +1668,8 @@ export default function CreatePlant() {
                     window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
                 }
 
-                // Set the imported JSON (updates the basic info)
-                setImportedJSON(jsonContents)
+                loadJson(jsonContents)
 
-                // Clear the current sections
-                dateInfoRef.current     = [];
-                edibleInfoRef.current   = [];
-                medicalInfoRef.current  = [];
-                craftInfoRef.current    = [];
-                sourceInfoRef.current   = [];
-                customInfoRef.current   = [];
-
-
-                // Create the months ready for ues
-                for (let i = 0; i < jsonContents.months_ready_for_use.length; i++) {
-                    // Create the new section
-                    newDateInfo()
-
-                    // Get the new section
-                    const dateSection = dateInfoRef.current[dateInfoRef.current.length-1];
-
-                    // Update the values
-                    dateSection.handleStartDateChange(jsonContents.months_ready_for_use[i].start_month)
-                    dateSection.handleEventChange(jsonContents.months_ready_for_use[i].event)
-                    dateSection.handleEndDateChange(jsonContents.months_ready_for_use[i].end_month)
-
-                    // Re-render the section
-                    dateSection.reRenderSection()
-                }
-
-
-
-                // Create the other sections from the imported JSON
-                for(let i = 0; i < jsonContents.sections.length; i++){
-
-                    // Create the section based on the type
-                    switch (jsonContents.sections[i].type) {
-                        case "edible":
-
-                            // Create the new section
-                            newEdibleInfo();
-
-                            // Get the new section
-                            const edibleSection = edibleInfoRef.current[edibleInfoRef.current.length-1];
-
-                            // Update the values
-                            edibleSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
-                            edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutritional_value)
-                            edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
-                            edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
-
-                            // Re-render the section
-                            edibleSection.reRenderSection()
-
-                            break
-
-                        case "medical":
-                            // Create the new section
-                            newMedicalInfo();
-
-                            // Get the new section
-                            const medicalSection = medicalInfoRef.current[medicalInfoRef.current.length-1];
-
-                            // Update the values
-                            medicalSection.handleTypeChange(jsonContents.sections[i].medical_type)
-                            medicalSection.handlePreparationChange(jsonContents.sections[i].preparation)
-                            medicalSection.handeUseValueChange(jsonContents.sections[i].use)
-
-                            // Re-render the section
-                            medicalSection.reRenderSection()
-
-                            break
-
-                        case "craft":
-                            // Create the new section
-                            newCraftInfo();
-
-                            // Get the new section
-                            const craftSection = craftInfoRef.current[craftInfoRef.current.length-1];
-
-                            // Update the values
-                            craftSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
-                            craftSection.handleUseValueChange(jsonContents.sections[i].use)
-                            craftSection.handleAdditionalInfoChange(jsonContents.sections[i].additonal_info)
-
-                            // Re-render the section
-                            craftSection.reRenderSection()
-
-                            break
-
-                        case "source":
-                            // Create the new section
-                            newSourceInfo();
-
-                            // Get the new section
-                            const sourceSection = sourceInfoRef.current[sourceInfoRef.current.length-1];
-
-                            // Update the values
-                            sourceSection.handleDataChange(jsonContents.sections[i].data)
-                            sourceSection.handleTypeChange(jsonContents.sections[i].source_type)
-
-                            // Re-render the section
-                            sourceSection.reRenderSection()
-
-                            break
-
-                        case "custom":
-                            // Create the new section
-                            newCustomInfo();
-
-                            // Get the new section
-                            const customSection = customInfoRef.current[customInfoRef.current.length-1];
-
-                            // Update the values
-                            customSection.handleTextChange(jsonContents.sections[i].text)
-                            customSection.handleTitleChange(jsonContents.sections[i].title)
-
-                            // Re-render the section
-                            customSection.reRenderSection()
-
-                            break
-
-
-                    }
-                }
             };
             reader.readAsText(file);
         });
@@ -1667,6 +1677,8 @@ export default function CreatePlant() {
         // Click the file upload input
         fileUploadInput.click();
     }
+
+
 
     const downloadPlant = () => {
 
@@ -1701,12 +1713,59 @@ export default function CreatePlant() {
         const jsonData = generateJSON();
 
         // Convert the JSON file to API format
-        const uploadApiData = ConvertPlantDataIntoApi(jsonData)
+        let uploadApiData = ConvertPlantDataIntoApi(jsonData) as any
+
+        //TODO: Show a loading screen
 
         let result;
 
+        // Get the id
+        const {id} = router.query;
+
+        // Check if the id is valid
+        if(!id){
+            return;
+        }
+
+        // Convert to a number
+        let idNum = parseInt(id);
+
+        // Check if the id is valid
+        if(isNaN(idNum)){
+            idNum = -1
+        }
+
+        const isEdit = idNum !== -1
+        console.log(isEdit)
+
+        // Check if this plant is being edited
+        if(isEdit){
+            console.log("EDITING PLANT")
+
+            // Remove the plant from the database
+            try{
+
+               // Remove the plant from the database
+                result = await axios.get(`/api/plants/remove?id=${plantID}`)
+                console.log(result)
+
+            } catch (err) {
+                console.log(err);
+
+                //TODO: Error handling
+                return;
+            }
+
+            // Remove the plant from the local storage
+            localStorage.removeItem("plant_" + plantID)
+
+            // Add the id to the upload data
+            console.log("SETTING ID")
+            uploadApiData.edit_id = plantID;
+            console.log(uploadApiData)
+        }
+
         try{
-            //TODO: Show a loading screen
 
             // Upload the data to the database using the upload API by passing each json key as params
             result = await axios.post(`/api/plants/upload`, uploadApiData);
@@ -1729,7 +1788,28 @@ export default function CreatePlant() {
         console.log(result);
     }
 
+    useEffect(() => {
+        // Get the id
+        const {id} = router.query;
 
+        // Check if the id is valid
+        if(!id){
+            return;
+        }
+
+        // Convert to a number
+        const idNum = parseInt(id);
+
+        // Check if the id is valid
+        if(isNaN(idNum)){
+            return;
+        }
+
+        // Set the plant id
+        setPlantID(idNum);
+
+
+    }, [router.query]);
 
     return (
         <>
