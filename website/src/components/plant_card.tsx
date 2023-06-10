@@ -1,6 +1,6 @@
 import styles from "@/styles/plant_card.module.css"
 import Link from "next/link";
-import {getNamesInPreference, PlantData} from "@/modules/plant_data";
+import {fetchPlant, getNamesInPreference, PlantData} from "@/modules/plant_data";
 import axios from "axios";
 import {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/modules/cache";
@@ -93,40 +93,16 @@ export function PlantCardApi({id}: PlantCardApiProps) {
             return
         dataFetch.current = true
 
-        fetchPlant();
+        setCard();
     }, []);
 
-    const fetchPlant = async () => {
+    const setCard = async () => {
 
-        // Check if the plant data has already been fetched
-        let plantOBJ = getFromCache("plant_" + id) as PlantData | null
+        const plantOBJ = await fetchPlant(id)
 
-        if(plantOBJ === null) {
-
-            try {
-                // Get the plant data from the api
-                const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
-                const plantData = res.data.data
-
-                // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
-                plantOBJ = plantData as PlantData
-
-                // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
-                plantOBJ.id = id
-
-                // Set the plant data in the cache
-                saveToCache("plant_" + id, plantOBJ)
-
-
-            } catch (e) {
-
-                // If there is an error just log it and set the plant card to the loading card
-                console.log("Error fetching plant data from api")
-                setPlantCard(<PlantCardNull/>)
-
-                //TODO: Should probably do smth abt this but so far no incorrect ids should b passed in because only its only called using data returned from the api
-                return;
-            }
+        if(!plantOBJ){
+            setPlantCard(<PlantCardNull/>)
+            return
         }
 
         // Set the plant data

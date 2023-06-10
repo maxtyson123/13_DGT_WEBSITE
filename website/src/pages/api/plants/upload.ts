@@ -39,6 +39,7 @@ export default async function handler(
     // Try uploading the data to the database
     try {
         let {
+            edit_id,
             preferred_name,
             english_name,
             maori_name,
@@ -73,6 +74,7 @@ export default async function handler(
 
         } = request.body;
 
+        console.log("API/Upload")
         console.log(request.body);
 
         // Return what parameters are missing
@@ -81,7 +83,7 @@ export default async function handler(
         if(english_name === null)               { return response.status(missingParametersErrorCode).json({ error: 'English name parameter not found' }); }
         if(maori_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Maori name parameter not found' }); }
         if(latin_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Latin name parameter not found' }); }
-        if(location_found === null)                   { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
+        if(location_found === null)             { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
         if(small_description === null)          { return response.status(missingParametersErrorCode).json({ error: 'Small description parameter not found' }); }
         if(long_description === null)           { return response.status(missingParametersErrorCode).json({ error: 'Long description parameter not found' }); }
         if(months_ready_events === null)        { return response.status(missingParametersErrorCode).json({ error: 'Months ready events parameter not found' }); }
@@ -117,12 +119,22 @@ export default async function handler(
             tables = new PostgresSQL();
         }
 
+        let insertQuery = "";
+        let insetQueryValues = "";
+        let getIDQuery = "(SELECT id FROM new_plant)";
+
+        if(edit_id){
+            insertQuery += `${tables.id}, `;
+            insetQueryValues += `${edit_id}, `;
+            getIDQuery = `${edit_id}`;
+        }
+
         // Create the query
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
-        query += `VALUES ('${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
+        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
+        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS (
@@ -140,7 +152,7 @@ export default async function handler(
             // Loop through each of the months ready events
             for(let i = 0; i < months_ready_events.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${months_ready_events[i]}', '${months_ready_start_months[i]}', '${months_ready_end_months[i]}')`;
+                query += `(${getIDQuery}, '${months_ready_events[i]}', '${months_ready_start_months[i]}', '${months_ready_end_months[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < months_ready_events.length - 1) {
@@ -160,7 +172,7 @@ export default async function handler(
             // Loop through each of the edible parts
             for(let i = 0; i < edible_parts.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${edible_parts[i]}', '${edible_images[i]}', '${edible_nutrition[i]}', '${edible_preparation[i]}', '${edible_preparation_type[i]}')`;
+                query += `(${getIDQuery}, '${edible_parts[i]}', '${edible_images[i]}', '${edible_nutrition[i]}', '${edible_preparation[i]}', '${edible_preparation_type[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < edible_parts.length - 1) {
@@ -180,7 +192,7 @@ export default async function handler(
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${medical_types[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}')`;
+                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < medical_types.length - 1) {
@@ -201,7 +213,7 @@ export default async function handler(
             // Loop through each of the craft parts
             for(let i = 0; i < craft_parts.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${craft_parts[i]}', '${craft_uses[i]}', '${craft_images[i]}', '${craft_additional_info[i]}')`;
+                query += `(${getIDQuery}, '${craft_parts[i]}', '${craft_uses[i]}', '${craft_images[i]}', '${craft_additional_info[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < craft_parts.length - 1) {
@@ -221,7 +233,7 @@ export default async function handler(
             // Loop through each of the source types
             for(let i = 0; i < source_types.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${source_types[i]}', '${source_data[i]}')`;
+                query += `(${getIDQuery}, '${source_types[i]}', '${source_data[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < source_types.length - 1) {
@@ -240,7 +252,7 @@ export default async function handler(
             // Loop through each of the custom titles
             for(let i = 0; i < custom_titles.length; i++) {
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${custom_titles[i]}', '${custom_text[i]}')`;
+                query += `(${getIDQuery}, '${custom_titles[i]}', '${custom_text[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < custom_titles.length - 1) {
@@ -261,7 +273,7 @@ export default async function handler(
             for(let i = 0; i < attachment_paths.length; i++) {
 
                 // Add the data to the query
-                query += `((SELECT id FROM new_plant), '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]})`;
+                query += `(${getIDQuery}, '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]})`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < attachment_paths.length - 1) {

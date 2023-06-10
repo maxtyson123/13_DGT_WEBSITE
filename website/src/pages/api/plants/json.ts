@@ -98,7 +98,7 @@ export default async function handler(
                 }
 
                 // Convert the PlantData into the API format
-                const uploadApiData = ConvertPlantDataIntoApi(parsed as PlantData);
+                const uploadApiData = ConvertPlantDataIntoApi(parsed as PlantData) as any;
 
                 // If the data is null then return an error
                 if (!uploadApiData) {
