@@ -20,6 +20,7 @@ import axios from "axios";
 
 import {MONTHS, PLANT_PARTS} from "@/modules/constants"
 import {useRouter} from "next/router";
+import {Error} from "@/components/error";
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 
@@ -1109,6 +1110,7 @@ export default function CreatePlant() {
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
     const [plantID, setPlantID] = useState(-1)
+    const [error, setError] = useState("")
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1321,11 +1323,7 @@ export default function CreatePlant() {
 
         // Scroll to the element with an error:
         if(elementThatNeedsFocus !== null){
-            const element = document.getElementById(elementThatNeedsFocus);
-            if (element) {
-                let dims = element.getBoundingClientRect();
-                window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
-            }
+            scrollToElement(elementThatNeedsFocus)
         }
 
         return isValid;
@@ -1656,17 +1654,14 @@ export default function CreatePlant() {
                 // Check if it is the valid type of JSON
                 if (!ValidPlantData(jsonContents)) {
 
-                    //TODO: Error Here
+                    setError("The file you uploaded is not a valid plant file")
+                    scrollToElement("errorSection")
                     console.log("ERROR NOT RIGHT TYPE")
                     return;
                 }
 
                 // Scroll to the top of the page
-                const element = document.getElementById("english-name");
-                if (element) {
-                    let dims = element.getBoundingClientRect();
-                    window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
-                }
+                scrollToElement("english-name")
 
                 loadJson(jsonContents)
 
@@ -1751,7 +1746,8 @@ export default function CreatePlant() {
                 } catch (err) {
                     console.log(err);
 
-                    //TODO: Error handling
+                    setError("Unable to remove previous plant data whilst editing")
+                    scrollToElement("errorSection")
                     return;
                 }
 
@@ -1774,7 +1770,8 @@ export default function CreatePlant() {
         } catch (err) {
             console.log(err);
 
-            //TODO: Error handling
+            setError("Unable to upload plant data")
+            scrollToElement("errorSection")
             return;
         }
 
@@ -1788,6 +1785,9 @@ export default function CreatePlant() {
         // Debug the result (this is for if the redirect doesn't work or smth else goes wrong)
         console.log(result);
     }
+
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
 
     useEffect(() => {
         // Get the id
@@ -1803,10 +1803,18 @@ export default function CreatePlant() {
 
         // Check if the id is valid
         if(isNaN(idNum)){
+            setError("The id of the plant you are trying to edit is not a valid id")
+            console.log("ERROR WRONG ID")
+            scrollToElement("errorSection")
             return;
         }
 
         setPlantID(idNum)
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
 
         getEditData(idNum)
 
@@ -1819,20 +1827,29 @@ export default function CreatePlant() {
 
         // Check if the plant data is valid
         if(!plantOBJ){
-            //TODO: error here
+            setError("The plant you are trying to edit is not a valid plant (was unable to fetch it's data from the database)")
+            console.log("ERROR WRONG ID")
+            scrollToElement("errorSection")
             return;
         }
+
+        console.log("Plant OBJ:")
+        console.log(plantOBJ)
 
         // Load the plant data
         loadJson(plantOBJ)
 
         // Scroll to the top of the page
-        const element = document.getElementById("english-name");
+        scrollToElement("english-name")
+
+    }
+
+    const scrollToElement = (elementId: string) => {
+        const element = document.getElementById(elementId);
         if (element) {
             let dims = element.getBoundingClientRect();
             window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
         }
-
     }
 
     return (
@@ -1846,8 +1863,12 @@ export default function CreatePlant() {
                 <h1 className={styles.title}>Creating plant: {plantName}</h1>
             </PageHeader>
 
-            <Section>
+            <Section autoPadding>
                 <div className={"row"}>
+
+                    <div id={"errorSection"}>
+                        { error === "" ? null : <Error error={error}/>}
+                    </div>
 
                     {/* Divide the page into a left and right column*/}
                     <div className={"column"}>

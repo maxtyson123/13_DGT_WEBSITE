@@ -491,8 +491,6 @@ export async function fetchPlant (id: number) {
             // If there is an error just log it and set the plant card to the loading card
             console.log("Error fetching plant data from api")
             return null;
-
-            //TODO: Should probably do smth abt this but so far no incorrect ids should b passed in because only its only called using data returned from the api
         }
     }
 

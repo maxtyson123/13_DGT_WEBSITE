@@ -15,6 +15,7 @@ import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {convertUseTag} from "@/components/plant_card";
 import Image from "next/image";
 import {AutoSection} from "@/components/plant_sections";
+import {Error} from "@/components/error";
 
 export default function PlantPage() {
 
@@ -28,6 +29,9 @@ export default function PlantPage() {
 
     // States for the months
     const [currentMonth, setCurrentMonth] = React.useState(0)
+
+    // Error state
+    const [error, setError] = React.useState("")
 
     // Set up the router
     const router = useRouter()
@@ -59,7 +63,7 @@ export default function PlantPage() {
 
             console.log("No id")
 
-            //TODO: ERROR PAGE
+            setError("Invalid plant id")
             return;
         }
 
@@ -71,7 +75,7 @@ export default function PlantPage() {
 
             console.log("Not a number")
 
-            //TODO: ERROR PAGE
+            setError("Invalid plant id")
             return
         }
 
@@ -80,10 +84,13 @@ export default function PlantPage() {
 
         console.log(plantOBJ)
 
+        if(!plantOBJ){
+            setError("Plant not found")
+            return
+        }
+
         // Set the plant data
         setPlantData(plantOBJ)
-
-        if(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
     }
 
@@ -137,6 +144,10 @@ export default function PlantPage() {
 
     }
 
+    const closeError = () => {
+        router.push("/")
+    }
+
     return (
         <>
 
@@ -185,6 +196,9 @@ export default function PlantPage() {
 
             <Section autoPadding>
                <div className={styles.plantMainInfo}>
+
+                   { error === "" ? null : <Error error={error}/>}
+
                       <div className={"row"}>
 
                           <div className={"column"}>

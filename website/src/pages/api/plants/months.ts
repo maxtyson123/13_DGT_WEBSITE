@@ -38,8 +38,6 @@ export default async function handler(
         return response.status(200).json({ data: data.rows });
 
     } catch (error) {
-        //TODO:  Error handling
-
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }

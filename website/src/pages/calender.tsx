@@ -152,7 +152,7 @@ export default function Calender(ref: CalenderRef){
                         {monthEntries
                             .map((entry, index) => {
 
-                               return <EventEntryDisplayer key={entry.plant} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
+                               return <EventEntryDisplayer key={entry.plant + index} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
 
                         })}
                     </div>

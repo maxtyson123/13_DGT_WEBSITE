@@ -76,23 +76,6 @@
     padding: 20px;
 }
 
-.errorContainer{
-    width: 100%;
-    background-color: red;
-    color: var(--text-light);
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-
-}
-
-.errorContainer h1{
-    font-size: 32px;
-    line-height: 103%;
-    color: var(--text-light);
-    font-weight: bold;
-}
-
 @media only screen and (max-width: 600px) {
     .searchBox{
         font-size: 24px;

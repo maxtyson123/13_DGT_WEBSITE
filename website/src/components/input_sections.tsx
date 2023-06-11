@@ -237,8 +237,6 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
                         }}
                     >
 
-                        {/*TODO: Custom option with default value*/}
-
                         {/* The placeholder text, shouldn't be selectable, only show if no default value */}
                         {defaultValue? "" : <option value="" disabled selected hidden>{placeHolder}</option>}
 

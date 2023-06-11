@@ -88,7 +88,7 @@
 .onGoing{
     grid-column-start: 1;
     grid-column-end: 4;
-    background-color: var(--secondary-gray);
+    background-color: var(--darker-secondary-gray);
     box-shadow: -10px 0 8px -8px var(--shadow), 10px 0 8px -8px var(--shadow);
 }
 

@@ -10,6 +10,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
 import axios from "axios";
+import {Error} from "@/components/error";
 
 type SearchRef = ForwardedRef<HTMLDivElement>
 export default function Search(ref: SearchRef){
@@ -122,10 +123,7 @@ export default function Search(ref: SearchRef){
 
             // Set the results to an error div
             setResults([
-                <div key={"error"} className={styles.errorContainer}>
-                    <h1>Something went wrong</h1>
-                    <p>Sorry, we couldnt find any plants with that name.</p>
-                </div>
+                <Error key={"error"} error={"Sorry, we couldn't find any plants with that name."}/>
             ])
 
             // Set the time and amount

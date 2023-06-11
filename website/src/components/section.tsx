@@ -10,7 +10,6 @@ type SectionProps = {
 export default function Section({ children, autoPadding = false }: SectionProps){
     return(
         <>
-
             {/* Add padding to the top of the page if autoPadding is true */}
             <div className={autoPadding ? "p-10" : ""}>
                 {children}
