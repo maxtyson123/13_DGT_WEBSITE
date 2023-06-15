@@ -1106,11 +1106,12 @@ export default function CreatePlant() {
     // Set up the router
     const router = useRouter();
 
-    // Page Constants
+    // Page States
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
     const [plantID, setPlantID] = useState(-1)
     const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1710,7 +1711,7 @@ export default function CreatePlant() {
         // Convert the JSON file to API format
         let uploadApiData = ConvertPlantDataIntoApi(jsonData) as any
 
-        //TODO: Show a loading screen
+        setIsLoading(true);
 
         let result;
 
@@ -1748,6 +1749,7 @@ export default function CreatePlant() {
 
                     setError("Unable to remove previous plant data whilst editing")
                     scrollToElement("errorSection")
+                    setIsLoading(false);
                     return;
                 }
 
@@ -1772,6 +1774,7 @@ export default function CreatePlant() {
 
             setError("Unable to upload plant data")
             scrollToElement("errorSection")
+            setIsLoading(false);
             return;
         }
 
@@ -1822,6 +1825,8 @@ export default function CreatePlant() {
     }, [router.query]);
 
     const getEditData = async (idNum: number) => {
+        setIsLoading(true);
+
         // Download the plant data
         const plantOBJ = await fetchPlant(idNum);
 
@@ -1830,6 +1835,7 @@ export default function CreatePlant() {
             setError("The plant you are trying to edit is not a valid plant (was unable to fetch it's data from the database)")
             console.log("ERROR WRONG ID")
             scrollToElement("errorSection")
+            setIsLoading(false);
             return;
         }
 
@@ -1841,7 +1847,7 @@ export default function CreatePlant() {
 
         // Scroll to the top of the page
         scrollToElement("english-name")
-
+        setIsLoading(false);
     }
 
     const scrollToElement = (elementId: string) => {
@@ -1864,6 +1870,13 @@ export default function CreatePlant() {
             </PageHeader>
 
             <Section autoPadding>
+                { isLoading ?
+                    <div className={styles.loadingContiner}>
+                        <Image src={"/media/images/loading.gif"} alt={"Loading.."} width={100} height={100}/>
+                        <h1> Loading... </h1>
+                    </div>
+                    : null}
+
                 <div className={"row"}>
 
                     <div id={"errorSection"}>
