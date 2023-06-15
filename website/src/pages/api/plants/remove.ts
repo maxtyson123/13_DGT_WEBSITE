@@ -14,7 +14,7 @@ export default async function handler(
     let dataBase : any = mysql({
         config: {
             host: process.env.MYSQL_HOST,
-            port: process.env.MYSQL_PORT,
+            port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
             database: process.env.MYSQL_DATABASE,
             user: process.env.MYSQL_USER,
             password: process.env.MYSQL_PASSWORD
@@ -39,8 +39,16 @@ export default async function handler(
             return response.status(400).json({ error: 'No ID' });
         }
 
+        // If it is an array, get the first element
+        if(Array.isArray(id)){
+            id = id[0];
+        }
+
+        let idNumber = parseInt(id);
+
+
         // If the id is not a number, return an error
-        if(isNaN(id)){
+        if(isNaN(idNumber)){
             return response.status(400).json({ error: 'Invalid ID' });
         }
 

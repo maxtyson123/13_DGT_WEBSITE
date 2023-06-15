@@ -245,8 +245,8 @@ export default function PlantPage() {
                 <div className={styles.monthsContainer}>
 
                     {/* If there are no events then there shouldn't be a title */}
-                    {plantData?.months_ready_for_use.length > 0 &&
-                    <h1 className={styles.title}> Events </h1>
+                    {plantData?.months_ready_for_use && plantData.months_ready_for_use.length > 0 &&
+                        <h1 className={styles.title}> Events </h1>
                     }
 
                     {plantData?.months_ready_for_use.map((month, index) => (

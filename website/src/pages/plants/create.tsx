@@ -1716,10 +1716,15 @@ export default function CreatePlant() {
         let result;
 
         // Get the id
-        const {id} = router.query;
+        let {id} = router.query;
 
         // Check if the id is valid
         if(id){
+
+            // If it is an array, get the first element
+            if(Array.isArray(id)){
+                id = id[0]
+            }
 
             // Convert to a number
             let idNum = parseInt(id);
@@ -1794,11 +1799,16 @@ export default function CreatePlant() {
 
     useEffect(() => {
         // Get the id
-        const {id} = router.query;
+        let {id} = router.query;
 
         // Check if the id is valid
         if(!id){
             return;
+        }
+
+        // If it is an array, get the first element
+        if(Array.isArray(id)){
+            id = id[0]
         }
 
         // Convert to a number
