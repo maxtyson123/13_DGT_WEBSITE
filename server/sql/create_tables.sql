@@ -13,7 +13,7 @@ CREATE TABLE plants (
 
 -- Months For Use
 CREATE TABLE months_ready_for_use (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     months_event TEXT,
     months_start_month TEXT,
@@ -25,7 +25,7 @@ CREATE TABLE months_ready_for_use (
 
 -- Attachments
 CREATE TABLE attachments (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     attachments_path TEXT,
     attachments_type TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE attachments (
 
 -- Medical Section
 CREATE TABLE medical (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     medical_type TEXT,
     medical_use TEXT,
@@ -50,7 +50,7 @@ CREATE TABLE medical (
 
 -- Craft Section
 CREATE TABLE craft (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     craft_part_of_plant TEXT,
     craft_use TEXT,
@@ -63,7 +63,7 @@ CREATE TABLE craft (
 
 -- Sources Section
 CREATE TABLE source (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     source_type TEXT,
     source_data TEXT,
@@ -74,7 +74,7 @@ CREATE TABLE source (
 
 -- Custom Sections
 CREATE TABLE custom (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     custom_title TEXT,
     custom_text TEXT,
@@ -85,7 +85,7 @@ CREATE TABLE custom (
 
 -- Edible Section
 CREATE TABLE edible (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     edible_part_of_plant TEXT,
     edible_image TEXT,

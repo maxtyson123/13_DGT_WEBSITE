@@ -1,4 +1,6 @@
 // Class for the names of the database tables depending  on SQL or  postgreSQL
+import mysql from "serverless-mysql";
+
 export class SQLDatabase {
 
     // Generic
@@ -158,3 +160,13 @@ export class PostgresSQL extends SQLDatabase{
         this.months_end_month           = "end_month";
     }
 }
+
+export const mysql_db = mysql({
+    config: {
+        host: process.env.MYSQL_HOST,
+        port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
+        database: process.env.MYSQL_DATABASE,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD
+    }
+});

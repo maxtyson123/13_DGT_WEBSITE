@@ -1,6 +1,6 @@
-import {db} from '@vercel/postgres';
+import {db, sql} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {PostgresSQL, SQLDatabase} from "@/modules/databse";
+import {mysql_db, PostgresSQL, SQLDatabase} from "@/modules/databse";
 import mysql from 'serverless-mysql';
 import{USE_POSTGRES} from "@/modules/constants";
 
@@ -17,24 +17,15 @@ export default async function handler(
     }
 
     // Select what database is being used
-    let dataBase : any = mysql({
-        config: {
-            host: process.env.MYSQL_HOST,
-            port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
-            database: process.env.MYSQL_DATABASE,
-            user: process.env.MYSQL_USER,
-            password: process.env.MYSQL_PASSWORD
-        }
-    });
+    const dataBase = USE_POSTGRES ? db : mysql_db
 
-    // If postgres use that
-    if(USE_POSTGRES){
-        dataBase = db
+    // Connect to it
+    let client : any = await dataBase.connect();
+
+    // MySQL requires to get client from connection
+    if(!USE_POSTGRES){
+        client = dataBase.getClient()
     }
-
-    // Connect to the database
-    const client = await dataBase.connect();
-
 
     // Try uploading the data to the database
     try {
@@ -291,8 +282,17 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
+        let data;
+
+
+        if(!USE_POSTGRES){
+            query = client.escape(query)
+        }
+
         // Get the data from the database
-        const data  = await client.query(query);
+        data  = await client.query(query);
+
+        console.log(data)
 
         // Get the id of the new plant
         // @ts-ignore (has to be like this data[0] is an object)
@@ -303,15 +303,16 @@ export default async function handler(
             return response.status(500).json({ error: "Error creating plant (id not returned)" });
         }
 
-        client.end();
+
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {
         // If there is an error, return the error
-        return response.status(500).json({ error: error });
+        console.log("ERROR")
+        console.log(error)
+        return response.status(500).json({message: "ERROR IN SERVER", error: error });
     } finally {
 
-
-
+        await client.end();
 
     }
 }
