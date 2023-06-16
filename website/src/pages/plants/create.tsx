@@ -21,6 +21,10 @@ import axios from "axios";
 import {MONTHS, PLANT_PARTS} from "@/modules/constants"
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
+import {signIn, signOut, useSession} from "next-auth/react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
+
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 
@@ -1106,6 +1110,9 @@ export default function CreatePlant() {
     // Set up the router
     const router = useRouter();
 
+    // Get the logged in user
+    const { data: session } = useSession()
+
     // Page States
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
@@ -1749,10 +1756,17 @@ export default function CreatePlant() {
                     result = await axios.get(`/api/plants/remove?id=${idNum}`)
                     console.log(result)
 
-                } catch (err) {
+                } catch (err: any) {
                     console.log(err);
 
-                    setError("Unable to remove previous plant data whilst editing")
+                    let errorText = "Unable to remove previous plant data whilst editing"
+
+                    // Check if the error is a 401 error
+                    if(err.response && err.response.status === 401){
+                        errorText = "You are not authorized to edit plant data"
+                    }
+
+                    setError(errorText)
                     scrollToElement("errorSection")
                     setIsLoading(false);
                     return;
@@ -1774,10 +1788,17 @@ export default function CreatePlant() {
             // Upload the data to the database using the upload API by passing each json key as params
             result = await axios.post(`/api/plants/upload`, uploadApiData);
 
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
 
-            setError("Unable to upload plant data")
+            let errorText = "Unable to upload plant data"
+
+            // Check if the error is a 401 error
+            if(err.response && err.response.status === 401){
+                errorText = "You are not authorized to upload plant data"
+            }
+
+            setError(errorText)
             scrollToElement("errorSection")
             setIsLoading(false);
             return;
@@ -1868,6 +1889,11 @@ export default function CreatePlant() {
         }
     }
 
+    // Debug the session
+    useEffect(() => {
+        console.log(session)
+    }, [session])
+
     return (
         <>
             {/* Set up the page header and navbar */}
@@ -1887,203 +1913,218 @@ export default function CreatePlant() {
                     </div>
                     : null}
 
-                <div className={"row"}>
+                { !session ?
+                    <>
+                        <div className={styles.userDetails}>
+                            <p> Please sign in to edit plants  </p>
+                            <button onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div className={styles.userDetails}>
+                            <p> Signed in as <span className={styles.email}> {session.user ? session.user.email : "No Email"} </span> </p>
+                            <button onClick={() => signOut()}><FontAwesomeIcon icon={faDoorOpen}/> Sign out</button>
+                        </div>
 
-                    <div id={"errorSection"}>
-                        { error === "" ? null : <Error error={error}/>}
-                    </div>
+                        <div className={"row"}>
 
-                    {/* Divide the page into a left and right column*/}
-                    <div className={"column"}>
-
-                        {/* Basic plant information */}
-                        <div className={styles.formSection}>
-
-                            {/* Section title */}
-                            <h1 className={styles.sectionTitle}>Basic Info</h1>
-
-                            {/* Plant name */}
-                            <div className={styles.formItem} id={"english-name"}>
-                                <SmallInput
-                                    placeHolder={"English Name"}
-                                    defaultValue={importedJSON.english_name}
-                                    required={false}
-                                    state={englishNameValidationState[0]}
-                                    errorText={englishNameValidationState[1]}
-                                    changeEventHandler={handleEnglishNameChange}
-                                />
-                            </div>
-                            <div className={styles.formItem} id={"moari-name"}>
-                                <SmallInput
-                                    placeHolder={"Moari Name"}
-                                    defaultValue={importedJSON.moari_name}
-                                    required={false}
-                                    state={moariNameValidationState[0]}
-                                    errorText={moariNameValidationState[1]}
-                                    changeEventHandler={handleMoariNameChange}
-                                />
-                            </div>
-                            <div className={styles.formItem} id={"latin-name"}>
-                                <SmallInput
-                                    placeHolder={"Latin Name"}
-                                    defaultValue={importedJSON.latin_name}
-                                    required={false}
-                                    state={latinNameValidationState[0]}
-                                    errorText={latinNameValidationState[1]}
-                                    changeEventHandler={handleLatinNameChange}
-                                />
+                            <div id={"errorSection"}>
+                                { error === "" ? null : <Error error={error}/>}
                             </div>
 
-                            {/* Preferred plant name */}
-                            <div className={styles.formItem} id={"preferred-name"}>
-                                <DropdownInput
-                                    placeHolder={"Preferred Name"}
-                                    defaultValue={importedJSON.preferred_name}
-                                    required={true}
-                                    state={preferredNameValidationState[0]}
-                                    errorText={preferredNameValidationState[1]}
-                                    options={["English", 'Moari', "Latin"]}
-                                    changeEventHandler={handleDropDownChange}
-                                    allowCustom={false}
-                                />
+                            {/* Divide the page into a left and right column*/}
+                            <div className={"column"}>
+
+                                {/* Basic plant information */}
+                                <div className={styles.formSection}>
+
+                                    {/* Section title */}
+                                    <h1 className={styles.sectionTitle}>Basic Info</h1>
+
+                                    {/* Plant name */}
+                                    <div className={styles.formItem} id={"english-name"}>
+                                        <SmallInput
+                                            placeHolder={"English Name"}
+                                            defaultValue={importedJSON.english_name}
+                                            required={false}
+                                            state={englishNameValidationState[0]}
+                                            errorText={englishNameValidationState[1]}
+                                            changeEventHandler={handleEnglishNameChange}
+                                        />
+                                    </div>
+                                    <div className={styles.formItem} id={"moari-name"}>
+                                        <SmallInput
+                                            placeHolder={"Moari Name"}
+                                            defaultValue={importedJSON.moari_name}
+                                            required={false}
+                                            state={moariNameValidationState[0]}
+                                            errorText={moariNameValidationState[1]}
+                                            changeEventHandler={handleMoariNameChange}
+                                        />
+                                    </div>
+                                    <div className={styles.formItem} id={"latin-name"}>
+                                        <SmallInput
+                                            placeHolder={"Latin Name"}
+                                            defaultValue={importedJSON.latin_name}
+                                            required={false}
+                                            state={latinNameValidationState[0]}
+                                            errorText={latinNameValidationState[1]}
+                                            changeEventHandler={handleLatinNameChange}
+                                        />
+                                    </div>
+
+                                    {/* Preferred plant name */}
+                                    <div className={styles.formItem} id={"preferred-name"}>
+                                        <DropdownInput
+                                            placeHolder={"Preferred Name"}
+                                            defaultValue={importedJSON.preferred_name}
+                                            required={true}
+                                            state={preferredNameValidationState[0]}
+                                            errorText={preferredNameValidationState[1]}
+                                            options={["English", 'Moari', "Latin"]}
+                                            changeEventHandler={handleDropDownChange}
+                                            allowCustom={false}
+                                        />
+                                    </div>
+
+                                    {/* Plant Small Description */}
+                                    <div className={styles.formItem} id={"small-description"}>
+                                        <SimpleTextArea
+                                            placeHolder={"Small Description"}
+                                            defaultValue={importedJSON.small_description}
+                                            required={true}
+                                            state={smallDescriptionValidationState[0]}
+                                            errorText={smallDescriptionValidationState[1]}
+                                            changeEventHandler={handleSmallDescriptionChange}
+                                        />
+                                    </div>
+
+                                    {/* Plant Large Description */}
+                                    <div className={styles.formItem} id={"large-description"}>
+                                        <AdvandcedTextArea
+                                            placeHolder={"Long Description"}
+                                            defaultValue={importedJSON.long_description}
+                                            required={true}
+                                            state={largeDescriptionValidationState[0]}
+                                            errorText={largeDescriptionValidationState[1]}
+                                            changeEventHandler={handleLargeDescriptionChange}
+                                        />
+                                    </div>
+
+                                    {/* Plant Location */}
+                                    <div className={styles.formItem} id={"location"}>
+                                        <DropdownInput
+                                            placeHolder={"Location"}
+                                            defaultValue={importedJSON.location_found}
+                                            required={true}
+                                            state={locationValidationState[0]}
+                                            errorText={locationValidationState[1]}
+                                            options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
+                                            allowCustom={true}
+                                            changeEventHandler={handleLocationChange}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Date"}
+                                        infoRef={dateInfoRef}
+                                        newInfo={newDateInfo}
+                                        key={renderKeyDate}
+                                        setRenderKey={setRenderKeyDate}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Edible Use"}
+                                        infoRef={edibleInfoRef}
+                                        newInfo={newEdibleInfo}
+                                        key={renderKeyEdible}
+                                        setRenderKey={setRenderKeyEdible}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Medical Use"}
+                                        infoRef={medicalInfoRef}
+                                        newInfo={newMedicalInfo}
+                                        key={renderKeyMedical}
+                                        setRenderKey={setRenderKeyMedical}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Craft Use"}
+                                        infoRef={craftInfoRef}
+                                        newInfo={newCraftInfo}
+                                        key={renderKeyCraft}
+                                        setRenderKey={setRenderKeyCraft}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Source"}
+                                        infoRef={sourceInfoRef}
+                                        newInfo={newSourceInfo}
+                                        key={renderKeySource}
+                                        setRenderKey={setRenderKeySource}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Custom Section"}
+                                        infoRef={customInfoRef}
+                                        newInfo={newCustomInfo}
+                                        key={renderKeyCustom}
+                                        setRenderKey={setRenderKeyCustom}
+                                    />
+                                </div>
                             </div>
 
-                            {/* Plant Small Description */}
-                            <div className={styles.formItem} id={"small-description"}>
-                                <SimpleTextArea
-                                    placeHolder={"Small Description"}
-                                    defaultValue={importedJSON.small_description}
-                                    required={true}
-                                    state={smallDescriptionValidationState[0]}
-                                    errorText={smallDescriptionValidationState[1]}
-                                    changeEventHandler={handleSmallDescriptionChange}
-                                />
-                            </div>
+                            {/* Right Hand Column */}
+                            <div className={"column"} >
 
-                            {/* Plant Large Description */}
-                            <div className={styles.formItem} id={"large-description"}>
-                                <AdvandcedTextArea
-                                    placeHolder={"Long Description"}
-                                    defaultValue={importedJSON.long_description}
-                                    required={true}
-                                    state={largeDescriptionValidationState[0]}
-                                    errorText={largeDescriptionValidationState[1]}
-                                    changeEventHandler={handleLargeDescriptionChange}
-                                />
-                            </div>
-
-                            {/* Plant Location */}
-                            <div className={styles.formItem} id={"location"}>
-                                <DropdownInput
-                                    placeHolder={"Location"}
-                                    defaultValue={importedJSON.location_found}
-                                    required={true}
-                                    state={locationValidationState[0]}
-                                    errorText={locationValidationState[1]}
-                                    options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
-                                    allowCustom={true}
-                                    changeEventHandler={handleLocationChange}
+                                {/*Images Section */}
+                                <InfoDisplayer
+                                    name={"Image"}
+                                    infoRef={imageInfoRef}
+                                    newInfo={newImage}
+                                    key={renderKeyImage}
+                                    setRenderKey={setRenderKeyImage}
                                 />
                             </div>
                         </div>
 
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Date"}
-                                infoRef={dateInfoRef}
-                                newInfo={newDateInfo}
-                                key={renderKeyDate}
-                                setRenderKey={setRenderKeyDate}
-                            />
+                        <div className={"row"}>
+
+                            <div className={styles.submitButtonsContainer}>
+
+                                {/* Upload to DB */}
+                                <div className={styles.formItem}>
+                                    <button onClick={importPlant} className={styles.submitDataButton}> Import JSON File </button>
+                                </div>
+
+                                {/* Generate JSON Button */}
+                                <div className={styles.formItem}>
+                                    <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON File </button>
+                                </div>
+
+                                {/* Upload to DB */}
+                                <div className={styles.formItem}>
+                                    <button onClick={uploadPlant} className={styles.submitDataButton}> Upload to database </button>
+                                </div>
+
+                            </div>
                         </div>
-
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Edible Use"}
-                                infoRef={edibleInfoRef}
-                                newInfo={newEdibleInfo}
-                                key={renderKeyEdible}
-                                setRenderKey={setRenderKeyEdible}
-                            />
-                        </div>
-
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Medical Use"}
-                                infoRef={medicalInfoRef}
-                                newInfo={newMedicalInfo}
-                                key={renderKeyMedical}
-                                setRenderKey={setRenderKeyMedical}
-                            />
-                        </div>
-
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Craft Use"}
-                                infoRef={craftInfoRef}
-                                newInfo={newCraftInfo}
-                                key={renderKeyCraft}
-                                setRenderKey={setRenderKeyCraft}
-                            />
-                        </div>
-
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Source"}
-                                infoRef={sourceInfoRef}
-                                newInfo={newSourceInfo}
-                                key={renderKeySource}
-                                setRenderKey={setRenderKeySource}
-                            />
-                        </div>
-
-                        <div className={styles.formSection}>
-                            <InfoDisplayer
-                                name={"Custom Section"}
-                                infoRef={customInfoRef}
-                                newInfo={newCustomInfo}
-                                key={renderKeyCustom}
-                                setRenderKey={setRenderKeyCustom}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Right Hand Column */}
-                    <div className={"column"} >
-
-                        {/*Images Section */}
-                        <InfoDisplayer
-                            name={"Image"}
-                            infoRef={imageInfoRef}
-                            newInfo={newImage}
-                            key={renderKeyImage}
-                            setRenderKey={setRenderKeyImage}
-                        />
-                    </div>
-                </div>
-
-
-                <div className={"row"}>
-
-                    <div className={styles.submitButtonsContainer}>
-
-                        {/* Upload to DB */}
-                        <div className={styles.formItem}>
-                            <button onClick={importPlant} className={styles.submitDataButton}> Import JSON File </button>
-                        </div>
-
-                        {/* Generate JSON Button */}
-                        <div className={styles.formItem}>
-                            <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON File </button>
-                        </div>
-
-                        {/* Upload to DB */}
-                        <div className={styles.formItem}>
-                            <button onClick={uploadPlant} className={styles.submitDataButton}> Upload to database </button>
-                        </div>
-
-                    </div>
-                </div>
+                    </>
+                }
             </Section>
 
             {/* Page footer */}

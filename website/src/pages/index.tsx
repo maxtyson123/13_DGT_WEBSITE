@@ -1,9 +1,10 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Authentication - Google login - check on data base if approved
 // TODO: Redo the images for the plants, upload ftp, allow for credits, image tags, require one image
 // TODO: Use SQL
+// TODO: Author of plant and last modified date
 // TODO: Redo css
+// TODO: JSDoc comments
 // TODO: Comment Code
 // TODO: Testing
 // TODO: Code cleanup

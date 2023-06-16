@@ -1,15 +1,18 @@
-import {db, sql} from '@vercel/postgres';
+import {db, VercelPool} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {mysql_db, PostgresSQL, SQLDatabase} from "@/modules/databse";
-import mysql from 'serverless-mysql';
-import{USE_POSTGRES} from "@/modules/constants";
+import {USE_POSTGRES} from "@/modules/constants";
+import {GetOrgin} from "@/modules/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    //return response.status(200).json({ error: 'This part of the API is unavailable until authentication is finished' });
+    // Get the origin of the request
+    const origin = GetOrgin(request);
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -24,7 +27,10 @@ export default async function handler(
 
     // MySQL requires to get client from connection
     if(!USE_POSTGRES){
-        client = dataBase.getClient()
+        // Check if the database is of mysql type
+        if(!(dataBase instanceof VercelPool)){
+            client = dataBase.getClient()
+        }
     }
 
     // Try uploading the data to the database
@@ -61,7 +67,9 @@ export default async function handler(
             attachment_paths,
             attachment_types,
             attachment_names,
-            attachment_downloadable
+            attachment_downloadable,
+            user_email,
+            api_key,
 
         } = request.body;
 
@@ -108,6 +116,52 @@ export default async function handler(
         // Set the tables to use
         if(USE_POSTGRES) {
             tables = new PostgresSQL();
+        }
+
+        // Check if the user is allowed to upload
+        let auth_query = ""
+
+        // If it is this site then allow user email to authenticate
+        if (origin === process.env.NEXTAUTH_URL) {
+            console.log("This is the same site");
+
+            // Get the email
+            const session = await getServerSession(request, response, authOptions)
+
+            if(!session){
+                return response.status(401).json({ error: 'No user session found' });
+            }
+
+            if(session.user === undefined){
+                return response.status(401).json({ error: 'No user found' });
+            }
+            const user_email = session.user.email;
+
+            console.log(user_email);
+
+            // Check if the email is allowed in the database
+            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${user_email}' AND ${tables.auth_type} = 'email'`;
+
+
+        }else{
+            console.log("This is a different site");
+
+            // If there is no API key then return an error
+            if(api_key === null) {
+                return response.status(401).json({ error: 'No API key found' });
+            }
+
+            // Check if the API key is allowed in the database
+            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
+
+        }
+
+        // Run the query
+        const auth_result = await db.query(auth_query);
+
+        // Check if the user is allowed to upload
+        if(auth_result.rows.length === 0) {
+            return response.status(401).json({ error: 'User not authorised to upload' });
         }
 
         let insertQuery = "";

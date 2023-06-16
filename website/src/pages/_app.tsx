@@ -7,6 +7,7 @@ import {useRouter} from 'next/router'
 import {config} from "@fortawesome/fontawesome-svg-core";
 import {Analytics} from '@vercel/analytics/react';
 import Credits from "@/components/credits";
+import {SessionProvider} from "next-auth/react";
 
 // Tell Font Awesome to skip adding the CSS automatically
 // since it's already imported above
@@ -21,9 +22,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
       <>
         <main>
-          <Component  key={pageKey} {...pageProps} />
-          <Credits/>
-          <Analytics />
+          <SessionProvider session={pageProps.session}>
+                  <Component  key={pageKey} {...pageProps} />
+                  <Credits/>
+                  <Analytics />
+           </SessionProvider>
         </main>
       </>
   )

@@ -113,3 +113,10 @@ ALTER TABLE edible
 ADD CONSTRAINT fk_edible_plants
 FOREIGN KEY (plant_id)
 REFERENCES plants(id);
+
+-- User Auth
+CREATE TABLE auth (
+    id SERIAL PRIMARY KEY,
+    entry TEXT,
+    type TEXT
+);

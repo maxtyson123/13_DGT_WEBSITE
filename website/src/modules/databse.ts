@@ -54,6 +54,10 @@ export class SQLDatabase {
     months_start_month: string;
     months_end_month: string;
 
+    // Auth Table
+    auth_entry: string;
+    auth_type: string;
+
     constructor() {
         // Generic
         this.id = "id";
@@ -105,6 +109,10 @@ export class SQLDatabase {
         this.months_event               = "months_event";
         this.months_start_month         = "months_start_month";
         this.months_end_month           = "months_end_month";
+
+        // Auth Table
+        this.auth_entry                 = "auth_entry";
+        this.auth_type                  = "auth_type";
 
     }
 }
@@ -158,6 +166,10 @@ export class PostgresSQL extends SQLDatabase{
         this.months_event               = "event";
         this.months_start_month         = "start_month";
         this.months_end_month           = "end_month";
+
+        // Auth Table
+        this.auth_entry                 = "entry";
+        this.auth_type                  = "type";
     }
 }
 
