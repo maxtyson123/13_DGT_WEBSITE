@@ -66,9 +66,8 @@ export default async function handler(
             custom_text,
             attachment_paths,
             attachment_types,
-            attachment_names,
+            attachment_metas,
             attachment_downloadable,
-            user_email,
             api_key,
 
         } = request.body;
@@ -107,7 +106,7 @@ export default async function handler(
         if(custom_text === null)                { return response.status(missingParametersErrorCode).json({ error: 'Custom text parameter not found' }); }
         if(attachment_paths === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment paths parameter not found' }); }
         if(attachment_types === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment types parameter not found' }); }
-        if(attachment_names === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment names parameter not found' }); }
+        if(attachment_metas === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment meta parameter not found' }); }
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
 
         // Check if the data is being downloaded from the Postgres database
@@ -312,13 +311,13 @@ export default async function handler(
         if(attachment_paths.length > 0) {
 
             // Tell the query that we are adding to the attachments table
-            query += `INSERT INTO attachments (plant_id, ${tables.attachment_path}, ${tables.attachment_type}, ${tables.attachment_name}, ${tables.attachment_downloadable}) VALUES `;
+            query += `INSERT INTO attachments (plant_id, ${tables.attachment_path}, ${tables.attachment_type}, ${tables.attachment_meta}, ${tables.attachment_downloadable}) VALUES `;
 
             // Loop through each of the attachments
             for(let i = 0; i < attachment_paths.length; i++) {
 
                 // Add the data to the query
-                query += `(${getIDQuery}, '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_names[i]}', ${attachment_downloadable[i]})`;
+                query += `(${getIDQuery}, '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_metas[i]}', ${attachment_downloadable[i]})`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < attachment_paths.length - 1) {
@@ -343,9 +342,17 @@ export default async function handler(
             query = client.escape(query)
         }
 
-        // Get the data from the database
-        data  = await client.query(query);
+        try{
+            // Get the data from the database
+            data  = await client.query(query);
+        } catch (e) {
+            console.log("ERROR")
+            console.log(e)
+            return response.status(500).json({message: "ERROR IN SERVER", error: e });
 
+        }
+
+        console.log("DATA")
         console.log(data)
 
         // Get the id of the new plant

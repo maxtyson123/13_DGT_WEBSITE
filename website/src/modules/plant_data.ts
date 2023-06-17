@@ -14,13 +14,13 @@ export interface PlantData {
         start_month:    string,
         end_month:      string,
     }[];
-    location_found:           string;
+    location_found:     string;
     small_description:  string;
     long_description:   string;
     attachments: {
         path:           string;
         type:           string;
-        name:           string;
+        meta:           object;
         downloadable:   boolean;
     }[];
     sections:           any[];
@@ -31,7 +31,7 @@ export interface PlantDataApi {
     english_name:               string;
     maori_name:                 string;
     latin_name:                 string;
-    location_found:                   string;
+    location_found:             string;
     small_description:          string;
     long_description:           string;
     months_ready_events:        string[];
@@ -56,9 +56,15 @@ export interface PlantDataApi {
     custom_text:                string[];
     attachment_paths:           string[];
     attachment_types:           string[];
-    attachment_names:           string[];
+    attachment_metas:           string[];
     attachment_downloadable:    boolean[];
 
+}
+
+export interface ImageMetaData {
+    name: string;
+    credits: string;
+    tags: string[];
 }
 
 export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
@@ -111,7 +117,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
     if (apiData.attachment_paths == null) {
         apiData.attachment_paths        = [];
         apiData.attachment_types        = [];
-        apiData.attachment_names        = [];
+        apiData.attachment_metas        = [];
         apiData.attachment_downloadable = [];
     }
 
@@ -149,7 +155,7 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.custom_text                  == null
         || apiData.attachment_paths             == null
         || apiData.attachment_types             == null
-        || apiData.attachment_names             == null
+        || apiData.attachment_metas             == null
         || apiData.attachment_downloadable      == null
     );
 }
@@ -195,13 +201,13 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         let imageInfoOBJ = {
             path: "",
             type: "",
-            name: "",
+            meta: {},
             downloadable: false
         }
 
         imageInfoOBJ.path           = apiData.attachment_paths[i];
         imageInfoOBJ.type           = apiData.attachment_types[i];
-        imageInfoOBJ.name           = apiData.attachment_names[i];
+        imageInfoOBJ.meta           = apiData.attachment_metas[i];
         imageInfoOBJ.downloadable   = apiData.attachment_downloadable[i];
 
         plantData.attachments.push(imageInfoOBJ);
@@ -329,7 +335,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     for(let i = 0; i < plantData.attachments.length; i++) {
         apiData.attachment_paths.push(plantData.attachments[i].path);
         apiData.attachment_types.push(plantData.attachments[i].type);
-        apiData.attachment_names.push(plantData.attachments[i].name);
+        apiData.attachment_metas.push(JSON.stringify(plantData.attachments[i].meta));
         apiData.attachment_downloadable.push(plantData.attachments[i].downloadable);
     }
 
@@ -430,7 +436,7 @@ export function emptyPlantApiData(){
         custom_text:                [],
         attachment_paths:           [],
         attachment_types:           [],
-        attachment_names:           [],
+        attachment_metas:           [],
         attachment_downloadable:    [],
     };
 

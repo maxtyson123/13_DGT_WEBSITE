@@ -29,7 +29,7 @@ CREATE TABLE attachments (
     plant_id INT,
     attachments_path TEXT,
     attachments_type TEXT,
-    attachments_name TEXT,
+    attachments_meta JSON,
     attachments_downloadable BOOLEAN,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)

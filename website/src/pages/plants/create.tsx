@@ -12,7 +12,14 @@ import {
 } from "@/components/input_sections";
 import Image from "next/image";
 
-import {ConvertPlantDataIntoApi, emptyPlantData, fetchPlant, PlantData, ValidPlantData} from "@/modules/plant_data";
+import {
+    ConvertPlantDataIntoApi,
+    emptyPlantData,
+    fetchPlant,
+    ImageMetaData,
+    PlantData,
+    ValidPlantData
+} from "@/modules/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
@@ -1247,6 +1254,7 @@ export default function CreatePlant() {
         // If there is no images then throw an error
         if(imageInfoRef.current.length === 0){
             setError("Please add at least one image");
+            scrollToElement("errorSection");
             return false;
         }
 
@@ -1379,7 +1387,7 @@ export default function CreatePlant() {
         }
 
         // If the previous error message is this on then remove it
-        if(error === "Please fix the fields below"){
+        if(error === "Please fix the fields below" || error === "Please add at least one image"){
             setError("")
         }
 
@@ -1415,14 +1423,25 @@ export default function CreatePlant() {
             const thisImageInfo = imageInfoRef.current[i].state;
 
             let imageInfoOBJ = {
-                path: "",
+                path: thisImageInfo.image_url,
                 type: "image",
-                name: "",
+                meta: {
+                    "name": thisImageInfo.image_name,
+                    "credits": thisImageInfo.image_credit,
+                    "tags": [""],
+                },
                 downloadable: false,
             }
 
-            imageInfoOBJ.path = thisImageInfo.image_url;
-            imageInfoOBJ.name = thisImageInfo.image_name;
+            // Split the tags by comma
+            if(thisImageInfo.image_tags !== ""){
+                imageInfoOBJ.meta.tags = thisImageInfo.image_tags.split(",");
+            }
+
+            // Remove any spaces at the start of tags
+            for(let i = 0; i < imageInfoOBJ.meta.tags.length; i++){
+                imageInfoOBJ.meta.tags[i] = imageInfoOBJ.meta.tags[i].trim();
+            }
 
             plantOBJ.attachments.push(imageInfoOBJ);
         }
@@ -1603,7 +1622,10 @@ export default function CreatePlant() {
 
             // Update the values
             imageSection.handleImageUrlChange(jsonContents.attachments[i].path)
-            imageSection.handleNameChange(jsonContents.attachments[i].name)
+            const metaData = jsonContents.attachments[i].meta as ImageMetaData
+            imageSection.handleNameChange(metaData.name)
+            imageSection.handleCreditChange(metaData.credits)
+            imageSection.handleTagsChange(metaData.tags.join(", "))
 
             // Re-render the section
             imageSection.reRenderSection()
@@ -2170,7 +2192,7 @@ export default function CreatePlant() {
                             </div>
 
                             {/* Right Hand Column */}
-                            <div className={"column"} >
+                            <div className={"column"}>
 
                                 {/*Images Section */}
                                 <InfoDisplayer

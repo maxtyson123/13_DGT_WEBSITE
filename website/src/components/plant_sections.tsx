@@ -1,13 +1,15 @@
 import styles from "@/styles/plant_sections.module.css"
 import React, {useEffect, useRef} from "react";
 import Image from "next/image";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCopyright} from "@fortawesome/free-solid-svg-icons";
 
 interface AutoSectionProps{
     section: any
     images: {
         path:           string;
         type:           string;
-        name:           string;
+        meta:           object;
         downloadable:   boolean;
     }[]
     isLeft: boolean
@@ -43,7 +45,7 @@ interface EdibleSectionProps{
     images: {
         path:               string;
         type:               string;
-        name:               string;
+        meta:               object;
         downloadable:       boolean;
     }[]
     isLeft:                 boolean
@@ -74,11 +76,12 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
             </div>
         </>
     )
@@ -129,7 +132,7 @@ interface MedicalSectionProps{
     images: {
         path:               string;
         type:               string;
-        name:               string;
+        meta:               object;
         downloadable:       boolean;
     }[]
     isLeft:                 boolean
@@ -160,11 +163,12 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
             </div>
         </>
     )
@@ -213,7 +217,7 @@ interface CraftSectionProps{
     images: {
         path:               string;
         type:               string;
-        name:               string;
+        meta:               object;
         downloadable:       boolean;
     }[]
     isLeft:                 boolean
@@ -244,11 +248,12 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].name : "Loading"}
+                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
             </div>
         </>
     )

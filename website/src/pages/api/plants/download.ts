@@ -2,7 +2,7 @@ import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {PostgresSQL, SQLDatabase} from "@/modules/databse";
 import mysql from 'serverless-mysql';
-import{USE_POSTGRES} from "@/modules/constants";
+import {USE_POSTGRES} from "@/modules/constants";
 
 export default async function handler(
     request: NextApiRequest,
@@ -205,16 +205,16 @@ export default async function handler(
                 case 'attachments':
 
                     // Select all the attachments data and make them into an array
-                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_names, attachments.attachment_downloadable,`;
+                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_metas, attachments.attachment_downloadable,`;
 
                     // Join the attachments table
                     joiner += ` LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(path) AS attachment_paths,
-                                array_agg(type) AS attachment_types,
-                                array_agg(name) AS attachment_names,
-                                array_agg(downloadable) AS attachment_downloadable
+                                array_agg(${tables.attachment_path}) AS attachment_paths,
+                                array_agg(${tables.attachment_type}) AS attachment_types,
+                                array_agg(${tables.attachment_meta}) AS attachment_metas,
+                                array_agg(${tables.attachment_downloadable}) AS attachment_downloadable
                                 FROM attachments
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id

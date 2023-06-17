@@ -30,7 +30,7 @@ CREATE TABLE attachments (
     plant_id INTEGER REFERENCES plants(id),
     path TEXT,
     type TEXT,
-    name TEXT,
+    meta JSON,
     downloadable BOOLEAN,
 
 );

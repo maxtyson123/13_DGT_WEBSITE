@@ -19,7 +19,7 @@ export class SQLDatabase {
     // Attachments Table
     attachment_path: string;
     attachment_type: string;
-    attachment_name: string;
+    attachment_meta: string;
     attachment_downloadable: string;
 
     // Craft Table
@@ -75,7 +75,7 @@ export class SQLDatabase {
         // Attachments Table
         this.attachment_path            = "attachments_path";
         this.attachment_type            = "attachments_type";
-        this.attachment_name            = "attachments_name";
+        this.attachment_meta            = "attachments_meta";
         this.attachment_downloadable    = "attachments_downloadable";
 
         // Craft Table
@@ -127,12 +127,12 @@ export class PostgresSQL extends SQLDatabase{
         this.plant_id = "plant_id";
 
         // Plants Table
-        // DOESNT  CHANGE
+        // -- DOESN'T  CHANGE
 
         // Attachments Table
         this.attachment_path            = "path";
         this.attachment_type            = "type";
-        this.attachment_name            = "name";
+        this.attachment_meta            = "meta";
         this.attachment_downloadable    = "downloadable";
 
         // Craft Table
