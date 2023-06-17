@@ -162,9 +162,10 @@ type DropdownInputProps = {
     errorText?: string;
     changeEventHandler?: (value: string) => void;
     options: string[];
-    allowCustom: boolean;
+    allowCustom?: boolean;
+    allowMultiple?: boolean;
 };
-export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler, allowCustom}: DropdownInputProps){
+export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler, allowCustom = false, allowMultiple = false}: DropdownInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);

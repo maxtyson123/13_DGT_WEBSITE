@@ -1,8 +1,9 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Redo the images for the plants, upload ftp, allow for credits, image tags, require one image
-// TODO: Use SQL
+// TODO: Redo the images for the plants, upload ftp, require one image
+// TODO: Clean up json a bit, make oop
 // TODO: Author of plant and last modified date
+// TODO: Use SQL
 // TODO: Redo css
 // TODO: JSDoc comments
 // TODO: Comment Code
@@ -47,7 +48,7 @@ export default function Home(ref: HomeRef) {
             return
         dataFetch.current = true
 
-        getPlantIDs();
+        getPlantIDs().then(() => {console.log("Plant IDs fetched")} ).catch((error) => {console.log(error)});
     }, [])
 
     const getPlantIDs = async () => {

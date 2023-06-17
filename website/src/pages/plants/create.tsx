@@ -763,35 +763,55 @@ class ImageInfo{
 
     // Store the state of the section
     state = {
-        image_url:  "",
-        image_name: "",
+        image_url:      "",
+        image_name:     "",
+        image_credit:   "",
+        image_tags:     "",
     }
 
     // Store the validation state of the section
     valid = {
-        image_url:  ["normal", "No Error"] as [ValidationState, string],
-        image_name: ["normal", "No Error"] as [ValidationState, string],
+        image_url:      ["normal", "No Error"] as [ValidationState, string],
+        image_name:     ["normal", "No Error"] as [ValidationState, string],
+        image_credit:   ["normal", "No Error"] as [ValidationState, string],
+        image_tags:     ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
 
     // Handlers that update the state
     handleImageUrlChange    = (value : string) => {this.state.image_url    = value};
-    handleNameChange        = (value : string) => {this.state.image_name   = value};
+    handleNameChange        = (value : string) => {this.state.image_name   = value; };
+    handleCreditChange      = (value : string) => {this.state.image_credit = value};
+    handleTagsChange        = (value : string) => {this.state.image_tags   = value};
+
 
     // Update the section
     setSection = (section: JSX.Element) => {this.section = section};
     updateSection = () => {
         this.setSection(
             <ImageSection
-                imageUrl = {this.state.image_url}
-                name = {this.state.image_name}
                 descriptionHandler={this.handleNameChange}
                 imageURLHandler={this.handleImageUrlChange}
+                creditHandler={this.handleCreditChange}
+                tagsHandler={this.handleTagsChange}
                 valid={this.valid}
+                state={this.state}
             />
         )
     }
+
+    reRenderSection = () => {
+        const updatedSection = React.cloneElement(
+            this.section,
+            {
+                valid: this.valid,
+                state: this.state
+            }
+        );
+        this.setSection(updatedSection);
+    }
+
 
     // Validate the section
     validate = () => {
@@ -809,15 +829,10 @@ class ImageInfo{
         // If there is no image uploaded then show an error otherwise the input is valid
         if(this.state.image_url === "") {
             this.valid.image_name = ["error", "Please upload a image"]; // Use name here as upload doesn't have a state
-            //TODO: FIX IMAGES isValid = false;
+            isValid = false;
         }
 
-        // Update section to show validation
-        const updatedSection = React.cloneElement(
-            this.section,
-            { valid: this.valid }
-        );
-        this.setSection(updatedSection);
+        this.reRenderSection();
 
         // Return whether the section is valid or not
         return isValid;
@@ -831,26 +846,28 @@ class ImageInfo{
 
 // Define the type of the props for the Image Section
 type ImageSectionProps = {
-    imageUrl:   string;
-    name:       string;
     descriptionHandler:     (value: string) => void;
     imageURLHandler:        (value: string) => void;
+    creditHandler:          (value: string) => void;
+    tagsHandler:            (value: string) => void;
     valid: {
         image_url:  [ValidationState, string];
         image_name: [ValidationState, string];
+        image_credit: [ValidationState, string];
+        image_tags: [ValidationState, string];
+    }
+    state: {
+        image_url:  string;
+        image_name: string;
+        image_credit: string;
+        image_tags: string;
     }
 }
-export function ImageSection({imageUrl, name, descriptionHandler, imageURLHandler, valid}: ImageSectionProps){
+export function ImageSection({descriptionHandler, imageURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
 
     // States
-    const [imageName, setImageName] = useState(name)
-    const [imageURL, setImageURL ]  = useState(imageUrl)
+    const [imageURL, setImageURL ]  = useState(state.image_url)
 
-    // Update the image alt tag state and also pass it to the handler
-    function imageNameHandler(value : string){
-        descriptionHandler(value)
-        setImageName(value)
-    }
 
     // Upload the image to imgbb and then pass the url to the handler and update the image url state
     const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -881,26 +898,54 @@ export function ImageSection({imageUrl, name, descriptionHandler, imageURLHandle
         console.log(data)
     }
 
+
     return(
         <>
             {/* Image / Uploader */}
-            <div className={styles.formContainer}>
+            <div className={styles.formItem}>
                 {imageURL !== "" ?
-                    <Image style={{borderRadius: 8}} src={imageURL} alt={imageName} width={600} height={600} objectFit={"contain"}/>
+                    <Image style={{borderRadius: 8}} src={imageURL} alt={imageURL} width={600} height={600} objectFit={"contain"}/>
                     :
                     <input type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
                 }
             </div>
-            <br/>
 
             {/* Image Name */}
-            <SmallInput
-                placeHolder={"Image Name"}
-                required={true}
-                state={valid.image_name[0]}
-                errorText={valid.image_name[1]}
-                changeEventHandler={imageNameHandler}
-            />
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Image Name"}
+                    defaultValue={state.image_name}
+                    required={true}
+                    state={valid.image_name[0]}
+                    errorText={valid.image_name[1]}
+                    changeEventHandler={descriptionHandler}
+                />
+            </div>
+
+            {/* Image Credit */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Image Credits"}
+                    defaultValue={state.image_credit}
+                    required={false}
+                    state={valid.image_credit[0]}
+                    errorText={valid.image_credit[1]}
+                    changeEventHandler={creditHandler}
+                />
+            </div>
+
+            {/* Image tags */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Image Tags (seperated by a comma)"}
+                    defaultValue={state.image_tags}
+                    required={false}
+                    state={valid.image_tags[0]}
+                    errorText={valid.image_tags[1]}
+                    changeEventHandler={tagsHandler}
+                />
+                <p>Example tags: <span>transparent, in_season, out_season, whole_plant, leaf_top, leaf_underside, stem, fruit, bud</span></p>
+            </div>
         </>
     )
 }
@@ -1153,8 +1198,7 @@ export default function CreatePlant() {
 
 
     // Value Handlers
-    const handleEnglishNameChange = (value : string) => { setEnglishName(value);
-        console.log(value) };
+    const handleEnglishNameChange = (value : string) => { setEnglishName(value); };
     const handleMoariNameChange = (value : string) => { setMoariName(value); };
     const handleLatinNameChange = (value : string) => { setLatinName(value); };
     const handleDropDownChange = (value : string) => { setPreferredName(value) };
@@ -1200,6 +1244,11 @@ export default function CreatePlant() {
 
     // Validate the input
     const validateInput = () => {
+        // If there is no images then throw an error
+        if(imageInfoRef.current.length === 0){
+            setError("Please add at least one image");
+            return false;
+        }
 
         //Allow for multiple invalid inputs
         let isValid = true;
@@ -1327,6 +1376,16 @@ export default function CreatePlant() {
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "custom-section-" + i;
             }
+        }
+
+        // If the previous error message is this on then remove it
+        if(error === "Please fix the fields below"){
+            setError("")
+        }
+
+        // Set the top error message
+        if(!isValid){
+            setError("Please fix the fields below")
         }
 
         // Scroll to the element with an error:
@@ -1508,6 +1567,7 @@ export default function CreatePlant() {
         craftInfoRef.current    = [];
         sourceInfoRef.current   = [];
         customInfoRef.current   = [];
+        imageInfoRef.current    = [];
 
 
         // Create the months ready for ues
@@ -1527,7 +1587,28 @@ export default function CreatePlant() {
             dateSection.reRenderSection()
         }
 
+        // Create the images
+        for (let i = 0; i < jsonContents.attachments.length; i++) {
 
+            // If this is not an image, skip it
+            if(jsonContents.attachments[i].type !== "image"){
+                continue;
+            }
+
+            // Create the new section
+            newImage()
+
+            // Get the new section
+            const imageSection = imageInfoRef.current[imageInfoRef.current.length-1];
+
+            // Update the values
+            imageSection.handleImageUrlChange(jsonContents.attachments[i].path)
+            imageSection.handleNameChange(jsonContents.attachments[i].name)
+
+            // Re-render the section
+            imageSection.reRenderSection()
+
+        }
 
         // Create the other sections from the imported JSON
         for(let i = 0; i < jsonContents.sections.length; i++){
