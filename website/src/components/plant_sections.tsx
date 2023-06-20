@@ -76,7 +76,7 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
+                    alt={images[image_index].meta.name ? images[image_index].meta.name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 

@@ -6,7 +6,7 @@ import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 import PageHeader from "@/components/page_header";
 import ScrollToTop from "@/components/scroll_to_top";
-import {fetchPlant, getNamesInPreference, PlantData} from "@/modules/plant_data";
+import {fetchPlant, getNamesInPreference, PlantData} from "@/lib/plant_data";
 import styles from "@/styles/id.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
@@ -221,7 +221,7 @@ export default function PlantPage() {
                                           <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
                                                 <Image
                                                     src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                    alt={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].name : "Loading"}
+                                                    alt={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].meta.name : "Loading"}
                                                     fill
                                                     style={{objectFit: "contain"}}
 

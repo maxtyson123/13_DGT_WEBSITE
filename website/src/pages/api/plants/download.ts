@@ -1,8 +1,8 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {PostgresSQL, SQLDatabase} from "@/modules/databse";
+import {PostgresSQL, SQLDatabase} from "@/lib/databse";
 import mysql from 'serverless-mysql';
-import {USE_POSTGRES} from "@/modules/constants";
+import {USE_POSTGRES} from "@/lib/constants";
 
 export default async function handler(
     request: NextApiRequest,

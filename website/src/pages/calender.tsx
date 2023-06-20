@@ -8,10 +8,10 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/calender.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
-import {MONTHS} from "@/modules/constants"
-import {getFromCache, saveToCache} from "@/modules/cache";
+import {MONTHS} from "@/lib/constants"
+import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
-import {getNamesInPreference, PlantData} from "@/modules/plant_data";
+import {getNamesInPreference, PlantData} from "@/lib/plant_data";
 import Link from "next/link";
 
 interface MonthEntry {

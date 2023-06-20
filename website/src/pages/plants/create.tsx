@@ -19,18 +19,19 @@ import {
     ImageMetaData,
     PlantData,
     ValidPlantData
-} from "@/modules/plant_data";
+} from "@/lib/plant_data";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import axios from "axios";
 
-import {MONTHS, PLANT_PARTS} from "@/modules/constants"
+import {MONTHS, PLANT_PARTS} from "@/lib/constants"
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
+
 
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
@@ -586,6 +587,8 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
 
 class EdibleInfo {
 
+    images: ImageInfo[] = [];
+
     // Store the data for the section at its current state
     state = {
         partOfPlant:        "",
@@ -624,6 +627,7 @@ class EdibleInfo {
                 preparationTypeHandler={this.handlePreparationTypeChange}
                 valid={this.valid}
                 state={this.state}
+                images={this.images}
             />
         );
     };
@@ -633,7 +637,8 @@ class EdibleInfo {
             this.section,
             {
                 valid: this.valid,
-                state: this.state
+                state: this.state,
+                images: this.images,
             }
         );
         this.setSection(updatedSection);
@@ -690,6 +695,7 @@ type EdibleUseSectionProps = {
     nutritionalValueHandler: (value: string) => void;
     preparationTypeHandler:  (value: string) => void;
     preparationHandler:      (value: string) => void;
+    images:                  ImageInfo[];
     valid: {
         partOfPlant:        [ValidationState, string];
         nutritionalValue:   [ValidationState, string];
@@ -707,7 +713,7 @@ type EdibleUseSectionProps = {
 
     }
 }
-export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, images, valid, state}: EdibleUseSectionProps){
 
     return(
         <>
@@ -762,11 +768,24 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     changeEventHandler={preparationHandler}
                 />
             </div>
+
+            {/* Image */}
+            <div className={styles.formItem}>
+                <DropdownInput
+                    placeHolder={"Image"}
+                    defaultValue={state.edibleImage}
+                    required={true}
+                    state={valid.image[0]}
+                    errorText={valid.image[1]}
+                    options={images.map((image) => image.state.image_name)}
+                />
+            </div>
         </>
     )
 }
 
 class ImageInfo{
+    edibles: EdibleInfo[] = [];
 
     // Store the state of the section
     state = {
@@ -788,10 +807,19 @@ class ImageInfo{
 
     // Handlers that update the state
     handleImageUrlChange    = (value : string) => {this.state.image_url    = value};
-    handleNameChange        = (value : string) => {this.state.image_name   = value; };
+    handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
     handleCreditChange      = (value : string) => {this.state.image_credit = value};
     handleTagsChange        = (value : string) => {this.state.image_tags   = value};
 
+    // Update the names
+    updateNames = () => {
+        // Loop through all the edibles and update their names
+        for(let i = 0; i < this.edibles.length; i++){
+            this.edibles[i].images = [this]
+            this.edibles[i].reRenderSection();
+            console.log(this.edibles[i].images)
+        }
+    }
 
     // Update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -879,30 +907,41 @@ export function ImageSection({descriptionHandler, imageURLHandler, creditHandler
     // Upload the image to imgbb and then pass the url to the handler and update the image url state
     const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
 
-        // Prevent the default event and grab the file selected
+        // Prevent the default behaviour
         event.preventDefault();
-        const file = event.target.files?.[0];
 
-        // If there is no file then return
-        if(!file) return;
+        // Get the file from the event
+        const selectedFile = event.target.files;
+
+        // If there is no file selected then return
+        if (!selectedFile) {
+            console.log('Please select a file.');
+            return;
+        }
 
         // Create a new form data object and append the file to it
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('file', selectedFile[0]);
+        formData.append('id', 'bob');
 
-        // Upload the image to imgbb
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=877ed2f3c890826488e67dfc295668d4`, {
-            method: 'POST',
-            body: formData,
-        });
 
-        // Get the response and update the image url state and pass it to the handler
-        const data = await response.json();
-        setImageURL(data.data.url);
-        imageURLHandler(data.data.url);
+        try {
+            // Send the form data to the server
+            const response = await fetch('/api/files/upload', {
+                method: 'POST',
+                body: formData,
+            });
 
-        // Debug the data
-        console.log(data)
+            // If the response is ok then get the json data and set the image url
+            if (response.ok) {
+                console.log('File uploaded successfully.');
+            } else {
+                const data = await response.json();
+                console.log(data);
+            }
+        } catch (error) {
+            console.log('An error occurred.');
+        }
     }
 
 
@@ -1996,6 +2035,18 @@ export default function CreatePlant() {
     useEffect(() => {
         console.log(session)
     }, [session])
+
+    // Whenever the images change update the names in edit mode
+    useEffect(() => {
+
+
+        // Loop through the image refs
+        for(let i = 0; i < imageInfoRef.current.length; i++){
+            imageInfoRef.current[i].edibles = edibleInfoRef.current
+            console.log(imageInfoRef.current[i])
+        }
+
+    }, [imageInfoRef.current])
 
     return (
         <>

@@ -1,9 +1,9 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import mysql from 'serverless-mysql';
-import {USE_POSTGRES} from "@/modules/constants";
-import {PostgresSQL, SQLDatabase} from "@/modules/databse";
-import {GetOrgin} from "@/modules/api_tools";
+import {USE_POSTGRES} from "@/lib/constants";
+import {PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {GetOrgin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 

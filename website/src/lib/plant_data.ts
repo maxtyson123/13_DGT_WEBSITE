@@ -1,5 +1,5 @@
 // Define the data for the plant
-import {getFromCache, saveToCache} from "@/modules/cache";
+import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 
 export interface PlantData {

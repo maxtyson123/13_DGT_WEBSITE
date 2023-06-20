@@ -1,8 +1,9 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Redo the images for the plants, upload ftp
-// TODO: Clean up json a bit, make oop
+// TODO: Redo the images for the plants, image names, upload ftp
 // TODO: Author of plant and last modified date
+// TODO: More attachments
+// TODO: Redo JSON
 // TODO: Use SQL
 // TODO: Redo css
 // TODO: JSDoc comments
@@ -25,7 +26,7 @@ import Image from "next/image";
 import Stats from "@/components/stats";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
-import {getFromCache, saveToCache} from "@/modules/cache";
+import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import ScrollingPlant from "@/components/scrolling_plant";
 

@@ -7,7 +7,7 @@ import {
     PlantData,
     PlantDataApi,
     ValidPlantData
-} from "@/modules/plant_data";
+} from "@/lib/plant_data";
 import axios from "axios";
 
 export default async function handler(

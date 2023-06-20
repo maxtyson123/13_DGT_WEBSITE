@@ -1,9 +1,7 @@
 import styles from "@/styles/plant_card.module.css"
 import Link from "next/link";
-import {fetchPlant, getNamesInPreference, PlantData} from "@/modules/plant_data";
-import axios from "axios";
+import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
 import {useEffect, useRef, useState} from "react";
-import {getFromCache, saveToCache} from "@/modules/cache";
 import Image from "next/image";
 
 // Define the props for the plant card and the types for the plant data
@@ -41,7 +39,7 @@ export default function PlantCardData({ data }: PlantCardProps){
                 <div className={styles.imageContainer}>
                     <Image
                          src={images[0] ? images[image_index].path : "/media/images/loading.gif"}
-                         alt={images[0] ? images[image_index].name : "Loading"}
+                         alt={images[0] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
                          fill
                          style={{objectFit: "contain"}}
                     />

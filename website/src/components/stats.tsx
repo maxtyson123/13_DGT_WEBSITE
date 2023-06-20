@@ -2,7 +2,7 @@ import styles from "@/styles/stats.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useRef, useState} from "react";
-import {getFromCache, saveToCache} from "@/modules/cache";
+import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 
 export default function Stats(){
