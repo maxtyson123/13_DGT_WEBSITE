@@ -3,6 +3,7 @@ import React, {useEffect, useRef} from "react";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCopyright} from "@fortawesome/free-solid-svg-icons";
+import {ImageMetaData} from "@/lib/plant_data";
 
 interface AutoSectionProps{
     section: any
@@ -76,12 +77,12 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index].meta.name ? images[image_index].meta.name : "Loading"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
             </div>
         </>
     )
@@ -163,12 +164,12 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
             </div>
         </>
     )
@@ -248,12 +249,12 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
             <div className={styles.imageContainer}>
                 <Image
                     src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? images[image_index].meta.name : "Loading"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? images[image_index].meta.credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
             </div>
         </>
     )
