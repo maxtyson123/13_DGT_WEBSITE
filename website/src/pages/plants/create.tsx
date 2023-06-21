@@ -1169,7 +1169,12 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
                                 state={value.valid && 'image' in value.valid ? value.valid.image[0] : "normal"}
                                 errorText={value.valid && 'image' in value.valid ? value.valid.image[1] : "No Error"}
                                 options={images}
-                                changeEventHandler={value?.handleImageChange}
+                                changeEventHandler={
+                                                        value instanceof EdibleInfo ||
+                                                        value instanceof MedicalInfo ||
+                                                        value instanceof CraftInfo
+                                                        // Any other classes that use images here...
+                                                        ? value.handleImageChange : undefined}
                             />
                         </div>
                             :
@@ -1302,7 +1307,7 @@ export default function CreatePlant() {
                 isValid = false;
                 if(elementThatNeedsFocus === null) elementThatNeedsFocus = "english-name";
             }
-        } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]) }
+        } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]);  }
 
         // Moari Name
         if(moariName === ""){
@@ -2145,7 +2150,7 @@ export default function CreatePlant() {
                                     <h1 className={styles.sectionTitle}>Basic Info</h1>
 
                                     {/* Plant name */}
-                                    <div className={styles.formItem} id={"english-name"}>
+                                    <div className={styles.formItem} id={"english-name"} >
                                         <SmallInput
                                             placeHolder={"English Name"}
                                             defaultValue={importedJSON.english_name}

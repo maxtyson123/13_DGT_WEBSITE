@@ -100,9 +100,6 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
     const changeHandler = (value: string) => {
         setInputValue(value);
 
-        // User has changed the value, so the previous state is no longer valid
-        setThisState("normal");
-
         // Pass to the handler if it exists
         if (changeEventHandler) {
             changeEventHandler(value);
@@ -114,7 +111,6 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
             changeHandler(defaultValue)
         }
     }, [defaultValue])
-
 
 
     return(
@@ -200,8 +196,8 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
     const changeHandler = (value: string) => {
         setInputValue(value);
 
-        // User has changed the value, so the previous state is no longer valid
-        setThisState("normal");
+
+        
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -267,9 +263,6 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
                                 // Update the value
                                 setInputValue(value);
 
-                                // User has changed the value, so the previous state is no longer valid
-                                setThisState("normal")
-
                                 // Pass to the handler if it exists
                                 if (changeEventHandler) {
                                     changeEventHandler(value);
@@ -332,9 +325,6 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
 
     const changeHandler = (value: string) => {
         setInputValue(value);
-
-        // User has changed the value, so the previous state is no longer valid
-        setThisState("normal");
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -453,10 +443,7 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
 
     const changeHandler = (value: string) => {
         setInputValue(value);
-
-        // User has changed the value, so the previous state is no longer valid
-        setThisState("normal");
-
+        
         // Pass to the handler if it exists
         if (changeEventHandler) {
             changeEventHandler(value);

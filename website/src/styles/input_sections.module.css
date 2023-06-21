@@ -1,4 +1,4 @@
-.selectBorder{
+.normal .selectBorder{
     border: 2px solid var(--secondary-gray);
     border-radius: 8px;
 }
