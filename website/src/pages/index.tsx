@@ -1,6 +1,6 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Redo the images for the plants, image names, upload ftp
+// TODO: Redo the images for the plants, image names
 // TODO: Author of plant and last modified date
 // TODO: More attachments
 // TODO: Redo JSON

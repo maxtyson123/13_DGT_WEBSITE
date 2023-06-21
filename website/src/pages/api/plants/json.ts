@@ -4,6 +4,7 @@ import {
     CleanAPIData,
     ConvertApiIntoPlantData,
     ConvertPlantDataIntoApi,
+    fixAttachmentsPaths,
     PlantData,
     PlantDataApi,
     ValidPlantData
@@ -54,7 +55,7 @@ export default async function handler(
 
                 // If there is no plant data, return an error
                 if (plantsInfo.data.error) {
-                    return response.status(404).json({ error: plantsInfo.data.error });
+                    return response.status(404).json({ error: plantsInfo.data.error, message: "No data" });
                 }
 
                 let apiData = plantsInfo.data as PlantDataApi;
@@ -63,12 +64,18 @@ export default async function handler(
                 apiData = CleanAPIData(apiData);
 
                 // Convert the data into the PlantData format
-                const plantOBJ = ConvertApiIntoPlantData(apiData);
+                let plantOBJ = ConvertApiIntoPlantData(apiData);
 
                 // If the data is null then return an error
                 if(!plantOBJ){
                     return response.status(404).json({ error: 'Plant data count be converted into PlantData', apiData: apiData });
                 }
+
+                // Set the id
+                plantOBJ.id = Number(id);
+
+                // Fix the data
+                plantOBJ = fixAttachmentsPaths(plantOBJ);
 
                 return response.status(200).json({ data: plantOBJ});
 

@@ -1,6 +1,6 @@
 import {Canvas, useThree} from "@react-three/fiber";
 import {PlantModel} from "@/components/plant_model";
-import { Environment } from '@react-three/drei'
+import {Environment} from "@react-three/drei";
 
 
 export default function ScrollingPlant() {
@@ -40,7 +40,7 @@ function Scene() {
     return (
         <>
             {/* Use the Environment component from drei to add HDR lighting to the scene */}
-            <Environment preset={"forest"} />
+            <Environment files={"/data/forest_slope_1k.hdr"} />
 
             {/* Add the plant model to the scene */}
             <PlantModel/>

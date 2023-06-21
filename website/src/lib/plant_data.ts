@@ -485,9 +485,6 @@ export async function fetchPlant (id: number) {
             // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
             plantOBJ = plantData as PlantData
 
-            // Update the id of the object because the api doesnt return it (TODO: Should probably fix this)
-            plantOBJ.id = id
-
             // Set the plant data in the cache
             saveToCache("plant_" + id, plantOBJ)
 
@@ -502,4 +499,19 @@ export async function fetchPlant (id: number) {
 
     // Set the plant data
     return plantOBJ;
+}
+
+export function fixAttachmentsPaths (plant: PlantData) {
+    // Loop through the attachments and set the propper path
+    for(let i = 0; i < plant.attachments.length; i++) {
+
+        // If the attachment doesnt start with a website url then it is using this server
+        if(plant.attachments[i].path.startsWith("http")) {
+            continue;
+        }
+
+        plant.attachments[i].path = `${process.env.NEXT_PUBLIC_FTP_PUBLIC_URL}/plants/${plant.id}/${plant.attachments[i].path}`;
+    }
+
+    return plant;
 }

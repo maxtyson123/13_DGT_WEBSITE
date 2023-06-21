@@ -16,6 +16,7 @@ import {
     ConvertPlantDataIntoApi,
     emptyPlantData,
     fetchPlant,
+    fixAttachmentsPaths,
     ImageMetaData,
     PlantData,
     ValidPlantData
@@ -788,11 +789,18 @@ class ImageInfo{
     edibles: EdibleInfo[] = [];
 
     // Store the state of the section
-    state = {
+    state: {
+        image_url:      string;
+        image_name:     string;
+        image_credit:   string;
+        image_tags:     string;
+        image_file:     File | null;
+    } = {
         image_url:      "",
         image_name:     "",
         image_credit:   "",
         image_tags:     "",
+        image_file:     null,
     }
 
     // Store the validation state of the section
@@ -806,7 +814,8 @@ class ImageInfo{
     section: JSX.Element = <></>;
 
     // Handlers that update the state
-    handleImageUrlChange    = (value : string) => {this.state.image_url    = value};
+    handleImageChange       = (file : File)    => {this.state.image_file = file};
+    handeURLChange          = (value : string) => {this.state.image_url   = value};
     handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
     handleCreditChange      = (value : string) => {this.state.image_credit = value};
     handleTagsChange        = (value : string) => {this.state.image_tags   = value};
@@ -826,8 +835,9 @@ class ImageInfo{
     updateSection = () => {
         this.setSection(
             <ImageSection
-                descriptionHandler={this.handleNameChange}
-                imageURLHandler={this.handleImageUrlChange}
+                nameHandler={this.handleNameChange}
+                imageFileHandler={this.handleImageChange}
+                imageURLHandler={this.handeURLChange}
                 creditHandler={this.handleCreditChange}
                 tagsHandler={this.handleTagsChange}
                 valid={this.valid}
@@ -881,8 +891,9 @@ class ImageInfo{
 
 // Define the type of the props for the Image Section
 type ImageSectionProps = {
-    descriptionHandler:     (value: string) => void;
-    imageURLHandler:        (value: string) => void;
+    nameHandler:     (value: string) => void;
+    imageURLHandler:       (value: string) => void;
+    imageFileHandler:       (file: File)    => void;
     creditHandler:          (value: string) => void;
     tagsHandler:            (value: string) => void;
     valid: {
@@ -898,10 +909,10 @@ type ImageSectionProps = {
         image_tags: string;
     }
 }
-export function ImageSection({descriptionHandler, imageURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
+export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
 
     // States
-    const [imageURL, setImageURL ]  = useState(state.image_url)
+    const [imageLocalURL, setImageLocalURL ]  = useState(state.image_url)
 
 
     // Upload the image to imgbb and then pass the url to the handler and update the image url state
@@ -919,29 +930,15 @@ export function ImageSection({descriptionHandler, imageURLHandler, creditHandler
             return;
         }
 
-        // Create a new form data object and append the file to it
-        const formData = new FormData();
-        formData.append('file', selectedFile[0]);
-        formData.append('id', 'bob');
+        const file = selectedFile[0];
 
+        // Handle the change of the file
+        imageFileHandler(file);
+        imageURLHandler(file.name);
 
-        try {
-            // Send the form data to the server
-            const response = await fetch('/api/files/upload', {
-                method: 'POST',
-                body: formData,
-            });
+        // Set the local image ur to the file
+        setImageLocalURL(URL.createObjectURL(file));
 
-            // If the response is ok then get the json data and set the image url
-            if (response.ok) {
-                console.log('File uploaded successfully.');
-            } else {
-                const data = await response.json();
-                console.log(data);
-            }
-        } catch (error) {
-            console.log('An error occurred.');
-        }
     }
 
 
@@ -949,8 +946,8 @@ export function ImageSection({descriptionHandler, imageURLHandler, creditHandler
         <>
             {/* Image / Uploader */}
             <div className={styles.formItem}>
-                {imageURL !== "" ?
-                    <Image style={{borderRadius: 8}} src={imageURL} alt={imageURL} width={600} height={600} objectFit={"contain"}/>
+                {imageLocalURL !== "" ?
+                    <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
                     :
                     <input type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
                 }
@@ -964,7 +961,7 @@ export function ImageSection({descriptionHandler, imageURLHandler, creditHandler
                     required={true}
                     state={valid.image_name[0]}
                     errorText={valid.image_name[1]}
-                    changeEventHandler={descriptionHandler}
+                    changeEventHandler={nameHandler}
                 />
             </div>
 
@@ -1660,7 +1657,9 @@ export default function CreatePlant() {
             const imageSection = imageInfoRef.current[imageInfoRef.current.length-1];
 
             // Update the values
-            imageSection.handleImageUrlChange(jsonContents.attachments[i].path)
+            if(jsonContents.id !== 1) {
+                imageSection.handeURLChange(jsonContents.attachments[i].path)
+            }
             const metaData = jsonContents.attachments[i].meta as ImageMetaData
             imageSection.handleNameChange(metaData.name)
             imageSection.handleCreditChange(metaData.credits)
@@ -1799,7 +1798,9 @@ export default function CreatePlant() {
                 }
 
                 // Convert the file contents to JSON
-                const jsonContents = JSON.parse(event.target.result);
+                let jsonContents = JSON.parse(event.target.result);
+                jsonContents = fixAttachmentsPaths(jsonContents)
+                console.log(fixAttachmentsPaths(jsonContents))
 
                 // Check if it is the valid type of JSON
                 if (!ValidPlantData(jsonContents)) {
@@ -1945,10 +1946,32 @@ export default function CreatePlant() {
             setIsLoading(false);
             return;
         }
+        const newId = result.data.id
 
-        // Redirect to the plant page
-        if(result.data.id !== undefined){
-            const url = "/plants/" + result.data.id
+        if(newId !== undefined){
+            // Loop through each image info and upload the image
+            for(let i = 0; i < imageInfoRef.current.length; i++){
+
+                // If the image url is alread set to have a url, skip it
+                if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
+                    continue;
+                }
+
+                // Get the file
+                const file = imageInfoRef.current[i].state.image_file
+
+                // Check if there is a file
+                if(!file){
+                    continue;
+                }
+
+                // Upload the image
+                await uploadImage(file, newId)
+
+            }
+
+            // Redirect to the plant page
+            const url = "/plants/" + newId
             console.log(url);
             window.location.href = url;
         }
@@ -2031,22 +2054,33 @@ export default function CreatePlant() {
         }
     }
 
-    // Debug the session
-    useEffect(() => {
-        console.log(session)
-    }, [session])
-
-    // Whenever the images change update the names in edit mode
-    useEffect(() => {
+    const uploadImage = async (file: File, id: number) => {
 
 
-        // Loop through the image refs
-        for(let i = 0; i < imageInfoRef.current.length; i++){
-            imageInfoRef.current[i].edibles = edibleInfoRef.current
-            console.log(imageInfoRef.current[i])
+        // Create a new form data object and append the file to it
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('id', id.toString());
+
+
+        try {
+            // Send the form data to the server
+            const response = await fetch('/api/files/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            // If the response is ok then get the json data and set the image url
+            if (response.ok) {
+                console.log('File uploaded successfully.');
+            } else {
+                const data = await response.json();
+                console.log(data);
+            }
+        } catch (error) {
+            console.log('An error occurred.');
         }
-
-    }, [imageInfoRef.current])
+    }
 
     return (
         <>
