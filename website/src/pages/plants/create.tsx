@@ -349,7 +349,7 @@ class CraftInfo {
         // If there is no image selected then show an error otherwise the input is valid
         if(this.state.image === "") {
             this.valid.image = ["error", "Please select what image is related to the use of this plant"] as [ValidationState, string];
-            //TODO: FIX IMAGES isValid = false;
+            isValid = false;
         }else{ this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
@@ -506,7 +506,7 @@ class MedicalInfo {
         // If there is no image selected then show an error otherwise the input is valid
         if(this.state.image === "") {
             this.valid.image = ["error", "Please select what image is related to the medical use of this plant"] as [ValidationState, string];
-            //TODO: FIX IMAGES isValid = false;
+            isValid = false;
         }else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
@@ -585,10 +585,7 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
     )
 }
 
-
 class EdibleInfo {
-
-    images: ImageInfo[] = [];
 
     // Store the data for the section at its current state
     state = {
@@ -596,7 +593,7 @@ class EdibleInfo {
         nutritionalValue:   "",
         preparation:        "",
         preparationType:    "",
-        edibleImage:        "",
+        image:              "",
     };
 
     // Store the validation state for each input
@@ -615,7 +612,7 @@ class EdibleInfo {
     handleNutritionalValueChange    = (value : string) => {this.state.nutritionalValue = value};
     handlePreparationChange         = (value : string) => {this.state.preparation      = value};
     handlePreparationTypeChange     = (value : string) => {this.state.preparationType  = value};
-    handleImageChange               = (value : string) => {this.state.edibleImage      = value};
+    handleImageChange               = (value : string) => {this.state.image            = value};
 
     // Update the section to show the current state
     setSection = (section: JSX.Element) => {this.section = section};
@@ -628,7 +625,6 @@ class EdibleInfo {
                 preparationTypeHandler={this.handlePreparationTypeChange}
                 valid={this.valid}
                 state={this.state}
-                images={this.images}
             />
         );
     };
@@ -638,11 +634,14 @@ class EdibleInfo {
             this.section,
             {
                 valid: this.valid,
-                state: this.state,
-                images: this.images,
+                state: this.state
             }
         );
         this.setSection(updatedSection);
+    }
+
+    showErrorInImage = () => {
+
     }
 
     // Validate the section
@@ -673,9 +672,10 @@ class EdibleInfo {
         } else { this.valid.preparation = ["success", "No Error"] as [ValidationState, string]; }
 
         // If there is no image selected then show an error otherwise the input is valid
-        if(this.state.edibleImage === "") {
+        if(this.state.image === "") {
             this.valid.image = ["error", "Please select what image is related to the edible use of this plant"];
-            //TODO: FIX IMAGES isValid = false;
+            isValid = false;
+            this.showErrorInImage();
         } else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
@@ -696,7 +696,6 @@ type EdibleUseSectionProps = {
     nutritionalValueHandler: (value: string) => void;
     preparationTypeHandler:  (value: string) => void;
     preparationHandler:      (value: string) => void;
-    images:                  ImageInfo[];
     valid: {
         partOfPlant:        [ValidationState, string];
         nutritionalValue:   [ValidationState, string];
@@ -710,11 +709,10 @@ type EdibleUseSectionProps = {
         nutritionalValue:   string;
         preparation:        string;
         preparationType:    string;
-        edibleImage:        string;
-
+        image:        string;
     }
 }
-export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, images, valid, state}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
 
     return(
         <>
@@ -769,24 +767,11 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     changeEventHandler={preparationHandler}
                 />
             </div>
-
-            {/* Image */}
-            <div className={styles.formItem}>
-                <DropdownInput
-                    placeHolder={"Image"}
-                    defaultValue={state.edibleImage}
-                    required={true}
-                    state={valid.image[0]}
-                    errorText={valid.image[1]}
-                    options={images.map((image) => image.state.image_name)}
-                />
-            </div>
         </>
     )
 }
 
 class ImageInfo{
-    edibles: EdibleInfo[] = [];
 
     // Store the state of the section
     state: {
@@ -813,22 +798,14 @@ class ImageInfo{
 
     section: JSX.Element = <></>;
 
+    updateNames = () => {}
+
     // Handlers that update the state
     handleImageChange       = (file : File)    => {this.state.image_file = file};
     handeURLChange          = (value : string) => {this.state.image_url   = value};
     handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
     handleCreditChange      = (value : string) => {this.state.image_credit = value};
     handleTagsChange        = (value : string) => {this.state.image_tags   = value};
-
-    // Update the names
-    updateNames = () => {
-        // Loop through all the edibles and update their names
-        for(let i = 0; i < this.edibles.length; i++){
-            this.edibles[i].images = [this]
-            this.edibles[i].reRenderSection();
-            console.log(this.edibles[i].images)
-        }
-    }
 
     // Update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -1150,8 +1127,9 @@ interface infoDisplayerProps{
     newInfo         : () => void
     name            : string
     setRenderKey    : React.Dispatch<React.SetStateAction<number>>
+    imageRef?       : React.MutableRefObject<ImageInfo[]>
 }
-function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerProps){
+function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDisplayerProps){
 
     // Calculate the id of the info
     let id = name.toLowerCase().replace(" ", "-");
@@ -1160,6 +1138,8 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerPro
         infoRef.current.splice(id, 1);
         setRenderKey(prevState => prevState + 1)
     }
+
+    const images = imageRef ? imageRef.current.map((value, index) => {return  value.state.image_name}) : ["No Images"];
 
     return(
         <>
@@ -1178,6 +1158,23 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey} : infoDisplayerPro
 
                         {/* Add the section */}
                         {value.section}
+
+                        {/* Image */}
+                        {imageRef ?
+                        <div className={styles.formItem}>
+                            <DropdownInput
+                                placeHolder={"Image"}
+                                defaultValue={value.state && 'image' in value.state ? value.state.image : ""}
+                                required={true}
+                                state={value.valid && 'image' in value.valid ? value.valid.image[0] : "normal"}
+                                errorText={value.valid && 'image' in value.valid ? value.valid.image[1] : "No Error"}
+                                options={images}
+                                changeEventHandler={value?.handleImageChange}
+                            />
+                        </div>
+                            :
+                        <></>
+                        }
                     </div>
                 </div>
             ))}
@@ -1513,7 +1510,7 @@ export default function CreatePlant() {
             }
 
             edibleInfoOBJ.part_of_plant = thisEdibleInfo.partOfPlant;
-            edibleInfoOBJ.image_of_part = thisEdibleInfo.edibleImage;
+            edibleInfoOBJ.image_of_part = thisEdibleInfo.image;
             edibleInfoOBJ.nutrition = thisEdibleInfo.nutritionalValue;
             edibleInfoOBJ.preparation = thisEdibleInfo.preparation;
             edibleInfoOBJ.preparation_type = thisEdibleInfo.preparationType;
@@ -1688,6 +1685,7 @@ export default function CreatePlant() {
                     edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutritional_value)
                     edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
+                    edibleSection.handleImageChange(jsonContents.sections[i].image_of_part)
 
                     // Re-render the section
                     edibleSection.reRenderSection()
@@ -1705,6 +1703,7 @@ export default function CreatePlant() {
                     medicalSection.handleTypeChange(jsonContents.sections[i].medical_type)
                     medicalSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     medicalSection.handeUseValueChange(jsonContents.sections[i].use)
+                    medicalSection.handleImageChange(jsonContents.sections[i].image)
 
                     // Re-render the section
                     medicalSection.reRenderSection()
@@ -1722,6 +1721,8 @@ export default function CreatePlant() {
                     craftSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
                     craftSection.handleUseValueChange(jsonContents.sections[i].use)
                     craftSection.handleAdditionalInfoChange(jsonContents.sections[i].additonal_info)
+                    craftSection.handleImageChange(jsonContents.sections[i].image)
+                    console.log(craftSection)
 
                     // Re-render the section
                     craftSection.reRenderSection()
@@ -1823,8 +1824,6 @@ export default function CreatePlant() {
         // Click the file upload input
         fileUploadInput.click();
     }
-
-
 
     const downloadPlant = () => {
 
@@ -2082,6 +2081,21 @@ export default function CreatePlant() {
         }
     }
 
+    const updateNames = () => {
+        setRenderKeyEdible(prevState => prevState + 1)
+        setRenderKeyMedical(prevState => prevState + 1)
+        setRenderKeyCraft(prevState => prevState + 1)
+    }
+
+    useEffect(() => {
+
+        // Register the updateNames names fundtion to the image info object
+        for (let i = 0; i < imageInfoRef.current.length; i++) {
+            imageInfoRef.current[i].updateNames = updateNames;
+        }
+
+    }, [imageInfoRef.current])
+
     return (
         <>
             {/* Set up the page header and navbar */}
@@ -2232,6 +2246,7 @@ export default function CreatePlant() {
                                         newInfo={newEdibleInfo}
                                         key={renderKeyEdible}
                                         setRenderKey={setRenderKeyEdible}
+                                        imageRef={imageInfoRef}
                                     />
                                 </div>
 
@@ -2242,6 +2257,7 @@ export default function CreatePlant() {
                                         newInfo={newMedicalInfo}
                                         key={renderKeyMedical}
                                         setRenderKey={setRenderKeyMedical}
+                                        imageRef={imageInfoRef}
                                     />
                                 </div>
 
@@ -2252,6 +2268,7 @@ export default function CreatePlant() {
                                         newInfo={newCraftInfo}
                                         key={renderKeyCraft}
                                         setRenderKey={setRenderKeyCraft}
+                                        imageRef={imageInfoRef}
                                     />
                                 </div>
 

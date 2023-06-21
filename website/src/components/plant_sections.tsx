@@ -58,18 +58,9 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
     const preparationRef = useRef<HTMLParagraphElement>(null)
 
     // Get the image of the part of the plant
-    let image_index = parseInt(section.image_of_part.split(" ")[1])
-
-    if (isNaN(image_index)){
-        image_index = 0
-    }else{
-        image_index -= 1
-    }
-
-    // Check that it is a valid index
-    if (image_index < 0 || image_index >= images.length){
-        image_index = 0
-    }
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image_of_part
+    })
 
 
     const imageDiv = (
@@ -82,7 +73,7 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
             </div>
         </>
     )
@@ -145,18 +136,9 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     const preparationRef = useRef<HTMLDivElement>(null)
 
     // Get the image of the part of the plant
-    let image_index = parseInt(section.image.split(" ")[1])
-
-    if (isNaN(image_index)){
-        image_index = 0
-    }else{
-        image_index -= 1
-    }
-
-    // Check that it is a valid index
-    if (image_index < 0 || image_index >= images.length){
-        image_index = 0
-    }
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image
+    })
 
 
     const imageDiv = (
@@ -169,7 +151,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
             </div>
         </>
     )
@@ -229,19 +211,10 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     const craft_useRef = useRef<HTMLDivElement>(null)
     const additional_infoRef = useRef<HTMLDivElement>(null)
 
-    // Get the image of the part of the plant
-    let image_index = parseInt(section.image.split(" ")[1])
-
-    if (isNaN(image_index)){
-        image_index = 0
-    }else{
-        image_index -= 1
-    }
-
-    // Check that it is a valid index
-    if (image_index < 0 || image_index >= images.length){
-        image_index = 0
-    }
+    // Find the same image name in the images array
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image
+    })
 
 
     const imageDiv = (
@@ -254,7 +227,7 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Loading"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
             </div>
         </>
     )
