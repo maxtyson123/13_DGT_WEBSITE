@@ -7,6 +7,7 @@
 
 /*
  Defines Some Global CSS Variables for the theme
+ NOTE: THEME IS CHANGED AND SET IN THE accessibility.js FILE
  */
 :root{
     --LIGHT-main-background: #ffffff;
@@ -93,6 +94,9 @@ body{
     align-items: center;
 }
 
+/*
+ When the screen is smaller than 1500px, make the column take up the entire width
+ */
 @media only screen and (max-width: 1500px) {
     .column{
         width: 100%;
@@ -106,4 +110,22 @@ body{
     content: "";
     display: table;
     clear: both;
+}
+
+/*
+ Centring can be used a lot so make a global class for it
+ */
+.gridCentre{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+/*
+ Centring can be used a lot so make a global class for it
+ */
+.flex-centre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

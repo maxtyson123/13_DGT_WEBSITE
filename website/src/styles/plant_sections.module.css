@@ -18,23 +18,23 @@
 
 .sectionContainer h1{
     font-size: 64px;
-    font-weight: 400;
+
     text-align: center;
 }
 
 .sectionContainer h2 {
     font-size: 32px;
-    font-weight: 400;
+
 }
 
 .sectionContainer h3{
     font-size: 24px;
-    font-weight: 400;
+
 }
 
 .sectionContainer p{
     font-size: 18px;
-    font-weight: 400;
+
 }
 
 .sectionContainer ol{

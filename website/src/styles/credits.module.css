@@ -1,36 +1,51 @@
+/*
+ Place the credits container in the bottom left corner, ensure it is always there with a fixed position and a high z-index
+ Make the font light and the background dark green, rounded and give it a shadow for depth
+ Add some padding to separate the text from the border, align the text to the centre and make it a pointer to show it is clickable
+ */
 .creditsContainer{
     position: fixed;
+    z-index: 999;
     bottom: 0;
     left: 2.5%;
     color: var(--text-light);
     background-color: var(--darker-main-green);
-    z-index: 999;
-    padding: 10px;
     border-radius: 10px 10px 0 0;
+    box-shadow: 0px 0px 10px 0px var(--shadow-less);
+    padding: 10px;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0px 0px 10px 0px var(--shadow-less);
 }
 
+/*
+ When hiding the bottom make it disappear by making the opacity 0 and the height 0 so that it is animatable
+ */
 .hidden{
-
     opacity: 0;
     height: 0;
     overflow: hidden;
 }
+
+/*
+ When shown make the opacity 1 and the height auto so that it is animatable
+ */
 .contentContainer{
     opacity: 1;
     height: auto;
 }
 
+/*
+ Make the items in the credits container take up the entire width and have a blue underline
+ */
 .item{
     width: 100%;
     color: var(--blue);
     text-decoration: underline;
-
 }
 
-
+/*
+ The link should be seperated from the icon by 5px
+ */
 .item a{
     margin-left: 5px;
 }

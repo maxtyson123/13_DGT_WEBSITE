@@ -1,47 +1,70 @@
+/*
+ Make the header text light
+ Use a grid to divide the header into 5 columns, the middle one is larger and for the title
+ Center the text vertically and horizontally
+ */
 .plantHeader{
     color: var(--text-light);
-    text-align: center;
-    align-items: center;
-    justify-content: center;
     display: grid;
     grid-template-columns: .25fr .75fr 1.75fr .75fr .25fr;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0;
-    grid-row-gap: 0;
+    align-items: center;
+    justify-items: center;
 
 }
 
-.plantMainInfo{
-    color: var(--text-dark);
-}
-
+/*
+ The header id is rotated 90 degrees and a bit larger then the other texts becuase of this
+ */
 .plantId{
     transform: rotate(-90deg);
     font-size: 20px;
 }
 
+/*
+ The main text is dark and medium sized
+ */
+.plantMainInfo{
+    color: var(--text-dark);
+    font-size: 20px;
+}
+
+/*
+ The header title is large and should wrap if it is too long
+ */
 .headerTitle{
     font-size: 40px;
     word-wrap: break-word;
 }
 
-.plantMainInfo h1{
+/*
+ These are the titles, they should be large and centered
+ */
+.plantMainInfo h1, .monthsContainer .title{
     font-size: 64px;
     text-align: center;
-    margin: 0;
+
 }
 
+/*
+ The subtitles are the alternative titles, they should be large and centered but not as large as the title
+ */
 .plantMainInfo h2{
     font-size: 24px;
     text-align: center;
-    margin: 0;
+
 }
 
+/*
+ Make the description text a bit offset from the top
+ */
 .description{
-    font-size: 20px;
     padding-top: 35px;
 }
 
+/*
+ Make the plant image take up all of the space it can
+ Hide the overflow as the corners are rounded
+ */
 .plantImageContainer{
     width: 100%;
     height: 100%;
@@ -100,8 +123,6 @@
 }
 
 .monthsContainer .title{
-    font-size: 64px;
-    text-align: center;
     grid-column-start: 1;
     grid-column-end: 4;
 

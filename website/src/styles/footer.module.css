@@ -1,13 +1,18 @@
+/*
+ The footer background image should be the width of the screen and 30vh tall
+ Blur so that it is not distracting as it is not the main focus
+ */
 .footerBackgroundImage{
     width: 100vw;
     height: 30vh;
     filter: blur(1px);
 }
 
+/*
+ The footer container should be a grid with 2 columns, one for the search box and one for the links
+ Add some room bteewen the top of the page and the footer
+ */
 .footer{
-    width: 100vw;
-    height: 30vh;
-    bottom: 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
@@ -15,30 +20,40 @@
     margin-top: 100px;
 }
 
+/*
+ Make it take a large portion of the the footer column
+ */
 .searchBoxContainer{
     width: 80%;
 }
 
-
-.links h1{
-    font-style: normal;
-    font-weight: 500;
-    font-size: 64px;
-    line-height: 75px;
-    color: white; /* Does not use themeing */
-}
-
-.link{
+/*
+ The links should be a medium size and white
+ */
+.links{
     font-size: 22px;
-    line-height: 38px;
     color: white; /* Does not use themeing */
 }
 
-.link p{
+/*
+ The title is a bit bigger
+ */
+.links h1{
+    font-size: 64px;
+}
+
+/*
+ Offset the link text from their icons
+ */
+.links p{
     margin: 10px;
 }
 
+/*
+ On smaller screens the footer should be a single column as the search box will take up too much space so it is removed
+ */
 @media only screen and (max-width: 800px) {
+
     .footer {
         grid-template-columns: 1fr;
     }

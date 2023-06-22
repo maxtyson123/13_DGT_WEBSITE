@@ -1,11 +1,13 @@
 .title{
-    color: var(--text-light);
     text-align: center;
     font-size: 64px;
 }
 
 .calenderContainer{
     width: 100%;
+}
+
+.title, .calenderContainer{
     color: var(--text-light);
 }
 
@@ -16,7 +18,7 @@
     grid-template-columns: .25fr 2.5fr .25fr;
     grid-template-rows: 1fr;
     align-items: center;
-    justify-content: center;
+    justify-items: center;
     text-align: center;
     font-size: 32px;
     padding: 2%;
@@ -74,7 +76,7 @@
     grid-column-end: 4;
     background-color: var(--main-green);
     border-radius: 10px 0px 0px 10px;
-    box-shadow: -10px 0 8px -8px var(--shadow);
+    box-shadow: 10px 0 8px -8px var(--shadow);
 }
 
 .end{

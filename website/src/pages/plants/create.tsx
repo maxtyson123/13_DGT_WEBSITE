@@ -40,6 +40,7 @@ import {Error} from "@/components/error";
 import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudArrowUp, faDoorOpen, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {globalStyles} from "@/lib/global_css";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -926,7 +927,7 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, cr
         <>
             {/* Image / Uploader */}
             <div className={styles.formItem}>
-                <div className={styles.fileUploader}>
+                <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
                     {imageLocalURL !== "" ?
                         <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
                         :
@@ -1131,7 +1132,7 @@ export function FileSection({nameHandler, fileHandler, URLHandler, creditHandler
         <>
             {/* Image / Uploader */}
             <div className={styles.formItem}>
-                <div className={styles.fileUploader}>
+                <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
                     {fileLocalURL !== "" ?
                         <>
                             <a href={fileLocalURL} target={"_blank"}>
@@ -2428,7 +2429,7 @@ export default function CreatePlant() {
                             <div className={"column"}>
 
                                 {/* Basic plant information */}
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
 
                                     {/* Section title */}
                                     <h1 className={styles.sectionTitle}>Basic Info</h1>
@@ -2516,7 +2517,7 @@ export default function CreatePlant() {
                                     </div>
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Date"}
                                         infoRef={dateInfoRef}
@@ -2526,7 +2527,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Edible Use"}
                                         infoRef={edibleInfoRef}
@@ -2537,7 +2538,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Medical Use"}
                                         infoRef={medicalInfoRef}
@@ -2548,7 +2549,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Craft Use"}
                                         infoRef={craftInfoRef}
@@ -2559,7 +2560,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Source"}
                                         infoRef={sourceInfoRef}
@@ -2569,7 +2570,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Custom Section"}
                                         infoRef={customInfoRef}
@@ -2583,7 +2584,7 @@ export default function CreatePlant() {
                             {/* Right Hand Column */}
                             <div className={"column"}>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Image"}
                                         infoRef={imageInfoRef}
@@ -2593,7 +2594,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
-                                <div className={styles.formSection}>
+                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"File"}
                                         infoRef={fileInfoRef}
@@ -2607,7 +2608,7 @@ export default function CreatePlant() {
 
                         <div className={"row"}>
 
-                            <div className={styles.submitButtonsContainer}>
+                            <div className={globalStyles.gridCentre}>
 
                                 {/* Upload to DB */}
                                 <div className={styles.formItem}>

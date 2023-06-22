@@ -19,13 +19,9 @@
 }
 
 /*
- Center the content of the header container using flexbox.
  Size the header container to be the same size as the mainBG.
  */
 .headerContainer{
-    display: grid;
-    justify-items: center;
-    align-items: center;
     width: 100vw;
     height: var(--headerHeight);
 }

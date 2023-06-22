@@ -1,16 +1,24 @@
+
+/*
+ Make the container take up the entire width of the parent element and give it some offset from the top
+ The background should be a red and the text should be light
+ Padding to give space between the text and the border, make the border rounded
+ Align the text to the centre
+ */
 .errorContainer{
+    margin-top: 10px;
     width: 100%;
     background-color: red;
     color: var(--text-light);
     border-radius: 20px;
     padding: 20px;
     text-align: center;
-
 }
 
+/*
+ Make the title large and bold
+ */
 .errorContainer h1{
     font-size: 32px;
-    line-height: 103%;
-    color: var(--text-light);
     font-weight: bold;
 }

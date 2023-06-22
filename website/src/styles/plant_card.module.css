@@ -68,7 +68,7 @@
  Give it a padding of 10% on the top and bottom to give it some space between the title and the description.
  */
 .description{
-    font-weight: 400;
+
     font-size: 16px;
     line-height: 24px;
     padding: 10% 0 10% 0;
@@ -102,7 +102,7 @@
  Give the button text a font-weight of 400 and a font-size of 24px to make it stand out.
  */
 .button p{
-    font-weight: 400;
+
     font-size: 24px;
     line-height: 28px;
 }
@@ -130,7 +130,7 @@
     border-radius: 15px;
     padding: 2% 4% 2% 4%;
     margin: 2%;
-    font-weight: 400;
+
     font-size: 14px;
     text-align: center;
 
