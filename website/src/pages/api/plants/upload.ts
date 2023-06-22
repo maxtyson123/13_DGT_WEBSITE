@@ -44,6 +44,7 @@ export default async function handler(
             location_found,
             small_description,
             long_description,
+            author,
             months_ready_events,
             months_ready_start_months,
             months_ready_end_months,
@@ -84,6 +85,7 @@ export default async function handler(
         if(location_found === null)             { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
         if(small_description === null)          { return response.status(missingParametersErrorCode).json({ error: 'Small description parameter not found' }); }
         if(long_description === null)           { return response.status(missingParametersErrorCode).json({ error: 'Long description parameter not found' }); }
+        if(author === null)                     { return response.status(missingParametersErrorCode).json({ error: 'Author parameter not found' }); }
         if(months_ready_events === null)        { return response.status(missingParametersErrorCode).json({ error: 'Months ready events parameter not found' }); }
         if(months_ready_start_months === null)  { return response.status(missingParametersErrorCode).json({ error: 'Months ready start months parameter not found' }); }
         if(months_ready_end_months === null)    { return response.status(missingParametersErrorCode).json({ error: 'Months ready end months parameter not found' }); }
@@ -167,6 +169,7 @@ export default async function handler(
         let insetQueryValues = "";
         let getIDQuery = "(SELECT id FROM new_plant)";
 
+        // If it is editing then insert at the id instead of gererating a new one
         if(edit_id){
             insertQuery += `${tables.id}, `;
             insetQueryValues += `${edit_id}, `;
@@ -177,8 +180,8 @@ export default async function handler(
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}) `;
-        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}') RETURNING id;`;
+        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}, ${tables.author}, ${tables.last_modified}) `;
+        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', to_timestamp(${Date.now()} / 1000.0)) RETURNING id;`;
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS (

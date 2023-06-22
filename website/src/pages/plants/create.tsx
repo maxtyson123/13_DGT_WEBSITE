@@ -31,7 +31,7 @@ import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {faCloudArrowUp, faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -923,11 +923,18 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, cr
         <>
             {/* Image / Uploader */}
             <div className={styles.formItem}>
-                {imageLocalURL !== "" ?
-                    <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
-                    :
-                    <input type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
-                }
+                <div className={styles.imageUploader}>
+                    {imageLocalURL !== "" ?
+                        <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
+                        :
+                        <>
+                            <div className={styles.uploadButton}>
+                                <label htmlFor="files"><FontAwesomeIcon icon={faCloudArrowUp}/> Select Image</label>
+                                <input id="files" type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
+                            </div>
+                        </>
+                    }
+                </div>
             </div>
 
             {/* Image Name */}
@@ -1455,6 +1462,11 @@ export default function CreatePlant() {
         plantOBJ.location_found = location;
         plantOBJ.small_description = smallDescription;
         plantOBJ.long_description = largeDescription;
+        if(session && session.user)
+            plantOBJ.author = session.user.name ? session.user.name : "Unknown";
+        else
+            plantOBJ.author = "Unknown";
+        plantOBJ.last_modified = new Date().toISOString()
 
         // Image info
         for(let i = 0; i < imageInfoRef.current.length; i++) {

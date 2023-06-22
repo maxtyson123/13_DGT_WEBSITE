@@ -8,6 +8,8 @@ CREATE TABLE plants (
     location_found TEXT,
     small_description TEXT,
     long_description TEXT,
+    author TEXT,
+    last_modified TEXT,
 	PRIMARY KEY (id)
 );
 

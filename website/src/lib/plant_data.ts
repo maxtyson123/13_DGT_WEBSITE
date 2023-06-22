@@ -17,6 +17,8 @@ export interface PlantData {
     location_found:     string;
     small_description:  string;
     long_description:   string;
+    author:             string;
+    last_modified:      string;
     attachments: {
         path:           string;
         type:           string;
@@ -34,6 +36,8 @@ export interface PlantDataApi {
     location_found:             string;
     small_description:          string;
     long_description:           string;
+    author:                     string;
+    last_modified:              string;
     months_ready_events:        string[];
     months_ready_start_months:  string[];
     months_ready_end_months:    string[];
@@ -133,6 +137,8 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.location_found               == null
         || apiData.small_description            == null
         || apiData.long_description             == null
+        || apiData.author                       == null
+        || apiData.last_modified                == null
         || apiData.months_ready_events          == null
         || apiData.months_ready_start_months    == null
         || apiData.months_ready_end_months      == null
@@ -169,6 +175,8 @@ export function ValidPlantData(plantData : PlantData) : boolean {
         || plantData.location_found         == null
         || plantData.small_description      == null
         || plantData.long_description       == null
+        || plantData.author                 == null
+        || plantData.last_modified          == null
         || plantData.months_ready_for_use   == null
         || plantData.use                    == null
         || plantData.attachments            == null
@@ -195,6 +203,8 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.location_found    = apiData.location_found;
     plantData.small_description = apiData.small_description;
     plantData.long_description  = apiData.long_description;
+    plantData.author            = apiData.author;
+    plantData.last_modified     = apiData.last_modified;
 
     // Image info
     for(let i = 0; i < apiData.attachment_paths.length; i++) {
@@ -323,6 +333,8 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.location_found    = plantData.location_found;
     apiData.small_description = plantData.small_description;
     apiData.long_description  = plantData.long_description;
+    apiData.author            = plantData.author;
+    apiData.last_modified     = plantData.last_modified;
 
     // Date info
     for(let i = 0; i < plantData.months_ready_for_use.length; i++) {
@@ -397,6 +409,8 @@ export function emptyPlantData(){
         location_found:         "",
         small_description:      "",
         long_description:       "",
+        author:                 "",
+        last_modified:          "",
         attachments:            [],
         sections:               [],
     };
@@ -414,6 +428,8 @@ export function emptyPlantApiData(){
         location_found:             "",
         small_description:          "",
         long_description:           "",
+        author:                     "",
+        last_modified:              new Date().toISOString(),
         months_ready_events:        [],
         months_ready_start_months:  [],
         months_ready_end_months:    [],

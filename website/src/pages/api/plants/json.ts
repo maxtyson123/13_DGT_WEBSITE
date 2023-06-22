@@ -58,6 +58,11 @@ export default async function handler(
                     return response.status(404).json({ error: plantsInfo.data.error, message: "No data" });
                 }
 
+                // Convert the string date into a date object
+                if(plantsInfo.data.last_modified){
+                    plantsInfo.data.last_modified = new Date(plantsInfo.data.last_modified);
+                }
+
                 let apiData = plantsInfo.data as PlantDataApi;
 
                 // Clean the data

@@ -84,7 +84,7 @@ export default async function handler(
             switch (tableArray[i]) {
                 case 'plants':
                     // Select all the plant data
-                    selector += ` plants.preferred_name, plants.english_name, plants.maori_name, plants.latin_name, plants.location_found, plants.small_description, plants.long_description,`;
+                    selector += ` plants.${tables.preferred_name}, plants.${tables.english_name}, plants.${tables.maori_name}, plants.${tables.latin_name}, plants.${tables.location_found}, plants.${tables.small_description}, plants.${tables.long_description}, plants.${tables.author}, plants.${tables.last_modified},`;
                     break;
 
                 case 'months_ready_for_use':

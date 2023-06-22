@@ -146,6 +146,7 @@ export default function PlantPage() {
         router.push("/")
     }
 
+    // @ts-ignore
     return (
         <>
 
@@ -163,8 +164,8 @@ export default function PlantPage() {
 
 
                         <div  className={styles.headerItem}>
-                            <p>{plantNames[1]}</p>
-                            <p>{plantNames[2]}</p>
+                            <p>Author: {plantData ? plantData.author : "Author..."}</p>
+                            <p>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
 
                         </div>
 
@@ -185,7 +186,7 @@ export default function PlantPage() {
                         </div>
 
                         <div  className={styles.headerItem}>
-                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "location_found"}</p>
+                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "Location..."}</p>
                         </div>
 
                     </div>

@@ -7,7 +7,9 @@ CREATE TABLE plants (
     latin_name TEXT,
     location_found TEXT,
     small_description TEXT,
-    long_description TEXT
+    long_description TEXT,
+    author TEXT,
+    last_modified date,
 );
 
 -- Months For Use

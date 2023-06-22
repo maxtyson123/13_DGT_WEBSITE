@@ -15,6 +15,8 @@ export class SQLDatabase {
     location_found: string;
     small_description: string;
     long_description: string;
+    author: string;
+    last_modified: string;
 
     // Attachments Table
     attachment_path: string;
@@ -68,9 +70,11 @@ export class SQLDatabase {
         this.english_name               = "english_name";
         this.maori_name                 = "maori_name";
         this.latin_name                 = "latin_name";
-        this.location_found                   = "location_found";
+        this.location_found             = "location_found";
         this.small_description          = "small_description";
         this.long_description           = "long_description";
+        this.author                     = "author";
+        this.last_modified              = "last_modified";
 
         // Attachments Table
         this.attachment_path            = "attachments_path";
