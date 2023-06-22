@@ -66,15 +66,65 @@ export interface PlantDataApi {
 }
 
 export interface ImageMetaData {
-    name: string;
-    credits: string;
-    tags: string[];
+    name:       string;
+    credits:    string;
+    tags:       string[];
 }
 
 export interface FileMetaData{
-    name: string;
-    credits: string;
-    size: number;
+    name:       string;
+    credits:    string;
+    size:       number;
+}
+
+export interface EdibleSectionData{
+    type:               string;
+    part_of_plant:      string;
+    image_of_part:      string;
+    nutrition:          string;
+    preparation:        string;
+    preparation_type:   string;
+}
+
+export interface MedicalSectionData{
+    type:               string;
+    medical_type:       string;
+    use:                string;
+    image:              string;
+    preparation:        string;
+}
+
+export interface CraftSectionData{
+    type:               string;
+    part_of_plant:      string;
+    use:                string;
+    image:              string;
+    additonal_info:     string;
+}
+
+export interface SourceSectionData{
+    type:           string;
+    source_type:    string;
+    data:           string;
+}
+
+export interface CustomSectionData{
+    type:           string;
+    title:          string;
+    text:           string;
+}
+
+export interface AttachmentSectionData{
+    type:           string;
+    path:           string;
+    meta:           object;
+    downloadable:   boolean;
+}
+
+export interface MonthsReadySectionData{
+    event:          string;
+    start_month:    string;
+    end_month:      string;
 }
 
 export function formatFileSize(bytes: number) {
@@ -241,7 +291,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             event:          apiData.months_ready_events[i],
             start_month:    apiData.months_ready_start_months[i],
             end_month:      apiData.months_ready_end_months[i],
-        }
+        } as MonthsReadySectionData;
 
         plantData.months_ready_for_use.push(dateInfoOBJ);
     }
@@ -255,7 +305,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             nutrition:          apiData.edible_nutrition[i],
             preparation:        apiData.edible_preparation[i],
             preparation_type:   apiData.edible_preparation_type[i],
-        }
+        } as EdibleSectionData;
 
         // If it isn't already in the use array, add it
         if(!plantData.use.includes("edible")){
@@ -273,7 +323,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             use:            apiData.medical_uses[i],
             image:          apiData.medical_images[i],
             preparation:    apiData.medical_preparation[i],
-        }
+        } as MedicalSectionData;
 
         // If it isn't already in the use array, add it
         if(!plantData.use.includes("medical_"+medicalInfoOBJ.medical_type)){
@@ -291,7 +341,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             use:                apiData.craft_uses[i],
             image:              apiData.craft_images[i],
             additonal_info:     apiData.craft_additional_info[i],
-        }
+        } as CraftSectionData;
 
         // If it isn't already in the use array, add it
         if(!plantData.use.includes("craft")){
@@ -307,7 +357,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             type: "custom",
             title:  apiData.custom_titles[i],
             text:   apiData.custom_text[i],
-        }
+        } as CustomSectionData;
 
         plantData.sections.push(customInfoOBJ);
     }
@@ -318,7 +368,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             type: "source",
             source_type:    apiData.source_types[i],
             data:           apiData.source_data[i],
-        }
+        } as SourceSectionData
 
         plantData.sections.push(sourceInfoOBJ);
     }

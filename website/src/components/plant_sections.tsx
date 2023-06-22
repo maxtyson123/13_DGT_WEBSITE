@@ -18,7 +18,17 @@ import {
     faFileWord,
     faGlobe
 } from "@fortawesome/free-solid-svg-icons";
-import {FileMetaData, formatFileSize, ImageMetaData} from "@/lib/plant_data";
+import {
+    AttachmentSectionData,
+    CraftSectionData,
+    CustomSectionData,
+    EdibleSectionData,
+    FileMetaData,
+    formatFileSize,
+    ImageMetaData,
+    MedicalSectionData,
+    SourceSectionData
+} from "@/lib/plant_data";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 interface AutoSectionProps{
@@ -49,14 +59,7 @@ export function AutoSection({section, images, isLeft} : AutoSectionProps){
 }
 
 interface EdibleSectionProps{
-    section: {
-        type:               string;
-        part_of_plant:      string;
-        image_of_part:      string;
-        nutrition:          string;
-        preparation:        string;
-        preparation_type:   string;
-    }
+    section:                EdibleSectionData;
     images: {
         path:               string;
         type:               string;
@@ -75,7 +78,6 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
     let image_index = images.findIndex((image) => {
         return (image.meta as ImageMetaData).name == section.image_of_part
     })
-
 
     const imageDiv = (
         <>
@@ -128,13 +130,7 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 }
 
 interface MedicalSectionProps{
-    section: {
-        type:               string;
-        medical_type:       string;
-        use:                string;
-        image:              string;
-        preparation:        string;
-    }
+    section:                MedicalSectionData;
     images: {
         path:               string;
         type:               string;
@@ -204,19 +200,8 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 }
 
 interface CraftSectionProps{
-    section: {
-        type:               string;
-        part_of_plant:      string;
-        use:                string;
-        image:              string;
-        additonal_info:     string;
-    }
-    images: {
-        path:               string;
-        type:               string;
-        meta:               object;
-        downloadable:       boolean;
-    }[]
+    section:                CraftSectionData;
+    images:                 AttachmentSectionData[]
     isLeft:                 boolean
 }
 export function CraftSection({section, images, isLeft} : CraftSectionProps){
@@ -281,11 +266,7 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
 }
 
 interface SourceSectionProps{
-    section: {
-        type:           string;
-        source_type:    string;
-        data:           string;
-    }
+    section: SourceSectionData
 }
 export function SourceSection({section} : SourceSectionProps){
     let sourceItem = (
@@ -324,11 +305,7 @@ export function SourceSection({section} : SourceSectionProps){
 }
 
 interface CustomSectionProps{
-    section: {
-        type:           string;
-        title:          string;
-        text:           string;
-    }
+    section: CustomSectionData;
 }
 export function CustomSection({section} : CustomSectionProps){
 
@@ -356,12 +333,7 @@ export function CustomSection({section} : CustomSectionProps){
 }
 
 interface AttachmentSectionProps{
-    attachment: {
-        type:           string;
-        path:           string;
-        meta:           object;
-        downloadable:   boolean;
-    }
+    attachment: AttachmentSectionData;
 }
 
 export function AttachmentSection({attachment} : AttachmentSectionProps){

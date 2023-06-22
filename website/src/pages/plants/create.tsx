@@ -13,13 +13,20 @@ import {
 import Image from "next/image";
 
 import {
+    AttachmentSectionData,
     ConvertPlantDataIntoApi,
+    CraftSectionData,
+    CustomSectionData,
+    EdibleSectionData,
     emptyPlantData,
     fetchPlant,
     FileMetaData,
     fixAttachmentsPaths,
     ImageMetaData,
+    MedicalSectionData,
+    MonthsReadySectionData,
     PlantData,
+    SourceSectionData,
     ValidPlantData
 } from "@/lib/plant_data";
 import Section from "@/components/section";
@@ -1691,16 +1698,16 @@ export default function CreatePlant() {
                     "tags": [""],
                 },
                 downloadable: false,
-            }
+            } as AttachmentSectionData;
 
             // Split the tags by comma
             if(thisImageInfo.image_tags !== ""){
-                imageInfoOBJ.meta.tags = thisImageInfo.image_tags.split(",");
+                (imageInfoOBJ.meta as ImageMetaData).tags = thisImageInfo.image_tags.split(",");
             }
 
             // Remove any spaces at the start of tags
-            for(let i = 0; i < imageInfoOBJ.meta.tags.length; i++){
-                imageInfoOBJ.meta.tags[i] = imageInfoOBJ.meta.tags[i].trim();
+            for(let i = 0; i <  (imageInfoOBJ.meta as ImageMetaData).tags.length; i++){
+                (imageInfoOBJ.meta as ImageMetaData).tags[i] =  (imageInfoOBJ.meta as ImageMetaData).tags[i].trim();
             }
 
             plantOBJ.attachments.push(imageInfoOBJ);
@@ -1719,7 +1726,7 @@ export default function CreatePlant() {
                     "size": thisFileInfo.file_size,
                 },
                 downloadable: true,
-            }
+            } as AttachmentSectionData;
 
             // Set the type to the file type
             if(thisFileInfo.file)
@@ -1736,7 +1743,7 @@ export default function CreatePlant() {
                 event: "",
                 start_month: "",
                 end_month: "",
-            }
+            } as MonthsReadySectionData;
 
             dateInfoOBJ.event = thisDateInfo.event;
             dateInfoOBJ.start_month = thisDateInfo.startDate;
@@ -1756,7 +1763,7 @@ export default function CreatePlant() {
                 nutrition: "",
                 preparation: "",
                 preparation_type: "",
-            }
+            } as EdibleSectionData;
 
             edibleInfoOBJ.part_of_plant = thisEdibleInfo.partOfPlant;
             edibleInfoOBJ.image_of_part = thisEdibleInfo.image;
@@ -1782,7 +1789,7 @@ export default function CreatePlant() {
                 use: "",
                 image: "",
                 preparation: "",
-            }
+            } as MedicalSectionData;
 
             medicalInfoOBJ.medical_type = thisMedicalInfo.type;
             medicalInfoOBJ.use = thisMedicalInfo.use;
@@ -1807,7 +1814,7 @@ export default function CreatePlant() {
                 use: "",
                 image: "",
                 additonal_info: "",
-            }
+            } as CraftSectionData;
 
             craftInfoOBJ.part_of_plant = thisCraftInfo.partOfPlant;
             craftInfoOBJ.use = thisCraftInfo.use;
@@ -1830,7 +1837,7 @@ export default function CreatePlant() {
                 type: "source",
                 source_type: "",
                 data: "",
-            }
+            } as SourceSectionData;
 
             sourceInfoOBJ.source_type = thisSourceInfo.type;
             sourceInfoOBJ.data = thisSourceInfo.data;
@@ -1846,7 +1853,7 @@ export default function CreatePlant() {
                 type: "custom",
                 title: "",
                 text: "",
-            }
+            } as CustomSectionData;
 
             customInfoOBJ.title = thisCustomInfo.title;
             customInfoOBJ.text = thisCustomInfo.text;
