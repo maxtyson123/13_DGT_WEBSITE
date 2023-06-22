@@ -158,15 +158,12 @@ type DropdownInputProps = {
     errorText?: string;
     changeEventHandler?: (value: string) => void;
     options: string[];
-    allowCustom?: boolean;
-    allowMultiple?: boolean;
 };
-export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler, allowCustom = false, allowMultiple = false}: DropdownInputProps){
+export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler}: DropdownInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
-    const [customOption, setCustomOption] = useState(false)
 
     // Get the states and functions from the hook
     const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
@@ -195,9 +192,6 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
 
     const changeHandler = (value: string) => {
         setInputValue(value);
-
-
-        
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -242,36 +236,9 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
                             return <option value={option} key={index} selected={option === defaultValue}> {option} </option>
 
                         })}
-
-                        {/* Allow for the user to add a custom choice */}
-                        {allowCustom ? <option value={"Custom"}>{"Custom"}</option>  : ""}
-
                     </select>
 
                 </div>
-
-
-                {/* Allow for the user to enter their custom choice */}
-                {customOption ?
-                    <>
-                        <br/>
-                        <SmallInput
-                            placeHolder={"Custom Option"}
-                            required={true}
-                            state={state}
-                            changeEventHandler={(value) => {
-                                // Update the value
-                                setInputValue(value);
-
-                                // Pass to the handler if it exists
-                                if (changeEventHandler) {
-                                    changeEventHandler(value);
-                                }
-
-                            }}
-                        />
-                    </>
-                    : ""}
 
                 {/* Show the success icon if the state is in success and if the input is not focused */}
                 {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}

@@ -143,7 +143,6 @@ export function SourceSection({typeHandler, dataHandler, valid, state}: SourceSe
                     required={true}
                     state={valid.type[0]}
                     errorText={valid.type[1]}
-                    allowCustom={true}
                     options={["Book", "Internet", "Person"]}
                     changeEventHandler={typeHandler}
                 />
@@ -405,7 +404,6 @@ export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlan
                     state={valid.partOfPlant[0]}
                     errorText={valid.partOfPlant[1]}
                     options={PLANT_PARTS}
-                    allowCustom={true}
                     changeEventHandler={partOfPlantHandler}
                 />
             </div>
@@ -561,7 +559,6 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
                     state={valid.type[0]}
                     errorText={valid.type[1]}
                     options={["Internal", "External"]}
-                    allowCustom={false}
                     changeEventHandler={medicalTypeHandler}
                 />
             </div>
@@ -733,7 +730,6 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     state={valid.partOfPlant[0]}
                     errorText={valid.partOfPlant[1]}
                     options={PLANT_PARTS}
-                    allowCustom={true}
                     changeEventHandler={partOfPlantHandler}
                 />
             </div>
@@ -760,7 +756,6 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     errorText={valid.preparationType[1]}
                     changeEventHandler={preparationTypeHandler}
                     options={["Raw", "Boiled", "Cooked", "Dried"]}
-                    allowCustom={true}
                 />
             </div>
 
@@ -1306,7 +1301,6 @@ export function DateInfoSection({eventHandler, startDateHandler, endDateHandler,
                     state={valid.startDate[0]}
                     errorText={valid.startDate[1]}
                     changeEventHandler={startDateHandler}
-                    allowCustom={false}
                     options={MONTHS}
                 />
             </div>
@@ -1320,7 +1314,6 @@ export function DateInfoSection({eventHandler, startDateHandler, endDateHandler,
                     state={valid.endDate[0]}
                     errorText={valid.endDate[1]}
                     changeEventHandler={endDateHandler}
-                    allowCustom={false}
                     options={MONTHS}
                 />
             </div>
@@ -2482,7 +2475,6 @@ export default function CreatePlant() {
                                             errorText={preferredNameValidationState[1]}
                                             options={["English", 'Moari', "Latin"]}
                                             changeEventHandler={handleDropDownChange}
-                                            allowCustom={false}
                                         />
                                     </div>
 
@@ -2519,7 +2511,6 @@ export default function CreatePlant() {
                                             state={locationValidationState[0]}
                                             errorText={locationValidationState[1]}
                                             options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
-                                            allowCustom={true}
                                             changeEventHandler={handleLocationChange}
                                         />
                                     </div>
