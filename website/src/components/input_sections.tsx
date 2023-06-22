@@ -100,6 +100,9 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
     const changeHandler = (value: string) => {
         setInputValue(value);
 
+        // Value has chaned so state is no longer vali
+        setThisState("normal")
+
         // Pass to the handler if it exists
         if (changeEventHandler) {
             changeEventHandler(value);
@@ -192,6 +195,9 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
 
     const changeHandler = (value: string) => {
         setInputValue(value);
+
+        // Value has chaned so state is no longer vali
+        setThisState("normal")
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -292,6 +298,9 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
 
     const changeHandler = (value: string) => {
         setInputValue(value);
+
+        // Value has chaned so state is no longer vali
+        setThisState("normal")
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -410,7 +419,10 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
 
     const changeHandler = (value: string) => {
         setInputValue(value);
-        
+
+        // Value has chaned so state is no longer vali
+        setThisState("normal")
+
         // Pass to the handler if it exists
         if (changeEventHandler) {
             changeEventHandler(value);

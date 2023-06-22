@@ -1,7 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: Redo css
-// TODO: Redo header
+// TODO: Fix Images not saving their display when new one is added, validation state not updating
 // TODO: JSDoc comments
 // TODO: Comment Code
 // TODO: Testing
@@ -26,6 +26,7 @@ import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import ScrollingPlant from "@/components/scrolling_plant";
+import Link from "next/link";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -34,12 +35,15 @@ export default function Home(ref: HomeRef) {
     // Stats for the featured plants
     const [isLoading, setIsLoading] = React.useState(true)
     const [plantIds, setPlantIds] = React.useState([0,0,0])
+    const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
 
     // Get the plant ids when the page loads
     useEffect(() => {
+
+        setLocation(window.location.host)
 
         // Prevent the data from being fetched again
         if (dataFetch.current)
@@ -117,10 +121,11 @@ export default function Home(ref: HomeRef) {
                        {/* Place the title and description on the left */}
                        <h1 className={styles.title}> Rongoa </h1>
 
-                       <p className={styles.description}>Site description ... ... ... ... ... ... ... ... ... ... ... ...
-                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...
-                           ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  </p>
+                       <p className={styles.description}>
+                           Welcome to {location}, here you will find a database full of rich information about rongoa. You can <Link href={"/search"}> search </Link> for a specific plant or see a index of all the plants in our database <Link href={"/plant_index"}> here</Link>.
+                           <br/> <br/>
+                           Each plant has its own page full with content, where you can discover information such as the plants craft uses, medical uses, edible uses and much more!
+                       </p>
 
                        <div className={styles.searchBox}>
                         <SearchBox/>

@@ -217,6 +217,8 @@ function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
 
                             // Loop through the plants and add a list item for each plant that starts with A
                             plants.map((plant) => {
+                                if(!plant.name)
+                                    return <></>
                                 if (plant.name[0].toLowerCase() === letter.toLowerCase()) {
                                     return <li key={plant.id} onClick={() => {window.location.href = "/plants/" + plant.id}}>{plant.name}</li>
                                 }})

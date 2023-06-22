@@ -69,6 +69,7 @@ export default async function handler(
         let auth_query = ""
 
         // If it is this site then allow user email to authenticate
+        console.log("orgin:" + origin)
         if (origin === process.env.NEXTAUTH_URL) {
             console.log("This is the same site");
 

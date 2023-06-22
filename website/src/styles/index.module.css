@@ -29,6 +29,11 @@
     padding-left: 4%;
 }
 
+.description a{
+    color: #00B4D8;
+
+}
+
 /*
  This is used to add styling to the ThreeCanvas component.
  Give a width of 60% to the plantContainer to make it larger than the titleContainer.
