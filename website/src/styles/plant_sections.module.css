@@ -10,6 +10,12 @@
 
 }
 
+.sourceSection{
+    padding: .5%;
+    justify-items: start;
+    margin-left: 13%;
+}
+
 .sectionContainer h1{
     font-size: 64px;
     font-weight: 400;
@@ -72,6 +78,24 @@
     background-color: var(--secondary-gray);
     border-radius: 0 20px 0 20px;
     padding: 2px 8px 2px 8px;
+}
+
+.attachment{
+    background-color: var(--main-green);
+    border-radius: 20px;
+    padding: 20px;
+    color: lightgray;
+    text-align: center;
+    font-size: 32px;
+    box-shadow: 0px 8px 8px var(--shadow-less);
+}
+
+.attachment:hover{
+    background-color: var(--dark-green);
+}
+
+.attachment p{
+    margin-top: 30px;
 }
 
 @media only screen and (max-width: 1500px) {

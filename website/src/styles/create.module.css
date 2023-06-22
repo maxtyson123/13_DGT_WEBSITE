@@ -155,7 +155,7 @@
     box-shadow: inset 0px 2px 2px var(--shadow-less);
 }
 
-.imageUploader{
+.fileUploader{
     width: 100%;
     display: grid;
     justify-items: center;
@@ -169,6 +169,7 @@
     padding: 15px;
     border-radius: 20px;
     box-shadow: 2px 4px 8px var(--shadow-less);
+    max-width: 85%;
 }
 
 .uploadButton input::file-selector-button {
@@ -189,4 +190,9 @@
 .uploadButton label:hover{
     color: var(--secondary-gray);
     background-color: var(--dark-green);
+}
+
+.fileDisplayItem{
+    display: inline;
+    margin-left: 10px;
 }

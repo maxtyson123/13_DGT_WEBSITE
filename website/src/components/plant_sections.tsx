@@ -1,9 +1,25 @@
 import styles from "@/styles/plant_sections.module.css"
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCopyright} from "@fortawesome/free-solid-svg-icons";
-import {ImageMetaData} from "@/lib/plant_data";
+import {
+    faCopyright,
+    faFile,
+    faFileAlt,
+    faFileArchive,
+    faFileAudio,
+    faFileCode,
+    faFileCsv,
+    faFileExcel,
+    faFileImage,
+    faFilePdf,
+    faFilePowerpoint,
+    faFileVideo,
+    faFileWord,
+    faGlobe
+} from "@fortawesome/free-solid-svg-icons";
+import {FileMetaData, formatFileSize, ImageMetaData} from "@/lib/plant_data";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 interface AutoSectionProps{
     section: any
@@ -24,12 +40,10 @@ export function AutoSection({section, images, isLeft} : AutoSectionProps){
             return <MedicalSection section={section} images={images} isLeft={isLeft}/>
         case "craft":
             return <CraftSection section={section} images={images} isLeft={isLeft}/>
-        case "source":
-            return <SourceSection section={section}/>
         case "custom":
             return <CustomSection section={section}/>
         default:
-            return <div></div>
+            return <></>
 
     }
 }
@@ -300,7 +314,7 @@ export function SourceSection({section} : SourceSectionProps){
 
     return(
         <>
-            <div className={styles.sectionContainer}>
+            <div className={styles.sectionContainer + " " + styles.sourceSection}>
                 <ul>
                     {sourceItem}
                 </ul>
@@ -332,11 +346,153 @@ export function CustomSection({section} : CustomSectionProps){
 
     return(
         <>
-            <div className={styles.sectionContainer}>
+            <div className={styles.sectionContainer }>
                 <h1> {section.title} </h1>
                 <div ref={textRef}></div>
             </div>
 
+        </>
+    )
+}
+
+interface AttachmentSectionProps{
+    attachment: {
+        type:           string;
+        path:           string;
+        meta:           object;
+        downloadable:   boolean;
+    }
+}
+
+export function AttachmentSection({attachment} : AttachmentSectionProps){
+    const [fileIcon, setFileIcon] = useState<IconDefinition>(faFile)
+
+    useEffect(() => {
+
+        switch (attachment.type) {
+            case "json":
+                setFileIcon(faFileCode);
+                break;
+            case "pdf":
+                setFileIcon(faFilePdf);
+                break;
+            case "doc":
+            case "docx":
+                setFileIcon(faFileWord);
+                break;
+            case "xls":
+            case "xlsx":
+                setFileIcon(faFileExcel);
+                break;
+            case "ppt":
+            case "pptx":
+                setFileIcon(faFilePowerpoint);
+                break;
+            case "txt":
+                setFileIcon(faFileAlt);
+                break;
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "gif":
+            case "tiff":
+            case "webp":
+            case "svg":
+            case "ico":
+            case "psd":
+            case "ai":
+            case "raw":
+            case "eps":
+            case "bmp":
+                setFileIcon(faFileImage);
+                break;
+            case "mp3":
+            case "wav":
+            case "ogg":
+            case "flac":
+            case "aac":
+            case "wma":
+            case "aiff":
+            case "dsd":
+            case "pcm":
+            case "mp2":
+            case "m4a":
+                setFileIcon(faFileAudio);
+                break;
+            case "mp4":
+            case "avi":
+            case "mkv":
+            case "mov":
+            case "wmv":
+            case "flv":
+            case "webm":
+            case "m4v":
+            case "mpeg":
+            case "mpg":
+            case "mpe":
+            case "mpv":
+            case "m4p":
+            case "m4b":
+            case "m4r":
+                setFileIcon(faFileVideo);
+                break;
+            case "zip":
+            case "rar":
+            case "tar":
+            case "gz":
+            case "bz2":
+            case "xz":
+            case "7zip":
+            case "iso":
+            case "dmg":
+            case "pkg":
+            case "deb":
+            case "rpm":
+            case "z":
+            case "taz":
+            case "tgz":
+            case "tlz":
+            case "txz":
+            case "tbz":
+            case "tbz2":
+            case "tz":
+            case "7z":
+                setFileIcon(faFileArchive);
+                break;
+            case "html":
+            case "htm":
+            case "xhtml":
+            case "php":
+            case "asp":
+            case "aspx":
+            case "jsp":
+            case "js":
+            case "css":
+            case "scss":
+            case "sass":
+            case "less":
+            case "xml":
+                setFileIcon(faGlobe);
+                break;
+            case "csv":
+                setFileIcon(faFileCsv);
+                break;
+            default:
+                setFileIcon(faFile);
+                break;
+        }
+
+    }, [])
+
+    return(
+        <>
+            <a href={attachment.path} download={(attachment.meta as FileMetaData).name} target={"_blank"}>
+                <div className={styles.attachment}>
+                    <FontAwesomeIcon icon={fileIcon} size={"3x"} />
+                    <p> {(attachment.meta as FileMetaData).name} </p>
+                    <p> {formatFileSize((attachment.meta as FileMetaData).size) } </p>
+                </div>
+            </a>
         </>
     )
 }

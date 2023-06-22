@@ -16,6 +16,7 @@ import {
     ConvertPlantDataIntoApi,
     emptyPlantData,
     fetchPlant,
+    FileMetaData,
     fixAttachmentsPaths,
     ImageMetaData,
     PlantData,
@@ -31,7 +32,7 @@ import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCloudArrowUp, faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {faCloudArrowUp, faDoorOpen, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -923,7 +924,7 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, cr
         <>
             {/* Image / Uploader */}
             <div className={styles.formItem}>
-                <div className={styles.imageUploader}>
+                <div className={styles.fileUploader}>
                     {imageLocalURL !== "" ?
                         <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
                         :
@@ -972,6 +973,203 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, cr
                     changeEventHandler={tagsHandler}
                 />
                 <p>Example tags: <span>transparent, in_season, out_season, whole_plant, leaf_top, leaf_underside, stem, fruit, bud</span></p>
+            </div>
+        </>
+    )
+}
+
+
+class FileInfo{
+
+    // Store the state of the section
+    state: {
+        file_url:      string;
+        file_name:     string;
+        file_credit:   string;
+        file_size:     number;
+        file:     File | null;
+    } = {
+        file_url:      "",
+        file_name:     "",
+        file_credit:   "",
+        file_size:     0,
+        file:     null,
+    }
+
+    // Store the validation state of the section
+    valid = {
+        file_url:      ["normal", "No Error"] as [ValidationState, string],
+        file_name:     ["normal", "No Error"] as [ValidationState, string],
+        file_credit:   ["normal", "No Error"] as [ValidationState, string],
+    }
+
+    section: JSX.Element = <></>;
+
+    // Handlers that update the state
+    handleNameChange = (value: string) => {this.state.file_name = value; this.validate(); this.reRenderSection()};
+    handleFileChange = (file: File) => {this.state.file = file; this.validate(); this.reRenderSection()};
+    handeURLChange = (value: string) => {this.state.file_url = value; this.validate(); this.reRenderSection()};
+    handleCreditChange = (value: string) => {this.state.file_credit = value; this.validate(); this.reRenderSection()};
+    handleSizeChange = (value: number) => {this.state.file_size = value; this.validate(); this.reRenderSection()};
+
+    // Update the section
+    setSection = (section: JSX.Element) => {this.section = section};
+    updateSection = () => {
+        this.setSection(
+            <FileSection
+                nameHandler={this.handleNameChange}
+                fileHandler={this.handleFileChange}
+                URLHandler={this.handeURLChange}
+                creditHandler={this.handleCreditChange}
+                sizeHandler={this.handleSizeChange}
+                state={this.state}
+                valid={this.valid}
+            />
+        )
+    }
+
+    reRenderSection = () => {
+        const updatedSection = React.cloneElement(
+            this.section,
+            {
+                valid: this.valid,
+                state: this.state
+            }
+        );
+        this.setSection(updatedSection);
+    }
+
+
+    // Validate the section
+    validate = () => {
+        let isValid = true;
+
+        // If there is no image name entered or it is longer than 50 chars then show an error otherwise the input is valid
+        if(this.state.file_name === "") {
+            this.valid.file_name = ["error", "Please enter a name for the file"];
+            isValid = false;
+        }else if(this.state.file_name.length > 50) {
+            this.valid.file_name = ["error", "File name must be less than 50 characters"];
+            isValid = false;
+        }else { this.valid.file_name = ["success", "No Error"] as [ValidationState, string]; }
+
+        // If there is no image uploaded then show an error otherwise the input is valid
+        if(this.state.file_url === "") {
+            this.valid.file_name = ["error", "Please upload a file"]; // Use name here as upload doesn't have a state
+            isValid = false;
+        }
+
+        // If there is credit then make it valid
+        if(this.state.file_credit !== "") { this.valid.file_credit = ["success", "No Error"] as [ValidationState, string]; }
+
+        this.reRenderSection();
+
+        // Return whether the section is valid or not
+        return isValid;
+    }
+
+    constructor() {
+        this.updateSection();
+    }
+
+}
+
+// Define the type of the props for the Image Section
+type FileSectionProps = {
+    nameHandler: (value: string) => void;
+    fileHandler: (file: File) => void;
+    URLHandler: (value: string) => void;
+    creditHandler: (value: string) => void;
+    sizeHandler: (value: number) => void;
+    state: {
+        file_url:      string;
+        file_name:     string;
+        file_credit:   string;
+        file:     File | null;
+    };
+    valid: {
+        file_url:      [ValidationState, string];
+        file_name:     [ValidationState, string];
+        file_credit:   [ValidationState, string];
+    };
+
+
+}
+export function FileSection({nameHandler, fileHandler, URLHandler, creditHandler, sizeHandler, state, valid}: FileSectionProps){
+
+    // States
+    const [fileLocalURL, setFileLocalURL ]  = useState(state.file_url)
+
+
+    const handleFileSelection = async (event: ChangeEvent<HTMLInputElement>) => {
+        // Prevent the default behaviour
+        event.preventDefault();
+
+        // Get the file from the event
+        const selectedFile = event.target.files;
+
+        // If there is no file selected then return
+        if (!selectedFile) {
+            console.log('Please select a file.');
+            return;
+        }
+
+        const file = selectedFile[0];
+
+        // Handle the change of the file
+        fileHandler(file);
+        URLHandler(file.name);
+        sizeHandler(file.size);
+        setFileLocalURL(URL.createObjectURL(file));
+
+    }
+
+
+    return(
+        <>
+            {/* Image / Uploader */}
+            <div className={styles.formItem}>
+                <div className={styles.fileUploader}>
+                    {fileLocalURL !== "" ?
+                        <>
+                            <a href={fileLocalURL} target={"_blank"}>
+                                <FontAwesomeIcon icon={faFile} size={"3x"} className={styles.fileDisplayItem}/>
+                                <p className={styles.fileDisplayItem}>{state.file_url}</p>
+                            </a>
+                        </>
+                        :
+                        <>
+                            <div className={styles.uploadButton}>
+                                <label htmlFor="files"><FontAwesomeIcon icon={faCloudArrowUp}/> Select File</label>
+                                <input id="files" type="file" onChange={handleFileSelection} />
+                            </div>
+                        </>
+                    }
+                </div>
+            </div>
+
+            {/* Image Name */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"File Name"}
+                    defaultValue={state.file_name}
+                    required={true}
+                    state={valid.file_name[0]}
+                    errorText={valid.file_name[1]}
+                    changeEventHandler={nameHandler}
+                />
+            </div>
+
+            {/* Image Credit */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"File Credits"}
+                    defaultValue={state.file_credit}
+                    required={false}
+                    state={valid.file_credit[0]}
+                    errorText={valid.file_credit[1]}
+                    changeEventHandler={creditHandler}
+                />
             </div>
         </>
     )
@@ -1131,6 +1329,7 @@ interface infoDisplayerProps{
         | React.MutableRefObject<SourceInfo[]>
         | React.MutableRefObject<CustomInfo[]>
         | React.MutableRefObject<ImageInfo[]>
+        | React.MutableRefObject<FileInfo[]>
     newInfo         : () => void
     name            : string
     setRenderKey    : React.Dispatch<React.SetStateAction<number>>
@@ -1237,6 +1436,7 @@ export default function CreatePlant() {
     const craftInfoRef                 = useRef<CraftInfo[]>([]);
     const customInfoRef               = useRef<CustomInfo[]>([]);
     const sourceInfoRef               = useRef<SourceInfo[]>([]);
+    const fileInfoRef                   = useRef<FileInfo[]>([]);
 
     // Section Render Keys
     const [renderKeyDate, setRenderKeyDate] = useState(0);
@@ -1246,7 +1446,7 @@ export default function CreatePlant() {
     const [renderKeyCraft, setRenderKeyCraft] = useState(0);
     const [renderKeyCustom, setRenderKeyCustom] = useState(0);
     const [renderKeySource, setRenderKeySource] = useState(0);
-
+    const [renderKeyFile, setRenderKeyFile] = useState(0);
 
 
     // Value Handlers
@@ -1266,6 +1466,7 @@ export default function CreatePlant() {
     const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; setRenderKeyCraft(prevState => prevState + 1)}
     const newCustomInfo = () => { customInfoRef.current = [...customInfoRef.current, new CustomInfo()]; setRenderKeyCustom(prevState => prevState + 1)}
     const newSourceInfo = () => { sourceInfoRef.current = [...sourceInfoRef.current, new SourceInfo()]; setRenderKeySource(prevState => prevState + 1)}
+    const newFileInfo = () => { fileInfoRef.current = [...fileInfoRef.current, new FileInfo()]; setRenderKeyFile(prevState => prevState + 1)}
 
     // Section States
     const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
@@ -1431,6 +1632,15 @@ export default function CreatePlant() {
             }
         }
 
+        // Validate the file info
+        for (let i = 0; i < fileInfoRef.current.length; i++) {
+            // Only change the valid state if it is false to prevent previous falses being overridden to be true
+            if(!fileInfoRef.current[i].validate()){
+                isValid = false;
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "file-" + i;
+            }
+        }
+
         // If the previous error message is this on then remove it
         if(error === "Please fix the fields below" || error === "Please add at least one image"){
             setError("")
@@ -1494,6 +1704,28 @@ export default function CreatePlant() {
             }
 
             plantOBJ.attachments.push(imageInfoOBJ);
+        }
+
+        // File info
+        for(let i = 0; i < fileInfoRef.current.length; i++) {
+            const thisFileInfo = fileInfoRef.current[i].state;
+
+            let fileInfoOBJ = {
+                path: thisFileInfo.file_url,
+                type: "file",
+                meta: {
+                    "name": thisFileInfo.file_name,
+                    "credits": thisFileInfo.file_credit,
+                    "size": thisFileInfo.file_size,
+                },
+                downloadable: true,
+            }
+
+            // Set the type to the file type
+            if(thisFileInfo.file)
+                fileInfoOBJ.type = thisFileInfo.file.type.split("/")[1];
+
+            plantOBJ.attachments.push(fileInfoOBJ);
         }
 
         // Date info
@@ -1637,6 +1869,7 @@ export default function CreatePlant() {
         sourceInfoRef.current   = [];
         customInfoRef.current   = [];
         imageInfoRef.current    = [];
+        fileInfoRef.current     = [];
 
 
         // Create the months ready for ues
@@ -1656,31 +1889,50 @@ export default function CreatePlant() {
             dateSection.reRenderSection()
         }
 
-        // Create the images
+        // Create the images and files
         for (let i = 0; i < jsonContents.attachments.length; i++) {
 
-            // If this is not an image, skip it
-            if(jsonContents.attachments[i].type !== "image"){
+            // If this is an image
+            if(jsonContents.attachments[i].type === "image"){
+                // Create the new section
+                newImage()
+
+                // Get the new section
+                const imageSection = imageInfoRef.current[imageInfoRef.current.length-1];
+
+                // Update the values
+                if(jsonContents.id !== 1) { // If it is not an import from local
+                    imageSection.handeURLChange(jsonContents.attachments[i].path)
+                }
+                const metaData = jsonContents.attachments[i].meta as ImageMetaData
+                imageSection.handleNameChange(metaData.name)
+                imageSection.handleCreditChange(metaData.credits)
+                imageSection.handleTagsChange(metaData.tags.join(", "))
+
+                // Re-render the section
+                imageSection.reRenderSection()
                 continue;
             }
 
+            // Otherwise it is a file
+
             // Create the new section
-            newImage()
+            newFileInfo()
 
             // Get the new section
-            const imageSection = imageInfoRef.current[imageInfoRef.current.length-1];
+            const fileSection = fileInfoRef.current[fileInfoRef.current.length-1];
 
             // Update the values
-            if(jsonContents.id !== 1) {
-                imageSection.handeURLChange(jsonContents.attachments[i].path)
+            if(jsonContents.id !== 1) {     // If it is not an import from local
+                fileSection.handeURLChange(jsonContents.attachments[i].path)
             }
-            const metaData = jsonContents.attachments[i].meta as ImageMetaData
-            imageSection.handleNameChange(metaData.name)
-            imageSection.handleCreditChange(metaData.credits)
-            imageSection.handleTagsChange(metaData.tags.join(", "))
+            const metaData = jsonContents.attachments[i].meta as FileMetaData
+            fileSection.handleNameChange(metaData.name)
+            fileSection.handleCreditChange(metaData.credits)
+            fileSection.handleSizeChange(metaData.size)
 
             // Re-render the section
-            imageSection.reRenderSection()
+            fileSection.reRenderSection()
 
         }
 
@@ -1982,8 +2234,28 @@ export default function CreatePlant() {
                 }
 
                 // Upload the image
-                await uploadImage(file, newId)
+                await uploadFile(file, newId)
 
+            }
+
+            // Loop through each file info and upload the file
+            for(let i = 0; i < fileInfoRef.current.length; i++){
+
+                    // If the file url is already set to have a url, skip it
+                    if(fileInfoRef.current[i].state.file_url.startsWith("http")) {
+                        continue;
+                    }
+
+                    // Get the file
+                    const file = fileInfoRef.current[i].state.file
+
+                    // Check if there is a file
+                    if(!file){
+                        continue;
+                    }
+
+                    // Upload the file
+                    await uploadFile(file, newId)
             }
 
             // Redirect to the plant page
@@ -2070,7 +2342,7 @@ export default function CreatePlant() {
         }
     }
 
-    const uploadImage = async (file: File, id: number) => {
+    const uploadFile = async (file: File, id: number) => {
 
 
         // Create a new form data object and append the file to it
@@ -2313,14 +2585,25 @@ export default function CreatePlant() {
                             {/* Right Hand Column */}
                             <div className={"column"}>
 
-                                {/*Images Section */}
-                                <InfoDisplayer
-                                    name={"Image"}
-                                    infoRef={imageInfoRef}
-                                    newInfo={newImage}
-                                    key={renderKeyImage}
-                                    setRenderKey={setRenderKeyImage}
-                                />
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"Image"}
+                                        infoRef={imageInfoRef}
+                                        newInfo={newImage}
+                                        key={renderKeyImage}
+                                        setRenderKey={setRenderKeyImage}
+                                    />
+                                </div>
+
+                                <div className={styles.formSection}>
+                                    <InfoDisplayer
+                                        name={"File"}
+                                        infoRef={fileInfoRef}
+                                        newInfo={newFileInfo}
+                                        key={renderKeyFile}
+                                        setRenderKey={setRenderKeyFile}
+                                    />
+                                </div>
                             </div>
                         </div>
 

@@ -71,6 +71,18 @@ export interface ImageMetaData {
     tags: string[];
 }
 
+export interface FileMetaData{
+    name: string;
+    credits: string;
+    size: number;
+}
+
+export function formatFileSize(bytes: number) {
+    const sufixes = ['B', 'kB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sufixes[i]}`;
+};
+
 export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
 
     // If this plant has no months section, set the months ready to an empty array

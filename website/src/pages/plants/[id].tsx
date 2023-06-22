@@ -12,7 +12,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {convertUseTag} from "@/components/plant_card";
 import Image from "next/image";
-import {AutoSection} from "@/components/plant_sections";
+import {AttachmentSection, AutoSection, SourceSection} from "@/components/plant_sections";
 import {Error} from "@/components/error";
 
 export default function PlantPage() {
@@ -259,6 +259,7 @@ export default function PlantPage() {
 
             <Section autoPadding>
                 <div className={styles.sectionsContainer}>
+                    {/* Load all the big sections */}
                     {plantData?.sections.map((section, index) => (
                         <AutoSection
                             section={section}
@@ -267,6 +268,40 @@ export default function PlantPage() {
                             key={index}
                         />
                     ))}
+
+                    {/* Attachments section */}
+                    {
+                        plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
+                            <>
+                                <div className={styles.attachmentsSection}>
+                                    <h1> Attachments </h1>
+                                    <div className={styles.attachmentsContainer}>
+                                        {plantData?.attachments.filter((attachment) => attachment.type !== "image").map((attachment, index) => (
+                                            <AttachmentSection attachment={attachment} key={index}/>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        :
+                            <>
+                            </>
+                    }
+
+                    {/* Load all the sources sections */}
+                    {
+                        plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
+                            <div className={styles.sourceSection}>
+                                <h1> Sources </h1>
+                                {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
+                                    <SourceSection section={source} key={index}/>
+                                ))}
+
+                            </div>
+                            :
+                            <></>
+                    }
+
+
                 </div>
             </Section>
 

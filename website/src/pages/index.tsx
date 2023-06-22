@@ -1,8 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: More attachments
 // TODO: Redo JSON
-// TODO: Use SQL
+// TODO: Fix custom input
 // TODO: Redo css
 // TODO: JSDoc comments
 // TODO: Comment Code
@@ -10,6 +9,7 @@
 // TODO: Code cleanup
 // TODO: Code Validation
 // TODO: Documentation
+// TODO: Use SQL
 
 import React, {useEffect, useRef} from "react";
 

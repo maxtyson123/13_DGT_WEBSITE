@@ -91,7 +91,7 @@
 
 }
 
-.monthsContainer{
+.monthsContainer, .attachmentsContainer{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
@@ -121,8 +121,15 @@
     font-size: 32px;
 }
 
+.sourceSection h1, .attachmentsSection h1{
+    color: var(--text-dark);
+    text-align: center;
+    font-size: 64px;
+}
+
+
 @media only screen and (max-width: 600px) {
-    .monthsContainer, .plantHeader{
+    .monthsContainer, .plantHeader, .attachmentsContainer{
         grid-template-columns: 1fr;
     }
 
