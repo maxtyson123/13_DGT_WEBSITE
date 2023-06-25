@@ -5,6 +5,11 @@ import React, {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 
+/**
+ * Stats component. Shows the number of plants in the database, and the number of plants for each use.
+ *
+ * @returns {JSX.Element} The rendered stats component.
+ */
 export default function Stats(){
 
 

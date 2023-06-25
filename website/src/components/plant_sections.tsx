@@ -33,15 +33,28 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 interface AutoSectionProps{
     section: any
-    images: {
-        path:           string;
-        type:           string;
-        meta:           object;
-        downloadable:   boolean;
-    }[]
+    images: AttachmentSectionData[]
     isLeft: boolean
 }
 
+/**
+ * AutoSection component. Renders the correct section based on the type of section.
+ *
+ * @param {Object} props - Component props.
+ * @param {Object} props.section - The section data.
+ * @param {string} props.section.type - The type of section.
+ * @param {AttachmentSectionData[]} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link EdibleSection} - The edible section.
+ * @see {@link MedicalSection} - The medical section.
+ * @see {@link CraftSection} - The craft section.
+ * @see {@link CustomSection} - The custom section.
+ * @see {@link SourceSection} - The source section.
+ * @see {@link AttachmentSection} - The attachment section.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function AutoSection({section, images, isLeft} : AutoSectionProps){
     switch (section.type){
         case "edible":
@@ -60,14 +73,22 @@ export function AutoSection({section, images, isLeft} : AutoSectionProps){
 
 interface EdibleSectionProps{
     section:                EdibleSectionData;
-    images: {
-        path:               string;
-        type:               string;
-        meta:               object;
-        downloadable:       boolean;
-    }[]
+    images:                 AttachmentSectionData[]
     isLeft:                 boolean
 }
+
+/**
+ * EdibleSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {EdibleSectionData} props.section - The section data.
+ * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 
     // Store the nutrition amd preparation section in a ref
@@ -131,14 +152,22 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 
 interface MedicalSectionProps{
     section:                MedicalSectionData;
-    images: {
-        path:               string;
-        type:               string;
-        meta:               object;
-        downloadable:       boolean;
-    }[]
+    images:                 AttachmentSectionData[]
     isLeft:                 boolean
 }
+
+/**
+ * Medical Section component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {MedicalSectionData} props.section - The section data.
+ * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft - Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 
     // Store the use and preparation in a ref to set the contents with html later
@@ -204,6 +233,19 @@ interface CraftSectionProps{
     images:                 AttachmentSectionData[]
     isLeft:                 boolean
 }
+
+/**
+ * CraftSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {CraftSectionData} props.section - The section data.
+ * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function CraftSection({section, images, isLeft} : CraftSectionProps){
 
     // Store the use and additional info in a ref to set the contents with html later
@@ -268,6 +310,15 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
 interface SourceSectionProps{
     section: SourceSectionData
 }
+
+/**
+ * SourceSection component. Displays the source of the information, will convert any links into clickable links and will display the source type.
+ *
+ * @param {Object} props - Component props.
+ * @param {SourceSectionData} props.section - The section data.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function SourceSection({section} : SourceSectionProps){
     let sourceItem = (
         <>
@@ -307,6 +358,17 @@ export function SourceSection({section} : SourceSectionProps){
 interface CustomSectionProps{
     section: CustomSectionData;
 }
+
+/**
+ * CustomSection component. Displays a custom section, will display the title and text of the section. IF the text uses HTML from the AdvancedTextArea component, it will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {CustomSectionData} props.section - The section data.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function CustomSection({section} : CustomSectionProps){
 
     // Store the text in a ref to set the contents with html later
@@ -336,6 +398,14 @@ interface AttachmentSectionProps{
     attachment: AttachmentSectionData;
 }
 
+/**
+ * AttachmentSection component. Displays an attachment section, will display the title and a link to the attachment. The link will open in a new tab. The attachment type will be displayed as an icon if possible.
+ *
+ * @param {Object} props - Component props.
+ * @param {AttachmentSectionData} props.attachment - The attachment data.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export function AttachmentSection({attachment} : AttachmentSectionProps){
     const [fileIcon, setFileIcon] = useState<IconDefinition>(faFile)
 

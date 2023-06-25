@@ -2,7 +2,13 @@ import {Canvas, useThree} from "@react-three/fiber";
 import {PlantModel} from "@/components/plant_model";
 import {Environment} from "@react-three/drei";
 
-
+/**
+ * Renders the 3D scene with the plant model and the environment.
+ *
+ * @see {@link Scene} - The scene component.
+ *
+ * @returns {JSX.Element} The rendered scrolling plant component.
+ */
 export default function ScrollingPlant() {
 
     return(
@@ -18,6 +24,13 @@ export default function ScrollingPlant() {
 
 }
 
+/**
+ * The scene component, this is where the plant model and environment are added to the scene.
+ *
+ * @see {@link PlantModel} - The plant model component.
+ *
+ * @returns {JSX.Element} The rendered scene component.
+ */
 function Scene() {
     const { camera } = useThree();
 

@@ -4,9 +4,25 @@ interface ToggleAccessibilityProps {
     setting: string
     setter: (value: boolean) => void
 }
+
+
+/**
+ ToggleAccessibilitySetting component is used to render a toggle switch for an accessibility setting.
+
+ @param {Object} props - The properties passed to the component.
+ @param {string} props.setting - The name of the accessibility setting.
+ @param {function} props.setter - The setter function to update the state of the accessibility setting.
+
+ @returns {JSX.Element} - A JSX Element that contains a div with a toggle switch and a button.
+ */
 export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilityProps) {
     const toggleRef = useRef<HTMLInputElement>(null)
 
+    /**
+     * Loads the accessibility setting from local storage
+     *
+     * @returns {boolean} - The accessibility setting
+     */
     const loader = () => {
         let loadedMode = localStorage.getItem(setting)
         let mode = false
@@ -19,6 +35,9 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
         return mode
     }
 
+    /**
+     * Toggles the accessibility setting between true and false, sets the toggle switch to the new mode, and saves the mode to local storage.
+     */
     const toggle = () => {
 
         // Get the current mode
@@ -49,6 +68,7 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
 
     return (
         <>
+            {/* Div to contain the button and checkbox, if user clicks anywhere in this div then it will toggle */}
             <div className="toggle-container" onClick={toggle}>
                 <input ref={toggleRef} type="checkbox"/>
                 <button className={"m-1"}>{setting}</button>
@@ -58,9 +78,19 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
 
 }
 
+/**
+ * DarkMode component is used to render a toggle switch for dark mode. Uses the ToggleAccessibilitySetting component.
+ *
+ * @returns {JSX.Element} - A JSX Element that contains a <ToggleAccessibilitySetting> component.
+ *
+ * @see {@link ToggleAccessibilitySetting} for further information.
+ */
 export function DarkMode(){
 
-
+    /**
+     * Loads the theme based on the mode, this sets the main CSS variables.
+     * @param isDark {boolean} - The mode of the theme, true for dark, false for light.
+     */
     const loadTheme = (isDark: boolean) => {
         // Get the root element
         const root = document.documentElement
@@ -111,8 +141,18 @@ export function DarkMode(){
     )
 }
 
+/**
+ * Dyslexic component is used to render a toggle switch for dyslexic mode. Dyslexic mode toggles the font between Archivo and Open Dyslexic  Uses the ToggleAccessibilitySetting component.
+ *
+ * @returns {JSX.Element} - A JSX Element that contains a <ToggleAccessibilitySetting> component.
+ * @see {@link ToggleAccessibilitySetting} for further information.
+ */
 export function Dyslexic(){
 
+    /**
+     * Sets the '--site-font' CSS variable to either Open-Dyslexic or Archivo based on the mode.
+     * @param isEnabled {boolean} - The mode of the font, true for Open-Dyslexic, false for Archivo.
+     */
     const toggleDyslexic = (isEnabled : boolean) => {
 
 

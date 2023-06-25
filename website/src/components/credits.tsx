@@ -4,9 +4,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCodeBranch} from "@fortawesome/free-solid-svg-icons";
 import {DarkMode, Dyslexic} from "@/components/accessibility";
 
+/**
+ * Renders the Credits component which displays the credits information and additional accessibility options.
+ *
+ * @returns {JSX.Element} - The JSX element representing the Credits component.
+ */
 export default function Credits(){
 
-    // Store wether the credits are expanded or not
+    // Store whether the credits are expanded or not
     const [expanded, setExpanded] = useState(false)
 
     const handleExpand = () => {
@@ -31,6 +36,8 @@ export default function Credits(){
                         {/* Target the link to a new tab */}
                         <a target="_blank" href="https://github.com/maxtyson123/13_DGT_WEBSITE">Source</a>
                     </div>
+
+                    {/* Accessibility options */}
                     <div className={styles.item}>
                         <DarkMode/>
                     </div>

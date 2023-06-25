@@ -15,6 +15,17 @@ export const pageNames = [
     ["Search", faSearch, "/search"],
 ];
 
+/**
+ * Navbar component. Renders either the mobile or desktop version of the navbar based on the screen size.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.currentPage - The current active page.
+ *
+ * @see {@link MobileNavbar} - The mobile version of the navbar.
+ * @see {@link DesktopNavbar} - The desktop version of the navbar.
+ *
+ * @returns {JSX.Element} The rendered navbar component.
+ */
 export default function Navbar(props: any) {
 
     // Get the data from the props
@@ -60,6 +71,17 @@ interface navbarProps {
     currentPage: string
 }
 
+/**
+ * The desktop version of the navbar. Will show the logo and the name of the website on the left, and the links on the right. Links are styled to be active if they have the same name as the current page.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.currentPage - The current active page.
+ *
+ * @see {@link pageNames} - The array of page names and links.
+ * @see {@link Navbar} - The parent navbar component.
+ *
+ * @returns {JSX.Element} The rendered desktop navbar component.
+ */
 function DesktopNavbar({currentPage} : navbarProps){
     return(
         <>
@@ -99,7 +121,17 @@ function DesktopNavbar({currentPage} : navbarProps){
     )
 }
 
-
+/**
+ * The mobile version of the navbar. Will show the logo left, current page in the centre and a hamburger menu on the right. Clicking the hamburger menu will expand the navbar to show the links. Links are styled to be active if they have the same name as the current page.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.currentPage - The current active page.
+ *
+ * @see {@link pageNames} - The array of page names and links.
+ * @see {@link Navbar} - The parent navbar component.
+ *
+ * @returns {JSX.Element} The rendered mobile navbar component.
+ */
 function MobileNavbar({currentPage} : navbarProps){
 
     const page = pageNames.find((page) => page[0] === currentPage);
@@ -131,7 +163,7 @@ function MobileNavbar({currentPage} : navbarProps){
 
                 {
                     page === undefined || isExpanded ?
-                        <></>
+                        <div></div>
                         :
                         <Link scroll={false} href={String(page[2])} className={styles.activePage}>
                             <FontAwesomeIcon icon={page[1] as IconProp}/>
@@ -161,11 +193,6 @@ function MobileNavbar({currentPage} : navbarProps){
                         :
                         <a href={"#"} onClick={toggleExpanded} className={styles.navItem}> <FontAwesomeIcon icon={faBars}/> <p> More Pages </p> </a>
                 }
-
-
-
-
-
             </div>
         </>
     )

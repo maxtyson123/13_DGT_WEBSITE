@@ -6,7 +6,15 @@ type SectionProps = {
 };
 
 
-//TODO: This may be used later idk
+/**
+ * Section component. Renders a section with the given children. This is usefull for splitting up the page into sections to make it easier to read the code.
+ *
+ * @param {Object} props - Component props.
+ * @param {React.ReactNode} props.children - The children of the section.
+ * @param {boolean} props.autoPadding - If true, the section will have padding around it.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
 export default function Section({ children, autoPadding = false }: SectionProps){
     return(
         <>

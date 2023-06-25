@@ -5,9 +5,18 @@ import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 
 
-// States for the input (as type bc its typescript)
+// States for the input
 export type ValidationState = "normal" | "error" | "success";
 
+/**
+ * Hook for managing the state of an input field this includes validation and requirement.
+ * @param {string} initialValue - The initial value of the input field.
+ * @param {boolean} required - Indicates if the input field is required.
+ * @param {ValidationState} state - The current validation state of the input field.
+ * @param {function} setThisState - A function to update the validation state.
+ * @param {function} setThisRequired - A function to update the required flag.
+ * @returns {object} - An object containing the input field's state and related functions.
+ */
 export function useInputState(initialValue: string, required: boolean, state: ValidationState, setThisState: (state: ValidationState) => void, setThisRequired: (required: boolean) => void) {
     // States to track
     const [isInputFocused, setIsInputFocused] = useState(false);
@@ -66,6 +75,22 @@ type SmallInputProps = {
     changeEventHandler?: (value: string) => void;
 };
 
+/**
+ * An input element that is styled to be small, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the input field.
+ * @param {string} props.defaultValue - The default value of the input field.
+ * @param {boolean} props.required - Indicates if the input field is required.
+ * @param {ValidationState} props.state - The current validation state of the input field.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The small input component.
+ */
 export function SmallInput({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SmallInputProps){
 
     // States to track
@@ -159,6 +184,24 @@ type DropdownInputProps = {
     changeEventHandler?: (value: string) => void;
     options: string[];
 };
+
+/**
+ * A dropdown input element, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.@param {object} props - The component props.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the dropdown input.
+ * @param {string} props.defaultValue - The default value of the dropdown input.
+ * @param {boolean} props.required - Indicates if the dropdown input is required.
+ * @param {ValidationState} props.state - The current validation state of the dropdown input.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {string[]} props.options - The available options for the dropdown input.
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The dropdown input component.
+ */
 export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler}: DropdownInputProps){
 
     // States to track
@@ -190,10 +233,15 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
             break;
     }
 
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
     const changeHandler = (value: string) => {
         setInputValue(value);
 
-        // Value has chaned so state is no longer vali
+        // Value has changed so state is no longer valid
         setThisState("normal")
 
         // Pass to the handler if it exists
@@ -262,6 +310,23 @@ type SimpleTextAreaProps = {
     errorText?: string;
     changeEventHandler?: (value: string) => void;
 };
+
+/**
+ * A text area input element that will scale vertically with the text typed. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the text area.
+ * @param {string} props.defaultValue - The default value of the text area.
+ * @param {boolean} props.required - Indicates if the text area is required.
+ * @param {ValidationState} props.state - The current validation state of the text area.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link AdvandcedTextArea} for a text area that allows for styling of the text input.
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The simple text area component.
+ */
 export function SimpleTextArea({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps){
 
     // States to track
@@ -293,6 +358,11 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
             break;
     }
 
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
     const changeHandler = (value: string) => {
         setInputValue(value);
 
@@ -358,7 +428,11 @@ interface RenderQuillProps {
     placeholder?: string;
 }
 
-// Dynamically load the quill component as it requires access to the window object and cannot be server side rendered
+/**
+ * A wrapper for the react-quill component that will dynamically load the component as it requires access to the window object and cannot be server side rendered.
+ *
+ * @returns {JSX.Element} - The render quill component.
+ */
 const QuillNoSSRWrapper = dynamic(
     () =>  import('react-quill'),
     { ssr: false, loading: () => <p>Loading ...</p> },
@@ -383,6 +457,24 @@ class RenderQuill extends React.Component<RenderQuillProps>{
 }
 
 // Advanced text area uses the same props as the simple text area
+/**
+ * A text area input element that allows for the styling of the input text inside of it and automatically converts the styling to HTML to be rendered again later. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the text area.
+ * @param {string} props.defaultValue - The default value of the text area.
+ * @param {boolean} props.required - Indicates if the text area is required.
+ * @param {ValidationState} props.state - The current validation state of the text area.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link SimpleTextArea} for a text area that does not allow for styling of the text input.
+ * @see {@link RenderQuill} for the component that renders the text area.
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The advanced text area component.
+ */
 export function AdvandcedTextArea({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
 
     // States to track
@@ -414,6 +506,11 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
             break;
     }
 
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
     const changeHandler = (value: string) => {
         setInputValue(value);
 

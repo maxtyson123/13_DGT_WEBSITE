@@ -7,6 +7,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {pageNames} from "@/components/navbar";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
+/**
+ * Renders the Footer component which displays a footer at the bottom of the page with a search box and links to other pages.
+ *
+ * @returns {JSX.Element} - The JSX element representing the Footer component.
+ */
 export default function Footer() {
     return (
         <>
@@ -35,7 +40,6 @@ export default function Footer() {
 
 
                 {/* Links to the other pages */}
-
                 <div className={styles.links}>
                     <h1> Rongoa </h1>
                     <ul>

@@ -6,6 +6,16 @@ type PageHeaderProps = {
     children: React.ReactNode;
     size?: "small" | "medium" | "large";
 };
+
+/**
+ * The page header component. This component is used to display a header on a page, it will render a background image with a blurred div in the centre where any children will be rendered.
+ *
+ * @param {Object} props - Component props.
+ * @param {React.ReactNode} props.children - The children to render in the page header.
+ * @param {string} [props.size="medium"] - The size of the page header, can be "small", "medium" or "large".
+ *
+ * @returns {JSX.Element} The rendered page header component.
+ */
 export default function PageHeader({ children, size = "medium" }: PageHeaderProps) {
 
     // Get a constant reference to the page header

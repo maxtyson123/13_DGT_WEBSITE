@@ -9,6 +9,14 @@ type PlantCardProps = {
     data: PlantData
 };
 
+/**
+ * Displays the plant data in the plant card format, this is where there is a main image, plant name and description, a button to go to the plant page and then in the bottom there are the uses of the plant.
+ *
+ * @param {Object} props - Component props.
+ * @param {PlantData} props.data - The plant data to display.
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
 export default function PlantCardData({ data }: PlantCardProps){
 
     const [names, setNames] = useState(["None", "None", "None"])
@@ -26,9 +34,6 @@ export default function PlantCardData({ data }: PlantCardProps){
 
     // Get a random image index
     const image_index = Math.floor(Math.random() * images.length)
-
-
-
 
     return(
         <>
@@ -75,6 +80,18 @@ type PlantCardApiProps = {
     id: number
 };
 
+/**
+ * Fetches the plant data from the API and then renders the plant card with the data fetched. Whilst waiting a loading PlantCard is displayed and if the plant is not found a PlantCardNull is displayed.
+ *
+ * @param {Object} props - Component props.
+ * @param {number} props.id - The id of the plant to fetch.
+ *
+ * @see {@link PlantCardData} - The plant card component.
+ * @see {@link PlantCardLoading} - The loading plant card component.
+ * @see {@link PlantCardNull} - The null plant card component.
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
 export function PlantCardApi({id}: PlantCardApiProps) {
 
     // Define the state for the plant data and the plant card
@@ -114,6 +131,13 @@ export function PlantCardApi({id}: PlantCardApiProps) {
     );
 }
 
+/**
+ * A plant card that is used as a placeholder whilst the plant data is being fetched.
+ *
+ * @see {@link PlantCardData} - The plant card component (this follows the same format).
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
 export function PlantCardLoading(){
     return(
         <>
@@ -151,6 +175,11 @@ export function PlantCardLoading(){
     )
 }
 
+/**
+ * A plant card that is used when there is no plant data to render.
+ *
+ * @see {@link PlantCardData} - The plant card component (this follows the same format).
+ */
 export function PlantCardNull(){
     return(
         <>
@@ -182,6 +211,13 @@ export function PlantCardNull(){
     )
 }
 
+/**
+ * Converts a tag from the API to a more readable format.
+ *
+ * @param tag {string | undefined} - The tag to convert.
+ *
+ * @returns {string} The converted tag.
+ */
 export function  convertUseTag(tag: string | undefined) {
 
     // If the tag is undefined, return an empty string

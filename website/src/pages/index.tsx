@@ -1,10 +1,9 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: "orgnial media assets"
-// TODO: JSDoc comments
 // TODO: Comment Code
+// TODO: JSDoc comments
 // TODO: Testing
-// TODO: Code cleanup
 // TODO: Code Validation
 // TODO: Documentation
 // TODO: Use SQL
@@ -29,6 +28,7 @@ import Link from "next/link";
 import {globalStyles} from "@/lib/global_css";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
+
 export default function Home(ref: HomeRef) {
     const pageName = "Home"
 
@@ -53,6 +53,9 @@ export default function Home(ref: HomeRef) {
         getPlantIDs().then(() => {console.log("Plant IDs fetched")} ).catch((error) => {console.log(error)});
     }, [])
 
+    /**
+     * Gets 3 random IDs from the database to be used for the featured plants
+     */
     const getPlantIDs = async () => {
 
         // Check if the plant ids have been cached
@@ -87,17 +90,11 @@ export default function Home(ref: HomeRef) {
                 // Save the plant ids to the cache
                 saveToCache("plantIds", ids)
 
-
             } catch (error) {
-
                 console.log(error)
-
             }
-
         }
-
     }
-
 
     return (
         <>

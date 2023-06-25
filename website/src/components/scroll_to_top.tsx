@@ -3,6 +3,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useState} from "react";
 
+/**
+ * Scroll to top button component. Shows a button that scrolls to the top of the page when clicked. Will hide itself if the user is already near the top of the page. To scroll to the bottom of the page, right click the button.
+ *
+ * @returns {JSX.Element} The rendered scroll to top button component.
+ */
 export default function ScrollToTop(){
 
     // State for showing the button
