@@ -780,12 +780,14 @@ class ImageInfo{
     // Store the state of the section
     state: {
         image_url:      string;
+        image_data:     string;
         image_name:     string;
         image_credit:   string;
         image_tags:     string;
         image_file:     File | null;
     } = {
         image_url:      "",
+        image_data:     "",
         image_name:     "",
         image_credit:   "",
         image_tags:     "",
@@ -807,6 +809,7 @@ class ImageInfo{
     // Handlers that update the state
     handleImageChange       = (file : File)    => {this.state.image_file = file};
     handeURLChange          = (value : string) => {this.state.image_url   = value};
+    handleDataChange        = (value : string) => {this.state.image_data  = value};
     handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
     handleCreditChange      = (value : string) => {this.state.image_credit = value};
     handleTagsChange        = (value : string) => {this.state.image_tags   = value};
@@ -819,6 +822,7 @@ class ImageInfo{
                 nameHandler={this.handleNameChange}
                 imageFileHandler={this.handleImageChange}
                 imageURLHandler={this.handeURLChange}
+                imageDataURLHandler={this.handleDataChange}
                 creditHandler={this.handleCreditChange}
                 tagsHandler={this.handleTagsChange}
                 valid={this.valid}
@@ -874,6 +878,7 @@ class ImageInfo{
 type ImageSectionProps = {
     nameHandler:     (value: string) => void;
     imageURLHandler:       (value: string) => void;
+    imageDataURLHandler:   (value: string) => void;
     imageFileHandler:       (file: File)    => void;
     creditHandler:          (value: string) => void;
     tagsHandler:            (value: string) => void;
@@ -885,18 +890,21 @@ type ImageSectionProps = {
     }
     state: {
         image_url:  string;
+        image_data: string;
         image_name: string;
         image_credit: string;
         image_tags: string;
     }
 }
-export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
+export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, imageDataURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
 
-    // States
-    const [imageLocalURL, setImageLocalURL ]  = useState(state.image_url)
+    const [localURL, setLocalURL] = useState(1);
 
+    useEffect(() => {
+        setLocalURL(prevState => prevState + 1);
 
-    // Upload the image to imgbb and then pass the url to the handler and update the image url state
+    }, [state])
+
     const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
 
         // Prevent the default behaviour
@@ -916,20 +924,20 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, cr
         // Handle the change of the file
         imageFileHandler(file);
         imageURLHandler(file.name);
+        imageDataURLHandler(URL.createObjectURL(file));
 
-        // Set the local image ur to the file
-        setImageLocalURL(URL.createObjectURL(file));
-
+        // Re render
+        setLocalURL(prevState => prevState + 1);
     }
 
 
     return(
         <>
             {/* Image / Uploader */}
-            <div className={styles.formItem}>
+            <div className={styles.formItem} key={localURL}>
                 <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
-                    {imageLocalURL !== "" ?
-                        <Image style={{borderRadius: 8}} src={imageLocalURL} alt={imageLocalURL} width={600} height={600} objectFit={"contain"}/>
+                    {state.image_url !== "" ?
+                        <Image style={{borderRadius: 8}} src={state.image_url.startsWith("http") ? state.image_url : state.image_data} alt={state.image_url} width={600} height={600} objectFit={"contain"}/>
                         :
                         <>
                             <div className={styles.uploadButton}>

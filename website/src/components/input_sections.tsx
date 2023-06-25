@@ -83,7 +83,7 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
 
     // Set the state class based on the state
     let stateClass = "";
-    switch (thisState) {
+    switch (state) {
         case "normal":
             stateClass = styles.normal;
             break;
@@ -99,9 +99,6 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
 
     const changeHandler = (value: string) => {
         setInputValue(value);
-
-        // Value has chaned so state is no longer vali
-        setThisState("normal")
 
         // Pass to the handler if it exists
         if (changeEventHandler) {
@@ -141,10 +138,10 @@ export function SmallInput({placeHolder, defaultValue, required, state, errorTex
                 </div>
 
                 {/* Show the success icon if the state is in success and if the input is not focused */}
-                {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+                {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
+                { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
 
@@ -179,7 +176,7 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
 
     // Set the state class based on the state
     let stateClass = "";
-    switch (thisState) {
+    switch (state) {
         case "normal":
             stateClass = styles.normal;
             break;
@@ -247,10 +244,10 @@ export function DropdownInput({placeHolder, defaultValue, required, state, error
                 </div>
 
                 {/* Show the success icon if the state is in success and if the input is not focused */}
-                {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+                {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
+                { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
     )
@@ -282,7 +279,7 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
 
     // Set the state class based on the state
     let stateClass = "";
-    switch (thisState) {
+    switch (state) {
         case "normal":
             stateClass = styles.normal;
             break;
@@ -340,11 +337,11 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
                 />
 
                 {/* Show the success icon if the state is in success and if the input is not focused */}
-                {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+                {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
 
                 {/* Show the error text if the state is in error */}
-                { thisState === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
+                { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
     )
@@ -403,7 +400,7 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
 
     // Set the state class based on the state
     let stateClass = "";
-    switch (thisState) {
+    switch (state) {
         case "normal":
             stateClass = styles.normal;
             break;
@@ -465,10 +462,10 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
                     />
 
                     {/* Show the success icon if the state is in success and if the input is not focused */}
-                    {thisState === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+                    {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
 
                     {/* Show the error text if the state is in error */}
-                    { thisState === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
+                    { state === "error" ? <p className={styles.errorText}>{errorText}</p> : ''}
                 </div>
             </div>
         </>

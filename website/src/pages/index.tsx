@@ -1,7 +1,6 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
 // TODO: Redo css
-// TODO: Fix Images not saving their display when new one is added, validation state not updating
 // TODO: JSDoc comments
 // TODO: Comment Code
 // TODO: Testing
