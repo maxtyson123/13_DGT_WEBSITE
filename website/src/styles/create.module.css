@@ -57,7 +57,7 @@
 /*
  These items take up 100% of the width of the parent
  */
-.formContainer, .submitDataButton,  .loadingContiner, .fileUploader{
+.submitDataButton,  .loadingContiner, .fileUploader{
     width: 100%;
 }
 
@@ -105,7 +105,7 @@
  Red background to indicate that it is a dagnerous action
  White text to contrast with the background
  Padding and font size to make the button larger
- Position it at the top right of the parent and round the coners to work with the parent container
+ Position it at the top left of the parent and round the coners to work with the parent container
  */
 .deleteSectionButton{
     background-color: rgba(255, 0, 0, 0.7);
@@ -113,6 +113,8 @@
     padding: 5px;
     font-size: 24px;
     align-self: start;
+    left: -5%;
+    position: relative;
     border-radius: 6px 0px 16px 0px
 }
 

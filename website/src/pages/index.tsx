@@ -1,6 +1,6 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Redo css
+// TODO: "orgnial media assets"
 // TODO: JSDoc comments
 // TODO: Comment Code
 // TODO: Testing
@@ -26,6 +26,7 @@ import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import ScrollingPlant from "@/components/scrolling_plant";
 import Link from "next/link";
+import {globalStyles} from "@/lib/global_css";
 
 type HomeRef = React.ForwardedRef<HTMLDivElement>
 export default function Home(ref: HomeRef) {
@@ -164,7 +165,7 @@ export default function Home(ref: HomeRef) {
 
             <Section autoPadding>
                 {/* A page break to give the user a break from the content */}
-                <div className={styles.pageBreakContainer}>
+                <div className={globalStyles.gridCentre}>
                     <div className={styles.pageBreak}>
                         <Image
                             src={"/media/images/fern.png"}
@@ -186,7 +187,7 @@ export default function Home(ref: HomeRef) {
             <Section autoPadding>
 
                 {/* Container for the stats */}
-                <div className={styles.pageBreakContainer}>
+                <div className={globalStyles.gridCentre}>
 
                     {/* Display the stats */}
                     <Stats/>

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {faBars, faBook, faCalendar, faClose, faHome, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -25,7 +25,7 @@ export default function Navbar(props: any) {
 
         // If the screen is mobile sized, set the isMobile state to true
         const handleResize = () => {
-            if (window.outerWidth < 600) {
+            if (window.outerWidth < 600 || window.innerWidth < 600) {
                 setIsMobile(true);
             } else {
                 setIsMobile(false);
@@ -124,19 +124,10 @@ function MobileNavbar({currentPage} : navbarProps){
 
                 {/* The next.js link component is used to link to other pages using the built-in router functionality*/}
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
-                <Link scroll={false} href="/">
-                    <Image
-                        src="/media/images/logo.svg"
-                        alt="Rongoa Logo"
-                        width={50}
-                        height={100}
-                        className={styles.logo}
-                    />
-
+                <Link scroll={false} href="/" className={styles.navItem}>
+                    <FontAwesomeIcon icon={faLeaf}/>
+                    <p> Rongoa </p>
                 </Link>
-
-                <Link scroll={false} href="/"> <h1 className={styles.title} > Rongoa </h1> </Link>
-
 
                 {
                     page === undefined || isExpanded ?

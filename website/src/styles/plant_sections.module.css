@@ -1,59 +1,91 @@
+/*
+ Use a grid to center the items and allow for the columns to be overriden when splitting
+ Add some padding to make the text not go to the edge
+ Make the colour of the text darker
+ */
 .sectionContainer{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0;
     align-items: center;
     justify-items: center;
     padding: 2.5%;
     color: var(--text-dark);
-
 }
 
+/*
+ Make the source section have a padding of 0.5% and justify the items to the start
+ Add some margin so its not too close to the edge
+ */
 .sourceSection{
     padding: .5%;
     justify-items: start;
     margin-left: 13%;
 }
 
+/*
+ Make the titles big and centred
+ */
 .sectionContainer h1{
     font-size: 64px;
-
     text-align: center;
 }
 
+/*
+ Make the secondary titles medium
+ */
 .sectionContainer h2 {
     font-size: 32px;
-
 }
 
+/*
+ Make the third titles a little bigger
+ */
 .sectionContainer h3{
     font-size: 24px;
-
 }
 
+/*
+ Make the text a little bigger
+ */
 .sectionContainer p{
     font-size: 18px;
-
 }
 
+/*
+ For the internal HTML of plant data make sure the list is in the right format
+ */
 .sectionContainer ol{
     list-style-type: decimal;
 }
 
+/*
+ For the internal HTML of plant data make sure the list is in the right format
+ */
 .sectionContainer ul{
     list-style-type: disc;
 }
 
+/*
+ Make the links underlined and using the theming blue
+ */
 .sectionContainer a{
     color: var(--blue);
     text-decoration: underline;
 }
 
+/*
+ Make sure the info side of the split section has spacing between that and the image
+ */
 .infoDiv{
     width: 80%;
 }
 
+/*
+ Make the background of the image container the secondary gray
+ Make the width 80% of the container and the height 100%
+ Make the default size of the image 400px
+ Round the corners, overflow hidden to hide the parts of the image that ignore the border radius
+ */
 .imageContainer{
     background-color: var(--secondary-gray);
     width: 80%;
@@ -64,11 +96,19 @@
     overflow: hidden;
 }
 
+/*
+ Override the columns to allow for an image and text
+ */
 .split{
     grid-template-columns: .5fr .5fr;
     grid-column-gap: 75px;
 }
 
+/*
+ Credits for the image needs to be displayed on top of the image so use absolute positioning with z index
+ Make the background the secondary gray and the text dark
+ Round the corners in a way that keeps the roundness of the image container
+ */
 .credits{
     z-index: 1;
     position: absolute;
@@ -80,6 +120,11 @@
     padding: 2px 8px 2px 8px;
 }
 
+/*
+ Make the attachment have a green background, rounded corners and a shadow
+ Make the text large, light gray and centered (cant use theming here it doesnt contrast well on dark mode)
+ Add padding to increase the size of the attachment
+ */
 .attachment{
     background-color: var(--main-green);
     border-radius: 20px;
@@ -90,15 +135,25 @@
     box-shadow: 0px 8px 8px var(--shadow-less);
 }
 
+/*
+ Show hover by making the background darker
+ */
 .attachment:hover{
     background-color: var(--dark-green);
 }
 
+/*
+ Ensure spacing from the icon
+ */
 .attachment p{
     margin-top: 30px;
 }
 
 @media only screen and (max-width: 1500px) {
+
+    /*
+     When the screen is smaller than 1500px revert the split to a single column
+     */
     .split{
         grid-template-columns: 1fr;
         grid-row-gap: 75px;
@@ -106,10 +161,12 @@
 
 }
 
+/*
+ Scale stuff down when the screen is smaller than 600px
+ */
 @media only screen and (max-width: 600px) {
     .sectionContainer h1{
         font-size: 42px;
-
     }
 
     .sectionContainer h3{

@@ -36,7 +36,7 @@
 }
 
 .mobileNav{
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     row-gap: 25px;
 }
 
@@ -66,8 +66,6 @@
     display: inline;
 }
 
-
-
 /*
  Make the current page visible to the user
  */
@@ -76,8 +74,7 @@
 }
 
 .navItem{
-    border-bottom: 4px solid white;
-
+    border-bottom: 2px solid white;
 }
 
 @media only screen and (max-width: 600px) {

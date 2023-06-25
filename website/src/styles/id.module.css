@@ -71,15 +71,27 @@
     overflow: hidden;
 }
 
+/*
+ Make the image container gray and rounded
+ Give it 100% width but keep the height at 400px, image with object fit itself to scale
+ Hide any overflow so the corners of the image dont go outside the rounder corners of the container
+ */
 .mainImage{
     background-color: var(--secondary-gray);
+    border-radius: 20px;
     width: 100%;
     height: 400px;
     position: relative;
-    border-radius: 20px;
     overflow: hidden;
 }
 
+/*
+ Move the container down a bit so it is not touching the main image
+ Make it half the hieth of the main image but same width percentage
+ Use a grid to divide the container into a column for the decrease button, 5 for the images and a column for the increase button
+ Add some spacing to each column and align the contents of the column to the centre
+ Hide any overflow so the corners of the images dont go outside the rounder corners of the container
+ */
 .bottomImages{
     margin-top: 50px;
     width: 100%;
@@ -94,26 +106,33 @@
 
 }
 
+/*
+ Make the buttons take up all of the space they can
+ Make them gray and rounded
+ Give the buttons a pointer cursor
+ Cover the buttons with the image
+
+ */
 .bottomImages button{
     position: relative;
     cursor: pointer;
     background-color: var(--secondary-gray);
-    border: none;
     width: 100%;
     height: 100%;
     object-fit: cover;
-
-
 }
 
+/*
+ On hover make the buttons a bit darker
+ */
 .bottomImages button:hover{
     background-color: var(--darker-secondary-gray);
 }
 
-.bottomImage{
-
-}
-
+/*
+ Divide the container into 3 columns and 1 row, repeating
+ Add some spacing between the columns and rows
+ */
 .monthsContainer, .attachmentsContainer{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -122,15 +141,22 @@
     grid-row-gap: 50px;
 }
 
+/*
+ The title should take up the entire first row, this makes it centre easily
+ */
 .monthsContainer .title{
     grid-column-start: 1;
     grid-column-end: 4;
-
 }
 
+/*
+ Month item has a green background, a shadow and rounded corners
+ The text is large, centered and light
+ Padding is added to make the month item larger
+ */
 .month{
     background: var(--darker-main-green);
-    box-shadow: -5px 5px 4px 5px var(--shadow-min); /* Dark mode shadow would not work */
+    box-shadow: -5px 5px 4px 5px var(--shadow-min);
     border-radius: 50px;
     text-align: center;
     color: var(--text-light);
@@ -138,10 +164,24 @@
     font-size: 20px;
 }
 
+/*
+ The header of the month item is large and centered
+ */
 .month h1{
     font-size: 32px;
 }
 
+/*
+ By default dont change the styling
+ */
+.smallInline{
+    display: block;
+    margin: 0px;
+}
+
+/*
+ The titles for the sections are large, dark and centered
+ */
 .sourceSection h1, .attachmentsSection h1{
     color: var(--text-dark);
     text-align: center;
@@ -149,25 +189,57 @@
 }
 
 
-@media only screen and (max-width: 600px) {
-    .monthsContainer, .plantHeader, .attachmentsContainer{
+@media only screen and (max-width: 800px) {
+
+    /*
+     On smaller screens the grid is changed to 1 column
+     */
+    .monthsContainer, .plantHeader, .attachmentsContainer, .bottomImages{
         grid-template-columns: 1fr;
     }
 
+    /*
+    The id is rotated back to 0 degrees as is now in a column
+     */
     .plantId{
         transform: rotate(0deg);
     }
 
+    /*
+     On smaller screens these items are made to be inline
+     */
+    .smallInline{
+        display: inline;
+        margin: 5px;
+    }
+
+    /*
+     Title needs to be updated to only take one column to keep the same row structure
+     */
     .monthsContainer .title{
         grid-column-start: 1;
         grid-column-end: 2;
     }
 
+    /*
+     Center the images when there is only one column
+    */
+    .plantImageContainer{
+        display: grid;
+        justify-items: center;
+    }
+
+    /*
+     Make the bottom images smaller as now they take up the entire screen width, make it long
+     */
     .bottomImages{
-        grid-template-columns: 1fr;
+        width: 50%;
         height: 1400px;
     }
-    
+
+    /*
+     Arrow should now put up/down instead of left/right
+     */
     .bottomImages .arrow{
         rotate: 90deg;
     }

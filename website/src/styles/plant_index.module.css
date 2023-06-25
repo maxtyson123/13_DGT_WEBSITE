@@ -1,10 +1,16 @@
+/*
+ Make the title of the page big, central and light coloured.
+ */
 .header h1{
     font-size: 64px;
-    line-height: 103%;
     text-align: center;
     color: var(--text-light);
 }
 
+/*
+ Make the top bar have a background colour of the darker green, take up the full width of the parent, be central, have a border radius of 20px, and have a shadow.
+ Add some padding to make it larger, and add a margin to lower it from the stats element
+ */
 .topBar{
     width: 100%;
     background-color: var(--darker-main-green);
@@ -16,37 +22,47 @@
     box-shadow: 0 8px 24px 10px var(--shadow-min)
 }
 
+/*
+ Make the title bigger
+ */
 .topBar h1{
     font-size: 32px;
 }
 
+/*
+ Use a flex box to center and wrap the letters
+ */
 .contentsLinks{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 }
 
+/*
+ Give the letters a margin to space them out
+ Make them light coloured, rounded, and have  a inset shadow to make them look like buttons
+ Make them have a pointer to show they are clickable
+ Padding to make them larger
+ */
 .contentsLinks p{
     margin: 2px;
-    text-decoration: none;
     color: var(--text-light);
-    font-size: 20px;
-    font-weight: 500;
-    background-color: var(--darker-main-green);
     border-radius: 5px;
     padding: 5px 15px 5px 15px;
     cursor: pointer;
     box-shadow: inset 0 0 0 1px var(--shadow-min);
 }
 
+/*
+ Show the hover by making the background a darker green
+ */
 .contentsLinks p:hover{
     background-color: var(--dark-green);
 }
 
-.letterContainer{
-
-}
-
+/*
+ Make the larger letter big, bold, italic and dark coloured
+ */
 .letterContainer h2{
     font-style: italic;
     font-weight: bolder;
@@ -55,6 +71,12 @@
 
 }
 
+/*
+ Make the list item dark coloured and small
+ Give it a border on the left to show it is a list item (instead of a bullet point)
+ Move the text away from the border by adding padding and margin
+ Cursor to show it is clickable
+ */
 .letterContainer li{
     color: var(--text-dark);
     border-left: var(--secondary-gray) solid 5px;
@@ -63,10 +85,16 @@
     cursor: pointer;
 }
 
+/*
+ On hover make the background the same as the border to give a "fulling" effect
+ */
 .letterContainer li:hover{
     background-color: var(--secondary-gray);
 }
 
+/*
+ Centre the stats and scale it down to 80% of its original size
+ */
 .statsContainer{
     display: grid;
     grid-template-columns: 1fr;

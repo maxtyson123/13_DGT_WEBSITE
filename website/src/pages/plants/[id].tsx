@@ -164,8 +164,8 @@ export default function PlantPage() {
 
 
                         <div  className={styles.headerItem}>
-                            <p>Author: {plantData ? plantData.author : "Author..."}</p>
-                            <p>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
+                            <p className={styles.smallInline}>Author: {plantData ? plantData.author : "Author..."}</p>
+                            <p className={styles.smallInline}>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
 
                         </div>
 
@@ -177,9 +177,7 @@ export default function PlantPage() {
                             <div className={styles.usesContianer}>
 
                                 {plantData && plantData.use.map((use, index) => (
-                                    <div key={index} className={styles.use}>
-                                        <p>{convertUseTag(use)}</p>
-                                    </div>
+                                        <p key={index} className={styles.smallInline}>{convertUseTag(use)}</p>
                                 ))}
 
                             </div>
@@ -273,6 +271,7 @@ export default function PlantPage() {
                     {
                         plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
                             <>
+                                <br/>
                                 <div className={styles.attachmentsSection}>
                                     <h1> Attachments </h1>
                                     <div className={styles.attachmentsContainer}>
@@ -291,6 +290,8 @@ export default function PlantPage() {
                     {
                         plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
                             <div className={styles.sourceSection}>
+                                <br/>
+                                <br/>
                                 <h1> Sources </h1>
                                 {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
                                     <SourceSection section={source} key={index}/>

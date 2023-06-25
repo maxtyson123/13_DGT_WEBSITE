@@ -1,54 +1,62 @@
+/*
+ Add a border and a box shadow to make it stand out from the background and round the corners
+ Make it take up 80% of the width of the screen
+ Centre the text
+ */
 .statsSection{
-    background: var(--main-background);
     border: 1px solid var(--secondary-gray);
     box-shadow: 0px 8px 24px 10px var(--shadow-min);
     border-radius: 8px;
     width: 80vw;
     padding: 32px;
     text-align: center;
-
-}
-
-.statsSection p{
-    width: 100%;
-
-}
-
-.statsSection h1{
-    font-style: normal;
-    font-weight: 500;
-    font-size: 74px;
-    line-height: 75px;
-    width: 100%;
     color: var(--text-dark);
-
 }
 
+/*
+ Make the title larger
+ */
+.statsSection h1{
+    font-size: 74px;
+}
+
+/*
+ The stats themselves are aligned in a row with 4 columns using a grid
+ They are centred
+ */
 .statsRowContainer{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
     align-items: center;
-    padding: 32px;
 }
 
+/*
+ Make the stat font larger
+ */
 .stat{
     font-size: 40px;
-    line-height: 47px;
-    color: var(--text-dark);
-
 }
 
+/*
+ Make the stat value double the size of the label
+ Make it a different colour to draw attention
+ */
 .stat h2{
-    font-size: 96px;
-    line-height: 112px;
+    font-size: 80px;
     color: var(--darker-secondary-gray);
 }
 
+/*
+ Make the icon and the label in line
+ */
 .inline{
     display: inline;
 }
 
+/*
+ The with of 4 stats cant fit on smaller screens so make it a column
+ */
 @media only screen and (max-width: 800px) {
     .statsRowContainer {
         display: grid;

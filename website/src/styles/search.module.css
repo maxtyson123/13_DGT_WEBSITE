@@ -1,92 +1,131 @@
+
+/*
+ Centre the text in the header, make the font white
+ */
 .searchHeaderContainer{
     text-align: center;
     color: var(--text-light);
 }
 
+/*
+ The title needs to be big
+ */
 .searchHeaderContainer h1{
     font-size: 64px;
-    line-height: 103%;
-    text-align: center;
-    color: var(--text-light);
 }
 
-
+/*
+ The search stats are in a grid, with 3 columns
+ Centre the items
+ */
 .statsContainer{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
-
 }
 
-.statContainer{
-
-}
-
+/*
+ Wrap the query if it is too long
+ Add margin so that it is not too close to the edge
+ Inline so that the lables can be on the same line as the values
+ */
 .statContainer p{
     margin-left: 10px;
     overflow-wrap: anywhere;
     display: inline;
 }
 
+
+/*
+ Center the search box
+ */
 .searchBoxContainer{
     display: flex;
-    flex-direction: row;
     justify-content: center;
-
 }
 
+/*
+ Make the search box that up 60% of the screen and have a constant height of 75px
+ Round the corners of the box on the left, not the right as that is where the button is
+ Add a shadow to the box
+ Padding to make it look larger
+ The font is large, centred and dark
+ */
 .searchBox{
     width: 60%;
     height: 75px;
-    border-radius: 10px 00px 0 10px;
+    border-radius: 10px 0 0 10px;
     box-shadow: 0 4px 4px var(--shadow-min);
     background-color: var(--main-background);
     padding: 10px;
     font-size: 32px;
-    line-height: 103%;
     text-align: center;
     color: var(--text-dark);
 
 }
 
+/*
+ Shadow on the button to look the same as the box
+ Make the background colour the darker green and the text white
+ Add padding on either side to make it larger
+ */
 .searchButton{
     box-shadow: 0 4px 4px var(--shadow-min);
     background-color: var(--darker-main-green);
     border-radius: 0 10px 10px 0;
-    padding-left: 30px;
+    padding: 0 30px 0 30px;
     color: var(--text-light);
-    padding-right: 30px;
 }
 
+/*
+ Show the hover by making the background a darker green
+ */
 .searchButton:hover{
     background-color: var(--dark-green);
     cursor: pointer;
 }
 
+/*
+ The results are displayed in a flex box, with the items wrapping in a row
+ Center the items
+ */
 .searchResultsContainer {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
 }
 
+/*
+ Add a gap between the results and the search box
+ */
 .searchResult{
     padding: 20px;
 }
 
 @media only screen and (max-width: 600px) {
+
+    /*
+      Make the search box font smaller on smaller screens so the entire prompt can be seen
+     */
     .searchBox{
         font-size: 24px;
     }
 
+    /*
+     The stats go into a single column as there isn't space for them to be all on one line
+     */
     .statsContainer{
         grid-template-columns: 1fr;
     }
 }
 
 @media only screen and (max-width: 400px) {
+
+    /*
+     Make the search box font smaller on smaller screens so the entire prompt can be seen
+    */
     .searchBox{
         font-size: 20px;
     }

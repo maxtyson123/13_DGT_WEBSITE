@@ -1,3 +1,11 @@
+/*
+ The scroll to top button is always visible in the bottom right corner of the screen through the use of fixed positioning.
+ Use index to make it above everything else on the page.
+ Give it the main background colour and a border radius to make it round.
+ Make it stand out with a shadow.
+ Make the text dark green.
+ Cursor to show it is clickable.
+ */
 .scrollButton{
     position: fixed;
     bottom: 20px;
@@ -12,6 +20,9 @@
 
 }
 
+/*
+ Hover swap the background and text colours to show the user that the button is being hovered over.
+ */
 .scrollButton:hover{
     background-color: var(--darker-main-green);
     color: var(--text-light);

@@ -30,6 +30,11 @@
     height: 100%;
 }
 
+
+/*
+ The image is made to be 350px by 350px
+ Hide to overflow to ensure the image does not go outside of the div.
+ */
 .imageContainer{
     width: 350px;
     height: 350px;
@@ -136,7 +141,9 @@
 
 }
 
-
+/*
+ "Fake" a image by giving it a grey background and a border-radius of 20px.
+ */
 .nullImage{
     width: 80%;
     height: 80%;
@@ -147,10 +154,12 @@
 }
 
 @media only screen and (max-width: 420px) {
+
+    /*
+     Make the image smaller on mobile devices.
+     */
     .imageContainer{
         width: 200px;
         height: 200px;
-        position: relative;
-        overflow: hidden;
     }
 }

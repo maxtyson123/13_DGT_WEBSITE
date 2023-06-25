@@ -29,9 +29,21 @@
     padding-left: 4%;
 }
 
+/*
+ Style the link in the description to be a light blue.
+ */
 .description a{
-    color: #00B4D8;
+    color: var(--blue)
 
+}
+
+/*
+ The search box takes up the width of the page header but its set to only take up 60% of this.
+ */
+.searchBox{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    width: 60%;
 }
 
 /*
@@ -67,14 +79,12 @@
     padding: 5%;
 }
 
-.pageBreakContainer{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    justify-items: center;
-    align-items: center;
-}
-
+/*
+ Make the pagebreak have a grey background with a inset shadow.
+ Round the corners and keep the width at 80 veiwport width.
+ Centre the plant images using a grid and two columns.
+ Justify the items to the baseline to make the flax start at the bottom of the pagebreak.
+ */
 .pageBreak{
     background: var(--secondary-gray);
     box-shadow: inset 0px 4px 4px var(--shadow-less);
@@ -82,38 +92,53 @@
     width: 80vw;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
     justify-items: center;
     align-items: baseline;
 }
 
-.searchBox{
-    grid-column-start: 1;
-    grid-column-end: 3;
-    width: 60%;
-}
+@media only screen and (max-width: 1400px) {
 
-@media only screen and (max-width: 1500px) {
+    /*
+     Can only fit two cards on the screen at a time with this width.
+     */
     .cardsContainer {
-        grid-template-columns: 2fr;
+        grid-template-columns: 1fr 1fr;
     }
 
 }
 
 @media only screen and (max-width: 1000px) {
+
+    /*
+     Can only fit one card on the screen at a time with this width.
+     */
+    .cardsContainer {
+        grid-template-columns: 1fr;
+    }
+
+    /*
+     Make the welcome container go into a singular column.
+     */
     .welcomeContainer{
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
     }
 
+    /*
+     Make the plant container go into a singular column.
+     */
     .plantContainer{
         grid-row: 1
     }
 
+    /*
+     Search needs to only take up one column in this low sized form
+     */
     .searchBox{
         grid-column-start: 1;
         grid-column-end: 2;
         width: 100%;
+        align-self: center;
     }
 
 
