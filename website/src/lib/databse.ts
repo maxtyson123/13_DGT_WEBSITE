@@ -1,7 +1,12 @@
 // Class for the names of the database tables depending  on SQL or  postgreSQL
-import mysql from "serverless-mysql";
+import mysql from "mysql2";
+import {USE_POSTGRES} from "@/lib/constants";
+import {db, VercelPool, VercelPoolClient} from "@vercel/postgres";
+import {Connection} from "mysql";
 
 export class SQLDatabase {
+
+    database: string;
 
     // Generic
     id: string;
@@ -61,6 +66,8 @@ export class SQLDatabase {
     auth_type: string;
 
     constructor() {
+        this.database = "rongoa8jwons3_rongoadb"
+
         // Generic
         this.id = "id";
         this.plant_id = "plant_id";
@@ -126,6 +133,8 @@ export class PostgresSQL extends SQLDatabase{
     constructor() {
         super();
 
+        this.database = "public"
+
         // Generic
         this.id = "id";
         this.plant_id = "plant_id";
@@ -177,12 +186,67 @@ export class PostgresSQL extends SQLDatabase{
     }
 }
 
-export const mysql_db = mysql({
-    config: {
+export function getTables(){
+    let tables = new SQLDatabase();
+
+    // Set the tables to use
+    if(USE_POSTGRES) {
+        tables = new PostgresSQL();
+    }
+
+    return tables
+}
+
+export const mysql_db = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
+    database: process.env.MYSQL_DATABASE,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD
+
+});
+
+export async function getClient(){
+    const dataBase = USE_POSTGRES ? db : mysql_db
+
+    let client = dataBase
+
+    if(!USE_POSTGRES)
+        client  = await dataBase.connect();
+
+    return client
+}
+
+export async function makeQuery(query: string, client: any){
+    const connection = mysql.createConnection({
         host: process.env.MYSQL_HOST,
-        port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
+        port: 3306,
         database: process.env.MYSQL_DATABASE,
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD
+    });
+
+// simple query
+    connection.query(
+        query,
+        function(err, results, fields) {
+            console.log(err)
+            console.log(results); // results contains rows returned by server
+        }
+    );
+
+
+    let data;
+
+    try{
+        // Get the data from the database
+        data  = await client.query(query);
+        return data
+
+    } catch (e) {
+        console.log("ERROR")
+        return null
     }
-});
+
+
+}

@@ -1,10 +1,11 @@
 import {db, VercelPool} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {mysql_db, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, getTables, makeQuery, mysql_db, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
 import {GetOrgin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {Connection} from "pg";
 
 export default async function handler(
     request: NextApiRequest,
@@ -19,19 +20,8 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use POST' });
     }
 
-    // Select what database is being used
-    const dataBase = USE_POSTGRES ? db : mysql_db
-
-    // Connect to it
-    let client : any = await dataBase.connect();
-
-    // MySQL requires to get client from connection
-    if(!USE_POSTGRES){
-        // Check if the database is of mysql type
-        if(!(dataBase instanceof VercelPool)){
-            client = dataBase.getClient()
-        }
-    }
+    // Get the client
+    const client =  await getClient()
 
     // Try uploading the data to the database
     try {
@@ -112,12 +102,7 @@ export default async function handler(
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
 
         // Check if the data is being downloaded from the Postgres database
-        let tables = new SQLDatabase();
-
-        // Set the tables to use
-        if(USE_POSTGRES) {
-            tables = new PostgresSQL();
-        }
+        const tables = getTables()
 
         // Check if the user is allowed to upload
         let auth_query = ""
@@ -338,25 +323,13 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
-        let data;
-
-
-        if(!USE_POSTGRES){
-            query = client.escape(query)
-        }
-
-        try{
-            // Get the data from the database
-            data  = await client.query(query);
-        } catch (e) {
-            console.log("ERROR")
-            console.log(e)
-            return response.status(500).json({message: "ERROR IN SERVER", error: e });
-
-        }
+        const data = await makeQuery(query, client)
 
         console.log("DATA")
         console.log(data)
+
+        if(!data)
+            return response.status(500).json({ error: "No data returned" });
 
         // Get the id of the new plant
         // @ts-ignore (has to be like this data[0] is an object)

@@ -1,6 +1,6 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import mysql from 'serverless-mysql';
 import {USE_POSTGRES} from "@/lib/constants";
 
@@ -14,26 +14,8 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
     }
 
-    // Select what database is being used
-    let dataBase : any = mysql({
-        config: {
-            host: process.env.MYSQL_HOST,
-            port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
-            database: process.env.MYSQL_DATABASE,
-            user: process.env.MYSQL_USER,
-            password: process.env.MYSQL_PASSWORD
-        }
-    });
-
-    // If postgres use that
-    if(USE_POSTGRES){
-        dataBase = db
-    }
-
-    // Connect to the database
-    const client = await dataBase.connect();
-
-
+    // Get the client
+    const client =  await getClient()
 
     // Get the ID and table from the query string
     const { id, table } = request.query;
@@ -242,7 +224,7 @@ export default async function handler(
         const query = `
             SELECT
             ${selector}
-            FROM public.plants
+            FROM ${tables.database}.plants
             ${joiner};
         `;
 
@@ -251,8 +233,13 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
-        // Get the data from the database
-        const data = await client.query(query);
+        const data = await makeQuery(query, client)
+
+        console.log("DATA")
+        console.log(data)
+
+        if(!data)
+            return response.status(500).json({ error: "No data returned" });
 
         // If the data is empty, return an error
         if(data.rows.length === 0) {
@@ -263,6 +250,8 @@ export default async function handler(
         return response.status(200).json({ data: data.rows[0] });
 
     } catch (error) {
+        console.log(error)
+
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }
