@@ -77,11 +77,11 @@ export default function PlantPage() {
             return
         }
 
+        // Fetch the plant data
         const plantOBJ = await fetchPlant(localId)
-
-
         console.log(plantOBJ)
 
+        // If the plant data is null then there is a problem
         if(!plantOBJ){
             setError("Plant not found")
             return
@@ -142,11 +142,6 @@ export default function PlantPage() {
 
     }
 
-    const closeError = () => {
-        router.push("/")
-    }
-
-    // @ts-ignore
     return (
         <>
 
@@ -158,21 +153,26 @@ export default function PlantPage() {
             <Section>
                 <PageHeader size={"small"}>
                     <div className={styles.plantHeader}>
+
+                        {/* Id of the plant if it exists*/}
                         <div  className={styles.headerItem}>
                             <p className={styles.plantId}>ID : {plantData  ? plantData.id : "0000"}</p>
                         </div>
 
 
+                        {/* Author and last modified date. Convert the date into the right format */}
                         <div  className={styles.headerItem}>
                             <p className={styles.smallInline}>Author: {plantData ? plantData.author : "Author..."}</p>
                             <p className={styles.smallInline}>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
 
                         </div>
 
+                        {/* Plant name */}
                         <div  className={styles.headerItem}>
                             <p className={styles.headerTitle}>{plantNames[0]}</p>
                         </div>
 
+                        {/* Plant uses, loop through them creating a item for each one but make sure its in the right format first */}
                         <div  className={styles.headerItem}>
                             <div className={styles.usesContianer}>
 
@@ -183,8 +183,9 @@ export default function PlantPage() {
                             </div>
                         </div>
 
+                        {/* Plant location found */}
                         <div  className={styles.headerItem}>
-                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "Location..."}</p>
+                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "Lost :("}</p>
                         </div>
 
                     </div>
@@ -194,47 +195,59 @@ export default function PlantPage() {
             <Section autoPadding>
                <div className={styles.plantMainInfo}>
 
+                   {/* If there is an error then display it */}
                    { error === "" ? null : <Error error={error}/>}
 
                       <div className={"row"}>
 
+                          {/* Show the preffered name as the title and the others as the subtitle */}
                           <div className={"column"}>
                               <h1> {plantNames[0]} </h1>
                               <h2> {plantNames[1]} | {plantNames[2]} </h2>
 
+                              {/* The contents of this is set by JS as the description is in html format and that wont work as plaintext*/}
                              <div className={styles.description} id={"large_description"}> </div>
                           </div>
 
                           <div className={"column"}>
 
+
                               <div className={styles.plantImageContainer}>
+
+                                  {/* The main image, will be set to the first image until the users scrolls below to another one */}
                                   <div className={styles.mainImage}>
                                       <Image src={mainImage} alt={`${plantNames[0]} Header Image`} fill style={{objectFit: "contain"}}/>
                                   </div>
 
+                                  {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
                                   <div className={styles.bottomImages}>
+
+                                      {/* Decrement the current image by 1 */}
                                       <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/> </button>
 
-                                      {/* Map 5 images in the range of the current image - 2 to the current image + 2 */}
+                                      {/* Loop through 5 creating 5 images */}
                                       {plantData && plantData.attachments.filter((attachment, index) => index <= 4 && attachment.type === "image").map((attachment, index) => (
-                                          <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
-                                                <Image
-                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                    alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
-                                                    fill
-                                                    style={{objectFit: "contain"}}
+                                            <>
+                                              {/* On click set the main image to the image clicked */}
+                                              <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
 
-                                                />
-                                            </button>
-                                        ))}
+                                                   {/* The image, use the current shown image plus the index to get the correct 5 */}
+                                                    <Image
+                                                        src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
+                                                        alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
+                                                        fill
+                                                        style={{objectFit: "contain"}}
+                                                    />
+                                                </button>
+                                              </>
+                                      ))}
 
+                                      {/* Decrement the current image by 1 */}
                                       <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/> </button>
                                   </div>
                               </div>
-
                           </div>
                       </div>
-
                </div>
             </Section>
 
@@ -246,6 +259,7 @@ export default function PlantPage() {
                         <h1 className={styles.title}> Events </h1>
                     }
 
+                    {/* Loop through the events and display them */}
                     {plantData?.months_ready_for_use.map((month, index) => (
                         <div key={index} className={styles.month}>
                             <h1>{month.event}</h1>
@@ -257,6 +271,7 @@ export default function PlantPage() {
 
             <Section autoPadding>
                 <div className={styles.sectionsContainer}>
+
                     {/* Load all the big sections */}
                     {plantData?.sections.map((section, index) => (
                         <AutoSection

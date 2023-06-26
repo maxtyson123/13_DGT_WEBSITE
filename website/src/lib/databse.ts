@@ -4,6 +4,9 @@ import {USE_POSTGRES} from "@/lib/constants";
 import {db, VercelPool, VercelPoolClient} from "@vercel/postgres";
 import {Connection} from "mysql";
 
+/**
+ * Class for the names of the columns in the database
+ */
 export class SQLDatabase {
 
     database: string;
@@ -128,6 +131,12 @@ export class SQLDatabase {
     }
 }
 
+/**
+ * Class for the names of the columns in the database, POSTGRES SQL names allow for the use of reserved words
+ *
+ * @see {@link SQLDatabase}
+ * @see {@link [Reserved](https://www.postgresql.org/docs/9.2/sql-keywords-appendix.html)}
+ */
 export class PostgresSQL extends SQLDatabase{
 
     constructor() {
@@ -186,6 +195,15 @@ export class PostgresSQL extends SQLDatabase{
     }
 }
 
+/**
+ * Checks what database to use and returns the correct column name class
+ *
+ * @see {@link SQLDatabase}
+ * @see {@link PostgresSQL}
+ * @see {@link USE_POSTGRES}
+ *
+ * @returns {SQLDatabase} - The correct column name class
+ */
 export function getTables(){
     let tables = new SQLDatabase();
 
@@ -197,6 +215,10 @@ export function getTables(){
     return tables
 }
 
+/**
+ * Initialises the database connection using the environment variables
+ * @type {Connection}
+ */
 export const mysql_db = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
@@ -206,47 +228,71 @@ export const mysql_db = mysql.createConnection({
 
 });
 
+/**
+ * Checks what database to use and then returns the correct database connection
+ *
+ * @see {@link mysql_db}
+ * @see {@link db}
+ * @see {@link USE_POSTGRES}
+ *
+ * @returns {Connection | VercelPoolClient} - The correct database connection
+ */
 export async function getClient(){
     const dataBase = USE_POSTGRES ? db : mysql_db
 
-    let client = dataBase
+    let client: any = dataBase
 
     if(!USE_POSTGRES)
-        client  = await dataBase.connect();
+        client = await dataBase.connect();
 
     return client
 }
 
-export async function makeQuery(query: string, client: any){
-    const connection = mysql.createConnection({
-        host: process.env.MYSQL_HOST,
-        port: 3306,
-        database: process.env.MYSQL_DATABASE,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD
-    });
-
-// simple query
-    connection.query(
-        query,
-        function(err, results, fields) {
-            console.log(err)
-            console.log(results); // results contains rows returned by server
-        }
-    );
-
-
+/**
+ * Makes a query to the database and returns the data. Query and response is different depending on the database used, this is handled by this function depending on the USE_POSTGRES variable meaning to get the client getClient() should be used
+ *
+ * @param {string} query - The query to make to the database
+ * @param {Connection | VercelPoolClient} client - The database connection to use
+ * @param {boolean} rawData - If the data returned should be raw data or not
+ *
+ * @see {@link getClient}
+ *
+ * @returns {JSON | null} - The data returned from the database in JSON format, null if there was an error or no data was returned
+ */
+export async function makeQuery(query: string, client: any, rawData : boolean = false){
     let data;
 
     try{
-        // Get the data from the database
-        data  = await client.query(query);
+
+        if(USE_POSTGRES){
+            // Get the data from the database
+            data  = await client.query(query);
+
+            // If the data is raw data return it
+            if(rawData)
+                return data
+
+            // Get the data from the rows
+            return data.rows[0]
+
+        }else{
+            data  = await (client as Connection).query(
+                query,
+                function(err, results, fields) {
+                    if(err){
+                        console.log("ERROR")
+                        console.log(err)
+                        return null
+                    }
+                    console.log(results); // results contains rows returned by server
+                }
+            );
+        }
+
         return data
 
     } catch (e) {
         console.log("ERROR")
         return null
     }
-
-
 }

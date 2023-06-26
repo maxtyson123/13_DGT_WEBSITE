@@ -138,8 +138,9 @@
     background-color: rgba(63, 60, 60, 0.9);
     display: grid;
     grid-template-columns: .8fr 1fr;
+    grid-template-rows: 1fr 1fr;
     justify-items: end;
-    align-items: center;
+    align-items: end;
 }
 
 /*
@@ -152,6 +153,16 @@
     color: var(--text-light);
     display: inline;
     justify-self: start;
+}
+
+.loadingContiner h2{
+    font-size: 32px;
+    text-align: center;
+    color: var(--darker-secondary-gray);
+    grid-column-start: 1;
+    grid-column-end: 3;
+    align-self: start;
+    justify-self: center;
 }
 
 /*

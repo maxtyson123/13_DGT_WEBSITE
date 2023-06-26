@@ -33,8 +33,7 @@ export default async function handler(
     // Get the ID and table from the query string
     const { operation, json, id } = request.query;
 
-
-    // Try downloading the data from the database
+    // Try running the operation
     try {
 
         switch (operation) {
@@ -63,6 +62,7 @@ export default async function handler(
                     plantsInfo.data.last_modified = new Date(plantsInfo.data.last_modified);
                 }
 
+                // Change the data into the PlantDataApi type
                 let apiData = plantsInfo.data as PlantDataApi;
 
                 // Clean the data
@@ -85,6 +85,7 @@ export default async function handler(
                 return response.status(200).json({ data: plantOBJ});
 
             case 'upload':
+
                 // Check if the JSON param exists
                 if (!json) {
                     // If it doesn't exist, return an error

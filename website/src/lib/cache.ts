@@ -3,6 +3,15 @@ interface CacheItem {
     data: any
 }
 
+/**
+ *  Will try get an item from the localstoarge, if the item is expired, it will be removed from the local storage
+ *
+ * @param {string} id - The key used to store the item in the local storage
+ *
+ * @see {@link CacheItem}
+ *
+ * @returns {JSON | null} - The item from the local storage, or null if the item does not exist or has expired
+ */
 export function getFromCache(id: string){
 
     let item = null;
@@ -34,6 +43,14 @@ export function getFromCache(id: string){
 
 }
 
+/**
+ * Saves an item to the local storage, gives it an expiry date of 24 hours from now
+ *
+ * @param {string} id - The key used to store the item in the local storage
+ * @param {JSON} data - The data to store in the local storage, will be converted to JSON
+ *
+ * @see {@link CacheItem}
+ */
 export function saveToCache(id: string, data: any){
 
     // Create the cache item
@@ -45,8 +62,4 @@ export function saveToCache(id: string, data: any){
     // Save the cache item to the local storage
     localStorage.setItem(id, JSON.stringify(cacheItem));
 
-}
-
-export function clearCache(){
-    localStorage.clear();
 }

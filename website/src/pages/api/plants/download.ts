@@ -233,21 +233,19 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
+        // Make the query
         const data = await makeQuery(query, client)
 
+        // Debug
         console.log("DATA")
         console.log(data)
 
+        // If the data is empty, return an error
         if(!data)
             return response.status(500).json({ error: "No data returned" });
 
-        // If the data is empty, return an error
-        if(data.rows.length === 0) {
-            return response.status(404).json({ error: 'No data found' });
-        }
-
         // If the data is not empty, return the data
-        return response.status(200).json({ data: data.rows[0] });
+        return response.status(200).json({ data: data });
 
     } catch (error) {
         console.log(error)

@@ -2,6 +2,9 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import NextAuth, {NextAuthOptions} from "next-auth";
 
+/**
+ * The config options that NextAuth uses when authenticating users
+ */
 export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({

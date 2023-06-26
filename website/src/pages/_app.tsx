@@ -16,16 +16,22 @@ config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
 
+  // Get the current page URL
   const router = useRouter()
   const pageKey = router.asPath
 
   return (
       <>
         <main>
+            {/* The session provider must wrap the entire app to keep the user logged in */}
           <SessionProvider session={pageProps.session}>
-                  <Component  key={pageKey} {...pageProps} />
-                  <Credits/>
-                  <Analytics />
+
+              {/* Show the page */}
+              <Component  key={pageKey} {...pageProps} />
+
+              {/* Credits and analytics should be on every page*/}
+              <Credits/>
+              <Analytics />
            </SessionProvider>
         </main>
       </>

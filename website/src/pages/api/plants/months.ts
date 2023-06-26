@@ -17,6 +17,8 @@ export default async function handler(
     // Try downloading the data from the database
     try {
 
+        //TODO: Test mysql then use that if it works
+
         // Create the query to retrieve plant_ids and table names
         const query = `
             SELECT plants.id, plants.english_name, plants.latin_name, plants.maori_name as moari_name, plants.preferred_name, months_ready_for_use.start_month, months_ready_for_use.end_month, months_ready_for_use.event
@@ -31,8 +33,6 @@ export default async function handler(
         if(data.rows.length === 0) {
             return response.status(404).json({ error: 'No data found' });
         }
-
-
 
         // If the data is not empty, return the data
         return response.status(200).json({ data: data.rows });

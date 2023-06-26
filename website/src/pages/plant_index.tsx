@@ -110,14 +110,15 @@ export default function PlantIndex(ref: IndexRef){
 
     return(
         <>
+            {/* The header and navbar */}
             <HtmlHeader currentPage={pageName}/>
             <Navbar currentPage={pageName}/>
 
+            {/* The main page header is just the plant index title */}
             <PageHeader size={"small"}>
                 <div className={styles.header}>
                     <h1>Plant Index</h1>
                 </div>
-
             </PageHeader>
 
             {/* Stats */}
@@ -181,10 +182,6 @@ export default function PlantIndex(ref: IndexRef){
                     })
 
                 }
-
-
-
-
             </Section>
 
             {/* Page footer */}
@@ -210,12 +207,12 @@ function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
             <div className={styles.letterContainer} id={letter}>
                 <h2>{letter}</h2>
                 <ul>
-                    {/* Add a list item for each plant that starts with A */}
+                    {/* Add a list item for each plant that starts with the specified letter */}
                     {
                         // Check if the plants have been fetched
                         plants ?
 
-                            // Loop through the plants and add a list item for each plant that starts with A
+                            // Loop through the plants and add a list item for each plant that starts with the specified letter
                             plants.map((plant) => {
                                 if(!plant.name)
                                     return <></>
@@ -223,7 +220,7 @@ function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
                                     return <li key={plant.id} onClick={() => {window.location.href = "/plants/" + plant.id}}>{plant.name}</li>
                                 }})
                             :
-                            // If the plants haven't been fetched then display a loading message
+                            // If the plants haven't been fetched, then display a loading message
                             <li>Loading...</li>
                     }
                 </ul>

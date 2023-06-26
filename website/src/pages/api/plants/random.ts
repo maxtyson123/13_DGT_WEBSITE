@@ -27,6 +27,8 @@ export default async function handler(
     // Try querying the database
     try {
 
+        //TODO: Test mysql then use that if it works
+
         // Get x random plant ids from the database
         const plantIds = await client.query(`SELECT id FROM plants ORDER BY RANDOM() LIMIT ${amount}`);
 

@@ -115,7 +115,6 @@ export default async function handler(
         // Create the query
         let query = ``;
 
-
         // Remove the information for attachment data
         query += `DELETE FROM attachments WHERE plant_id = ${id};`;
 
@@ -144,6 +143,9 @@ export default async function handler(
         console.log("=====================================")
         console.log(query);
         console.log("=====================================")
+
+
+        //TODO: Test mysql and use that instead of postgres
 
         // Get the data from the database
         const data  = await client.query(query);

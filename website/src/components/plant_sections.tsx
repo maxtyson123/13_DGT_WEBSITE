@@ -19,7 +19,7 @@ import {
     faGlobe
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    AttachmentSectionData,
+    AttachmentData,
     CraftSectionData,
     CustomSectionData,
     EdibleSectionData,
@@ -33,7 +33,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 interface AutoSectionProps{
     section: any
-    images: AttachmentSectionData[]
+    images: AttachmentData[]
     isLeft: boolean
 }
 
@@ -43,7 +43,7 @@ interface AutoSectionProps{
  * @param {Object} props - Component props.
  * @param {Object} props.section - The section data.
  * @param {string} props.section.type - The type of section.
- * @param {AttachmentSectionData[]} props.images - The images for the plant.
+ * @param {AttachmentData[]} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
  * @see {@link EdibleSection} - The edible section.
@@ -73,7 +73,7 @@ export function AutoSection({section, images, isLeft} : AutoSectionProps){
 
 interface EdibleSectionProps{
     section:                EdibleSectionData;
-    images:                 AttachmentSectionData[]
+    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -82,7 +82,7 @@ interface EdibleSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {EdibleSectionData} props.section - The section data.
- * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {AttachmentData} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
  * @see {@link AdvancedTextArea} - The advanced text area component.
@@ -152,7 +152,7 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 
 interface MedicalSectionProps{
     section:                MedicalSectionData;
-    images:                 AttachmentSectionData[]
+    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -161,7 +161,7 @@ interface MedicalSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {MedicalSectionData} props.section - The section data.
- * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {AttachmentData} props.images - The images for the plant.
  * @param {boolean} props.isLeft - Whether the image should be on the left or right side of the page.
  *
  * @see {@link AdvancedTextArea} - The advanced text area component.
@@ -230,7 +230,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 
 interface CraftSectionProps{
     section:                CraftSectionData;
-    images:                 AttachmentSectionData[]
+    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -239,7 +239,7 @@ interface CraftSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {CraftSectionData} props.section - The section data.
- * @param {AttachmentSectionData} props.images - The images for the plant.
+ * @param {AttachmentData} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
  * @see {@link AdvancedTextArea} - The advanced text area component.
@@ -395,14 +395,14 @@ export function CustomSection({section} : CustomSectionProps){
 }
 
 interface AttachmentSectionProps{
-    attachment: AttachmentSectionData;
+    attachment: AttachmentData;
 }
 
 /**
  * AttachmentSection component. Displays an attachment section, will display the title and a link to the attachment. The link will open in a new tab. The attachment type will be displayed as an icon if possible.
  *
  * @param {Object} props - Component props.
- * @param {AttachmentSectionData} props.attachment - The attachment data.
+ * @param {AttachmentData} props.attachment - The attachment data.
  *
  * @returns {JSX.Element} The rendered section component.
  */

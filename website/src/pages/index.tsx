@@ -1,12 +1,10 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
+// TODO: Use SQL
 // TODO: "orgnial media assets"
-// TODO: Comment Code
-// TODO: JSDoc comments
 // TODO: Testing
 // TODO: Code Validation
 // TODO: Documentation
-// TODO: Use SQL
 
 import React, {useEffect, useRef} from "react";
 

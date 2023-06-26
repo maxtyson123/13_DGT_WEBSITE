@@ -28,8 +28,8 @@ export default async function handler(
         // Assemble the query
         let query = ``;
 
+        // If the user specifed a name, get the plant id from the plants database
         let shouldGetNames = ``;
-
         if(getNames){
             shouldGetNames = `, english_name, maori_name, latin_name`;
         }
@@ -46,6 +46,8 @@ export default async function handler(
         if(amount){
             query += ` LIMIT ${amount}`
         }
+
+        //TODO: Test mysql then use that if it works
 
         // Return the plants that match the query
         const plantIds = await client.query(query);

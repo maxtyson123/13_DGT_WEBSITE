@@ -26,6 +26,8 @@ export default async function handler(
             SELECT plant_id, 'medical' AS table_name FROM medical;
         `;
 
+        //TODO: Test mysql then use that if it works
+
         // Get the data from the database
         const data = await client.query(query);
 

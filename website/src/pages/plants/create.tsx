@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 
 import {
-    AttachmentSectionData,
+    AttachmentData,
     ConvertPlantDataIntoApi,
     CraftSectionData,
     CustomSectionData,
@@ -24,7 +24,7 @@ import {
     fixAttachmentsPaths,
     ImageMetaData,
     MedicalSectionData,
-    MonthsReadySectionData,
+    MonthsReadyData,
     PlantData,
     SourceSectionData,
     ValidPlantData
@@ -913,7 +913,7 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, im
         // Get the file from the event
         const selectedFile = event.target.files;
 
-        // If there is no file selected then return
+        // If there is no file selected, then return
         if (!selectedFile) {
             console.log('Please select a file.');
             return;
@@ -936,8 +936,13 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, im
             {/* Image / Uploader */}
             <div className={styles.formItem} key={localURL}>
                 <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
+
+                    {/* If there is a image then display that, otherwise show a upload button */}
                     {state.image_url !== "" ?
-                        <Image style={{borderRadius: 8}} src={state.image_url.startsWith("http") ? state.image_url : state.image_data} alt={state.image_url} width={600} height={600} objectFit={"contain"}/>
+                        <>
+                            {/* Load the image from the website or use the blob data from the file */}
+                            <Image style={{borderRadius: 8}} src={state.image_url.startsWith("http") ? state.image_url : state.image_data} alt={state.image_url} width={600} height={600} objectFit={"contain"}/>
+                        </>
                         :
                         <>
                             <div className={styles.uploadButton}>
@@ -1055,7 +1060,7 @@ class FileInfo{
     validate = () => {
         let isValid = true;
 
-        // If there is no image name entered or it is longer than 50 chars then show an error otherwise the input is valid
+        // If there is no file name entered or it is longer than 50 chars then show an error otherwise the input is valid
         if(this.state.file_name === "") {
             this.valid.file_name = ["error", "Please enter a name for the file"];
             isValid = false;
@@ -1064,7 +1069,7 @@ class FileInfo{
             isValid = false;
         }else { this.valid.file_name = ["success", "No Error"] as [ValidationState, string]; }
 
-        // If there is no image uploaded then show an error otherwise the input is valid
+        // If there is no file uploaded then show an error otherwise the input is valid
         if(this.state.file_url === "") {
             this.valid.file_name = ["error", "Please upload a file"]; // Use name here as upload doesn't have a state
             isValid = false;
@@ -1085,7 +1090,7 @@ class FileInfo{
 
 }
 
-// Define the type of the props for the Image Section
+// Define the type of the props for the File Section
 type FileSectionProps = {
     nameHandler: (value: string) => void;
     fileHandler: (file: File) => void;
@@ -1138,9 +1143,11 @@ export function FileSection({nameHandler, fileHandler, URLHandler, creditHandler
 
     return(
         <>
-            {/* Image / Uploader */}
+            {/* File / Uploader */}
             <div className={styles.formItem}>
                 <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
+
+                    {/* If there is a file uploaded then show the file otherwise show the upload button */}
                     {fileLocalURL !== "" ?
                         <>
                             <a href={fileLocalURL} target={"_blank"}>
@@ -1349,8 +1356,11 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
     // Calculate the id of the info
     let id = name.toLowerCase().replace(" ", "-");
 
-    const rm = (id: number) => {
+    const removeInfo = (id: number) => {
+        // Remove the info displayer
         infoRef.current.splice(id, 1);
+
+        // Re render the entire div with this update
         setRenderKey(prevState => prevState + 1)
     }
 
@@ -1366,7 +1376,7 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
                 <div key={index} className={styles.formItem} id={`${id}-${index}`}>
                     <div className={styles.formContainer}>
                         {/* Remove Button */}
-                        <button onClick={() => {rm(index);}} className={styles.deleteSectionButton}> X </button>
+                        <button onClick={() => {removeInfo(index);}} className={styles.deleteSectionButton}> X </button>
 
                         {/* Add some space */}
                         <br />
@@ -1374,7 +1384,7 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
                         {/* Add the section */}
                         {value.section}
 
-                        {/* Image */}
+                        {/* Image slector has to be here as the sections them selves cant see each other */}
                         {imageRef ?
                         <div className={styles.formItem}>
                             <DropdownInput
@@ -1385,11 +1395,11 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
                                 errorText={value.valid && 'image' in value.valid ? value.valid.image[1] : "No Error"}
                                 options={images}
                                 changeEventHandler={
-                                                        value instanceof EdibleInfo ||
-                                                        value instanceof MedicalInfo ||
-                                                        value instanceof CraftInfo
-                                                        // Any other classes that use images here...
-                                                        ? value.handleImageChange : undefined}
+                                    value instanceof EdibleInfo ||
+                                    value instanceof MedicalInfo ||
+                                    value instanceof CraftInfo
+                                    // Any other classes that use images here...
+                                    ? value.handleImageChange : undefined}
                             />
                         </div>
                             :
@@ -1421,9 +1431,9 @@ export default function CreatePlant() {
     // Page States
     const pageName = "Create Plant"
     const [plantName, setPlantName] = useState("...")
-    const [plantID, setPlantID] = useState(-1)
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [progressMessage, setProgressMessage] = useState("")
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1700,7 +1710,7 @@ export default function CreatePlant() {
                     "tags": [""],
                 },
                 downloadable: false,
-            } as AttachmentSectionData;
+            } as AttachmentData;
 
             // Split the tags by comma
             if(thisImageInfo.image_tags !== ""){
@@ -1728,7 +1738,7 @@ export default function CreatePlant() {
                     "size": thisFileInfo.file_size,
                 },
                 downloadable: true,
-            } as AttachmentSectionData;
+            } as AttachmentData;
 
             // Set the type to the file type
             if(thisFileInfo.file)
@@ -1745,7 +1755,7 @@ export default function CreatePlant() {
                 event: "",
                 start_month: "",
                 end_month: "",
-            } as MonthsReadySectionData;
+            } as MonthsReadyData;
 
             dateInfoOBJ.event = thisDateInfo.event;
             dateInfoOBJ.start_month = thisDateInfo.startDate;
@@ -1867,7 +1877,8 @@ export default function CreatePlant() {
     }
 
     const loadJson = (jsonContents: PlantData) => {
-        // Set the imported JSON (updates the basic info)
+
+        // Set the imported JSON (also updates the basic info)
         setImportedJSON(jsonContents)
 
         // Clear the current sections
@@ -1879,7 +1890,6 @@ export default function CreatePlant() {
         customInfoRef.current   = [];
         imageInfoRef.current    = [];
         fileInfoRef.current     = [];
-
 
         // Create the months ready for ues
         for (let i = 0; i < jsonContents.months_ready_for_use.length; i++) {
@@ -2093,9 +2103,12 @@ export default function CreatePlant() {
                 // Scroll to the top of the page
                 scrollToElement("english-name")
 
+                // Load the JSON
                 loadJson(jsonContents)
 
             };
+
+            // Read the file as text
             reader.readAsText(file);
         });
 
@@ -2139,6 +2152,7 @@ export default function CreatePlant() {
         let uploadApiData = ConvertPlantDataIntoApi(jsonData) as any
 
         setIsLoading(true);
+        setProgressMessage("Uploading plant to database")
 
         let result;
 
@@ -2167,6 +2181,7 @@ export default function CreatePlant() {
             // Check if this plant is being edited
             if(isEdit){
                 console.log("EDITING PLANT")
+                setProgressMessage("Removing previous plant data")
 
                 // Remove the plant from the database
                 try{
@@ -2179,6 +2194,7 @@ export default function CreatePlant() {
                 } catch (err: any) {
                     console.log(err);
 
+                    // Update the error text
                     let errorText = "Unable to remove previous plant data whilst editing"
 
                     // Check if the error is a 401 error
@@ -2186,6 +2202,7 @@ export default function CreatePlant() {
                         errorText = "You are not authorized to edit plant data"
                     }
 
+                    // Set these changes in the state and scroll to the error div so that the user can see that
                     setError(errorText)
                     scrollToElement("errorSection")
                     setIsLoading(false);
@@ -2205,12 +2222,15 @@ export default function CreatePlant() {
         try{
 
             console.log("UPLOADING PLANT")
+            setProgressMessage("Uploading plant data")
+
             // Upload the data to the database using the upload API by passing each json key as params
             result = await axios.post(`/api/plants/upload`, uploadApiData);
 
         } catch (err: any) {
             console.log(err);
 
+            // Set the error text
             let errorText = "Unable to upload plant data"
 
             // Check if the error is a 401 error
@@ -2218,60 +2238,68 @@ export default function CreatePlant() {
                 errorText = "You are not authorized to upload plant data"
             }
 
+            // Scroll to the section to show the user and update the states
             setError(errorText)
             scrollToElement("errorSection")
             setIsLoading(false);
             return;
         }
+
+        // Get the id of the new plant
         const newId = result.data.id
 
-        if(newId !== undefined){
-            // Loop through each image info and upload the image
-            for(let i = 0; i < imageInfoRef.current.length; i++){
+        // If there is no id, return
+        if(newId === undefined){
+            return}
 
-                // If the image url is alread set to have a url, skip it
-                if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
-                    continue;
-                }
+        // Loop through each image info and upload the image
+        for(let i = 0; i < imageInfoRef.current.length; i++){
 
-                // Get the file
-                const file = imageInfoRef.current[i].state.image_file
-
-                // Check if there is a file
-                if(!file){
-                    continue;
-                }
-
-                // Upload the image
-                await uploadFile(file, newId)
-
+            setProgressMessage(`Uploading image ${i + 1} of ${imageInfoRef.current.length}`)
+            // If the image url is alread set to have a url, skip it
+            if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
+                continue;
             }
 
-            // Loop through each file info and upload the file
-            for(let i = 0; i < fileInfoRef.current.length; i++){
+            // Get the file
+            const file = imageInfoRef.current[i].state.image_file
 
-                    // If the file url is already set to have a url, skip it
-                    if(fileInfoRef.current[i].state.file_url.startsWith("http")) {
-                        continue;
-                    }
-
-                    // Get the file
-                    const file = fileInfoRef.current[i].state.file
-
-                    // Check if there is a file
-                    if(!file){
-                        continue;
-                    }
-
-                    // Upload the file
-                    await uploadFile(file, newId)
+            // Check if there is a file
+            if(!file){
+                continue;
             }
 
-            // Redirect to the plant page
-            const url = "/plants/" + newId
-            console.log(url);
-            window.location.href = url;
+            // Upload the image
+            await uploadFile(file, newId)
+
         }
+
+        // Loop through each file info and upload the file
+        for(let i = 0; i < fileInfoRef.current.length; i++){
+
+            setProgressMessage(`Uploading file ${i + 1} of ${fileInfoRef.current.length}`)
+
+            // If the file url is already set to have a url, skip it
+            if(fileInfoRef.current[i].state.file_url.startsWith("http")) {
+                continue;
+            }
+
+            // Get the file
+            const file = fileInfoRef.current[i].state.file
+
+            // Check if there is a file
+            if(!file){
+                continue;
+            }
+
+            // Upload the file
+            await uploadFile(file, newId)
+        }
+
+        // Redirect to the plant page
+        const url = "/plants/" + newId
+        console.log(url);
+        window.location.href = url;
 
         // Debug the result (this is for if the redirect doesn't work or smth else goes wrong)
         console.log(result);
@@ -2305,8 +2333,6 @@ export default function CreatePlant() {
             return;
         }
 
-        setPlantID(idNum)
-
         // Prevent the data from being fetched again
         if (dataFetch.current)
             return
@@ -2319,6 +2345,7 @@ export default function CreatePlant() {
 
     const getEditData = async (idNum: number) => {
         setIsLoading(true);
+        setProgressMessage("Fetching plant data to edit")
 
         // Download the plant data
         const plantOBJ = await fetchPlant(idNum);
@@ -2344,21 +2371,28 @@ export default function CreatePlant() {
     }
 
     const scrollToElement = (elementId: string) => {
+        // Get the element to scroll to
         const element = document.getElementById(elementId);
-        if (element) {
-            let dims = element.getBoundingClientRect();
-            window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+
+        // If it doesnt exist return
+        if (!element) {
+            return;
         }
+
+        // Get its position on the page
+        let dims = element.getBoundingClientRect();
+
+        // Scroll to it, add 150px spacing so that the nav bar has space, ensure that it is smooth and doesnt just jump
+        window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
+
     }
 
     const uploadFile = async (file: File, id: number) => {
-
 
         // Create a new form data object and append the file to it
         const formData = new FormData();
         formData.append('file', file);
         formData.append('id', id.toString());
-
 
         try {
             // Send the form data to the server
@@ -2379,6 +2413,7 @@ export default function CreatePlant() {
         }
     }
 
+    // When the names are updated re render the sections that use images
     const updateNames = () => {
         setRenderKeyEdible(prevState => prevState + 1)
         setRenderKeyMedical(prevState => prevState + 1)
@@ -2387,7 +2422,7 @@ export default function CreatePlant() {
 
     useEffect(() => {
 
-        // Register the updateNames names fundtion to the image info object
+        // Register the updateNames names function to the image info object as it doenst have a refrence to the render keys of the other sections
         for (let i = 0; i < imageInfoRef.current.length; i++) {
             imageInfoRef.current[i].updateNames = updateNames;
         }
@@ -2406,13 +2441,17 @@ export default function CreatePlant() {
             </PageHeader>
 
             <Section autoPadding>
+
+                {/* If something is set to be loading on the page then show the loading screen */}
                 { isLoading ?
                     <div className={styles.loadingContiner}>
                         <Image src={"/media/images/loading.gif"} alt={"Loading.."} width={100} height={100}/>
                         <h1> Loading... </h1>
+                        <h2>{progressMessage}...</h2>
                     </div>
                     : null}
 
+                {/* If the user is not signed in then show the sign in button */}
                 { !session ?
                     <>
                         <div className={styles.userDetails}>
@@ -2422,6 +2461,7 @@ export default function CreatePlant() {
                     </>
                     :
                     <>
+                        {/* If the user is signed in then show the user details and sign out button */}
                         <div className={styles.userDetails}>
                             <p> Signed in as <span className={styles.email}> {session.user ? session.user.email : "No Email"} </span> </p>
                             <button onClick={() => signOut()}><FontAwesomeIcon icon={faDoorOpen}/> Sign out</button>
@@ -2429,6 +2469,7 @@ export default function CreatePlant() {
 
                         <div className={"row"}>
 
+                            {/* If there is an error then show it */}
                             <div id={"errorSection"}>
                                 { error === "" ? null : <Error error={error}/>}
                             </div>
@@ -2525,6 +2566,7 @@ export default function CreatePlant() {
                                     </div>
                                 </div>
 
+                                {/* Months ready for use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Date"}
@@ -2535,6 +2577,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* Edible use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Edible Use"}
@@ -2546,6 +2589,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* Medical use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Medical Use"}
@@ -2557,6 +2601,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* Craft use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Craft Use"}
@@ -2568,6 +2613,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* Source */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Source"}
@@ -2578,6 +2624,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* Custom Section */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Custom Section"}
@@ -2592,6 +2639,7 @@ export default function CreatePlant() {
                             {/* Right Hand Column */}
                             <div className={"column"}>
 
+                                {/* Images */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"Image"}
@@ -2602,6 +2650,7 @@ export default function CreatePlant() {
                                     />
                                 </div>
 
+                                {/* File */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
                                     <InfoDisplayer
                                         name={"File"}

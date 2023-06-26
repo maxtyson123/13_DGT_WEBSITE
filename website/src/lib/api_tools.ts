@@ -1,5 +1,14 @@
 import {NextApiRequest} from "next";
 
+/**
+ * Get the origin of the request from the headers of a next api request
+ *
+ * @param {NextApiRequest} request - The request of the api cal, if there is no request, the origin will be localhost:3000
+ *
+ * @see {@link NextApiRequest}
+ *
+ * @returns {string} - The origin of the request
+ */
 export function GetOrgin(request: NextApiRequest){
     const LOCAL_HOST_ADDRESS = "localhost:3000";
 

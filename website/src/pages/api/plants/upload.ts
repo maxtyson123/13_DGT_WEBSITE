@@ -323,8 +323,10 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
-        const data = await makeQuery(query, client)
+        // Run the query
+        const data = await makeQuery(query, client, true)
 
+        // Log the data
         console.log("DATA")
         console.log(data)
 
@@ -333,7 +335,7 @@ export default async function handler(
 
         // Get the id of the new plant
         // @ts-ignore (has to be like this data[0] is an object)
-        const id = data[0].rows[0].id;
+        const id = USE_POSTGRES ? data[0].rows[0].id : data.id;
 
         // If there is no id, return an error
         if(!id) {

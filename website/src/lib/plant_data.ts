@@ -1,7 +1,10 @@
-// Define the data for the plant
+
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 
+/**
+ * The data for the plant in a more readable format and easier to use programmatically with alot of the data from the api moved into arrays of objects
+ */
 export interface PlantData {
     id:                 number;
     preferred_name:     string;
@@ -9,25 +12,19 @@ export interface PlantData {
     moari_name:         string;
     latin_name:         string;
     use:                string[];
-    months_ready_for_use: {
-        event:          string,
-        start_month:    string,
-        end_month:      string,
-    }[];
+    months_ready_for_use: MonthsReadyData[];
     location_found:     string;
     small_description:  string;
     long_description:   string;
     author:             string;
     last_modified:      string;
-    attachments: {
-        path:           string;
-        type:           string;
-        meta:           object;
-        downloadable:   boolean;
-    }[];
+    attachments:        AttachmentData[];
     sections:           any[];
 }
 
+/**
+ * Raw column data from the database
+ */
 export interface PlantDataApi {
     preferred_name:             string;
     english_name:               string;
@@ -65,18 +62,33 @@ export interface PlantDataApi {
 
 }
 
+/**
+ * Meta data for an image, (attachment.meta)
+ *
+ * @see {@link AttachmentSectionData}
+ */
 export interface ImageMetaData {
     name:       string;
     credits:    string;
     tags:       string[];
 }
 
+/**
+ * Meta data for a file, (attachment.meta)
+ *
+ * @see {@link AttachmentSectionData}
+ */
 export interface FileMetaData{
     name:       string;
     credits:    string;
     size:       number;
 }
 
+/**
+ * The format of an edible section
+ *
+ * @see {@link PlantData.sections}
+ */
 export interface EdibleSectionData{
     type:               string;
     part_of_plant:      string;
@@ -86,6 +98,11 @@ export interface EdibleSectionData{
     preparation_type:   string;
 }
 
+/**
+ * The format of a medical section
+ *
+ * @see {@link PlantData.sections}
+ */
 export interface MedicalSectionData{
     type:               string;
     medical_type:       string;
@@ -94,6 +111,11 @@ export interface MedicalSectionData{
     preparation:        string;
 }
 
+/**
+ * The format of a craft section
+ *
+ * @see {@link PlantData.sections}
+ */
 export interface CraftSectionData{
     type:               string;
     part_of_plant:      string;
@@ -102,37 +124,69 @@ export interface CraftSectionData{
     additonal_info:     string;
 }
 
+/**
+ * The format of a source section
+ *
+ * @see {@link PlantData.sections}
+ */
 export interface SourceSectionData{
     type:           string;
     source_type:    string;
     data:           string;
 }
 
+/**
+ * The format of a custom section
+ *
+ * @see {@link PlantData.sections}
+ */
 export interface CustomSectionData{
     type:           string;
     title:          string;
     text:           string;
 }
 
-export interface AttachmentSectionData{
+/**
+ * The format of an attachment
+ *
+ * @see {@link PlantData.attachments}
+ */
+export interface AttachmentData {
     type:           string;
     path:           string;
     meta:           object;
     downloadable:   boolean;
 }
 
-export interface MonthsReadySectionData{
+/**
+ * The format of a event in the months ready for use section
+ *
+ * @see {@link PlantData.months_ready_for_use}
+ */
+export interface MonthsReadyData {
     event:          string;
     start_month:    string;
     end_month:      string;
 }
 
+/**
+ * Formats the size of a file in bytes to a more readable format
+ *
+ * @param {number} bytes - The size of the file in bytes
+ *
+ * @returns {string} - The size of the file in a more readable format (e.g. 1.23 MB)
+ */
 export function formatFileSize(bytes: number) {
     const sufixes = ['B', 'kB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sufixes[i]}`;
 };
 
+/**
+ * Will clean the data from the api, this makes sure any null values are set to empty arrays.
+ *
+ * @param apiData {PlantDataApi} - The data from the api
+ */
 export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
 
     // If this plant has no months section, set the months ready to an empty array
@@ -190,6 +244,13 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
     return apiData;
 }
 
+/**
+ * Will validate the data from the api, this makes sure no null values are present.
+ *
+ * @param {PlantDataApi} apiData - The data from the api
+ *
+ * @returns {boolean} - True if the data is valid, false otherwise
+ */
 export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
     // Check that the data is valid
     return !(apiData.preferred_name             == null
@@ -228,6 +289,13 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
     );
 }
 
+/**
+ * Will validate the plant data, this makes sure no null values are present.
+ *
+ * @param {PlantData} plantData - The data from the api
+ *
+ * @returns {boolean} - True if the data is valid, false otherwise
+ */
 export function ValidPlantData(plantData : PlantData) : boolean {
 
     return !(plantData.preferred_name       == null
@@ -247,6 +315,13 @@ export function ValidPlantData(plantData : PlantData) : boolean {
 
 }
 
+/**
+ * Will convert the api data into the plant data object, if the data is invalid null will be returned.
+ *
+ * @param {PlantDataApi} apiData - The data from the api
+ *
+ * @returns {PlantData} - The plant data object
+ */
 export function ConvertApiIntoPlantData(apiData : PlantDataApi){
 
     // Check that the data is valid
@@ -291,7 +366,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             event:          apiData.months_ready_events[i],
             start_month:    apiData.months_ready_start_months[i],
             end_month:      apiData.months_ready_end_months[i],
-        } as MonthsReadySectionData;
+        } as MonthsReadyData;
 
         plantData.months_ready_for_use.push(dateInfoOBJ);
     }
@@ -377,6 +452,13 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
 
 }
 
+/**
+ * Convert the plant data object into the api data object, if it not valid return null
+ *
+ * @param {PlantData} plantData - The plant data object
+ *
+ * @returns {PlantDataApi} - The api data object
+ */
 export function ConvertPlantDataIntoApi(plantData : PlantData){
 
     // Check that the data is valid
@@ -459,6 +541,9 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
 
 }
 
+/**
+ * Will make a empty plant data object. The id will be set to 1
+ */
 export function emptyPlantData(){
     const plantData : PlantData = {
         id:                     1,
@@ -480,6 +565,9 @@ export function emptyPlantData(){
     return plantData;
 }
 
+/**
+ * Will make a empty plant api data object. The date will be set to the current date
+ */
 export function emptyPlantApiData(){
     // Create the api data object
     let apiData : PlantDataApi = {
@@ -521,6 +609,13 @@ export function emptyPlantApiData(){
     return apiData;
 }
 
+/**
+ * Will return the names in the order of the preference, this is an easier way to display the preferred name without having to do a switch statement
+ *
+ * @param {PlantData} data - The plant data to get the names from
+ *
+ * @returns {string[]} - The names in the order of the preference
+ */
 export function getNamesInPreference(data: PlantData){
     let localNames = ["None", "None", "None"]
 
@@ -548,6 +643,13 @@ export function getNamesInPreference(data: PlantData){
     return localNames;
 }
 
+/**
+ * Using an ID it will fetch the plant data from the api and return it. First it will check the cache to see if the data has already been fetched, if it has not then the API will be called to get the data and then saved to a cache entry of that id. If the data could not be fetched then null will be returned
+ *
+ * @param {number} id - The id of the plant to fetch
+ *
+ * @returns {PlantData | null} - The plant data or null if it could not be fetched
+ */
 export async function fetchPlant (id: number) {
 
     // Check if the plant data has already been fetched
@@ -579,7 +681,19 @@ export async function fetchPlant (id: number) {
     return plantOBJ;
 }
 
+/**
+ * Will fix the paths of the attachments to be the propper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing its ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
+ *
+ * @param {PlantData} plant - The plant data to fix the paths of
+ *
+ * @returns {PlantData} - The plant data with the fixed paths
+ */
 export function fixAttachmentsPaths (plant: PlantData) {
+    // Check if the plant has any attachments
+    if(plant.attachments.length === 0) {
+        return plant;
+    }
+
     // Loop through the attachments and set the propper path
     for(let i = 0; i < plant.attachments.length; i++) {
 

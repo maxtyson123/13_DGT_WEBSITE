@@ -136,10 +136,10 @@ export default function Search(ref: SearchRef){
 
     return(
         <>
+            {/* Page header */}
             <HtmlHeader currentPage={pageName}/>
             <Navbar currentPage={pageName}/>
 
-            {/* Page header */}
             <Section>
                 <PageHeader size={"medium"}>
                     <div className={styles.searchHeaderContainer}>
