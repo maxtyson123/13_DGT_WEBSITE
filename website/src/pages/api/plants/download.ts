@@ -15,7 +15,7 @@ export default async function handler(
     }
 
     // Get the client
-    const client =  await getClient()
+    const client = await getClient()
 
     // Get the ID and table from the query string
     const { id, table } = request.query;
@@ -53,6 +53,8 @@ export default async function handler(
         // Create an array of tables that have already been selected
         let selectedAlready : string[] = [];
 
+        const joinCommand = USE_POSTGRES ? 'array_agg' : 'JSON_ARRAYAGG';
+
         for(let i = 0; i < tableArray.length; i++) {
             // Ensure that the table requested isn't in the array of tables more than once
             if(selectedAlready.includes(tableArray[i])){
@@ -78,9 +80,9 @@ export default async function handler(
                     joiner += `
                                 LEFT JOIN (SELECT
                                 plant_id,
-                                array_agg(event) AS months_ready_events,
-                                array_agg(start_month) AS months_ready_start_months,
-                                array_agg(end_month) AS months_ready_end_months
+                                ${joinCommand}(${tables.months_event}) AS months_ready_events,
+                                ${joinCommand}(${tables.months_start_month}) AS months_ready_start_months,
+                                ${joinCommand}(${tables.months_end_month}) AS months_ready_end_months
                                 FROM months_ready_for_use
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -97,11 +99,11 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.edible_part_of_plant}) AS edible_parts,
-                                array_agg(${tables.edible_image_of_part}) AS edible_images,
-                                array_agg(${tables.edible_nutrition}) AS edible_nutrition,
-                                array_agg(${tables.edible_preparation}) AS edible_preparation,
-                                array_agg(${tables.edible_preparation_type}) AS edible_preparation_type
+                                ${joinCommand}(${tables.edible_part_of_plant}) AS edible_parts,
+                                ${joinCommand}(${tables.edible_image_of_part}) AS edible_images,
+                                ${joinCommand}(${tables.edible_nutrition}) AS edible_nutrition,
+                                ${joinCommand}(${tables.edible_preparation}) AS edible_preparation,
+                                ${joinCommand}(${tables.edible_preparation_type}) AS edible_preparation_type
                                 FROM edible
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -118,10 +120,10 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.medical_type}) AS medical_types,
-                                array_agg(${tables.medical_use}) AS medical_uses,
-                                array_agg(${tables.medical_image}) AS medical_images,
-                                array_agg(${tables.medical_preparation}) AS medical_preparation
+                                ${joinCommand}(${tables.medical_type}) AS medical_types,
+                                ${joinCommand}(${tables.medical_use}) AS medical_uses,
+                                ${joinCommand}(${tables.medical_image}) AS medical_images,
+                                ${joinCommand}(${tables.medical_preparation}) AS medical_preparation
                                 FROM medical
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -138,10 +140,10 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.craft_part_of_plant}) AS craft_parts,
-                                array_agg(${tables.craft_use}) AS craft_uses,
-                                array_agg(${tables.craft_image}) AS craft_images,
-                                array_agg(${tables.craft_additional_info}) AS craft_additional_info
+                                ${joinCommand}(${tables.craft_part_of_plant}) AS craft_parts,
+                                ${joinCommand}(${tables.craft_use}) AS craft_uses,
+                                ${joinCommand}(${tables.craft_image}) AS craft_images,
+                                ${joinCommand}(${tables.craft_additional_info}) AS craft_additional_info
                                 FROM craft
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -158,8 +160,8 @@ export default async function handler(
                                 LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.source_type}) AS source_types,
-                                array_agg(${tables.source_data}) AS source_data
+                                ${joinCommand}(${tables.source_type}) AS source_types,
+                                ${joinCommand}(${tables.source_data}) AS source_data
                                 FROM source
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -175,8 +177,8 @@ export default async function handler(
                     joiner += ` LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.custom_title}) AS custom_titles,
-                                array_agg(${tables.custom_text}) AS custom_text
+                                ${joinCommand}(${tables.custom_title}) AS custom_titles,
+                                ${joinCommand}(${tables.custom_text}) AS custom_text
                                 FROM custom
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -193,10 +195,10 @@ export default async function handler(
                     joiner += ` LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                array_agg(${tables.attachment_path}) AS attachment_paths,
-                                array_agg(${tables.attachment_type}) AS attachment_types,
-                                array_agg(${tables.attachment_meta}) AS attachment_metas,
-                                array_agg(${tables.attachment_downloadable}) AS attachment_downloadable
+                                ${joinCommand}(${tables.attachment_path}) AS attachment_paths,
+                                ${joinCommand}(${tables.attachment_type}) AS attachment_types,
+                                ${joinCommand}(${tables.attachment_meta}) AS attachment_metas,
+                                ${joinCommand}(${tables.attachment_downloadable}) AS attachment_downloadable
                                 FROM attachments
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
@@ -239,10 +241,11 @@ export default async function handler(
         // Debug
         console.log("DATA")
         console.log(data)
+        console.log("DONE")
 
         // If the data is empty, return an error
         if(!data)
-            return response.status(500).json({ error: "No data returned" });
+            return response.status(500).json({ error: "No data returned", data: data });
 
         // If the data is not empty, return the data
         return response.status(200).json({ data: data });

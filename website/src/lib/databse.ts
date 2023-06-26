@@ -1,9 +1,8 @@
 // Class for the names of the database tables depending  on SQL or  postgreSQL
-import mysql from "mysql2";
 import {USE_POSTGRES} from "@/lib/constants";
 import {db, VercelPool, VercelPoolClient} from "@vercel/postgres";
 import {Connection} from "mysql";
-
+const sqlDb = require('mysql2-async').default;
 /**
  * Class for the names of the columns in the database
  */
@@ -219,14 +218,7 @@ export function getTables(){
  * Initialises the database connection using the environment variables
  * @type {Connection}
  */
-export const mysql_db = mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
-    database: process.env.MYSQL_DATABASE,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD
 
-});
 
 /**
  * Checks what database to use and then returns the correct database connection
@@ -238,11 +230,19 @@ export const mysql_db = mysql.createConnection({
  * @returns {Connection | VercelPoolClient} - The correct database connection
  */
 export async function getClient(){
-    const dataBase = USE_POSTGRES ? db : mysql_db
+
+    const dataBase = USE_POSTGRES ? db : new sqlDb({
+        host: process.env.MYSQL_HOST,
+        port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
+        database: process.env.MYSQL_DATABASE,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+    });
 
     let client: any = dataBase
 
-    if(!USE_POSTGRES)
+    // Vercel POSTGRES requires a client to be created
+    if(USE_POSTGRES)
         client = await dataBase.connect();
 
     return client
@@ -276,23 +276,15 @@ export async function makeQuery(query: string, client: any, rawData : boolean = 
             return data.rows[0]
 
         }else{
-            data  = await (client as Connection).query(
-                query,
-                function(err, results, fields) {
-                    if(err){
-                        console.log("ERROR")
-                        console.log(err)
-                        return null
-                    }
-                    console.log(results); // results contains rows returned by server
-                }
-            );
+
+            data  = await client.getrow(query);
         }
 
         return data
 
     } catch (e) {
         console.log("ERROR")
+        console.log(e)
         return null
     }
 }
