@@ -9,7 +9,7 @@ CREATE TABLE plants (
     small_description TEXT,
     long_description TEXT,
     author TEXT,
-    last_modified TEXT,
+    last_modified DATE,
 	PRIMARY KEY (id)
 );
 
@@ -96,4 +96,11 @@ CREATE TABLE edible (
     edible_preparation_type TEXT,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
+);
+
+-- User Auth
+CREATE TABLE auth (
+    id SERIAL PRIMARY KEY,
+    auth_entry TEXT,
+    auth_type TEXT
 );

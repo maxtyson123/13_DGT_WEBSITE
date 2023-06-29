@@ -20,12 +20,8 @@ export default async function handler(
     // Get the ID and table from the query string
     const { id, table } = request.query;
 
-    let tables = new SQLDatabase();
+    const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
-    // If the data is being downloaded from the Postgres database
-    if(USE_POSTGRES) {
-        tables = new PostgresSQL();
-    }
 
     // Try downloading the data from the database
     try {
@@ -248,7 +244,7 @@ export default async function handler(
             return response.status(500).json({ error: "No data returned", data: data });
 
         // If the data is not empty, return the data
-        return response.status(200).json({ data: data });
+        return response.status(200).json({ data: data[0] });
 
     } catch (error) {
         console.log(error)

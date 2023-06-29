@@ -2,7 +2,7 @@ import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import mysql from 'serverless-mysql';
 import {USE_POSTGRES} from "@/lib/constants";
-import {PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {GetOrgin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
@@ -15,24 +15,8 @@ export default async function handler(
     // Get the origin of the request
     const origin = GetOrgin(request);
 
-    // Select what database is being used
-    let dataBase : any = mysql({
-        config: {
-            host: process.env.MYSQL_HOST,
-            port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
-            database: process.env.MYSQL_DATABASE,
-            user: process.env.MYSQL_USER,
-            password: process.env.MYSQL_PASSWORD
-        }
-    });
-
-    // If postgres use that
-    if(USE_POSTGRES){
-        dataBase = db
-    }
-
-    // Connect to the database
-    const client = await dataBase.connect();
+    // Get the client
+    const client = await getClient()
 
 
     // Try uploading the data to the database
@@ -58,12 +42,7 @@ export default async function handler(
         }
 
         // Check if the data is being downloaded from the Postgres database
-        let tables = new SQLDatabase();
-
-        // Set the tables to use
-        if(USE_POSTGRES) {
-            tables = new PostgresSQL();
-        }
+        const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
         // Check if the user is allowed to upload
         let auth_query = ""
@@ -105,10 +84,10 @@ export default async function handler(
         }
 
         // Run the query
-        const auth_result = await db.query(auth_query);
+        const auth_result = await makeQuery(auth_query, client);
 
         // Check if the user is allowed to upload
-        if(auth_result.rows.length === 0) {
+        if(!auth_result) {
             return response.status(401).json({ error: 'User not authorised to remove data' });
         }
 
@@ -144,26 +123,15 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
+        // Remove the plant
+        const data  = await makeQuery(query, client)
+        return response.status(200).json({ message: "Remove sent", id: id });
 
-        //TODO: Test mysql and use that instead of postgres
-
-        // Get the data from the database
-        const data  = await client.query(query);
-
-        // Check for errors
-        if(data.error){
-            return response.status(500).json({ error: data.error });
-        }
-
-        return response.status(200).json({ message: "Remove Successful", id: id });
     } catch (error) {
         console.log("Error");
         console.log(error);
 
         // If there is an error, return the error
         return response.status(500).json({ error: error });
-    } finally {
-        client.end();
-
     }
 }

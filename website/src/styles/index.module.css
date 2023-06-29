@@ -9,14 +9,25 @@
     grid-row-gap: 25px;
 }
 
+.title{
+    background: url("/media/images/pohotukawa.png");
+    background-size: cover;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    padding: 0;
+}
+
 /*
  Make the title have a font size of 60px and a line height of 103%.
  Padding should be 4% to give spacing from the edges of the container.
  */
-.title{
+.title h1{
     font-size: 60px;
     line-height: 103%;
     padding: 4%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: rgba(0, 0, 0, 0.2);
 }
 
 /*

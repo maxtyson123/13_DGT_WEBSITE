@@ -4,6 +4,8 @@
 // TODO: "orgnial media assets"
 // TODO: Testing
 // TODO: Code Validation
+// TODO: Optimize
+// TODO: Optimize
 // TODO: Documentation
 
 import React, {useEffect, useRef} from "react";
@@ -114,7 +116,10 @@ export default function Home(ref: HomeRef) {
                        </div>
 
                        {/* Place the title and description on the left */}
-                       <h1 className={styles.title}> Rongoa </h1>
+                       <div className={styles.title}>
+                           <h1 > Rongoa </h1>
+                       </div>
+
 
                        <p className={styles.description}>
                            Welcome to {location}, here you will find a database full of rich information about rongoa. You can <Link href={"/search"}> search </Link> for a specific plant or see a index of all the plants in our database <Link href={"/plant_index"}> here</Link>.

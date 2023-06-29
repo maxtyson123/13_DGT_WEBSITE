@@ -1,6 +1,7 @@
 
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
+import {USE_POSTGRES} from "@/lib/constants";
 
 /**
  * The data for the plant in a more readable format and easier to use programmatically with alot of the data from the api moved into arrays of objects
@@ -241,7 +242,59 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.attachment_downloadable = [];
     }
 
+    // On non postgres some double parse is needed
+    if(!USE_POSTGRES) {
+
+        // Main data is clean
+
+        // Craft data needs to be parsed
+        apiData.craft_parts             = tryParse(apiData.craft_parts)
+        apiData.craft_uses              = tryParse(apiData.craft_uses)
+        apiData.craft_images            = tryParse(apiData.craft_images)
+
+
+        // Custom data needs to be parsed
+        apiData.custom_titles   = tryParse(apiData.custom_titles)
+        apiData.custom_text     = tryParse(apiData.custom_text)
+
+        // Edible data needs to be parsed
+        apiData.edible_parts                = tryParse(apiData.edible_parts)
+        apiData.edible_images               = tryParse(apiData.edible_images)
+        apiData.edible_nutrition            = tryParse(apiData.edible_nutrition)
+        apiData.edible_preparation          = tryParse(apiData.edible_preparation)
+        apiData.edible_preparation_type     = tryParse(apiData.edible_preparation_type)
+
+        // Medical data needs to be parsed
+        apiData.medical_types           = tryParse(apiData.medical_types)
+        apiData.medical_uses            = tryParse(apiData.medical_uses)
+        apiData.medical_images          = tryParse(apiData.medical_images)
+        apiData.medical_preparation     = tryParse(apiData.medical_preparation)
+
+        // Months data needs to be parsed
+        apiData.months_ready_events         = tryParse(apiData.months_ready_events)
+        apiData.months_ready_start_months   = tryParse(apiData.months_ready_start_months)
+        apiData.months_ready_end_months     = tryParse(apiData.months_ready_end_months)
+
+        // Source data needs to be parsed
+        apiData.source_types    = tryParse(apiData.source_types)
+        apiData.source_data     = tryParse(apiData.source_data)
+
+        // Attachment data needs to be parsed
+        apiData.attachment_paths = tryParse(apiData.attachment_paths)
+        apiData.attachment_types = tryParse(apiData.attachment_types)
+        apiData.attachment_metas = tryParse(apiData.attachment_metas)
+        apiData.attachment_downloadable = tryParse(apiData.attachment_downloadable)
+    }
+
     return apiData;
+}
+
+function tryParse(data : any) : any {
+    try {
+        return JSON.parse(data as any);
+    } catch (e) {
+        return data;
+    }
 }
 
 /**

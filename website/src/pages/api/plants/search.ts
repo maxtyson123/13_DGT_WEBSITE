@@ -1,5 +1,6 @@
 import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
+import {getClient, makeQuery} from "@/lib/databse";
 
 export default async function handler(
     request: NextApiRequest,
@@ -12,8 +13,8 @@ export default async function handler(
     }
 
 
-    // Connect to the database
-    const client = await db.connect();
+    // Get the client
+    const client = await getClient()
 
     // Get the ID and table from the query string
     const {
@@ -47,18 +48,16 @@ export default async function handler(
             query += ` LIMIT ${amount}`
         }
 
-        //TODO: Test mysql then use that if it works
-
         // Return the plants that match the query
-        const plantIds = await client.query(query);
+        const plantIds = await makeQuery(query, client)
 
         // If there are no plants, return an error
-        if (plantIds.rows.length === 0) {
+        if (!plantIds) {
             return response.status(404).json({ error: 'No plants found' });
         }
 
         // Return the plant ids
-        return response.status(200).json({ data: plantIds.rows });
+        return response.status(200).json({ data: plantIds });
 
     } catch (error) {
         // If there is an error, return the error

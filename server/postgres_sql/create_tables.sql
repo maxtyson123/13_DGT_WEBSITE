@@ -9,7 +9,7 @@ CREATE TABLE plants (
     small_description TEXT,
     long_description TEXT,
     author TEXT,
-    last_modified date,
+    last_modified DATE,
 );
 
 -- Months For Use

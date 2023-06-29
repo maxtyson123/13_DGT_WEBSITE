@@ -1,8 +1,9 @@
 // Class for the names of the database tables depending  on SQL or  postgreSQL
 import {USE_POSTGRES} from "@/lib/constants";
 import {db, VercelPool, VercelPoolClient} from "@vercel/postgres";
-import {Connection} from "mysql";
 const sqlDb = require('mysql2-async').default;
+import {escape} from "mysql2";
+
 /**
  * Class for the names of the columns in the database
  */
@@ -214,11 +215,6 @@ export function getTables(){
     return tables
 }
 
-/**
- * Initialises the database connection using the environment variables
- * @type {Connection}
- */
-
 
 /**
  * Checks what database to use and then returns the correct database connection
@@ -227,7 +223,7 @@ export function getTables(){
  * @see {@link db}
  * @see {@link USE_POSTGRES}
  *
- * @returns {Connection | VercelPoolClient} - The correct database connection
+ * @returns {VercelPoolClient} - The correct database connection
  */
 export async function getClient(){
 
@@ -237,6 +233,8 @@ export async function getClient(){
         database: process.env.MYSQL_DATABASE,
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD,
+        skiptzfix: true,
+        multipleStatements: true,
     });
 
     let client: any = dataBase
@@ -268,16 +266,14 @@ export async function makeQuery(query: string, client: any, rawData : boolean = 
             // Get the data from the database
             data  = await client.query(query);
 
-            // If the data is raw data return it
-            if(rawData)
-                return data
 
-            // Get the data from the rows
-            return data.rows[0]
+            // If the data is not to be raw the process it
+            if(!rawData)
+                data = data.rows
 
         }else{
-
-            data  = await client.getrow(query);
+            // Get the data from the database
+            data  = await client.getall(query);
         }
 
         return data

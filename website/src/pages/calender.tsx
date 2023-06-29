@@ -8,7 +8,7 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/calender.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
-import {MONTHS} from "@/lib/constants"
+import {MONTHS, USE_POSTGRES} from "@/lib/constants"
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import {getNamesInPreference, PlantData} from "@/lib/plant_data";
@@ -82,6 +82,8 @@ export default function Calender(ref: CalenderRef){
 
             }else{
 
+                console.log("Fetching data")
+
                 // Get the data from the API
                 res = await axios.get('/api/plants/months');
 
@@ -101,13 +103,14 @@ export default function Calender(ref: CalenderRef){
 
             // Convert the data into an array of month entries
             for (let i = 0; i < data.length; i++) {
+
                 const entry = data[i];
                 const monthEntry: MonthEntry = {
                     id: entry.id,
-                    startMonth:  MONTHS.indexOf(entry.start_month),
-                    endMonth: MONTHS.indexOf(entry.end_month),
+                    startMonth:  USE_POSTGRES ? MONTHS.indexOf(entry.start_month) : MONTHS.indexOf(entry.months_start_month),
+                    endMonth: USE_POSTGRES ? MONTHS.indexOf(entry.end_month) : MONTHS.indexOf(entry.months_end_month),
                     plant: getNamesInPreference(entry as PlantData)[0],
-                    event: entry.event
+                    event: USE_POSTGRES ? entry.event : entry.months_event
                 }
 
 

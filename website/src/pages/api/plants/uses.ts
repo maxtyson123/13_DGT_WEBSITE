@@ -1,5 +1,5 @@
-import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
+import {getClient, makeQuery} from "@/lib/databse";
 
 export default async function handler(
     request: NextApiRequest,
@@ -11,8 +11,8 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
     }
 
-    // Connect to the database
-    const client = await db.connect();
+    // Get the client
+    const client = await getClient()
 
     // Try downloading the data from the database
     try {
@@ -26,20 +26,22 @@ export default async function handler(
             SELECT plant_id, 'medical' AS table_name FROM medical;
         `;
 
-        //TODO: Test mysql then use that if it works
 
         // Get the data from the database
-        const data = await client.query(query);
+        const data = await makeQuery(query, client)
 
         // If the data is empty, return an error
-        if(data.rows.length === 0) {
+        if(!data) {
             return response.status(404).json({ error: 'No data found' });
         }
-
+        interface Row {
+            plant_id: string;
+            table_name: string;
+        }
 
         // Extract the plant_ids and table names from the query results
         const plantIdTableMap: { [key: string]: string[] } = {};
-        data.rows.forEach(row => {
+        data.forEach((row: Row) => {
             const { plant_id, table_name } = row;
             if (plantIdTableMap.hasOwnProperty(plant_id)) {
                 plantIdTableMap[plant_id].push(table_name);

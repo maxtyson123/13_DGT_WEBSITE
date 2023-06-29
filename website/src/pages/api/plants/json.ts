@@ -27,8 +27,6 @@ export default async function handler(
     const host = headers['x-forwarded-host'] || headers['host']; // Use the "x-forwarded-host" header if it exists, otherwise fallback to "host"
     const url = `${protocol}://${host}`; // Construct the full URL using the protocol, host, and request URL
 
-    // Connect to the database
-    const client = await db.connect();
 
     // Get the ID and table from the query string
     const { operation, json, id } = request.query;
@@ -57,6 +55,7 @@ export default async function handler(
                     return response.status(404).json({ error: plantsInfo.data.error, message: "No data" });
                 }
 
+
                 // Convert the string date into a date object
                 if(plantsInfo.data.last_modified){
                     plantsInfo.data.last_modified = new Date(plantsInfo.data.last_modified);
@@ -82,7 +81,7 @@ export default async function handler(
                 // Fix the data
                 plantOBJ = fixAttachmentsPaths(plantOBJ);
 
-                return response.status(200).json({ data: plantOBJ});
+                return response.status(200).json({ data: plantOBJ, apiData: apiData});
 
             case 'upload':
 

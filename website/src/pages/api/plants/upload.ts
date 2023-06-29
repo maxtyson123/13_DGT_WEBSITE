@@ -1,6 +1,6 @@
 import {db, VercelPool} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, getTables, makeQuery, mysql_db, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
 import {GetOrgin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
@@ -138,21 +138,24 @@ export default async function handler(
             }
 
             // Check if the API key is allowed in the database
-            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
+            auth_query = `SELECT * FROM ${tables.database}.auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
 
         }
 
         // Run the query
-        const auth_result = await db.query(auth_query);
+        console.log(auth_query)
+        const auth_result = await makeQuery(auth_query, client)
+        console.log(auth_result)
 
         // Check if the user is allowed to upload
-        if(auth_result.rows.length === 0) {
+        if(!auth_result[0].id) {
             return response.status(401).json({ error: 'User not authorised to upload' });
         }
 
         let insertQuery = "";
         let insetQueryValues = "";
         let getIDQuery = "(SELECT id FROM new_plant)";
+        const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
         // If it is editing then insert at the id instead of gererating a new one
         if(edit_id){
@@ -166,15 +169,10 @@ export default async function handler(
 
         // Add the information for the plant data
         query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}, ${tables.author}, ${tables.last_modified}) `;
-        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', to_timestamp(${Date.now()} / 1000.0)) RETURNING id;`;
+        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', ${timeFunction}(${Date.now()} / 1000.0)) ${USE_POSTGRES ? "RETURNING id" : ""};`;
 
         // Create a temporary table to hold the new plant id
-        query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS (
-          SELECT id
-          FROM plants
-          ORDER BY id DESC
-          LIMIT 1
-        );`;
+        query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS ( SELECT id FROM plants ORDER BY id DESC LIMIT 1 ); ${!USE_POSTGRES ? "SELECT id FROM new_plant;" : ""}`;
 
         // If there is months ready data, add it to the query
         if(months_ready_events.length > 0) {
@@ -335,7 +333,22 @@ export default async function handler(
 
         // Get the id of the new plant
         // @ts-ignore (has to be like this data[0] is an object)
-        const id = USE_POSTGRES ? data[0].rows[0].id : data.id;
+        let id = undefined
+
+        if(USE_POSTGRES){
+            id = data[0].rows[0].id;
+        }else{
+
+            // Loop through the data
+            data.forEach((item: any) => {
+
+                // If there is an id, set it
+                if (item[0] && item[0].id) {
+                    id = item[0].id;
+                }
+            });
+        }
+
 
         // If there is no id, return an error
         if(!id) {
@@ -351,7 +364,8 @@ export default async function handler(
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
     } finally {
 
-        await client.end();
+        if(USE_POSTGRES)
+            await client.end();
 
     }
 }

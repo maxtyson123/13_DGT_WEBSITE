@@ -1,6 +1,5 @@
-import {db, VercelPool} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {mysql_db, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
 import {GetOrgin} from "@/lib/api_tools";
 import {Form} from "multiparty";
@@ -24,20 +23,8 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use POST' });
     }
 
-    // Select what database is being used
-    const dataBase = USE_POSTGRES ? db : mysql_db
-
-    // Connect to it
-    let client : any = await dataBase.connect();
-    const ftpServer = new Client()
-
-    // MySQL requires to get client from connection
-    if(!USE_POSTGRES){
-        // Check if the database is of mysql type
-        if(!(dataBase instanceof VercelPool)){
-            client = dataBase.getClient()
-        }
-    }
+    // Get the client
+    const client = await getClient()
 
     // Try uploading the data to the database
     try {
@@ -114,10 +101,10 @@ export default async function handler(
                 }
 
                 // Run the query
-                const auth_result = await db.query(auth_query);
+                const auth_result = await makeQuery(auth_query, client)
 
                 // Check if the user is allowed to upload
-                if(auth_result.rows.length === 0) {
+                if(!auth_result) {
                     return response.status(401).json({ error: 'User not authorised to upload' });
                 }
 
@@ -198,10 +185,6 @@ export default async function handler(
         console.log("ERROR")
         console.log(error)
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
-    } finally {
-
-        await client.end();
-
     }
 }
 

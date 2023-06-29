@@ -42,6 +42,7 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-quill": "^2.0.0",
     "serverless-mysql": "^1.5.5",
+    "sqlstring": "^2.3.3",
     "tailwindcss": "^3.3.1",
     "three": "^0.152.2",
     "typescript": "5.0.3"
