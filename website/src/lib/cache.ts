@@ -4,7 +4,7 @@ interface CacheItem {
 }
 
 /**
- *  Will try get an item from the localstoarge, if the item is expired, it will be removed from the local storage
+ *  Will try to get an item from the localstorage, if the item is expired, it will be removed from the local storage
  *
  * @param {string} id - The key used to store the item in the local storage
  *
@@ -14,8 +14,7 @@ interface CacheItem {
  */
 export function getFromCache(id: string){
 
-    let item = null;
-    item = localStorage.getItem(id);
+    let item = localStorage.getItem(id);
 
     // Check if the item exists in the local storage
     if(item){

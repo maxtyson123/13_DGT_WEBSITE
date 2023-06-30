@@ -32,7 +32,7 @@
 
 /*
  Add spacing between items in the input form
- Make the width 90% so it doesnt touch the borders of the box
+ Make the width 90% so it doesn't touch the borders of the box
  */
 .formItem{
     margin-bottom: 30px;
@@ -57,7 +57,7 @@
 /*
  These items take up 100% of the width of the parent
  */
-.submitDataButton,  .loadingContiner, .fileUploader{
+.submitDataButton,  .loadingContainer, .fileUploader{
     width: 100%;
 }
 
@@ -89,7 +89,7 @@
     background-color: var(--main-green);
     color: var(--text-light);
     font-size: 24px;
-    box-shadow: 0px 4px 4px var(--shadow-less);
+    box-shadow: 0 4px 4px var(--shadow-less);
     padding: 10px;
     border-radius: 10px;
 }
@@ -102,10 +102,10 @@
 }
 
 /*
- Red background to indicate that it is a dagnerous action
+ Red background to indicate that it is a dangerous action
  White text to contrast with the background
  Padding and font size to make the button larger
- Position it at the top left of the parent and round the coners to work with the parent container
+ Position it at the top left of the parent and round the corners to work with the parent container
  */
 .deleteSectionButton{
     background-color: rgba(255, 0, 0, 0.7);
@@ -115,7 +115,7 @@
     align-self: start;
     left: -5%;
     position: relative;
-    border-radius: 6px 0px 16px 0px
+    border-radius: 6px 0 16px 0
 }
 
 /*
@@ -130,7 +130,7 @@
  Semi-transparent background to show that the user can still see the page behind
  Grid is used to centre the image and icon, positioned in the centre and at the end of their containers
  */
-.loadingContiner{
+.loadingContainer{
     position: fixed;
     left: 0;
     top: 0;
@@ -147,7 +147,7 @@
  Make the text large, light and centred
  Position it at the start of the container so that it is near the image in the centre
  */
-.loadingContiner h1{
+.loadingContainer h1{
     font-size: 64px;
     text-align: center;
     color: var(--text-light);
@@ -155,7 +155,7 @@
     justify-self: start;
 }
 
-.loadingContiner h2{
+.loadingContainer h2{
     font-size: 32px;
     text-align: center;
     color: var(--darker-secondary-gray);
@@ -177,7 +177,7 @@
     padding: 10px;
     background-color: var(--secondary-gray);
     border-radius: 25px;
-    box-shadow: 0px 8px 8px var(--shadow-min);
+    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
 /*
@@ -197,7 +197,7 @@
     background-color: var(--main-green);
     color: var(--text-light);
     border-radius: 10px;
-    box-shadow: 0px 2px 2px var(--shadow-less);
+    box-shadow: 0 2px 2px var(--shadow-less);
     padding: 5px;
     font-size: 18px;
     margin-top: 10px;
@@ -209,7 +209,7 @@
  */
 .userDetails button:hover{
     background-color: var(--darker-main-green);
-    box-shadow: inset 0px 2px 2px var(--shadow-less);
+    box-shadow: inset 0 2px 2px var(--shadow-less);
 }
 
 /*

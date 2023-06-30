@@ -1,5 +1,5 @@
 /*
- Use a grid to center the items and allow for the columns to be overriden when splitting
+ Use a grid to center the items and allow for the columns to be override when splitting
  Add some padding to make the text not go to the edge
  Make the colour of the text darker
  */
@@ -122,7 +122,7 @@
 
 /*
  Make the attachment have a green background, rounded corners and a shadow
- Make the text large, light gray and centered (cant use theming here it doesnt contrast well on dark mode)
+ Make the text large, light gray and centered (cant use theming here it doesn't contrast well on dark mode)
  Add padding to increase the size of the attachment
  */
 .attachment{
@@ -132,7 +132,7 @@
     color: lightgray;
     text-align: center;
     font-size: 32px;
-    box-shadow: 0px 8px 8px var(--shadow-less);
+    box-shadow: 0 8px 8px var(--shadow-less);
 }
 
 /*

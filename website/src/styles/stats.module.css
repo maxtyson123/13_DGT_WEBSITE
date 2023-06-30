@@ -5,7 +5,7 @@
  */
 .statsSection{
     border: 1px solid var(--secondary-gray);
-    box-shadow: 0px 8px 24px 10px var(--shadow-min);
+    box-shadow: 0 8px 24px 10px var(--shadow-min);
     border-radius: 8px;
     width: 80vw;
     padding: 32px;

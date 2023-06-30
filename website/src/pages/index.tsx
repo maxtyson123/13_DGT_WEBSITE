@@ -1,11 +1,7 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
 
-// TODO: Use SQL
-// TODO: "orgnial media assets"
+// TODO: Optimize
 // TODO: Testing
-// TODO: Code Validation
-// TODO: Optimize
-// TODO: Optimize
 // TODO: Documentation
 
 import React, {useEffect, useRef} from "react";
@@ -27,9 +23,7 @@ import ScrollingPlant from "@/components/scrolling_plant";
 import Link from "next/link";
 import {globalStyles} from "@/lib/global_css";
 
-type HomeRef = React.ForwardedRef<HTMLDivElement>
-
-export default function Home(ref: HomeRef) {
+export default function Home() {
     const pageName = "Home"
 
     // Stats for the featured plants

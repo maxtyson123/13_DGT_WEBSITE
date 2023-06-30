@@ -1,0 +1,4 @@
+Pohotukawa.png is an original media asset by Max Tyson,
+I took this photo at ocean's beach and edited it to be of the appropriate size and format for the website.
+
+It is used internally for the title and is uploaded to the server for the pohotukawa page.

@@ -1,8 +1,8 @@
-// Class for the names of the database tables depending  on SQL or  postgreSQL
+// Class for the names of the database tables depending  on SQL or  postgresSQL
 import {USE_POSTGRES} from "@/lib/constants";
-import {db, VercelPool, VercelPoolClient} from "@vercel/postgres";
+import {db, VercelPoolClient} from "@vercel/postgres";
+
 const sqlDb = require('mysql2-async').default;
-import {escape} from "mysql2";
 
 /**
  * Class for the names of the columns in the database
@@ -250,7 +250,7 @@ export async function getClient(){
  * Makes a query to the database and returns the data. Query and response is different depending on the database used, this is handled by this function depending on the USE_POSTGRES variable meaning to get the client getClient() should be used
  *
  * @param {string} query - The query to make to the database
- * @param {Connection | VercelPoolClient} client - The database connection to use
+ * @param client - The database connection to use
  * @param {boolean} rawData - If the data returned should be raw data or not
  *
  * @see {@link getClient}

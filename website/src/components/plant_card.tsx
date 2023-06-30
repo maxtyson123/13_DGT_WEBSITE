@@ -27,7 +27,7 @@ export default function PlantCardData({ data }: PlantCardProps){
         // Update the names
         setNames(getNamesInPreference(data))
 
-    }, [])
+    }, [data])
 
     // Store all the images
     const images = data.attachments.filter((attachment) => attachment.type === "image")
@@ -101,16 +101,6 @@ export function PlantCardApi({id}: PlantCardApiProps) {
     const dataFetch = useRef(false)
 
     // Fetch the plant data from the api for this plant on load
-    useEffect(() => {
-
-        // Prevent the data from being fetched again
-        if (dataFetch.current)
-            return
-        dataFetch.current = true
-
-        setCard();
-    }, []);
-
     const setCard = async () => {
 
         const plantOBJ = await fetchPlant(id)
@@ -123,6 +113,16 @@ export function PlantCardApi({id}: PlantCardApiProps) {
         // Set the plant data
         setPlantCard(<PlantCardData data={plantOBJ}/>)
     }
+
+    useEffect(() => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
+        setCard().then(() => {console.log("Plant card set")}).catch((err) => {console.log(err)})
+    }, [setCard]);
 
     return (
         <>

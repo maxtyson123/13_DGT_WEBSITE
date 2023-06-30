@@ -15,13 +15,13 @@ export default function Credits(){
     const [expanded, setExpanded] = useState(false)
 
     const handleExpand = () => {
-        // Toogle the expanded state
+        // Toggle the expanded state
         setExpanded(!expanded)
     }
 
     return(
         <>
-            {/* Container chip for the credits, allow clicking to expand if it isnt already expanded (this prevents it being unexpanded when the link is clicked */}
+            {/* Container chip for the credits, allow clicking to expand if it isn't already expanded (this prevents it being unexpanded when the link is clicked */}
             <div className={styles.creditsContainer} onClick={expanded ? () =>{} : handleExpand}>
 
                 {/* The credits text */}

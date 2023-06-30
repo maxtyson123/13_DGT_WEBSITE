@@ -42,7 +42,6 @@ interface AutoSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {Object} props.section - The section data.
- * @param {string} props.section.type - The type of section.
  * @param {AttachmentData[]} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
@@ -78,7 +77,7 @@ interface EdibleSectionProps{
 }
 
 /**
- * EdibleSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ * EdibleSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
  *
  * @param {Object} props - Component props.
  * @param {EdibleSectionData} props.section - The section data.
@@ -157,7 +156,7 @@ interface MedicalSectionProps{
 }
 
 /**
- * Medical Section component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ * Medical Section component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
  *
  * @param {Object} props - Component props.
  * @param {MedicalSectionData} props.section - The section data.
@@ -171,7 +170,7 @@ interface MedicalSectionProps{
 export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 
     // Store the use and preparation in a ref to set the contents with html later
-    const meduseRef = useRef<HTMLDivElement>(null)
+    const medUseRef = useRef<HTMLDivElement>(null)
     const preparationRef = useRef<HTMLDivElement>(null)
 
     // Get the image of the part of the plant
@@ -199,7 +198,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
         <>
             <div className={styles.infoDiv}>
                 <h1> {section.medical_type} Medical Use </h1>
-                <div ref={meduseRef}></div>
+                <div ref={medUseRef}></div>
                 <div ref={preparationRef}></div>
             </div>
         </>
@@ -208,15 +207,15 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     // Set the inner html of the use and preparation sections with a useEffect
     useEffect(() => {
 
-        if (meduseRef.current != null){
-            meduseRef.current.innerHTML = "<h3> Use: </h3> " + section.use
+        if (medUseRef.current != null){
+            medUseRef.current.innerHTML = "<h3> Use: </h3> " + section.use
         }
 
         if (preparationRef.current != null){
             preparationRef.current.innerHTML = "<h3> Preparation: </h3> " + section.preparation
         }
 
-    }, [meduseRef, preparationRef, section.use, section.preparation])
+    }, [medUseRef, preparationRef, section.use, section.preparation])
 
     return(
         <>
@@ -235,7 +234,7 @@ interface CraftSectionProps{
 }
 
 /**
- * CraftSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the valus from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ * CraftSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
  *
  * @param {Object} props - Component props.
  * @param {CraftSectionData} props.section - The section data.
@@ -524,7 +523,7 @@ export function AttachmentSection({attachment} : AttachmentSectionProps){
                 break;
         }
 
-    }, [])
+    }, [attachment.type])
 
     return(
         <>

@@ -48,7 +48,7 @@ export function useInputState(initialValue: string, required: boolean, state: Va
     useEffect(() => {
         setThisState(state);
         setThisRequired(required);
-    }, [state, required]);
+    }, [state, required, setThisState, setThisRequired]);
 
     // When the input is focused, change the state
     const handleInputFocus = () => setIsInputFocused(true);
@@ -321,7 +321,7 @@ type SimpleTextAreaProps = {
  * @param {string} props.errorText - The error text to display when the state is "error".
  * @param {function} props.changeEventHandler - A function to handle input changes.
  *
- * @see {@link AdvandcedTextArea} for a text area that allows for styling of the text input.
+ * @see {@link AdvancedTextArea} for a text area that allows for styling of the text input.
  * @see {@link useInputState} for the hook that handles the input state.
  * @see {@link ValidationState} for the type of the validation state.
  *
@@ -366,7 +366,7 @@ export function SimpleTextArea({placeHolder, defaultValue,  required, state, err
     const changeHandler = (value: string) => {
         setInputValue(value);
 
-        // Value has chaned so state is no longer vali
+        // Value has changed so state is no longer valid
         setThisState("normal")
 
         // Pass to the handler if it exists
@@ -475,7 +475,7 @@ class RenderQuill extends React.Component<RenderQuillProps>{
  *
  * @returns {JSX.Element} - The advanced text area component.
  */
-export function AdvandcedTextArea({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
+export function AdvancedTextArea({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -514,7 +514,7 @@ export function AdvandcedTextArea({placeHolder, defaultValue, required, state, e
     const changeHandler = (value: string) => {
         setInputValue(value);
 
-        // Value has chaned so state is no longer vali
+        // Value has changed so state is no longer valid
         setThisState("normal")
 
         // Pass to the handler if it exists

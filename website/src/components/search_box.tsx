@@ -18,7 +18,7 @@ export default function SearchBox() {
                     {/* Input for the search query */}
                     <input type="text" placeholder="Search.." name="query"/>
 
-                    {/* Button to submit the form, uses the seach icon from FontAwesome */}
+                    {/* Button to submit the form, uses the search icon from FontAwesome */}
                     <button type="submit"><FontAwesomeIcon icon={faSearch}/></button>
                 </form>
             </div>

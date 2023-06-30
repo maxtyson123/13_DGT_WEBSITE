@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
-import {GetOrgin} from "@/lib/api_tools";
+import {GetOrigin} from "@/lib/api_tools";
 import {Form} from "multiparty";
 import fs from "fs";
 import Client from "ftp";
@@ -15,7 +15,7 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrgin(request);
+    const origin = GetOrigin(request);
     const session = await getServerSession(request, response, authOptions)
 
     // If the request is not a POST request, return an error

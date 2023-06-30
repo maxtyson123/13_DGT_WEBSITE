@@ -1,4 +1,3 @@
-import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, makeQuery} from "@/lib/databse";
 
@@ -29,7 +28,7 @@ export default async function handler(
         // Assemble the query
         let query = ``;
 
-        // If the user specifed a name, get the plant id from the plants database
+        // If the user specified a name, get the plant id from the plants database
         let shouldGetNames = ``;
         if(getNames){
             shouldGetNames = `, english_name, maori_name, latin_name`;

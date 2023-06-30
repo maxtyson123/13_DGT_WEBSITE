@@ -22,8 +22,7 @@ interface MonthEntry {
     event: string
 }
 
-type CalenderRef = React.ForwardedRef<HTMLDivElement>
-export default function Calender(ref: CalenderRef){
+export default function Calender(){
     const pageName = "Calender"
 
     // Store the month states
@@ -65,7 +64,7 @@ export default function Calender(ref: CalenderRef){
             return
         dataFetch.current = true
 
-        fetchData();
+        fetchData().then(() => {console.log("Data fetched")} ).catch((error) => {console.log(error)});
     }, []);
 
     async function fetchData() {
@@ -114,7 +113,7 @@ export default function Calender(ref: CalenderRef){
                 }
 
 
-                // If ether the start or end month is null then skip this entry
+                // If either the start or end month is null then skip this entry
                 if (monthEntry.startMonth === -1 || monthEntry.endMonth === -1)
                     continue;
 
@@ -164,7 +163,7 @@ export default function Calender(ref: CalenderRef){
                         {/* Map the entry's for this month */}
                         {monthEntries
                             .map((entry, index) => {
-                               return <EventEntryDisplayer key={entry.plant + index} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
+                               return <EventEntryDisplayed key={entry.plant + index} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
 
                         })}
                     </div>
@@ -186,13 +185,13 @@ export default function Calender(ref: CalenderRef){
     )
 }
 
-interface EventEntryDisplayerProps{
+interface EventEntryDisplayedProps{
     entry: MonthEntry,
     month: number
     prevMonth: () => void,
     nextMonth: () => void
 }
-function EventEntryDisplayer({entry, month, prevMonth, nextMonth}: EventEntryDisplayerProps){
+function EventEntryDisplayed({entry, month, prevMonth, nextMonth}: EventEntryDisplayedProps){
 
     let type = ""
     let style = null
@@ -227,7 +226,7 @@ function EventEntryDisplayer({entry, month, prevMonth, nextMonth}: EventEntryDis
         type = "OnGoing"
         style = styles.onGoing
     }else{
-        // If this is reached then the month is not between the start and end month but it still could be looped around (e.g dec - march)
+        // If this is reached then the month is not between the start and end month, but it still could be looped around (e.g dec - march)
         // If the end month is less than the start month then the event is ongoing
         if(entry.endMonth < entry.startMonth){
             if ((month >= entry.startMonth && month <= 12) || (month >= 1 && month < entry.endMonth)) {
@@ -249,7 +248,7 @@ function EventEntryDisplayer({entry, month, prevMonth, nextMonth}: EventEntryDis
                     {/* Display the entry */}
                     <div className={styles.plant + " " + style}>
                         {/* If it is ending or ongoing then display the button to go back a month */}
-                        {type === "End" || type === "OnGoing" ? <button className={styles.monthElmentButton} onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button> : <div/>}
+                        {type === "End" || type === "OnGoing" ? <button className={styles.monthElementButton} onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button> : <div/>}
 
                         {/* Display the name, event and type */}
                         <Link href={`/plants/${entry.id}`}>
@@ -258,7 +257,7 @@ function EventEntryDisplayer({entry, month, prevMonth, nextMonth}: EventEntryDis
                         <h2> {type} </h2>
 
                         {/* If it is starting or ongoing then display the button to go forward a month */}
-                        {type === "Start" || type === "OnGoing" ? <button className={styles.monthElmentButton} onClick={nextMonth}><FontAwesomeIcon icon={faArrowRight} /></button> : <div/>}
+                        {type === "Start" || type === "OnGoing" ? <button className={styles.monthElementButton} onClick={nextMonth}><FontAwesomeIcon icon={faArrowRight} /></button> : <div/>}
                     </div>
             </>
     )

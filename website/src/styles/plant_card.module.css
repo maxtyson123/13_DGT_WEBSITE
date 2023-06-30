@@ -2,7 +2,7 @@
  A div with a rounded border and a shadow.
  Add padding to the div to give it some space between the border and the content inside.
  Use flexbox to align the content inside the div, display it as a column.
- Add a max-width to the div to ensure it isnt too big.
+ Add a max-width to the div to ensure it isn't too big.
  */
 .card{
     box-sizing: border-box;

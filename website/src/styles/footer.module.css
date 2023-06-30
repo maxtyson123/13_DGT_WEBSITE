@@ -10,7 +10,7 @@
 
 /*
  The footer container should be a grid with 2 columns, one for the search box and one for the links
- Add some room bteewen the top of the page and the footer
+ Add some room between the top of the page and the footer
  */
 .footer{
     display: grid;
@@ -32,7 +32,7 @@
  */
 .links{
     font-size: 22px;
-    color: white; /* Does not use themeing */
+    color: white; /* Does not use theming */
 }
 
 /*

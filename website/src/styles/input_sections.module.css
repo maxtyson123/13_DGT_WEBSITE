@@ -21,8 +21,8 @@
 
 
 /*
- Since cant change much of the place holder text have to use absolute positioing and translate to move it to make a overlayed lable
- Smaller font to suggest insignifacance and to not distract from the input
+ Since cant change much of the place holder text have to use absolute position and translate to move it to make a overlay label
+ Smaller font to suggest insignificance and to not distract from the input
  */
 .required{
     color: var(--text-dark);
@@ -166,45 +166,10 @@
     width: 100%;
 }
 
-.advancedTextArea .topBar{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--secondary-gray);
-    padding-right: 16px;
-}
-
-
 
 .editableDiv {
     padding-top: var(--top-spacing);
     overflow-wrap: break-word;
     max-width: 100%;
     border: none;
-}
-
-
-/*
- Use a top spacing var so that it can be changed easily via JS
- Min width so that the position of the icon doesn't change when the input is too small
- */
-.dateInput {
-    --top-spacing: 8px;
-    width: 100%;
-}
-
-/*
-  Style the input box to look better by changing the border and adding a border radius
-  Make it take up the full width of the container
- */
-.dateInput input[type=date] {
-    padding: var(--top-spacing) 16px 8px 16px;
-    border-radius: 8px;
-    width: 100%;
-}
-
-.dateInput .tooltip{
-    margin-left: 10px;
 }

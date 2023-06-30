@@ -1,7 +1,7 @@
 NZ Native Plant Based Website Notes (Rongoa):
 
-Breif:
-I am going to create a website that informs users about NZ plants. The information and data should be displayed in a
+Brief:
+I am going to create a website that informs users about NZ plants. The information and data should be displayed in an
 entertaining and interactive way, with the site being accessible to a wide range of users on mobile or pc. The plant
 pages should be automatically generated from JSON data contain all the information, it should be easy to update and edit
 data.
@@ -21,22 +21,22 @@ Plan:
 - Figma Mock Up: https://www.figma.com/file/Kk8xBt6xba5k448VpILIyv/13-DGT-Website?node-id=0%3A1&t=JckHKCGevQqI6JDG-1
 
 Features:
-- [ ] Search Bar
-- [ ] Dynamic Plant Index
-- [ ] Dynamic Plant Page
-- [ ] Plant page should have sections, sections and their images should alternate from left to right automatically
+- [x] Search Bar
+- [x] Dynamic Plant Index
+- [x] Dynamic Plant Page
+- [x] Plant page should have sections, sections and their images should alternate from left to right automatically
 - [x] Stats
-- [ ] Accessibility Settings
-- [ ] Calendar of plant in season
+- [x] Accessibility Settings
+- [x] Calendar of plant in season
 
 Possible Features:
 - [x] 3D Parallax Plant on Header
 - [x] Page to log a new plant
 - [ ] Social Media Side where users sign up and post pictures of plants they see, automatically tagged with location and date
-- [ ] Plant of the day
-- [ ] API to get plant information and upload plants
+- [x] Plant of the day
+- [x] API to get plant information and upload plants
 
-Data Stucture:
+Data Structure:
 
 - Plants:
 {
@@ -104,7 +104,7 @@ Data Stucture:
     "part_of_plant": "*",
     "use": "*",
     "image": "*",
-    "Addditonal info": "*"
+    "Additional info": "*"
 
 
 }

@@ -2,7 +2,7 @@
  Make the text in the welcome container white and any child elements should be flex to align them horizontally.
  */
 .welcomeContainer{
-    color: white; /* This doesnt change with themeing */
+    color: white; /* This doesn't change with theming */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: .5fr 2fr .5fr;
@@ -91,14 +91,14 @@
 }
 
 /*
- Make the pagebreak have a grey background with a inset shadow.
- Round the corners and keep the width at 80 veiwport width.
+ Make the page-break have a grey background with a inset shadow.
+ Round the corners and keep the width at 80 viewport width.
  Centre the plant images using a grid and two columns.
- Justify the items to the baseline to make the flax start at the bottom of the pagebreak.
+ Justify the items to the baseline to make the flax start at the bottom of the page-break.
  */
 .pageBreak{
     background: var(--secondary-gray);
-    box-shadow: inset 0px 4px 4px var(--shadow-less);
+    box-shadow: inset 0 4px 4px var(--shadow-less);
     border-radius: 25px;
     width: 80vw;
     display: grid;

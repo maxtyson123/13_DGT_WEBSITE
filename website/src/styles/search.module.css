@@ -28,7 +28,7 @@
 /*
  Wrap the query if it is too long
  Add margin so that it is not too close to the edge
- Inline so that the lables can be on the same line as the values
+ Inline so that the labels can be on the same line as the values
  */
 .statContainer p{
     margin-left: 10px;

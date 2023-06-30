@@ -1,11 +1,9 @@
-import {db, VercelPool} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
-import {GetOrgin} from "@/lib/api_tools";
+import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
-import {Connection} from "pg";
 
 export default async function handler(
     request: NextApiRequest,
@@ -13,7 +11,7 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrgin(request);
+    const origin = GetOrigin(request);
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -148,7 +146,7 @@ export default async function handler(
         console.log(auth_result)
 
         // Check if the user is allowed to upload
-        if(!auth_result[0].id) {
+        if(!auth_result[0]) {
             return response.status(401).json({ error: 'User not authorised to upload' });
         }
 
@@ -157,7 +155,7 @@ export default async function handler(
         let getIDQuery = "(SELECT id FROM new_plant)";
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
-        // If it is editing then insert at the id instead of gererating a new one
+        // If it is editing then insert at the id instead of generating a new one
         if(edit_id){
             insertQuery += `${tables.id}, `;
             insetQueryValues += `${edit_id}, `;

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 
 interface ToggleAccessibilityProps {
     setting: string
@@ -64,7 +64,7 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
 
         // Update the toggle
         toggleRef.current!.checked = mode
-    }, [toggleRef.current])
+    }, [setter, loader])
 
     return (
         <>

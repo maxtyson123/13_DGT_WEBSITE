@@ -9,8 +9,6 @@ import styles from "@/styles/plant_index.module.css";
 import axios from "axios";
 import Stats from "@/components/stats";
 
-type IndexRef = React.ForwardedRef<HTMLDivElement>
-
 interface plantEntry {
     id: number,
     name: string,
@@ -20,7 +18,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 const numbers = "0123456789".split("")
 const symbols = "!@#$%^&*()_+-=[]{};':\",./<>?".split("")
 
-export default function PlantIndex(ref: IndexRef){
+export default function PlantIndex(){
     const pageName = "Plant Index"
     const [plants, setPlants] = React.useState<plantEntry[] | null>(null)
 
@@ -35,7 +33,7 @@ export default function PlantIndex(ref: IndexRef){
             return
         dataFetch.current = true
 
-        getPlantIDs()
+        getPlantIDs().then(() => {console.log("Finished getting plant ids")}).catch((error) => {console.log(error)})
     }, [])
 
     const getPlantIDs = async () => {
@@ -53,8 +51,6 @@ export default function PlantIndex(ref: IndexRef){
             // Get the plant ids from the response
             const data = response.data.data
 
-            // Example Data: [{"id":10,"english_name":"Christmas Tree","maori_name":"Pohutukawa","latin_name":"Metrosideros excelsa"},{"id":12,"english_name":"Christmas Tree","maori_name":"Pohutukawa","latin_name":"Metrosideros excelsa"},{"id":13,"english_name":"Christmas Tree","maori_name":"Pohutukawa","latin_name":"Metrosideros excelsa"},{"id":54,"english_name":"Wineberry","maori_name":"Makomako","latin_name":"Aristotelia serrata"},{"id":61,"english_name":"asd","maori_name":"asd","latin_name":"asd"},{"id":64,"english_name":"asd","maori_name":"asd","latin_name":"asd"}]
-
             // Create an array to store the plant ids (for each name)
             let ids: plantEntry[] = []
             setPlants(ids)
@@ -62,7 +58,7 @@ export default function PlantIndex(ref: IndexRef){
             // Loop through the data and set the ids
             for (let i = 0; i < data.length; i++) {
 
-                // If there is a english name then add it to the array
+                // If there is an english name then add it to the array
                 if (data[i].english_name !== null) {
                     ids.push({id: data[i].id, name: data[i].english_name})
                 }

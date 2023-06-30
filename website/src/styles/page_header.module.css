@@ -1,7 +1,7 @@
 /*
- Provides a varible to set the height of the header.
- This varible is updated in the page_header component based on a size value.
- Set to 0vh by default to show if it isnt working, this also gives alittle drop down animation when the page loads.
+ Provides a variable to set the height of the header.
+ This variable is updated in the page_header component based on a size value.
+ Set to 0vh by default to show if it isn't working, this also gives a little drop down animation when the page loads.
  */
 .pageHeader{
     --headerHeight: 0vh;
@@ -15,7 +15,7 @@
 .mainBG{
     width: 100vw;
     height: var(--headerHeight);
-    box-shadow: 0px 10px 10px var(--shadow-less);
+    box-shadow: 0 10px 10px var(--shadow-less);
 }
 
 /*

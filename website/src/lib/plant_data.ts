@@ -1,10 +1,9 @@
-
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import {USE_POSTGRES} from "@/lib/constants";
 
 /**
- * The data for the plant in a more readable format and easier to use programmatically with alot of the data from the api moved into arrays of objects
+ * The data for the plant in a more readable format and easier to use programmatically with a lot of the data from the api moved into arrays of objects
  */
 export interface PlantData {
     id:                 number;
@@ -160,7 +159,7 @@ export interface AttachmentData {
 }
 
 /**
- * The format of a event in the months ready for use section
+ * The format of an event in the months ready for use section
  *
  * @see {@link PlantData.months_ready_for_use}
  */
@@ -178,10 +177,10 @@ export interface MonthsReadyData {
  * @returns {string} - The size of the file in a more readable format (e.g. 1.23 MB)
  */
 export function formatFileSize(bytes: number) {
-    const sufixes = ['B', 'kB', 'MB', 'GB', 'TB'];
+    const suffixes = ['B', 'kB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sufixes[i]}`;
-};
+    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${suffixes[i]}`;
+}
 
 /**
  * Will clean the data from the api, this makes sure any null values are set to empty arrays.
@@ -595,7 +594,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
 }
 
 /**
- * Will make a empty plant data object. The id will be set to 1
+ * Will make an empty plant data object. The id will be set to 1
  */
 export function emptyPlantData(){
     const plantData : PlantData = {
@@ -619,7 +618,7 @@ export function emptyPlantData(){
 }
 
 /**
- * Will make a empty plant api data object. The date will be set to the current date
+ * Will make an empty plant api data object. The date will be set to the current date
  */
 export function emptyPlantApiData(){
     // Create the api data object
@@ -715,7 +714,7 @@ export async function fetchPlant (id: number) {
             const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
             const plantData = res.data.data
 
-            // Typecast the plant data to the PlantData type (this is becuase it is know to return the PlantData type by the api - checking is done there)
+            // Typecast the plant data to the PlantData type (this is because it is know to return the PlantData type by the api - checking is done there)
             plantOBJ = plantData as PlantData
 
             // Set the plant data in the cache
@@ -735,7 +734,7 @@ export async function fetchPlant (id: number) {
 }
 
 /**
- * Will fix the paths of the attachments to be the propper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing its ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
+ * Will fix the paths of the attachments to be the proper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing its ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
  *
  * @param {PlantData} plant - The plant data to fix the paths of
  *
@@ -747,10 +746,10 @@ export function fixAttachmentsPaths (plant: PlantData) {
         return plant;
     }
 
-    // Loop through the attachments and set the propper path
+    // Loop through the attachments and set the proper path
     for(let i = 0; i < plant.attachments.length; i++) {
 
-        // If the attachment doesnt start with a website url then it is using this server
+        // If the attachment doesn't start with a website url then it is using this server
         if(plant.attachments[i].path.startsWith("http")) {
             continue;
         }

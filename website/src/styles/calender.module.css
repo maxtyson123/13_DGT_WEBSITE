@@ -75,7 +75,7 @@
     grid-column-start: 2;
     grid-column-end: 4;
     background-color: var(--main-green);
-    border-radius: 10px 0px 0px 10px;
+    border-radius: 10px 0 0 10px;
     box-shadow: 10px 0 8px -8px var(--shadow);
 }
 
@@ -83,7 +83,7 @@
     grid-column-start: 1;
     grid-column-end: 3;
     background-color: red;
-    border-radius: 0px 10px 10px 0px;
+    border-radius: 0 10px 10px 0;
     box-shadow: -10px 0 8px -8px var(--shadow);
 }
 
@@ -109,7 +109,7 @@
         grid-template-columns: 1fr;
     }
 
-    .monthElmentButton{
+    .monthElementButton{
         display: none;
     }
 

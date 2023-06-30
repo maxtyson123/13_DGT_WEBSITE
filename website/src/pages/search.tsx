@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
-import React, {ForwardedRef, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
@@ -12,8 +12,7 @@ import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_
 import axios from "axios";
 import {Error} from "@/components/error";
 
-type SearchRef = ForwardedRef<HTMLDivElement>
-export default function Search(ref: SearchRef){
+export default function Search(){
     const pageName = "Search"
 
     // Stats
@@ -76,7 +75,7 @@ export default function Search(ref: SearchRef){
         dataFetch.current = true
 
         // Begin getting the search results
-        getSearchResults(query)
+        getSearchResults(query).then()
 
     }, [])
 
@@ -191,7 +190,7 @@ export default function Search(ref: SearchRef){
                     {/* Search button */}
                     <button
                         className={styles.searchButton}
-                        onClick={(e) => {
+                        onClick={() => {
                             const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
                             window.location.href = `/search?query=${userInput}`
                         }}>

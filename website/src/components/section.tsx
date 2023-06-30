@@ -7,7 +7,7 @@ type SectionProps = {
 
 
 /**
- * Section component. Renders a section with the given children. This is usefull for splitting up the page into sections to make it easier to read the code.
+ * Section component. Renders a section with the given children. This is usefully for splitting up the page into sections to make it easier to read the code.
  *
  * @param {Object} props - Component props.
  * @param {React.ReactNode} props.children - The children of the section.

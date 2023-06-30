@@ -83,7 +83,7 @@ body{
 /*
  Split the page so that the input can be on the left and the images on the right
  Use flex to vertically and horizontally centre the input
- Flex in a collum for it to be vertical
+ Flex in a column for it to be vertical
  */
 .column {
     float: left;

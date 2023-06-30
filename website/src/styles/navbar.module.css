@@ -29,7 +29,7 @@
     float: left;
     margin: 0;
     display: block;
-    color: white; /* Doesnt use themeing */
+    color: white; /* doesn't use theming */
     text-align: center;
     font-size: 17px;
 
@@ -83,10 +83,6 @@
 .expanded{
     grid-template-columns: 1fr;
     background-color: rgba(10, 44, 9, 0.9);
-}
-
-.collapsed{
-
 }
 
 @media only screen and (max-width: 600px) {

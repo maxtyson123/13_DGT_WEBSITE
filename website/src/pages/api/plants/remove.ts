@@ -1,9 +1,7 @@
-import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
-import mysql from 'serverless-mysql';
 import {USE_POSTGRES} from "@/lib/constants";
 import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
-import {GetOrgin} from "@/lib/api_tools";
+import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
@@ -13,7 +11,7 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrgin(request);
+    const origin = GetOrigin(request);
 
     // Get the client
     const client = await getClient()
@@ -48,7 +46,7 @@ export default async function handler(
         let auth_query = ""
 
         // If it is this site then allow user email to authenticate
-        console.log("orgin:" + origin)
+        console.log("origin:" + origin)
         if (origin === process.env.NEXTAUTH_URL) {
             console.log("This is the same site");
 

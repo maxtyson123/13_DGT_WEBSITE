@@ -4,11 +4,11 @@ Spinning code by: Max Tyson
 */
 
 import React, {useEffect, useRef, useState} from "react";
-import { useGLTF} from "@react-three/drei";
+import {useGLTF} from "@react-three/drei";
 import {useFrame} from "@react-three/fiber";
 import {GLTF} from "three-stdlib";
 import * as THREE from "three";
-import { Mesh, BufferGeometry, Material } from "three";
+import {Mesh} from "three";
 
 // Define the type for the GLTFResult
 type GLTFResult = GLTF & {
@@ -35,9 +35,9 @@ export function PlantModel(props: JSX.IntrinsicElements['group']) {
     const { nodes, materials } = useGLTF("/data/plant.glb") as GLTFResult;
 
     // Store the pieces of the plant model for later use
-    const plantModelRef1 = useRef<Mesh<BufferGeometry, Material | Material[]>>(null!);
-    const plantModelRef2 = useRef<Mesh<BufferGeometry, Material | Material[]>>(null!);
-    const plantModelRef3 = useRef<Mesh<BufferGeometry, Material | Material[]>>(null!);
+    const plantModelRef1 = useRef<Mesh>(null!);
+    const plantModelRef2 = useRef<Mesh>(null!);
+    const plantModelRef3 = useRef<Mesh>(null!);
 
     // Values for the rotation speed and scroll speed
     const rotationSpeed = 0.0002;

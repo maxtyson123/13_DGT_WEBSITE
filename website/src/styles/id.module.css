@@ -13,7 +13,7 @@
 }
 
 /*
- The header id is rotated 90 degrees and a bit larger then the other texts becuase of this
+ The header id is rotated 90 degrees and a bit larger then the other texts because of this
  */
 .plantId{
     transform: rotate(-90deg);
@@ -87,7 +87,7 @@
 
 /*
  Move the container down a bit so it is not touching the main image
- Make it half the hieth of the main image but same width percentage
+ Make it half the height of the main image but same width percentage
  Use a grid to divide the container into a column for the decrease button, 5 for the images and a column for the increase button
  Add some spacing to each column and align the contents of the column to the centre
  Hide any overflow so the corners of the images dont go outside the rounder corners of the container
@@ -176,7 +176,7 @@
  */
 .smallInline{
     display: block;
-    margin: 0px;
+    margin: 0;
 }
 
 /*

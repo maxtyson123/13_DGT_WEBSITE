@@ -9,7 +9,7 @@ import {NextApiRequest} from "next";
  *
  * @returns {string} - The origin of the request
  */
-export function GetOrgin(request: NextApiRequest){
+export function GetOrigin(request: NextApiRequest){
     const LOCAL_HOST_ADDRESS = "localhost:3000";
 
     let host = request.headers?.host || LOCAL_HOST_ADDRESS;

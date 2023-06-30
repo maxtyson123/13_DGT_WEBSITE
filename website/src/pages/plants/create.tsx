@@ -4,7 +4,7 @@ import styles from "@/styles/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 import {
-    AdvandcedTextArea,
+    AdvancedTextArea,
     DropdownInput,
     SimpleTextArea,
     SmallInput,
@@ -269,7 +269,7 @@ export function CustomSection({titleHandler, textHandler, valid, state}: CustomS
 
             {/* Custom Text */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Custom Section Text"}
                     defaultValue={state.text}
                     required={true}
@@ -412,7 +412,7 @@ export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlan
 
             {/* Use */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Use"}
                     defaultValue={state.use}
                     required={true}
@@ -424,7 +424,7 @@ export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlan
 
             {/* Additional Info */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Additional Info"}
                     defaultValue={state.additionalInfo}
                     required={false}
@@ -566,7 +566,7 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
 
             {/* Use */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Use"}
                     defaultValue={state.use}
                     required={true}
@@ -578,7 +578,7 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
 
             {/* Preparation */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Preparation"}
                     defaultValue={state.preparation}
                     required={true}
@@ -660,7 +660,7 @@ class EdibleInfo {
             isValid = false;
         }else { this.valid.partOfPlant = ["success", "No Error"] as [ValidationState, string]; }
 
-        // If there is no nutritional value entered then ignore as not requried otherwise the input is valid
+        // If there is no nutritional value entered then ignore as not required otherwise the input is valid
         if (this.state.nutritionalValue !== "") {
             this.valid.nutritionalValue = ["success", "No Error"] as [ValidationState, string];
         }
@@ -762,7 +762,7 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
 
             {/* Preparation */}
             <div className={styles.formItem}>
-                <AdvandcedTextArea
+                <AdvancedTextArea
                     placeHolder={"Preparation"}
                     defaultValue={state.preparation}
                     required={true}
@@ -847,7 +847,7 @@ class ImageInfo{
     validate = () => {
         let isValid = true;
 
-        // If there is no image name entered or it is longer than 50 chars then show an error otherwise the input is valid
+        // If there is no image name entered, or it is longer than 50 chars then show an error otherwise the input is valid
         if(this.state.image_name === "") {
             this.valid.image_name = ["error", "Please enter a name for the image"];
             isValid = false;
@@ -926,7 +926,7 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, im
         imageURLHandler(file.name);
         imageDataURLHandler(URL.createObjectURL(file));
 
-        // Re render
+        // re-render
         setLocalURL(prevState => prevState + 1);
     }
 
@@ -937,7 +937,7 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, im
             <div className={styles.formItem} key={localURL}>
                 <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
 
-                    {/* If there is a image then display that, otherwise show a upload button */}
+                    {/* If there is an image then display that, otherwise show an upload button */}
                     {state.image_url !== "" ?
                         <>
                             {/* Load the image from the website or use the blob data from the file */}
@@ -1060,7 +1060,7 @@ class FileInfo{
     validate = () => {
         let isValid = true;
 
-        // If there is no file name entered or it is longer than 50 chars then show an error otherwise the input is valid
+        // If there is no file name entered, or it is longer than 50 chars then show an error otherwise the input is valid
         if(this.state.file_name === "") {
             this.valid.file_name = ["error", "Please enter a name for the file"];
             isValid = false;
@@ -1337,7 +1337,7 @@ export function DateInfoSection({eventHandler, startDateHandler, endDateHandler,
     )
 }
 
-interface infoDisplayerProps{
+interface infoDisplayedProps{
     infoRef         : React.MutableRefObject<DateInfo[]>
         | React.MutableRefObject<EdibleInfo[]>
         | React.MutableRefObject<MedicalInfo[]>
@@ -1351,16 +1351,16 @@ interface infoDisplayerProps{
     setRenderKey    : React.Dispatch<React.SetStateAction<number>>
     imageRef?       : React.MutableRefObject<ImageInfo[]>
 }
-function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDisplayerProps){
+function InfoDisplayed({infoRef, newInfo, name, setRenderKey, imageRef} : infoDisplayedProps){
 
     // Calculate the id of the info
     let id = name.toLowerCase().replace(" ", "-");
 
     const removeInfo = (id: number) => {
-        // Remove the info displayer
+        // Remove the info displayed
         infoRef.current.splice(id, 1);
 
-        // Re render the entire div with this update
+        // Re-render the entire div with this update
         setRenderKey(prevState => prevState + 1)
     }
 
@@ -1384,7 +1384,7 @@ function InfoDisplayer({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
                         {/* Add the section */}
                         {value.section}
 
-                        {/* Image slector has to be here as the sections them selves cant see each other */}
+                        {/* Image selector has to be here as the sections themselves cant see each other */}
                         {imageRef ?
                         <div className={styles.formItem}>
                             <DropdownInput
@@ -1425,7 +1425,7 @@ export default function CreatePlant() {
     // Set up the router
     const router = useRouter();
 
-    // Get the logged in user
+    // Get the logged-in user
     const { data: session } = useSession()
 
     // Page States
@@ -1532,7 +1532,9 @@ export default function CreatePlant() {
             if(preferredName === "English"){
                 setEnglishNameValidationState(["error", "Required if preferred name is English"])
                 isValid = false;
-                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "english-name";
+
+                // Dont need to check if null here as there is nothing before it 
+                elementThatNeedsFocus = "english-name";
             }
         } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]);  }
 
@@ -2256,7 +2258,7 @@ export default function CreatePlant() {
         for(let i = 0; i < imageInfoRef.current.length; i++){
 
             setProgressMessage(`Uploading image ${i + 1} of ${imageInfoRef.current.length}`)
-            // If the image url is alread set to have a url, skip it
+            // If the image url is already set to have a url, skip it
             if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
                 continue;
             }
@@ -2279,7 +2281,7 @@ export default function CreatePlant() {
 
             setProgressMessage(`Uploading file ${i + 1} of ${fileInfoRef.current.length}`)
 
-            // If the file url is already set to have a url, skip it
+            // If the file url is already set to have an url, skip it
             if(fileInfoRef.current[i].state.file_url.startsWith("http")) {
                 continue;
             }
@@ -2307,6 +2309,33 @@ export default function CreatePlant() {
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
+
+    const getEditData = async (idNum: number) => {
+        setIsLoading(true);
+        setProgressMessage("Fetching plant data to edit")
+
+        // Download the plant data
+        const plantOBJ = await fetchPlant(idNum);
+
+        // Check if the plant data is valid
+        if(!plantOBJ){
+            setError("The plant you are trying to edit is not a valid plant (was unable to fetch it's data from the database)")
+            console.log("ERROR WRONG ID")
+            scrollToElement("errorSection")
+            setIsLoading(false);
+            return;
+        }
+
+        console.log("Plant OBJ:")
+        console.log(plantOBJ)
+
+        // Load the plant data
+        loadJson(plantOBJ)
+
+        // Scroll to the top of the page
+        scrollToElement("english-name")
+        setIsLoading(false);
+    }
 
     useEffect(() => {
         // Get the id
@@ -2338,43 +2367,16 @@ export default function CreatePlant() {
             return
         dataFetch.current = true
 
-        getEditData(idNum)
+        getEditData(idNum).then(() => {console.log("DONE")}).catch((err) => {console.log(err)})
 
 
-    }, [router.query]);
-
-    const getEditData = async (idNum: number) => {
-        setIsLoading(true);
-        setProgressMessage("Fetching plant data to edit")
-
-        // Download the plant data
-        const plantOBJ = await fetchPlant(idNum);
-
-        // Check if the plant data is valid
-        if(!plantOBJ){
-            setError("The plant you are trying to edit is not a valid plant (was unable to fetch it's data from the database)")
-            console.log("ERROR WRONG ID")
-            scrollToElement("errorSection")
-            setIsLoading(false);
-            return;
-        }
-
-        console.log("Plant OBJ:")
-        console.log(plantOBJ)
-
-        // Load the plant data
-        loadJson(plantOBJ)
-
-        // Scroll to the top of the page
-        scrollToElement("english-name")
-        setIsLoading(false);
-    }
+    }, [getEditData, router.query]);
 
     const scrollToElement = (elementId: string) => {
         // Get the element to scroll to
         const element = document.getElementById(elementId);
 
-        // If it doesnt exist return
+        // If it doesn't exist return
         if (!element) {
             return;
         }
@@ -2382,7 +2384,7 @@ export default function CreatePlant() {
         // Get its position on the page
         let dims = element.getBoundingClientRect();
 
-        // Scroll to it, add 150px spacing so that the nav bar has space, ensure that it is smooth and doesnt just jump
+        // Scroll to it, add 150px spacing so that the nav bar has space, ensure that it is smooth and doesn't just jump
         window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
 
     }
@@ -2413,7 +2415,7 @@ export default function CreatePlant() {
         }
     }
 
-    // When the names are updated re render the sections that use images
+    // When the names are updated re-render the sections that use images
     const updateNames = () => {
         setRenderKeyEdible(prevState => prevState + 1)
         setRenderKeyMedical(prevState => prevState + 1)
@@ -2422,7 +2424,7 @@ export default function CreatePlant() {
 
     useEffect(() => {
 
-        // Register the updateNames names function to the image info object as it doenst have a refrence to the render keys of the other sections
+        // Register the updateNames names function to the image info object as it doest have a reference to the render keys of the other sections
         for (let i = 0; i < imageInfoRef.current.length; i++) {
             imageInfoRef.current[i].updateNames = updateNames;
         }
@@ -2444,14 +2446,14 @@ export default function CreatePlant() {
 
                 {/* If something is set to be loading on the page then show the loading screen */}
                 { isLoading ?
-                    <div className={styles.loadingContiner}>
+                    <div className={styles.loadingContainer}>
                         <Image src={"/media/images/loading.gif"} alt={"Loading.."} width={100} height={100}/>
                         <h1> Loading... </h1>
                         <h2>{progressMessage}...</h2>
                     </div>
                     : null}
 
-                {/* If the user is not signed in then show the sign in button */}
+                {/* If the user is not signed in then show the sign-in button */}
                 { !session ?
                     <>
                         <div className={styles.userDetails}>
@@ -2542,7 +2544,7 @@ export default function CreatePlant() {
 
                                     {/* Plant Large Description */}
                                     <div className={styles.formItem} id={"large-description"}>
-                                        <AdvandcedTextArea
+                                        <AdvancedTextArea
                                             placeHolder={"Long Description"}
                                             defaultValue={importedJSON.long_description}
                                             required={true}
@@ -2568,7 +2570,7 @@ export default function CreatePlant() {
 
                                 {/* Months ready for use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Date"}
                                         infoRef={dateInfoRef}
                                         newInfo={newDateInfo}
@@ -2579,7 +2581,7 @@ export default function CreatePlant() {
 
                                 {/* Edible use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Edible Use"}
                                         infoRef={edibleInfoRef}
                                         newInfo={newEdibleInfo}
@@ -2591,7 +2593,7 @@ export default function CreatePlant() {
 
                                 {/* Medical use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Medical Use"}
                                         infoRef={medicalInfoRef}
                                         newInfo={newMedicalInfo}
@@ -2603,7 +2605,7 @@ export default function CreatePlant() {
 
                                 {/* Craft use */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Craft Use"}
                                         infoRef={craftInfoRef}
                                         newInfo={newCraftInfo}
@@ -2615,7 +2617,7 @@ export default function CreatePlant() {
 
                                 {/* Source */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Source"}
                                         infoRef={sourceInfoRef}
                                         newInfo={newSourceInfo}
@@ -2626,7 +2628,7 @@ export default function CreatePlant() {
 
                                 {/* Custom Section */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Custom Section"}
                                         infoRef={customInfoRef}
                                         newInfo={newCustomInfo}
@@ -2641,7 +2643,7 @@ export default function CreatePlant() {
 
                                 {/* Images */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"Image"}
                                         infoRef={imageInfoRef}
                                         newInfo={newImage}
@@ -2652,7 +2654,7 @@ export default function CreatePlant() {
 
                                 {/* File */}
                                 <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayer
+                                    <InfoDisplayed
                                         name={"File"}
                                         infoRef={fileInfoRef}
                                         newInfo={newFileInfo}

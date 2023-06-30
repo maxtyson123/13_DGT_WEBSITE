@@ -34,7 +34,7 @@ export default function ScrollingPlant() {
 function Scene() {
     const { camera } = useThree();
 
-    // Function to move the camera, used here instead of intial camera position to allow for the camera to be moved later
+    // Function to move the camera, used here instead of initial camera position to allow for the camera to be moved later
     // Additionally this helps for real time reloading of the page when in the dev environment as the camera will be automatically moved to the correct position
     const moveCamera = () => {
         camera.position.x = 0;

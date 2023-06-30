@@ -17,7 +17,7 @@
     border: none;
     background: var(--main-background);
     border-radius: 10px 0 0 10px;
-    box-shadow: 0px 8px 24px 2px var(--shadow-min);
+    box-shadow: 0 8px 24px 2px var(--shadow-min);
     width: 80%;
 
 }
@@ -37,7 +37,7 @@
     cursor: pointer;
     background: linear-gradient(180deg, var(--darker-main-green) 0%, var(--dark-green) 100%);
     border-radius: 0 10px 10px 0;
-    box-shadow: 0px 8px 24px 2px var(--shadow-min);
+    box-shadow: 0 8px 24px 2px var(--shadow-min);
     color: var(--secondary-gray);
 }
 

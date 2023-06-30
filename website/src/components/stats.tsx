@@ -26,16 +26,6 @@ export default function Stats(){
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
 
-    useEffect( () => {
-
-        // Prevent the data from being fetched again
-        if (dataFetch.current)
-            return
-        dataFetch.current = true
-
-        fetchData();
-    }, []);
-
     async function fetchData() {
         try {
 
@@ -105,6 +95,16 @@ export default function Stats(){
         }
 
     }
+
+    useEffect( () => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
+        fetchData().then();
+    }, []);
 
     return(
         <>

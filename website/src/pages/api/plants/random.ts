@@ -1,4 +1,3 @@
-import {db} from '@vercel/postgres';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, makeQuery} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";

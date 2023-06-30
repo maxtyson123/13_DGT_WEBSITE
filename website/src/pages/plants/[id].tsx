@@ -25,9 +25,6 @@ export default function PlantPage() {
     const [currentImage, setCurrentImage] = React.useState(0)
     const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
 
-    // States for the months
-    const [currentMonth, setCurrentMonth] = React.useState(0)
-
     // Error state
     const [error, setError] = React.useState("")
 
@@ -36,19 +33,6 @@ export default function PlantPage() {
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
-
-    // Fetch the plant data from the api for this plant on load
-    useEffect(() => {
-
-        // Prevent the data from being fetched again
-        if (dataFetch.current)
-            return
-        dataFetch.current = true
-
-        getData();
-
-
-    }, []);
 
     const getData = async () => {
 
@@ -91,8 +75,39 @@ export default function PlantPage() {
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
     }
+    
+    // Fetch the plant data from the api for this plant on load
+    useEffect(() => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
+        getData().then(() => {console.log("Plant data fetched")} ).catch((error) => {console.log(error)});
+
+
+    }, []);
 
     // Update content when the plant data changes
+    const setMainImageFromIndex = (index: number) => {
+
+        // Get all the attachments with image type
+        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+
+        // If there are no images then return
+        if(!images)
+            return
+
+        // If the index is out of bounds then return
+        if(index < 0 || index >= images.length)
+            return;
+
+        // Set the current image
+        setMainImage(images[index].path)
+
+    }
+
     useEffect(() => {
 
         // Set the description
@@ -124,24 +139,6 @@ export default function PlantPage() {
 
     }
 
-    const setMainImageFromIndex = (index: number) => {
-
-            // Get all the attachments with image type
-            let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
-
-            // If there are no images then return
-            if(!images)
-                return
-
-            // If the index is out of bounds then return
-            if(index < 0 || index >= images.length)
-                return;
-
-            // Set the current image
-            setMainImage(images[index].path)
-
-    }
-
     return (
         <>
 
@@ -154,7 +151,7 @@ export default function PlantPage() {
                 <PageHeader size={"small"}>
                     <div className={styles.plantHeader}>
 
-                        {/* Id of the plant if it exists*/}
+                        {/* ID of the plant if it exists*/}
                         <div  className={styles.headerItem}>
                             <p className={styles.plantId}>ID : {plantData  ? plantData.id : "0000"}</p>
                         </div>
@@ -172,7 +169,7 @@ export default function PlantPage() {
                             <p className={styles.headerTitle}>{plantNames[0]}</p>
                         </div>
 
-                        {/* Plant uses, loop through them creating a item for each one but make sure its in the right format first */}
+                        {/* Plant uses, loop through them creating an item for each one but make sure it's in the right format first */}
                         <div  className={styles.headerItem}>
                             <div className={styles.usesContianer}>
 
@@ -200,12 +197,12 @@ export default function PlantPage() {
 
                       <div className={"row"}>
 
-                          {/* Show the preffered name as the title and the others as the subtitle */}
+                          {/* Show the preferred name as the title and the others as the subtitle */}
                           <div className={"column"}>
                               <h1> {plantNames[0]} </h1>
                               <h2> {plantNames[1]} | {plantNames[2]} </h2>
 
-                              {/* The contents of this is set by JS as the description is in html format and that wont work as plaintext*/}
+                              {/* The contents of this is set by JS as the description is in html format and that won't work as plaintext*/}
                              <div className={styles.description} id={"large_description"}> </div>
                           </div>
 
