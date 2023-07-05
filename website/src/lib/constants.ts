@@ -5,4 +5,4 @@ export const MONTHS        = ["January", "February", "March", "April", "May", "J
  * Should the server connect to the database using postgres or mysql?
  * If true, use postgres, if false, use mysql
  */
-export const USE_POSTGRES = true;
+export const USE_POSTGRES = false;
