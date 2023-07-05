@@ -1,0 +1,687 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/input_sections.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/input_sections.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import styles from "@/styles/input_sections.module.css";
+import React, {useEffect, useRef, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
+import dynamic from "next/dynamic";
+
+
+// States for the input
+export type ValidationState = "normal" | "error" | "success";
+
+/**
+ * Hook for managing the state of an input field this includes validation and requirement.
+ * @param {string} initialValue - The initial value of the input field.
+ * @param {boolean} required - Indicates if the input field is required.
+ * @param {ValidationState} state - The current validation state of the input field.
+ * @param {function} setThisState - A function to update the validation state.
+ * @param {function} setThisRequired - A function to update the required flag.
+ * @returns {object} - An object containing the input field's state and related functions.
+ */
+export function useInputState(initialValue: string, required: boolean, state: ValidationState, setThisState: (state: ValidationState) => void, setThisRequired: (required: boolean) => void) {
+    // States to track
+    const [isInputFocused, setIsInputFocused] = useState(false);
+    const [inputValue, setInputValue] = useState(initialValue);
+    const inputRef = useRef&lt;HTMLInputElement>(null);
+
+    // Update the sizing space for the required text
+    useEffect(() => {
+        const inputElement = inputRef.current;
+
+        // Update CSS variable based on size if the element exists
+        if (inputElement) {
+            // Only change if there is the required text being displayed
+            if (required) {
+                // Change the top spacing based on if the input is focused
+                if (isInputFocused){
+                    inputElement.style.setProperty("--top-spacing", "8px");
+                }
+                else {
+                    inputElement.style.setProperty("--top-spacing", "18px");
+                }
+            }else{
+                inputElement.style.setProperty("--top-spacing", "8px");
+            }
+        }
+    }, [isInputFocused, inputRef.current, required]);
+
+    // Update the state if the state prop changes
+    useEffect(() => {
+        setThisState(state);
+        setThisRequired(required);
+    }, [state, required, setThisState, setThisRequired]);
+
+    // When the input is focused, change the state
+    const handleInputFocus = () => setIsInputFocused(true);
+    const handleInputBlur = () => setIsInputFocused(false);
+
+    // Return the states and functions
+    return {
+        inputValue,
+        setInputValue,
+        inputRef,
+        handleInputFocus,
+        handleInputBlur,
+        isInputFocused
+    };
+}
+
+// Define the props needed and their types for the small input
+type SmallInputProps = {
+    placeHolder: string;
+    defaultValue?: string;
+    required: boolean;
+    state: ValidationState;
+    errorText?: string;
+    changeEventHandler?: (value: string) => void;
+};
+
+/**
+ * An input element that is styled to be small, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the input field.
+ * @param {string} props.defaultValue - The default value of the input field.
+ * @param {boolean} props.required - Indicates if the input field is required.
+ * @param {ValidationState} props.state - The current validation state of the input field.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The small input component.
+ */
+export function SmallInput({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SmallInputProps){
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+
+    return(
+        &lt;>
+            {/* The small input section */}
+            &lt;div className={styles.smallInput + " " + stateClass} ref={inputRef}>
+
+                {/* Show the required text if the input is not focused */}
+                &lt;p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                    {thisRequired ? 'Required' : ''}
+                &lt;/p>
+
+                {/* The input element, has a placeholder from the props, and a value from the state */}
+                &lt;div className={styles.selectBorder}>
+                    &lt;input
+                        type="text"
+                        placeholder={placeHolder}
+                        value={inputValue}
+                        onChange={(e) => {
+                            changeHandler(e.target.value)
+                        }}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                    />
+                &lt;/div>
+
+                {/* Show the success icon if the state is in success and if the input is not focused */}
+                {state === "success" ? &lt;FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+
+                {/* Show the error text if the state is in error */}
+                { state === "error" ? &lt;p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}&lt;/p> : ''}
+            &lt;/div>
+        &lt;/>
+
+    )
+
+}
+
+// Define the props needed and their types for the dropdown input
+type DropdownInputProps = {
+    placeHolder: string;
+    defaultValue?: string;
+    required: boolean;
+    state: ValidationState;
+    errorText?: string;
+    changeEventHandler?: (value: string) => void;
+    options: string[];
+};
+
+/**
+ * A dropdown input element, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.@param {object} props - The component props.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the dropdown input.
+ * @param {string} props.defaultValue - The default value of the dropdown input.
+ * @param {boolean} props.required - Indicates if the dropdown input is required.
+ * @param {ValidationState} props.state - The current validation state of the dropdown input.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {string[]} props.options - The available options for the dropdown input.
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The dropdown input component.
+ */
+export function DropdownInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler}: DropdownInputProps){
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // Value has changed so state is no longer valid
+        setThisState("normal")
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+    return(
+        &lt;>
+            {/* The dropdown input section */}
+            &lt;div className={styles.dropdownInput + " " + stateClass} ref={inputRef}>
+
+                {/* Show the required text if the input is not focused */}
+                &lt;p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                    {thisRequired ? 'Required' : ''}
+                &lt;/p>
+
+                {/* Dropdown input */}
+                &lt;div className={styles.selectBorder}>
+                    &lt;select
+                        className={styles.dropDownSelect}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                        onChange={(e) => {
+                            changeHandler(e.target.value);
+                        }}
+                    >
+
+                        {/* The placeholder text, shouldn't be selectable, only show if no default value */}
+                        {defaultValue? "" : &lt;option value="" disabled selected hidden>{placeHolder}&lt;/option>}
+
+                        {/* Map the options to the select options */}
+                        {options.map((option, index) => {
+                            return &lt;option value={option} key={index} selected={option === defaultValue}> {option} &lt;/option>
+
+                        })}
+                    &lt;/select>
+
+                &lt;/div>
+
+                {/* Show the success icon if the state is in success and if the input is not focused */}
+                {state === "success" ? &lt;FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+
+                {/* Show the error text if the state is in error */}
+                { state === "error" ? &lt;p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}&lt;/p> : ''}
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+// Define the props needed and their types for the simple text area
+type SimpleTextAreaProps = {
+    placeHolder: string;
+    defaultValue?: string;
+    required: boolean;
+    state: ValidationState;
+    errorText?: string;
+    changeEventHandler?: (value: string) => void;
+};
+
+/**
+ * A text area input element that will scale vertically with the text typed. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the text area.
+ * @param {string} props.defaultValue - The default value of the text area.
+ * @param {boolean} props.required - Indicates if the text area is required.
+ * @param {ValidationState} props.state - The current validation state of the text area.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link AdvancedTextArea} for a text area that allows for styling of the text input.
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The simple text area component.
+ */
+export function SimpleTextArea({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps){
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // Value has changed so state is no longer valid
+        setThisState("normal")
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+    return(
+        &lt;>
+            {/*  The simple text area section */}
+            &lt;div className={styles.simpleTextArea + " " + stateClass} ref={inputRef}>
+
+                {/* Show the required text if the input is not focused */}
+                &lt;p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                    {thisRequired ? 'Required' : ''}
+                &lt;/p>
+
+                {/* Text Area input */}
+                &lt;textarea
+                    className={styles.simpleTextAreaTA}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    placeholder={placeHolder}
+                    value={inputValue}
+                    onChange={(e) => {
+                        // Update the value
+                        changeHandler(e.target.value);
+                    }}
+                />
+
+                {/* Show the success icon if the state is in success and if the input is not focused */}
+                {state === "success" ? &lt;FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+
+
+                {/* Show the error text if the state is in error */}
+                { state === "error" ? &lt;p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}&lt;/p> : ''}
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+// Define the props needed and their types for the render quill
+interface RenderQuillProps {
+    className?: string;
+    theme?: string;
+    onFocus?: () => void;
+    onBlur?: () => void;
+    value?: string;
+    onChange?: (value: string) => void;
+    placeholder?: string;
+}
+
+/**
+ * A wrapper for the react-quill component that will dynamically load the component as it requires access to the window object and cannot be server side rendered.
+ *
+ * @returns {JSX.Element} - The render quill component.
+ */
+const QuillNoSSRWrapper = dynamic(
+    () =>  import('react-quill'),
+    { ssr: false, loading: () => &lt;p>Loading ...&lt;/p> },
+)
+
+// Define the render quill component using the dynamic component
+class RenderQuill extends React.Component&lt;RenderQuillProps>{
+    render () {
+        const { className, theme, onFocus, onBlur, value, onChange, placeholder} = this.props;
+        return (
+            &lt;QuillNoSSRWrapper
+                className={className}
+                theme={theme}
+                placeholder={placeholder}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                value={value}
+                onChange={onChange}
+            />
+        )
+    }
+}
+
+// Advanced text area uses the same props as the simple text area
+/**
+ * A text area input element that allows for the styling of the input text inside of it and automatically converts the styling to HTML to be rendered again later. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the text area.
+ * @param {string} props.defaultValue - The default value of the text area.
+ * @param {boolean} props.required - Indicates if the text area is required.
+ * @param {ValidationState} props.state - The current validation state of the text area.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ *
+ * @see {@link SimpleTextArea} for a text area that does not allow for styling of the text input.
+ * @see {@link RenderQuill} for the component that renders the text area.
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The advanced text area component.
+ */
+export function AdvancedTextArea({placeHolder, defaultValue, required, state, errorText = "", changeEventHandler}: SimpleTextAreaProps) {
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // Value has changed so state is no longer valid
+        setThisState("normal")
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+    return(
+        &lt;>
+            {/* The advanced text area section */}
+            &lt;div className={styles.advancedTextArea + " " + stateClass} ref={inputRef}>
+
+                &lt;div className={styles.selectBorder}>
+
+                    {/* Show the required text if the input is not focused */}
+                    &lt;p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                        {thisRequired ? 'Required' : ''}
+                    &lt;/p>
+
+                    {/* Text Ara input */}
+                    &lt;RenderQuill
+                        className={styles.editableDiv}
+                        theme={"snow"}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                        value={inputValue}
+                        placeholder={placeHolder}
+                        onChange={(e) => {
+                            // Update the value
+                            changeHandler(e);
+
+                        }}
+                    />
+
+                    {/* Show the success icon if the state is in success and if the input is not focused */}
+                    {state === "success" ? &lt;FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+
+                    {/* Show the error text if the state is in error */}
+                    { state === "error" ? &lt;p className={styles.errorText}>{errorText}&lt;/p> : ''}
+                &lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

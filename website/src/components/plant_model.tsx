@@ -27,11 +27,11 @@ type GLTFResult = GLTF & {
  * The 3D model of the plant, loaded from a GLTF file.
  *
  * @param {Object} props - Component props.
- * @param {JSX.IntrinsicElements['group']} props - The props for the group element.
+ * @param {any} props - The props for the group element.
  *
  * @returns {JSX.Element} The rendered plant model component.
  */
-export function PlantModel(props: JSX.IntrinsicElements['group']) {
+export function PlantModel(props: any) {
     const { nodes, materials } = useGLTF("/data/plant.glb") as GLTFResult;
 
     // Store the pieces of the plant model for later use

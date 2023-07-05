@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/plant_card.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/plant_card.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import styles from "@/styles/plant_card.module.css"
+import Link from "next/link";
+import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
+import {useEffect, useRef, useState} from "react";
+import Image from "next/image";
+
+// Define the props for the plant card and the types for the plant data
+type PlantCardProps = {
+    data: PlantData
+};
+
+/**
+ * Displays the plant data in the plant card format, this is where there is a main image, plant name and description, a button to go to the plant page and then in the bottom there are the uses of the plant.
+ *
+ * @param {Object} props - Component props.
+ * @param {PlantData} props.data - The plant data to display.
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
+export default function PlantCardData({ data }: PlantCardProps){
+
+    const [names, setNames] = useState(["None", "None", "None"])
+
+    // Run on page start
+    useEffect(() => {
+
+        // Update the names
+        setNames(getNamesInPreference(data))
+
+    }, [data])
+
+    // Store all the images
+    const images = data.attachments.filter((attachment) => attachment.type === "image")
+
+    // Get a random image index
+    const image_index = Math.floor(Math.random() * images.length)
+
+    return(
+        &lt;>
+            {/* Shadowed div that holds the card contents*/}
+            &lt;div className={styles.card}>
+
+                {/* Image of the plant, grabbed from the image attachments of the pant data*/}
+                &lt;div className={styles.imageContainer}>
+                    &lt;Image
+                         src={images[0] ? images[image_index].path : "/media/images/loading.gif"}
+                         alt={images[0] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                         fill
+                         style={{objectFit: "contain"}}
+                    />
+                &lt;/div>
+
+                {/* Title, category, description*/}
+                &lt;h1 className={styles.title}>{names[0]}&lt;/h1>
+                &lt;h3 className={styles.category}>{names[1]} | {names[2]}&lt;/h3>
+                &lt;p className={styles.description}>{data.small_description}&lt;/p>
+
+                {/* Button to go to the plant page, automatically gets the id from the plant data */}
+                &lt;Link scroll={false} className={styles.button} href={"/plants/" + data.id}>
+                   &lt;p>More Info&lt;/p>
+                &lt;/Link>
+
+                {/* Container for the tags*/}
+                &lt;div className={styles.tagsContainer}>
+
+                    {/* Map through the tags and display them */}
+                    {data.use.map((useName, index) => (
+                        &lt;p key={index} className={styles.useText}>{
+                            convertUseTag(useName)
+                        }&lt;/p>
+                    ))}
+                &lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+// Define the props for the plant card and their types
+type PlantCardApiProps = {
+    id: number
+};
+
+/**
+ * Fetches the plant data from the API and then renders the plant card with the data fetched. Whilst waiting a loading PlantCard is displayed and if the plant is not found a PlantCardNull is displayed.
+ *
+ * @param {Object} props - Component props.
+ * @param {number} props.id - The id of the plant to fetch.
+ *
+ * @see {@link PlantCardData} - The plant card component.
+ * @see {@link PlantCardLoading} - The loading plant card component.
+ * @see {@link PlantCardNull} - The null plant card component.
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
+export function PlantCardApi({id}: PlantCardApiProps) {
+
+    // Define the state for the plant data and the plant card
+    const [plantCard, setPlantCard] = useState(&lt;PlantCardLoading/>);
+
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
+
+    // Fetch the plant data from the api for this plant on load
+    const setCard = async () => {
+
+        const plantOBJ = await fetchPlant(id)
+
+        if(!plantOBJ){
+            setPlantCard(&lt;PlantCardNull/>)
+            return
+        }
+
+        // Set the plant data
+        setPlantCard(&lt;PlantCardData data={plantOBJ}/>)
+    }
+
+    useEffect(() => {
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
+        setCard().then(() => {console.log("Plant card set")}).catch((err) => {console.log(err)})
+    }, [setCard]);
+
+    return (
+        &lt;>
+            {plantCard}
+        &lt;/>
+    );
+}
+
+/**
+ * A plant card that is used as a placeholder whilst the plant data is being fetched.
+ *
+ * @see {@link PlantCardData} - The plant card component (this follows the same format).
+ *
+ * @returns {JSX.Element} The rendered plant card component.
+ */
+export function PlantCardLoading(){
+    return(
+        &lt;>
+            {/* Shadowed div that holds the card contents, add a pulse effect*/}
+            &lt;div className={styles.card + " animate-pulse"}>
+
+              {/* Placeholder loading gif */}
+               &lt;div className={styles.imageContainer}>
+                   &lt;Image
+                       src={"/media/images/loading.gif"}
+                       alt={"Loading"}
+                       fill
+                       style={{objectFit: "contain"}}
+                   />
+                &lt;/div>
+
+                {/* Title, category, description*/}
+                &lt;h1 className={styles.title}>       LOADING... &lt;/h1>
+                &lt;h3 className={styles.category}>    LOADING... &lt;/h3>
+                &lt;p className={styles.description}>  LOADING... &lt;/p>
+
+                {/* Button to go to the plant page, automatically gets the id from the plant data */}
+                &lt;a className={styles.button} href={"#"}>
+                    &lt;p >More Info&lt;/p>
+                &lt;/a>
+
+                {/* Container for the tags*/}
+                &lt;div className={styles.tagsContainer}>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                &lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+/**
+ * A plant card that is used when there is no plant data to render.
+ *
+ * @see {@link PlantCardData} - The plant card component (this follows the same format).
+ */
+export function PlantCardNull(){
+    return(
+        &lt;>
+            {/* Shadowed div that holds the card contents, add a pulse effect*/}
+            &lt;div className={styles.card + " opacity-60"}>
+                {/* Placeholder loading gif */}
+                &lt;div className={styles.imageContainer}>
+                   &lt;div className={styles.nullImage}/>
+                &lt;/div>
+
+                {/* Title, category, description*/}
+                &lt;h1 className={styles.title}> None &lt;/h1>
+                &lt;h3 className={styles.category}> N/A &lt;/h3>
+                &lt;p className={styles.description}> Short description&lt;/p>
+
+                {/* Button to go to the plant page, automatically gets the id from the plant data */}
+                &lt;a className={styles.button} href={"#"}>
+                    &lt;p >More Info&lt;/p>
+                &lt;/a>
+
+                {/* Container for the tags*/}
+                &lt;div className={styles.tagsContainer}>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                    &lt;p className={styles.useText}> TAG &lt;/p>
+                &lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+/**
+ * Converts a tag from the API to a more readable format.
+ *
+ * @param tag {string | undefined} - The tag to convert.
+ *
+ * @returns {string} The converted tag.
+ */
+export function  convertUseTag(tag: string | undefined) {
+
+    // If the tag is undefined, return an empty string
+    if (tag === undefined) {
+        return "";
+    }
+
+    // Get the first letter and capitalize it
+    const firstLetter = tag.charAt(0).toUpperCase();
+
+    // Combine the first letter with the rest of the word
+    const restOfWord = tag.slice(1);
+    let word = firstLetter + restOfWord;
+
+    // Remove the underscore and replace with a space
+    word = word.replace("_", " ");
+
+    return word;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

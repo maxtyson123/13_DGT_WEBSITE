@@ -1,0 +1,8444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Global</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p></p>
+                    <h1>Global</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+<h4 class="name" id="QuillNoSSRWrapper">
+    <a class="href-link" href="#QuillNoSSRWrapper">#</a>
+    
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        QuillNoSSRWrapper
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    A wrapper for the react-quill component that will dynamically load the component as it requires access to the window object and cannot be server side rendered.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line259">line 259</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="USE_POSTGRES">
+    <a class="href-link" href="#USE_POSTGRES">#</a>
+    
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        USE_POSTGRES
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Should the server connect to the database using postgres or mysql?If true, use postgres, if false, use mysql
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_constants.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_constants.ts.html">lib/constants.ts</a>, <a href="lib_constants.ts.html#line8">line 8</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="authOptions">
+    <a class="href-link" href="#authOptions">#</a>
+    
+        
+            <span class='tag'>constant</span>
+        
+    
+    <span class="code-name">
+        authOptions
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    The config options that NextAuth uses when authenticating users
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="pages_api_auth_%5B...nextauth%5D.ts.html" class="button">View Source</a>
+            <span>
+                <a href="pages_api_auth_%5B...nextauth%5D.ts.html">pages/api/auth/[...nextauth].ts</a>, <a href="pages_api_auth_%5B...nextauth%5D.ts.html#line8">line 8</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="AdvancedTextArea">
+        <a class="href-link" href="#AdvancedTextArea">#</a>
+        
+        <span class="code-name">
+            
+                AdvancedTextArea<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        A text area input element that allows for the styling of the input text inside of it and automatically converts the styling to HTML to be rendered again later. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>placeHolder</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The placeholder text for the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>defaultValue</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The default value of the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>required</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Indicates if the text area is required.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>state</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">ValidationState</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current validation state of the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>errorText</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The error text to display when the state is "error".</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>changeEventHandler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to handle input changes.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#SimpleTextArea">SimpleTextArea</a> for a text area that does not allow for styling of the text input.</li>
+        
+            <li>RenderQuill for the component that renders the text area.</li>
+        
+            <li><a href="global.html#useInputState">useInputState</a> for the hook that handles the input state.</li>
+        
+            <li>ValidationState for the type of the validation state.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line286">line 286</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The advanced text area component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="AttachmentSection">
+        <a class="href-link" href="#AttachmentSection">#</a>
+        
+        <span class="code-name">
+            
+                AttachmentSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        AttachmentSection component. Displays an attachment section, will display the title and a link to the attachment. The link will open in a new tab. The attachment type will be displayed as an icon if possible.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>attachment</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="AttachmentData.html">AttachmentData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The attachment data.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line268">line 268</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="AutoSection">
+        <a class="href-link" href="#AutoSection">#</a>
+        
+        <span class="code-name">
+            
+                AutoSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        AutoSection component. Renders the correct section based on the type of section.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>images</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Array.&lt;<a href="AttachmentData.html">AttachmentData</a>></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The images for the plant.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>isLeft</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Whether the image should be on the left or right side of the page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#EdibleSection">EdibleSection</a> - The edible section.</li>
+        
+            <li><a href="global.html#MedicalSection">MedicalSection</a> - The medical section.</li>
+        
+            <li><a href="global.html#CraftSection">CraftSection</a> - The craft section.</li>
+        
+            <li><a href="global.html#CustomSection">CustomSection</a> - The custom section.</li>
+        
+            <li><a href="global.html#SourceSection">SourceSection</a> - The source section.</li>
+        
+            <li><a href="global.html#AttachmentSection">AttachmentSection</a> - The attachment section.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line25">line 25</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="CleanAPIData">
+        <a class="href-link" href="#CleanAPIData">#</a>
+        
+        <span class="code-name">
+            
+                CleanAPIData<span class="signature">(apiData)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will clean the data from the api, this makes sure any null values are set to empty arrays.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>apiData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantDataApi.html">PlantDataApi</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The data from the api</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line22">line 22</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="ConvertApiIntoPlantData">
+        <a class="href-link" href="#ConvertApiIntoPlantData">#</a>
+        
+        <span class="code-name">
+            
+                ConvertApiIntoPlantData<span class="signature">(apiData)</span><span class="type-signature"> &rarr; {<a href="PlantData.html">PlantData</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will convert the api data into the plant data object, if the data is invalid null will be returned.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>apiData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantDataApi.html">PlantDataApi</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The data from the api</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line184">line 184</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The plant data object</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="ConvertPlantDataIntoApi">
+        <a class="href-link" href="#ConvertPlantDataIntoApi">#</a>
+        
+        <span class="code-name">
+            
+                ConvertPlantDataIntoApi<span class="signature">(plantData)</span><span class="type-signature"> &rarr; {<a href="PlantDataApi.html">PlantDataApi</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Convert the plant data object into the api data object, if it not valid return null
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>plantData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The plant data object</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line297">line 297</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The api data object</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type"><a href="PlantDataApi.html">PlantDataApi</a></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="CraftSection">
+        <a class="href-link" href="#CraftSection">#</a>
+        
+        <span class="code-name">
+            
+                CraftSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        CraftSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="CraftSectionData.html">CraftSectionData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>images</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="AttachmentData.html">AttachmentData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The images for the plant.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>isLeft</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Whether the image should be on the left or right side of the page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a> - The advanced text area component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line161">line 161</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="CustomSection">
+        <a class="href-link" href="#CustomSection">#</a>
+        
+        <span class="code-name">
+            
+                CustomSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        CustomSection component. Displays a custom section, will display the title and text of the section. IF the text uses HTML from the AdvancedTextArea component, it will be inserted correctly.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="CustomSectionData.html">CustomSectionData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a> - The advanced text area component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line243">line 243</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="DarkMode">
+        <a class="href-link" href="#DarkMode">#</a>
+        
+        <span class="code-name">
+            
+                DarkMode<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        DarkMode component is used to render a toggle switch for dark mode. Uses the ToggleAccessibilitySetting component.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a> for further information.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_accessibility.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_accessibility.tsx.html">components/accessibility.tsx</a>, <a href="components_accessibility.tsx.html#line62">line 62</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- A JSX Element that contains a <ToggleAccessibilitySetting> component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="DesktopNavbar">
+        <a class="href-link" href="#DesktopNavbar">#</a>
+        
+        <span class="code-name">
+            
+                DesktopNavbar<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        The desktop version of the navbar. Will show the logo and the name of the website on the left, and the links on the right. Links are styled to be active if they have the same name as the current page.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>currentPage</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current active page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>pageNames - The array of page names and links.</li>
+        
+            <li>Navbar - The parent navbar component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_navbar.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_navbar.tsx.html">components/navbar.tsx</a>, <a href="components_navbar.tsx.html#line64">line 64</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered desktop navbar component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="DropdownInput">
+        <a class="href-link" href="#DropdownInput">#</a>
+        
+        <span class="code-name">
+            
+                DropdownInput<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        A dropdown input element, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.@param {object} props - The component props.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>placeHolder</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The placeholder text for the dropdown input.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>defaultValue</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The default value of the dropdown input.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>required</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Indicates if the dropdown input is required.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>state</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">ValidationState</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current validation state of the dropdown input.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>errorText</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The error text to display when the state is "error".</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>options</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Array.&lt;string></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The available options for the dropdown input.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>changeEventHandler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to handle input changes.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#useInputState">useInputState</a> for the hook that handles the input state.</li>
+        
+            <li>ValidationState for the type of the validation state.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line133">line 133</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The dropdown input component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Dyslexic">
+        <a class="href-link" href="#Dyslexic">#</a>
+        
+        <span class="code-name">
+            
+                Dyslexic<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Dyslexic component is used to render a toggle switch for dyslexic mode. Dyslexic mode toggles the font between Archivo and Open Dyslexic  Uses the ToggleAccessibilitySetting component.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a> for further information.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_accessibility.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_accessibility.tsx.html">components/accessibility.tsx</a>, <a href="components_accessibility.tsx.html#line114">line 114</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- A JSX Element that contains a <ToggleAccessibilitySetting> component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="EdibleSection">
+        <a class="href-link" href="#EdibleSection">#</a>
+        
+        <span class="code-name">
+            
+                EdibleSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        EdibleSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="EdibleSectionData.html">EdibleSectionData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>images</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="AttachmentData.html">AttachmentData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The images for the plant.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>isLeft</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Whether the image should be on the left or right side of the page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a> - The advanced text area component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line51">line 51</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Error">
+        <a class="href-link" href="#Error">#</a>
+        
+        <span class="code-name">
+            
+                Error<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Renders an Error component that displays an error message.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The properties passed to the component.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>error</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The error message to be displayed.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_error.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_error.tsx.html">components/error.tsx</a>, <a href="components_error.tsx.html#line12">line 12</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The JSX element representing the Error component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="GetOrigin">
+        <a class="href-link" href="#GetOrigin">#</a>
+        
+        <span class="code-name">
+            
+                GetOrigin<span class="signature">(request)</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Get the origin of the request from the headers of a next api request
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>request</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">NextApiRequest</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The request of the api cal, if there is no request, the origin will be localhost:3000</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>NextApiRequest</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_api_tools.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_api_tools.ts.html">lib/api_tools.ts</a>, <a href="lib_api_tools.ts.html#line14">line 14</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The origin of the request</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="MedicalSection">
+        <a class="href-link" href="#MedicalSection">#</a>
+        
+        <span class="code-name">
+            
+                MedicalSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Medical Section component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="MedicalSectionData.html">MedicalSectionData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>images</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="AttachmentData.html">AttachmentData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The images for the plant.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>isLeft</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Whether the image should be on the left or right side of the page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a> - The advanced text area component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line110">line 110</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="MobileNavbar">
+        <a class="href-link" href="#MobileNavbar">#</a>
+        
+        <span class="code-name">
+            
+                MobileNavbar<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        The mobile version of the navbar. Will show the logo left, current page in the centre and a hamburger menu on the right. Clicking the hamburger menu will expand the navbar to show the links. Links are styled to be active if they have the same name as the current page.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>currentPage</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current active page.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>pageNames - The array of page names and links.</li>
+        
+            <li>Navbar - The parent navbar component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_navbar.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_navbar.tsx.html">components/navbar.tsx</a>, <a href="components_navbar.tsx.html#line89">line 89</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered mobile navbar component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PlantCardApi">
+        <a class="href-link" href="#PlantCardApi">#</a>
+        
+        <span class="code-name">
+            
+                PlantCardApi<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Fetches the plant data from the API and then renders the plant card with the data fetched. Whilst waiting a loading PlantCard is displayed and if the plant is not found a PlantCardNull is displayed.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The id of the plant to fetch.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>PlantCardData - The plant card component.</li>
+        
+            <li><a href="global.html#PlantCardLoading">PlantCardLoading</a> - The loading plant card component.</li>
+        
+            <li><a href="global.html#PlantCardNull">PlantCardNull</a> - The null plant card component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_card.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_card.tsx.html">components/plant_card.tsx</a>, <a href="components_plant_card.tsx.html#line52">line 52</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered plant card component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PlantCardLoading">
+        <a class="href-link" href="#PlantCardLoading">#</a>
+        
+        <span class="code-name">
+            
+                PlantCardLoading<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        A plant card that is used as a placeholder whilst the plant data is being fetched.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>PlantCardData - The plant card component (this follows the same format).</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_card.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_card.tsx.html">components/plant_card.tsx</a>, <a href="components_plant_card.tsx.html#line83">line 83</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered plant card component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PlantCardNull">
+        <a class="href-link" href="#PlantCardNull">#</a>
+        
+        <span class="code-name">
+            
+                PlantCardNull<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        A plant card that is used when there is no plant data to render.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>PlantCardData - The plant card component (this follows the same format).</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_card.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_card.tsx.html">components/plant_card.tsx</a>, <a href="components_plant_card.tsx.html#line103">line 103</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="PlantModel">
+        <a class="href-link" href="#PlantModel">#</a>
+        
+        <span class="code-name">
+            
+                PlantModel<span class="signature">(props, props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        The 3D model of the plant, loaded from a GLTF file.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">any</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The props for the group element.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_model.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_model.tsx.html">components/plant_model.tsx</a>, <a href="components_plant_model.tsx.html#line17">line 17</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered plant model component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="Scene">
+        <a class="href-link" href="#Scene">#</a>
+        
+        <span class="code-name">
+            
+                Scene<span class="signature">()</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        The scene component, this is where the plant model and environment are added to the scene.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#PlantModel">PlantModel</a> - The plant model component.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_scrolling_plant.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_scrolling_plant.tsx.html">components/scrolling_plant.tsx</a>, <a href="components_scrolling_plant.tsx.html#line24">line 24</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered scene component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="SimpleTextArea">
+        <a class="href-link" href="#SimpleTextArea">#</a>
+        
+        <span class="code-name">
+            
+                SimpleTextArea<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        A text area input element that will scale vertically with the text typed. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>placeHolder</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The placeholder text for the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>defaultValue</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The default value of the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>required</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Indicates if the text area is required.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>state</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">ValidationState</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current validation state of the text area.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>errorText</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The error text to display when the state is "error".</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>changeEventHandler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to handle input changes.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a> for a text area that allows for styling of the text input.</li>
+        
+            <li><a href="global.html#useInputState">useInputState</a> for the hook that handles the input state.</li>
+        
+            <li>ValidationState for the type of the validation state.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line205">line 205</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The simple text area component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="SmallInput">
+        <a class="href-link" href="#SmallInput">#</a>
+        
+        <span class="code-name">
+            
+                SmallInput<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        An input element that is styled to be small, will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>placeHolder</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The placeholder text for the input field.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>defaultValue</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The default value of the input field.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>required</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Indicates if the input field is required.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>state</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">ValidationState</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current validation state of the input field.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>errorText</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The error text to display when the state is "error".</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>changeEventHandler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to handle input changes.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#useInputState">useInputState</a> for the hook that handles the input state.</li>
+        
+            <li>ValidationState for the type of the validation state.</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line75">line 75</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The small input component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="SourceSection">
+        <a class="href-link" href="#SourceSection">#</a>
+        
+        <span class="code-name">
+            
+                SourceSection<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        SourceSection component. Displays the source of the information, will convert any links into clickable links and will display the source type.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Component props.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>section</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="SourceSectionData.html">SourceSectionData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The section data.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_sections.tsx.html">components/plant_sections.tsx</a>, <a href="components_plant_sections.tsx.html#line211">line 211</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The rendered section component.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="ToggleAccessibilitySetting">
+        <a class="href-link" href="#ToggleAccessibilitySetting">#</a>
+        
+        <span class="code-name">
+            
+                ToggleAccessibilitySetting<span class="signature">(props)</span><span class="type-signature"> &rarr; {JSX.Element}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        ToggleAccessibilitySetting component is used to render a toggle switch for an accessibility setting.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>props</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The properties passed to the component.</td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>setting</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The name of the accessibility setting.</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>setter</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The setter function to update the state of the accessibility setting.</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_accessibility.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_accessibility.tsx.html">components/accessibility.tsx</a>, <a href="components_accessibility.tsx.html#line12">line 12</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- A JSX Element that contains a div with a toggle switch and a button.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSX.Element</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="ValidPlantData">
+        <a class="href-link" href="#ValidPlantData">#</a>
+        
+        <span class="code-name">
+            
+                ValidPlantData<span class="signature">(plantData)</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will validate the plant data, this makes sure no null values are present.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>plantData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The data from the api</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line162">line 162</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- True if the data is valid, false otherwise</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">boolean</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="ValidPlantDataApi">
+        <a class="href-link" href="#ValidPlantDataApi">#</a>
+        
+        <span class="code-name">
+            
+                ValidPlantDataApi<span class="signature">(apiData)</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will validate the data from the api, this makes sure no null values are present.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>apiData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantDataApi.html">PlantDataApi</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The data from the api</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line119">line 119</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- True if the data is valid, false otherwise</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">boolean</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="convertUseTag">
+        <a class="href-link" href="#convertUseTag">#</a>
+        
+        <span class="code-name">
+            
+                convertUseTag<span class="signature">(tag)</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Converts a tag from the API to a more readable format.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>tag</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+|
+
+<code class="param-type">undefined</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The tag to convert.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_plant_card.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_plant_card.tsx.html">components/plant_card.tsx</a>, <a href="components_plant_card.tsx.html#line125">line 125</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The converted tag.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="emptyPlantApiData">
+        <a class="href-link" href="#emptyPlantApiData">#</a>
+        
+        <span class="code-name">
+            
+                emptyPlantApiData<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will make an empty plant api data object. The date will be set to the current date
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line389">line 389</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="emptyPlantData">
+        <a class="href-link" href="#emptyPlantData">#</a>
+        
+        <span class="code-name">
+            
+                emptyPlantData<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will make an empty plant data object. The id will be set to 1
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line367">line 367</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="fetchPlant">
+        <a class="href-link" href="#fetchPlant">#</a>
+        
+        <span class="code-name">
+            
+                fetchPlant<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="PlantData.html">PlantData</a>|null}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Using an ID it will fetch the plant data from the api and return it. First it will check the cache to see if the data has already been fetched, if it has not then the API will be called to get the data and then saved to a cache entry of that id. If the data could not be fetched then null will be returned
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The id of the plant to fetch</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line464">line 464</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The plant data or null if it could not be fetched</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+|
+
+<code class="param-type">null</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="fixAttachmentsPaths">
+        <a class="href-link" href="#fixAttachmentsPaths">#</a>
+        
+        <span class="code-name">
+            
+                fixAttachmentsPaths<span class="signature">(plant)</span><span class="type-signature"> &rarr; {<a href="PlantData.html">PlantData</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will fix the paths of the attachments to be the proper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing its ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>plant</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The plant data to fix the paths of</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line493">line 493</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The plant data with the fixed paths</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="formatFileSize">
+        <a class="href-link" href="#formatFileSize">#</a>
+        
+        <span class="code-name">
+            
+                formatFileSize<span class="signature">(bytes)</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Formats the size of a file in bytes to a more readable format
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>bytes</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">number</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The size of the file in bytes</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line12">line 12</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The size of the file in a more readable format (e.g. 1.23 MB)</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getClient">
+        <a class="href-link" href="#getClient">#</a>
+        
+        <span class="code-name">
+            
+                getClient<span class="signature">()</span><span class="type-signature"> &rarr; {VercelPoolClient}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Checks what database to use and then returns the correct database connection
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>mysql_db</li>
+        
+            <li>db</li>
+        
+            <li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_databse.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_databse.ts.html">lib/databse.ts</a>, <a href="lib_databse.ts.html#line186">line 186</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The correct database connection</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">VercelPoolClient</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getFromCache">
+        <a class="href-link" href="#getFromCache">#</a>
+        
+        <span class="code-name">
+            
+                getFromCache<span class="signature">(id)</span><span class="type-signature"> &rarr; {JSON|null}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will try to get an item from the localstorage, if the item is expired, it will be removed from the local storage
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The key used to store the item in the local storage</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>CacheItem</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_cache.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_cache.ts.html">lib/cache.ts</a>, <a href="lib_cache.ts.html#line11">line 11</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The item from the local storage, or null if the item does not exist or has expired</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSON</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getNamesInPreference">
+        <a class="href-link" href="#getNamesInPreference">#</a>
+        
+        <span class="code-name">
+            
+                getNamesInPreference<span class="signature">(data)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Will return the names in the order of the preference, this is an easier way to display the preferred name without having to do a switch statement
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>data</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="PlantData.html">PlantData</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The plant data to get the names from</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_plant_data.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_plant_data.ts.html">lib/plant_data.ts</a>, <a href="lib_plant_data.ts.html#line435">line 435</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The names in the order of the preference</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Array.&lt;string></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getTables">
+        <a class="href-link" href="#getTables">#</a>
+        
+        <span class="code-name">
+            
+                getTables<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="SQLDatabase.html">SQLDatabase</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Checks what database to use and returns the correct column name class
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="SQLDatabase.html">SQLDatabase</a></li>
+        
+            <li><a href="PostgresSQL.html">PostgresSQL</a></li>
+        
+            <li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_databse.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_databse.ts.html">lib/databse.ts</a>, <a href="lib_databse.ts.html#line169">line 169</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The correct column name class</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type"><a href="SQLDatabase.html">SQLDatabase</a></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="makeQuery">
+        <a class="href-link" href="#makeQuery">#</a>
+        
+        <span class="code-name">
+            
+                makeQuery<span class="signature">(query, client, rawData)</span><span class="type-signature"> &rarr; {JSON|null}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Makes a query to the database and returns the data. Query and response is different depending on the database used, this is handled by this function depending on the USE_POSTGRES variable meaning to get the client getClient() should be used
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>query</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The query to make to the database</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>client</code></td>
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The database connection to use</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>rawData</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">If the data returned should be raw data or not</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#getClient">getClient</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_databse.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_databse.ts.html">lib/databse.ts</a>, <a href="lib_databse.ts.html#line213">line 213</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- The data returned from the database in JSON format, null if there was an error or no data was returned</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">JSON</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="saveToCache">
+        <a class="href-link" href="#saveToCache">#</a>
+        
+        <span class="code-name">
+            
+                saveToCache<span class="signature">(id, data)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Saves an item to the local storage, gives it an expiry date of 24 hours from now
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>id</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The key used to store the item in the local storage</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>data</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">JSON</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The data to store in the local storage, will be converted to JSON</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>CacheItem</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_cache.ts.html" class="button">View Source</a>
+            <span>
+                <a href="lib_cache.ts.html">lib/cache.ts</a>, <a href="lib_cache.ts.html#line38">line 38</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="useInputState">
+        <a class="href-link" href="#useInputState">#</a>
+        
+        <span class="code-name">
+            
+                useInputState<span class="signature">(initialValue, required, state, setThisState, setThisRequired)</span><span class="type-signature"> &rarr; {object}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Hook for managing the state of an input field this includes validation and requirement.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>initialValue</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The initial value of the input field.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>required</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Indicates if the input field is required.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>state</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">ValidationState</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The current validation state of the input field.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>setThisState</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to update the validation state.</td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>setThisRequired</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">A function to update the required flag.</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_input_sections.tsx.html" class="button">View Source</a>
+            <span>
+                <a href="components_input_sections.tsx.html">components/input_sections.tsx</a>, <a href="components_input_sections.tsx.html#line16">line 16</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>- An object containing the input field's state and related functions.</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">object</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

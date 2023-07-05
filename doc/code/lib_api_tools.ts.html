@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> lib/api_tools.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>lib/api_tools.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {NextApiRequest, NextApiResponse} from "next";
+import {getTables, makeQuery} from "@/lib/databse";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+
+/**
+ * Get the origin of the request from the headers of a next api request
+ *
+ * @param {NextApiRequest} request - The request of the api cal, if there is no request, the origin will be localhost:3000
+ *
+ * @see {@link NextApiRequest}
+ *
+ * @returns {string} - The origin of the request
+ */
+export function GetOrigin(request: NextApiRequest){
+    const LOCAL_HOST_ADDRESS = "localhost:3001";
+
+    let host = request.headers?.host || LOCAL_HOST_ADDRESS;
+    let protocol = /^localhost(:\d+)?$/.test(host) ? "http:" : "https:";
+
+    // If server sits behind reverse proxy/load balancer, get the "actual" host ...
+    if (
+        request.headers["x-forwarded-host"] &amp;&amp;
+        typeof request.headers["x-forwarded-host"] === "string"
+    ) {
+        host = request.headers["x-forwarded-host"];
+    }
+
+    // ... and protocol:
+    if (
+        request.headers["x-forwarded-proto"] &amp;&amp;
+        typeof request.headers["x-forwarded-proto"] === "string"
+    ) {
+        protocol = `${request.headers["x-forwarded-proto"]}:`;
+    }
+
+    return protocol + "//" + host;
+}
+
+export async function CheckWhitelisted(request: NextApiRequest, response: NextApiResponse, client: any){
+
+    let {api_key} = request.query;
+
+    // Check if the user is allowed to upload
+    let auth_query = ""
+
+    const tables = getTables()
+    const origin = GetOrigin(request);
+
+    // If it is this site then allow user email to authenticate
+    console.log("origin:" + origin)
+    let api =  !(origin === process.env.NEXTAUTH_URL)
+
+    // If we are not usin the API key then use the email
+    if (!api) {
+        console.log("Trying Email");
+
+        // Get the email
+        const session = await getServerSession(request, response, authOptions)
+
+        // If there is a user session then get the email otherwise default to the API key
+        if(session){
+            if(session.user === undefined){
+                return false;
+            }
+            const user_email = session.user.email;
+
+            console.log(user_email);
+
+            // Check if the email is allowed in the database
+            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${user_email}' AND ${tables.auth_type} = 'email'`;
+        }else{
+            api = true;
+        }
+
+    }
+
+    // If we are using the API key then use the API key
+    if(api){
+        console.log("Using API key");
+
+        // If there is no API key then return an error
+        if(!api_key) {
+            return false;
+        }
+
+        // Check if the API key is allowed in the database
+        auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
+    }
+
+    // Run the query
+    const auth_result = await makeQuery(auth_query, client);
+
+    // Check if the user is allowed to upload
+    if(!auth_result) {
+        return true;
+    }else{
+        return true;
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

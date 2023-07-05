@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/plant_sections.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/plant_sections.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import styles from "@/styles/plant_sections.module.css"
+import React, {useEffect, useRef, useState} from "react";
+import Image from "next/image";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faCopyright,
+    faFile,
+    faFileAlt,
+    faFileArchive,
+    faFileAudio,
+    faFileCode,
+    faFileCsv,
+    faFileExcel,
+    faFileImage,
+    faFilePdf,
+    faFilePowerpoint,
+    faFileVideo,
+    faFileWord,
+    faGlobe
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    AttachmentData,
+    CraftSectionData,
+    CustomSectionData,
+    EdibleSectionData,
+    FileMetaData,
+    formatFileSize,
+    ImageMetaData,
+    MedicalSectionData,
+    SourceSectionData
+} from "@/lib/plant_data";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+
+interface AutoSectionProps{
+    section: any
+    images: AttachmentData[]
+    isLeft: boolean
+}
+
+/**
+ * AutoSection component. Renders the correct section based on the type of section.
+ *
+ * @param {Object} props - Component props.
+ * @param {Object} props.section - The section data.
+ * @param {AttachmentData[]} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link EdibleSection} - The edible section.
+ * @see {@link MedicalSection} - The medical section.
+ * @see {@link CraftSection} - The craft section.
+ * @see {@link CustomSection} - The custom section.
+ * @see {@link SourceSection} - The source section.
+ * @see {@link AttachmentSection} - The attachment section.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function AutoSection({section, images, isLeft} : AutoSectionProps){
+    switch (section.type){
+        case "edible":
+            return &lt;EdibleSection section={section} images={images} isLeft={isLeft}/>
+        case "medical":
+            return &lt;MedicalSection section={section} images={images} isLeft={isLeft}/>
+        case "craft":
+            return &lt;CraftSection section={section} images={images} isLeft={isLeft}/>
+        case "custom":
+            return &lt;CustomSection section={section}/>
+        default:
+            return &lt;>&lt;/>
+
+    }
+}
+
+interface EdibleSectionProps{
+    section:                EdibleSectionData;
+    images:                 AttachmentData[]
+    isLeft:                 boolean
+}
+
+/**
+ * EdibleSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {EdibleSectionData} props.section - The section data.
+ * @param {AttachmentData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
+
+    // Store the nutrition amd preparation section in a ref
+    const nutritionRef = useRef&lt;HTMLParagraphElement>(null)
+    const preparationRef = useRef&lt;HTMLParagraphElement>(null)
+
+    // Get the image of the part of the plant
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image_of_part
+    })
+
+    const imageDiv = (
+        &lt;>
+            &lt;div className={styles.imageContainer}>
+                &lt;Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
+                &lt;p className={styles.credits}> &lt;FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} &lt;/p>
+            &lt;/div>
+        &lt;/>
+    )
+
+    const textDiv = (
+        &lt;>
+            &lt;div className={styles.infoDiv}>
+                &lt;h1> Edible Use &lt;/h1>
+                &lt;h3> Part of Plant: &lt;/h3> &lt;p> {section.part_of_plant} &lt;/p>
+                &lt;div ref={nutritionRef} >&lt;/div>
+                &lt;h3> Preparation Type: &lt;/h3> &lt;p> {section.preparation_type}&lt;/p>
+                &lt;div ref={preparationRef}> &lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+
+    // Set the inner html of the nutrition and preparation sections with a useEffect
+    useEffect(() => {
+
+        if (nutritionRef.current != null){
+            nutritionRef.current.innerHTML = "&lt;h3> Nutrition: &lt;/h3> " + section.nutrition
+        }
+
+        if (preparationRef.current != null){
+            preparationRef.current.innerHTML = "&lt;h3> Preparation: &lt;/h3> " + section.preparation
+        }
+    }, [nutritionRef, preparationRef, section.nutrition, section.preparation])
+
+
+    return(
+        &lt;>
+            &lt;div className={styles.sectionContainer + " " + styles.split}>
+                {isLeft ? imageDiv : textDiv}
+                {isLeft ? textDiv : imageDiv}
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+interface MedicalSectionProps{
+    section:                MedicalSectionData;
+    images:                 AttachmentData[]
+    isLeft:                 boolean
+}
+
+/**
+ * Medical Section component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {MedicalSectionData} props.section - The section data.
+ * @param {AttachmentData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft - Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
+
+    // Store the use and preparation in a ref to set the contents with html later
+    const medUseRef = useRef&lt;HTMLDivElement>(null)
+    const preparationRef = useRef&lt;HTMLDivElement>(null)
+
+    // Get the image of the part of the plant
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image
+    })
+
+
+    const imageDiv = (
+        &lt;>
+            &lt;div className={styles.imageContainer}>
+                &lt;Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
+                &lt;p className={styles.credits}> &lt;FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} &lt;/p>
+            &lt;/div>
+        &lt;/>
+    )
+
+   const textDiv = (
+        &lt;>
+            &lt;div className={styles.infoDiv}>
+                &lt;h1> {section.medical_type} Medical Use &lt;/h1>
+                &lt;div ref={medUseRef}>&lt;/div>
+                &lt;div ref={preparationRef}>&lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+
+    // Set the inner html of the use and preparation sections with a useEffect
+    useEffect(() => {
+
+        if (medUseRef.current != null){
+            medUseRef.current.innerHTML = "&lt;h3> Use: &lt;/h3> " + section.use
+        }
+
+        if (preparationRef.current != null){
+            preparationRef.current.innerHTML = "&lt;h3> Preparation: &lt;/h3> " + section.preparation
+        }
+
+    }, [medUseRef, preparationRef, section.use, section.preparation])
+
+    return(
+        &lt;>
+            &lt;div className={styles.sectionContainer + " " + styles.split}>
+                {isLeft ? imageDiv : textDiv}
+                {isLeft ? textDiv : imageDiv}
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+interface CraftSectionProps{
+    section:                CraftSectionData;
+    images:                 AttachmentData[]
+    isLeft:                 boolean
+}
+
+/**
+ * CraftSection component. Splits the page into two columns, one for the image and one for the text. Will then insert the values from the section into the text, any AdvancedTextArea HTML will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {CraftSectionData} props.section - The section data.
+ * @param {AttachmentData} props.images - The images for the plant.
+ * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function CraftSection({section, images, isLeft} : CraftSectionProps){
+
+    // Store the use and additional info in a ref to set the contents with html later
+    const craft_useRef = useRef&lt;HTMLDivElement>(null)
+    const additional_infoRef = useRef&lt;HTMLDivElement>(null)
+
+    // Find the same image name in the images array
+    let image_index = images.findIndex((image) => {
+        return (image.meta as ImageMetaData).name == section.image
+    })
+
+
+    const imageDiv = (
+        &lt;>
+            &lt;div className={styles.imageContainer}>
+                &lt;Image
+                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
+                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    fill
+                    style={{objectFit: "contain"}}
+
+                />
+                &lt;p className={styles.credits}> &lt;FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} &lt;/p>
+            &lt;/div>
+        &lt;/>
+    )
+
+    const textDiv = (
+        &lt;>
+            &lt;div className={styles.infoDiv}>
+                &lt;h1> Craft Use &lt;/h1>
+                &lt;h3> Part of Plant: &lt;/h3> &lt;p> {section.part_of_plant} &lt;/p>
+                &lt;div ref={craft_useRef}>&lt;/div>
+                &lt;div ref={additional_infoRef}>&lt;/div>
+            &lt;/div>
+        &lt;/>
+    )
+
+    // Set the inner html of the use and additional info sections with a useEffect
+    useEffect(() => {
+
+        if (craft_useRef.current != null){
+            craft_useRef.current.innerHTML = "&lt;h3> Use: &lt;/h3> " + section.use
+        }
+
+        if (additional_infoRef.current != null){
+            additional_infoRef.current.innerHTML = "&lt;h3> Additional Info: &lt;/h3> " + section.additonal_info
+        }
+
+    }, [craft_useRef, additional_infoRef, section.use, section.additonal_info])
+
+    return(
+        &lt;>
+            &lt;div className={styles.sectionContainer + " " + styles.split}>
+                {isLeft ? imageDiv : textDiv}
+                {isLeft ? textDiv : imageDiv}
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+interface SourceSectionProps{
+    section: SourceSectionData
+}
+
+/**
+ * SourceSection component. Displays the source of the information, will convert any links into clickable links and will display the source type.
+ *
+ * @param {Object} props - Component props.
+ * @param {SourceSectionData} props.section - The section data.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function SourceSection({section} : SourceSectionProps){
+    let sourceItem = (
+        &lt;>
+        &lt;/>
+    )
+
+    switch (section.source_type){
+        case "Internet":
+            sourceItem = (
+                &lt;>
+                    &lt;li> Source (Internet): &lt;a href={section.data}>{section.data}&lt;/a>&lt;/li>
+                &lt;/>
+            )
+            break;
+
+        // Other special cases here
+
+        default:
+            sourceItem = (
+                &lt;>
+                    &lt;li> Source ({section.source_type}): {section.data}&lt;/li>
+                &lt;/>
+            )
+    }
+
+    return(
+        &lt;>
+            &lt;div className={styles.sectionContainer + " " + styles.sourceSection}>
+                &lt;ul>
+                    {sourceItem}
+                &lt;/ul>
+            &lt;/div>
+        &lt;/>
+    )
+}
+
+interface CustomSectionProps{
+    section: CustomSectionData;
+}
+
+/**
+ * CustomSection component. Displays a custom section, will display the title and text of the section. IF the text uses HTML from the AdvancedTextArea component, it will be inserted correctly.
+ *
+ * @param {Object} props - Component props.
+ * @param {CustomSectionData} props.section - The section data.
+ *
+ * @see {@link AdvancedTextArea} - The advanced text area component.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function CustomSection({section} : CustomSectionProps){
+
+    // Store the text in a ref to set the contents with html later
+    const textRef = useRef&lt;HTMLDivElement>(null)
+
+    // Set the inner html of the text section with a useEffect
+    useEffect(() => {
+
+            if (textRef.current != null){
+                textRef.current.innerHTML = section.text
+            }
+
+    }, [textRef, section.text])
+
+    return(
+        &lt;>
+            &lt;div className={styles.sectionContainer }>
+                &lt;h1> {section.title} &lt;/h1>
+                &lt;div ref={textRef}>&lt;/div>
+            &lt;/div>
+
+        &lt;/>
+    )
+}
+
+interface AttachmentSectionProps{
+    attachment: AttachmentData;
+}
+
+/**
+ * AttachmentSection component. Displays an attachment section, will display the title and a link to the attachment. The link will open in a new tab. The attachment type will be displayed as an icon if possible.
+ *
+ * @param {Object} props - Component props.
+ * @param {AttachmentData} props.attachment - The attachment data.
+ *
+ * @returns {JSX.Element} The rendered section component.
+ */
+export function AttachmentSection({attachment} : AttachmentSectionProps){
+    const [fileIcon, setFileIcon] = useState&lt;IconDefinition>(faFile)
+
+    useEffect(() => {
+
+        switch (attachment.type) {
+            case "json":
+                setFileIcon(faFileCode);
+                break;
+            case "pdf":
+                setFileIcon(faFilePdf);
+                break;
+            case "doc":
+            case "docx":
+                setFileIcon(faFileWord);
+                break;
+            case "xls":
+            case "xlsx":
+                setFileIcon(faFileExcel);
+                break;
+            case "ppt":
+            case "pptx":
+                setFileIcon(faFilePowerpoint);
+                break;
+            case "txt":
+                setFileIcon(faFileAlt);
+                break;
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "gif":
+            case "tiff":
+            case "webp":
+            case "svg":
+            case "ico":
+            case "psd":
+            case "ai":
+            case "raw":
+            case "eps":
+            case "bmp":
+                setFileIcon(faFileImage);
+                break;
+            case "mp3":
+            case "wav":
+            case "ogg":
+            case "flac":
+            case "aac":
+            case "wma":
+            case "aiff":
+            case "dsd":
+            case "pcm":
+            case "mp2":
+            case "m4a":
+                setFileIcon(faFileAudio);
+                break;
+            case "mp4":
+            case "avi":
+            case "mkv":
+            case "mov":
+            case "wmv":
+            case "flv":
+            case "webm":
+            case "m4v":
+            case "mpeg":
+            case "mpg":
+            case "mpe":
+            case "mpv":
+            case "m4p":
+            case "m4b":
+            case "m4r":
+                setFileIcon(faFileVideo);
+                break;
+            case "zip":
+            case "rar":
+            case "tar":
+            case "gz":
+            case "bz2":
+            case "xz":
+            case "7zip":
+            case "iso":
+            case "dmg":
+            case "pkg":
+            case "deb":
+            case "rpm":
+            case "z":
+            case "taz":
+            case "tgz":
+            case "tlz":
+            case "txz":
+            case "tbz":
+            case "tbz2":
+            case "tz":
+            case "7z":
+                setFileIcon(faFileArchive);
+                break;
+            case "html":
+            case "htm":
+            case "xhtml":
+            case "php":
+            case "asp":
+            case "aspx":
+            case "jsp":
+            case "js":
+            case "css":
+            case "scss":
+            case "sass":
+            case "less":
+            case "xml":
+                setFileIcon(faGlobe);
+                break;
+            case "csv":
+                setFileIcon(faFileCsv);
+                break;
+            default:
+                setFileIcon(faFile);
+                break;
+        }
+
+    }, [attachment.type])
+
+    return(
+        &lt;>
+            &lt;a href={attachment.path} download={(attachment.meta as FileMetaData).name} target={"_blank"}>
+                &lt;div className={styles.attachment}>
+                    &lt;FontAwesomeIcon icon={fileIcon} size={"3x"} />
+                    &lt;p> {(attachment.meta as FileMetaData).name} &lt;/p>
+                    &lt;p> {formatFileSize((attachment.meta as FileMetaData).size) } &lt;/p>
+                &lt;/div>
+            &lt;/a>
+        &lt;/>
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

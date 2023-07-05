@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> pages/index.tsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>pages/index.tsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
+
+// TODO: Documentation
+
+import React, {useEffect, useRef} from "react";
+
+import styles from "@/styles/index.module.css"
+import Navbar from "@/components/navbar";
+import HtmlHeader from "@/components/html_header";
+import Section from "@/components/section";
+import PageHeader from "@/components/page_header";
+import SearchBox from "@/components/search_box";
+import {PlantCardApi, PlantCardLoading} from "@/components/plant_card";
+import Image from "next/image";
+import Stats from "@/components/stats";
+import Footer from "@/components/footer";
+import ScrollToTop from "@/components/scroll_to_top";
+import {getFromCache, saveToCache} from "@/lib/cache";
+import axios from "axios";
+import ScrollingPlant from "@/components/scrolling_plant";
+import Link from "next/link";
+import {globalStyles} from "@/lib/global_css";
+
+export default function Home() {
+    const pageName = "Home"
+
+    // Stats for the featured plants
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [plantIds, setPlantIds] = React.useState([0,0,0])
+    const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
+
+    // Don't fetch the data again if it has already been fetched
+    const dataFetch = useRef(false)
+
+    // Get the plant ids when the page loads
+    useEffect(() => {
+
+        setLocation(window.location.host)
+
+        // Prevent the data from being fetched again
+        if (dataFetch.current)
+            return
+        dataFetch.current = true
+
+        getPlantIDs().then(() => {console.log("Plant IDs fetched")} ).catch((error) => {console.log(error)});
+    }, [])
+
+    /**
+     * Gets 3 random IDs from the database to be used for the featured plants
+     */
+    const getPlantIDs = async () => {
+
+        // Check if the plant ids have been cached
+        const ids = getFromCache("plantIds")
+
+        // If the plant ids have been cached
+        if (ids !== null) {
+            setPlantIds(ids)
+            setIsLoading(false)
+        }else{
+
+            // Use the api to get the plant ids
+            try{
+                // Make the api call
+                const response = await axios.get("/api/plants/random?amount=3")
+
+                // API returns the data as "data" which axios also uses, so we need to use response.data.data
+                const data = response.data.data
+
+                // Create an array to store the ids
+                let ids = [0,0,0]
+
+                // Loop through the data and set the ids
+                for (let i = 0; i &lt; data.length; i++) {
+                    ids[i] = data[i].id
+                }
+
+                // Set the plant ids
+                setPlantIds(ids)
+                setIsLoading(false)
+
+                // Save the plant ids to the cache
+                saveToCache("plantIds", ids)
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    return (
+        &lt;>
+            {/* Set up the page header and navbar */}
+            &lt;HtmlHeader currentPage={pageName}/>
+            &lt;Navbar currentPage={pageName}/>
+
+            {/* Section for the welcome message and search box */}
+            &lt;Section>
+                {/* Use the page header component to display the welcome message (See: components/page_header.tsx) */}
+                &lt;PageHeader size={"large"}>
+
+                  {/* Container for the welcome message and search box */}
+                   &lt;div className={styles.welcomeContainer}>
+
+                       {/* Place the plant model on the right */}
+                       &lt;div className={styles.plantContainer}>
+                           &lt;ScrollingPlant/>
+                       &lt;/div>
+
+                       {/* Place the title and description on the left */}
+                       &lt;div className={styles.title}>
+                           &lt;h1 > Rongoa &lt;/h1>
+                       &lt;/div>
+
+
+                       &lt;p className={styles.description}>
+                           Welcome to {location}, here you will find a database full of rich information about rongoa. You can &lt;Link href={"/search"}> search &lt;/Link> for a specific plant or see a index of all the plants in our database &lt;Link href={"/plant_index"}> here&lt;/Link>.
+                           &lt;br/> &lt;br/>
+                           Each plant has its own page full with content, where you can discover information such as the plants craft uses, medical uses, edible uses and much more!
+                       &lt;/p>
+
+                       &lt;div className={styles.searchBox}>
+                        &lt;SearchBox/>
+                       &lt;/div>
+
+                   &lt;/div>
+                &lt;/PageHeader>
+            &lt;/Section>
+
+            {/* Section for the featured plants */}
+            &lt;Section autoPadding>
+                {/* Section title */}
+                &lt;h1 className={styles.sectionTitle}>Featured Plants&lt;/h1>
+
+                {/* Container that centers the cards */}
+                &lt;div className={styles.cardsContainer}>
+                    {
+                        isLoading ?
+                        &lt;>
+                            {/* While the data is being fetched, display the loading cards */}
+                            &lt;PlantCardLoading/>
+                            &lt;PlantCardLoading/>
+                            &lt;PlantCardLoading/>
+                        &lt;/>
+                        :
+                        &lt;>
+                            {/* Once the data has been fetched, load the individual card's data */}
+                            &lt;PlantCardApi id={plantIds[0]}/>
+                            &lt;PlantCardApi id={plantIds[1]}/>
+                            &lt;PlantCardApi id={plantIds[2]}/>
+                        &lt;/>
+
+                    }
+                &lt;/div>
+            &lt;/Section>
+
+
+            &lt;Section autoPadding>
+                {/* A page break to give the user a break from the content */}
+                &lt;div className={globalStyles.gridCentre}>
+                    &lt;div className={styles.pageBreak}>
+                        &lt;Image
+                            src={"/media/images/fern.png"}
+                            alt={"fern"}
+                            width={400}
+                            height={400}
+                        />
+                        &lt;Image
+                            src={"/media/images/kowhai.png"}
+                            alt={"kowhai"}
+                            width={400}
+                            height={400}
+                        />
+                    &lt;/div>
+                &lt;/div>
+            &lt;/Section>
+
+            {/* Section for the plant stats */}
+            &lt;Section autoPadding>
+
+                {/* Container for the stats */}
+                &lt;div className={globalStyles.gridCentre}>
+
+                    {/* Display the stats */}
+                    &lt;Stats/>
+                &lt;/div>
+            &lt;/Section>
+
+            {/* Page footer */}
+            &lt;Section>
+                    &lt;Footer/>
+            &lt;/Section>
+
+            {/* Allow the user to scroll to the top of the page easily*/}
+            &lt;ScrollToTop/>
+        &lt;/>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

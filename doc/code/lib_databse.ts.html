@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> lib/databse.ts</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="PostgresSQL.html">PostgresSQL</a></li><li><a href="SQLDatabase.html">SQLDatabase</a></li></ul><h3>Interfaces</h3><ul><li><a href="AttachmentData.html">AttachmentData</a></li><li><a href="CraftSectionData.html">CraftSectionData</a></li><li><a href="CustomSectionData.html">CustomSectionData</a></li><li><a href="EdibleSectionData.html">EdibleSectionData</a></li><li><a href="FileMetaData.html">FileMetaData</a></li><li><a href="ImageMetaData.html">ImageMetaData</a></li><li><a href="MedicalSectionData.html">MedicalSectionData</a></li><li><a href="MonthsReadyData.html">MonthsReadyData</a></li><li><a href="PlantData.html">PlantData</a></li><li><a href="PlantDataApi.html">PlantDataApi</a></li><li><a href="SourceSectionData.html">SourceSectionData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdvancedTextArea">AdvancedTextArea</a></li><li><a href="global.html#AttachmentSection">AttachmentSection</a></li><li><a href="global.html#AutoSection">AutoSection</a></li><li><a href="global.html#CleanAPIData">CleanAPIData</a></li><li><a href="global.html#ConvertApiIntoPlantData">ConvertApiIntoPlantData</a></li><li><a href="global.html#ConvertPlantDataIntoApi">ConvertPlantDataIntoApi</a></li><li><a href="global.html#CraftSection">CraftSection</a></li><li><a href="global.html#CustomSection">CustomSection</a></li><li><a href="global.html#DarkMode">DarkMode</a></li><li><a href="global.html#DesktopNavbar">DesktopNavbar</a></li><li><a href="global.html#DropdownInput">DropdownInput</a></li><li><a href="global.html#Dyslexic">Dyslexic</a></li><li><a href="global.html#EdibleSection">EdibleSection</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#GetOrigin">GetOrigin</a></li><li><a href="global.html#MedicalSection">MedicalSection</a></li><li><a href="global.html#MobileNavbar">MobileNavbar</a></li><li><a href="global.html#PlantCardApi">PlantCardApi</a></li><li><a href="global.html#PlantCardLoading">PlantCardLoading</a></li><li><a href="global.html#PlantCardNull">PlantCardNull</a></li><li><a href="global.html#PlantModel">PlantModel</a></li><li><a href="global.html#QuillNoSSRWrapper">QuillNoSSRWrapper</a></li><li><a href="global.html#Scene">Scene</a></li><li><a href="global.html#SimpleTextArea">SimpleTextArea</a></li><li><a href="global.html#SmallInput">SmallInput</a></li><li><a href="global.html#SourceSection">SourceSection</a></li><li><a href="global.html#ToggleAccessibilitySetting">ToggleAccessibilitySetting</a></li><li><a href="global.html#USE_POSTGRES">USE_POSTGRES</a></li><li><a href="global.html#ValidPlantData">ValidPlantData</a></li><li><a href="global.html#ValidPlantDataApi">ValidPlantDataApi</a></li><li><a href="global.html#authOptions">authOptions</a></li><li><a href="global.html#convertUseTag">convertUseTag</a></li><li><a href="global.html#emptyPlantApiData">emptyPlantApiData</a></li><li><a href="global.html#emptyPlantData">emptyPlantData</a></li><li><a href="global.html#fetchPlant">fetchPlant</a></li><li><a href="global.html#fixAttachmentsPaths">fixAttachmentsPaths</a></li><li><a href="global.html#formatFileSize">formatFileSize</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getFromCache">getFromCache</a></li><li><a href="global.html#getNamesInPreference">getNamesInPreference</a></li><li><a href="global.html#getTables">getTables</a></li><li><a href="global.html#makeQuery">makeQuery</a></li><li><a href="global.html#saveToCache">saveToCache</a></li><li><a href="global.html#useInputState">useInputState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>lib/databse.ts</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Class for the names of the database tables depending  on SQL or  postgresSQL
+import {USE_POSTGRES} from "@/lib/constants";
+import {db, VercelPoolClient} from "@vercel/postgres";
+
+const sqlDb = require('mysql2-async').default;
+
+/**
+ * Class for the names of the columns in the database
+ */
+export class SQLDatabase {
+
+    database: string;
+
+    // Generic
+    id: string;
+    plant_id: string;
+
+    // Plants Table
+    preferred_name: string;
+    english_name: string;
+    maori_name: string;
+    latin_name: string;
+    location_found: string;
+    small_description: string;
+    long_description: string;
+    author: string;
+    last_modified: string;
+
+    // Attachments Table
+    attachment_path: string;
+    attachment_type: string;
+    attachment_meta: string;
+    attachment_downloadable: string;
+
+    // Craft Table
+    craft_part_of_plant: string;
+    craft_use: string;
+    craft_additional_info: string;
+    craft_image: string;
+
+    // Custom Table
+    custom_title: string;
+    custom_text: string;
+
+    // Edible Table
+    edible_part_of_plant: string;
+    edible_image_of_part: string;
+    edible_nutrition: string;
+    edible_preparation: string;
+    edible_preparation_type: string;
+
+    // Medical Table
+    medical_type: string;
+    medical_use: string;
+    medical_image: string;
+    medical_preparation: string;
+
+    // Source Table
+    source_type: string;
+    source_data: string;
+
+    // Months For Use Table
+    months_event: string;
+    months_start_month: string;
+    months_end_month: string;
+
+    // Auth Table
+    auth_entry: string;
+    auth_type: string;
+
+    constructor() {
+        this.database = "rongoa8jwons3_rongoadb"
+
+        // Generic
+        this.id = "id";
+        this.plant_id = "plant_id";
+
+        // Plants Table
+        this.preferred_name             = "preferred_name";
+        this.english_name               = "english_name";
+        this.maori_name                 = "maori_name";
+        this.latin_name                 = "latin_name";
+        this.location_found             = "location_found";
+        this.small_description          = "small_description";
+        this.long_description           = "long_description";
+        this.author                     = "author";
+        this.last_modified              = "last_modified";
+
+        // Attachments Table
+        this.attachment_path            = "attachments_path";
+        this.attachment_type            = "attachments_type";
+        this.attachment_meta            = "attachments_meta";
+        this.attachment_downloadable    = "attachments_downloadable";
+
+        // Craft Table
+        this.craft_part_of_plant        = "craft_part_of_plant";
+        this.craft_use                  = "craft_use";
+        this.craft_additional_info      = "craft_additional_info";
+        this.craft_image                = "craft_image";
+
+        // Custom Table
+        this.custom_title               = "custom_title";
+        this.custom_text                = "custom_text";
+
+        // Edible Table
+        this.edible_part_of_plant       = "edible_part_of_plant";
+        this.edible_image_of_part       = "edible_image";
+        this.edible_nutrition           = "edible_nutrition";
+        this.edible_preparation         = "edible_preparation";
+        this.edible_preparation_type    = "edible_preparation_type";
+
+        // Medical Table
+        this.medical_type               = "medical_type";
+        this.medical_use                = "medical_use";
+        this.medical_image              = "medical_image";
+        this.medical_preparation        = "medical_preparation";
+
+        // Source Table
+        this.source_type                = "source_type";
+        this.source_data                = "source_data";
+
+        // Months For Use Table
+        this.months_event               = "months_event";
+        this.months_start_month         = "months_start_month";
+        this.months_end_month           = "months_end_month";
+
+        // Auth Table
+        this.auth_entry                 = "auth_entry";
+        this.auth_type                  = "auth_type";
+
+    }
+}
+
+/**
+ * Class for the names of the columns in the database, POSTGRES SQL names allow for the use of reserved words
+ *
+ * @see {@link SQLDatabase}
+ * @see {@link [Reserved](https://www.postgresql.org/docs/9.2/sql-keywords-appendix.html)}
+ */
+export class PostgresSQL extends SQLDatabase{
+
+    constructor() {
+        super();
+
+        this.database = "public"
+
+        // Generic
+        this.id = "id";
+        this.plant_id = "plant_id";
+
+        // Plants Table
+        // -- DOESN'T  CHANGE
+
+        // Attachments Table
+        this.attachment_path            = "path";
+        this.attachment_type            = "type";
+        this.attachment_meta            = "meta";
+        this.attachment_downloadable    = "downloadable";
+
+        // Craft Table
+        this.craft_part_of_plant        = "part_of_plant";
+        this.craft_use                  = "use";
+        this.craft_additional_info      = "additional_info";
+        this.craft_image                = "image";
+
+        // Custom Table
+        this.custom_title               = "title";
+        this.custom_text                = "text";
+
+        // Edible Table
+        this.edible_part_of_plant       = "part_of_plant";
+        this.edible_image_of_part       = "image_of_part";
+        this.edible_nutrition           = "nutrition";
+        this.edible_preparation         = "preparation";
+        this.edible_preparation_type    = "preparation_type";
+
+        // Medical Table
+        this.medical_type               = "medical_type";
+        this.medical_use                = "use";
+        this.medical_image              = "image";
+        this.medical_preparation        = "preparation";
+
+        // Source Table
+        this.source_type                = "source_type";
+        this.source_data                = "data";
+
+        // Months For Use Table
+        this.months_event               = "event";
+        this.months_start_month         = "start_month";
+        this.months_end_month           = "end_month";
+
+        // Auth Table
+        this.auth_entry                 = "entry";
+        this.auth_type                  = "type";
+    }
+}
+
+/**
+ * Checks what database to use and returns the correct column name class
+ *
+ * @see {@link SQLDatabase}
+ * @see {@link PostgresSQL}
+ * @see {@link USE_POSTGRES}
+ *
+ * @returns {SQLDatabase} - The correct column name class
+ */
+export function getTables(){
+    let tables = new SQLDatabase();
+
+    // Set the tables to use
+    if(USE_POSTGRES) {
+        tables = new PostgresSQL();
+    }
+
+    return tables
+}
+
+
+/**
+ * Checks what database to use and then returns the correct database connection
+ *
+ * @see {@link mysql_db}
+ * @see {@link db}
+ * @see {@link USE_POSTGRES}
+ *
+ * @returns {VercelPoolClient} - The correct database connection
+ */
+export async function getClient(){
+
+    const dataBase = USE_POSTGRES ? db : new sqlDb({
+        host: process.env.MYSQL_HOST,
+        port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 1234,
+        database: process.env.MYSQL_DATABASE,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        skiptzfix: true,
+        multipleStatements: true,
+    });
+
+    let client: any = dataBase
+
+    // Vercel POSTGRES requires a client to be created
+    if(USE_POSTGRES)
+        client = await dataBase.connect();
+
+    return client
+}
+
+/**
+ * Makes a query to the database and returns the data. Query and response is different depending on the database used, this is handled by this function depending on the USE_POSTGRES variable meaning to get the client getClient() should be used
+ *
+ * @param {string} query - The query to make to the database
+ * @param client - The database connection to use
+ * @param {boolean} rawData - If the data returned should be raw data or not
+ *
+ * @see {@link getClient}
+ *
+ * @returns {JSON | null} - The data returned from the database in JSON format, null if there was an error or no data was returned
+ */
+export async function makeQuery(query: string, client: any, rawData : boolean = false){
+    let data;
+
+    try{
+
+        if(USE_POSTGRES){
+            // Get the data from the database
+            data  = await client.query(query);
+
+
+            // If the data is not to be raw the process it
+            if(!rawData)
+                data = data.rows
+
+        }else{
+            // Get the data from the database
+            data  = await client.getall(query);
+        }
+
+        return data
+
+    } catch (e) {
+        console.log("ERROR")
+        console.log(e)
+        return null
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>
