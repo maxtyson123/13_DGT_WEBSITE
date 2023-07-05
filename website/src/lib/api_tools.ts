@@ -1,4 +1,7 @@
-import {NextApiRequest} from "next";
+import {NextApiRequest, NextApiResponse} from "next";
+import {getTables, makeQuery} from "@/lib/databse";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 /**
  * Get the origin of the request from the headers of a next api request
@@ -10,7 +13,7 @@ import {NextApiRequest} from "next";
  * @returns {string} - The origin of the request
  */
 export function GetOrigin(request: NextApiRequest){
-    const LOCAL_HOST_ADDRESS = "localhost:3000";
+    const LOCAL_HOST_ADDRESS = "localhost:3001";
 
     let host = request.headers?.host || LOCAL_HOST_ADDRESS;
     let protocol = /^localhost(:\d+)?$/.test(host) ? "http:" : "https:";
@@ -32,4 +35,66 @@ export function GetOrigin(request: NextApiRequest){
     }
 
     return protocol + "//" + host;
+}
+
+export async function CheckWhitelisted(request: NextApiRequest, response: NextApiResponse, client: any){
+
+    let {api_key} = request.query;
+
+    // Check if the user is allowed to upload
+    let auth_query = ""
+
+    const tables = getTables()
+    const origin = GetOrigin(request);
+
+    // If it is this site then allow user email to authenticate
+    console.log("origin:" + origin)
+    let api =  !(origin === process.env.NEXTAUTH_URL)
+
+    // If we are not usin the API key then use the email
+    if (!api) {
+        console.log("Trying Email");
+
+        // Get the email
+        const session = await getServerSession(request, response, authOptions)
+
+        // If there is a user session then get the email otherwise default to the API key
+        if(session){
+            if(session.user === undefined){
+                return false;
+            }
+            const user_email = session.user.email;
+
+            console.log(user_email);
+
+            // Check if the email is allowed in the database
+            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${user_email}' AND ${tables.auth_type} = 'email'`;
+        }else{
+            api = true;
+        }
+
+    }
+
+    // If we are using the API key then use the API key
+    if(api){
+        console.log("Using API key");
+
+        // If there is no API key then return an error
+        if(!api_key) {
+            return false;
+        }
+
+        // Check if the API key is allowed in the database
+        auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
+    }
+
+    // Run the query
+    const auth_result = await makeQuery(auth_query, client);
+
+    // Check if the user is allowed to upload
+    if(!auth_result) {
+        return true;
+    }else{
+        return true;
+    }
 }

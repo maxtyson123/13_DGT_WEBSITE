@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
-import {GetOrigin} from "@/lib/api_tools";
+import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
 import {Form} from "multiparty";
 import fs from "fs";
 import Client from "ftp";
@@ -66,45 +66,7 @@ export default async function handler(
                 }
 
                 // Check if the user is allowed to upload
-                let auth_query = ""
-
-                // If it is this site then allow user email to authenticate
-                if (origin === process.env.NEXTAUTH_URL) {
-                    console.log("This is the same site");
-
-                    if(!session){
-                        return response.status(401).json({ error: 'No user session found' });
-                    }
-
-                    if(session.user === undefined){
-                        return response.status(401).json({ error: 'No user found' });
-                    }
-                    const user_email = session.user.email;
-
-                    console.log(user_email);
-
-                    // Check if the email is allowed in the database
-                    auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${user_email}' AND ${tables.auth_type} = 'email'`;
-
-
-                }else{
-                    console.log("This is a different site");
-
-                    // If there is no API key then return an error
-                    if(api_key === null) {
-                        return response.status(401).json({ error: 'No API key found' });
-                    }
-
-                    // Check if the API key is allowed in the database
-                    auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
-
-                }
-
-                // Run the query
-                const auth_result = await makeQuery(auth_query, client)
-
-                // Check if the user is allowed to upload
-                if(!auth_result) {
+                if(!await CheckWhitelisted(request, response, client)) {
                     return response.status(401).json({ error: 'User not authorised to upload' });
                 }
 
