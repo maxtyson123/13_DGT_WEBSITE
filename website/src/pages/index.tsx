@@ -1,7 +1,3 @@
-//set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v14.16.0-win-x64\node-v14.16.0-win-x64
-
-// TODO: Documentation
-
 import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/index.module.css"
