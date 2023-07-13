@@ -308,6 +308,9 @@ export default async function handler(
             return response.status(500).json({ error: "Error creating plant (id not returned)" });
         }
 
+        if(edit_id){
+            return response.status(200).json({ message: "Upload Successful", id: edit_id });
+        }
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {

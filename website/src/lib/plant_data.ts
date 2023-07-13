@@ -250,6 +250,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.craft_parts             = tryParse(apiData.craft_parts)
         apiData.craft_uses              = tryParse(apiData.craft_uses)
         apiData.craft_images            = tryParse(apiData.craft_images)
+        apiData.craft_additional_info   = tryParse(apiData.craft_additional_info)
 
 
         // Custom data needs to be parsed
