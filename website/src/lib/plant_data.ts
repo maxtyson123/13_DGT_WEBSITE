@@ -749,6 +749,8 @@ export function fixAttachmentsPaths (plant: PlantData) {
     // Loop through the attachments and set the proper path
     for(let i = 0; i < plant.attachments.length; i++) {
 
+        plant.attachments[i].path = plant.attachments[i].path.replaceAll("’", "'");
+
         // If the attachment doesn't start with a website url then it is using this server
         if(plant.attachments[i].path.startsWith("http")) {
             continue;

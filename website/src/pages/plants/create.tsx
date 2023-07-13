@@ -1680,23 +1680,40 @@ export default function CreatePlant() {
         return isValid;
     }
 
+
+    const cleanInput = (input: string) => {
+
+        if(!input)
+            return input;
+
+        let clean = input;
+
+        // Replace ' with slanted '
+        clean = input.replaceAll("'", "’");
+
+        return clean;
+
+    }
+
     const generateJSON = () => {
 
         // Create the JSON object
         let plantOBJ = emptyPlantData()
 
         // Basic info
-        plantOBJ.preferred_name = preferredName;
-        plantOBJ.english_name = englishName;
-        plantOBJ.moari_name = moariName;
-        plantOBJ.latin_name = latinName;
-        plantOBJ.location_found = location;
-        plantOBJ.small_description = smallDescription;
-        plantOBJ.long_description = largeDescription;
+        plantOBJ.preferred_name = cleanInput(preferredName);
+        plantOBJ.english_name = cleanInput(englishName);
+        plantOBJ.moari_name =   cleanInput(moariName);
+        plantOBJ.latin_name =   cleanInput(latinName);
+        plantOBJ.location_found = cleanInput(location);
+        plantOBJ.small_description = cleanInput(smallDescription)
+        plantOBJ.long_description = cleanInput(largeDescription)
         if(session && session.user)
             plantOBJ.author = session.user.name ? session.user.name : "Unknown";
         else
             plantOBJ.author = "Unknown";
+
+        plantOBJ.author = cleanInput(plantOBJ.author);
         plantOBJ.last_modified = new Date().toISOString()
 
         // Image info
@@ -1704,11 +1721,11 @@ export default function CreatePlant() {
             const thisImageInfo = imageInfoRef.current[i].state;
 
             let imageInfoOBJ = {
-                path: thisImageInfo.image_url,
+                path: cleanInput(thisImageInfo.image_url),
                 type: "image",
                 meta: {
-                    "name": thisImageInfo.image_name,
-                    "credits": thisImageInfo.image_credit,
+                    "name": cleanInput(thisImageInfo.image_name),
+                    "credits": cleanInput(thisImageInfo.image_credit),
                     "tags": [""],
                 },
                 downloadable: false,
@@ -1721,7 +1738,7 @@ export default function CreatePlant() {
 
             // Remove any spaces at the start of tags
             for(let i = 0; i <  (imageInfoOBJ.meta as ImageMetaData).tags.length; i++){
-                (imageInfoOBJ.meta as ImageMetaData).tags[i] =  (imageInfoOBJ.meta as ImageMetaData).tags[i].trim();
+                (imageInfoOBJ.meta as ImageMetaData).tags[i] =  cleanInput((imageInfoOBJ.meta as ImageMetaData).tags[i].trim());
             }
 
             plantOBJ.attachments.push(imageInfoOBJ);
@@ -1732,11 +1749,11 @@ export default function CreatePlant() {
             const thisFileInfo = fileInfoRef.current[i].state;
 
             let fileInfoOBJ = {
-                path: thisFileInfo.file_url,
+                path: cleanInput(thisFileInfo.file_url),
                 type: "file",
                 meta: {
-                    "name": thisFileInfo.file_name,
-                    "credits": thisFileInfo.file_credit,
+                    "name": cleanInput(thisFileInfo.file_name),
+                    "credits": cleanInput(thisFileInfo.file_credit),
                     "size": thisFileInfo.file_size,
                 },
                 downloadable: true,
@@ -1759,7 +1776,7 @@ export default function CreatePlant() {
                 end_month: "",
             } as MonthsReadyData;
 
-            dateInfoOBJ.event = thisDateInfo.event;
+            dateInfoOBJ.event = cleanInput(thisDateInfo.event);
             dateInfoOBJ.start_month = thisDateInfo.startDate;
             dateInfoOBJ.end_month = thisDateInfo.endDate;
 
@@ -1779,11 +1796,11 @@ export default function CreatePlant() {
                 preparation_type: "",
             } as EdibleSectionData;
 
-            edibleInfoOBJ.part_of_plant = thisEdibleInfo.partOfPlant;
-            edibleInfoOBJ.image_of_part = thisEdibleInfo.image;
-            edibleInfoOBJ.nutrition = thisEdibleInfo.nutritionalValue;
-            edibleInfoOBJ.preparation = thisEdibleInfo.preparation;
-            edibleInfoOBJ.preparation_type = thisEdibleInfo.preparationType;
+            edibleInfoOBJ.part_of_plant = cleanInput(thisEdibleInfo.partOfPlant);
+            edibleInfoOBJ.image_of_part = cleanInput(thisEdibleInfo.image);
+            edibleInfoOBJ.nutrition = cleanInput(thisEdibleInfo.nutritionalValue);
+            edibleInfoOBJ.preparation = cleanInput(thisEdibleInfo.preparation);
+            edibleInfoOBJ.preparation_type = cleanInput(thisEdibleInfo.preparationType);
 
             // If it isn't already in the use array, add it
             if(!plantOBJ.use.includes("edible")){
@@ -1805,10 +1822,10 @@ export default function CreatePlant() {
                 preparation: "",
             } as MedicalSectionData;
 
-            medicalInfoOBJ.medical_type = thisMedicalInfo.type;
-            medicalInfoOBJ.use = thisMedicalInfo.use;
-            medicalInfoOBJ.image = thisMedicalInfo.image;
-            medicalInfoOBJ.preparation = thisMedicalInfo.preparation;
+            medicalInfoOBJ.medical_type = cleanInput(thisMedicalInfo.type);
+            medicalInfoOBJ.use = cleanInput(thisMedicalInfo.use);
+            medicalInfoOBJ.image = cleanInput(thisMedicalInfo.image);
+            medicalInfoOBJ.preparation = cleanInput(thisMedicalInfo.preparation);
 
             // If it isn't already in the use array, add it
             if(!plantOBJ.use.includes("medical_"+medicalInfoOBJ.medical_type)){
@@ -1830,10 +1847,10 @@ export default function CreatePlant() {
                 additonal_info: "",
             } as CraftSectionData;
 
-            craftInfoOBJ.part_of_plant = thisCraftInfo.partOfPlant;
-            craftInfoOBJ.use = thisCraftInfo.use;
-            craftInfoOBJ.image = thisCraftInfo.image;
-            craftInfoOBJ.additonal_info = thisCraftInfo.additionalInfo;
+            craftInfoOBJ.part_of_plant = cleanInput(thisCraftInfo.partOfPlant);
+            craftInfoOBJ.use = cleanInput(thisCraftInfo.use);
+            craftInfoOBJ.image = cleanInput(thisCraftInfo.image);
+            craftInfoOBJ.additonal_info = cleanInput(thisCraftInfo.additionalInfo);
 
             // If it isn't already in the use array, add it
             if(!plantOBJ.use.includes("craft")){
@@ -1853,8 +1870,8 @@ export default function CreatePlant() {
                 data: "",
             } as SourceSectionData;
 
-            sourceInfoOBJ.source_type = thisSourceInfo.type;
-            sourceInfoOBJ.data = thisSourceInfo.data;
+            sourceInfoOBJ.source_type = cleanInput(thisSourceInfo.type);
+            sourceInfoOBJ.data = cleanInput(thisSourceInfo.data);
 
             plantOBJ.sections.push(sourceInfoOBJ);
         }
@@ -1869,8 +1886,8 @@ export default function CreatePlant() {
                 text: "",
             } as CustomSectionData;
 
-            customInfoOBJ.title = thisCustomInfo.title;
-            customInfoOBJ.text = thisCustomInfo.text;
+            customInfoOBJ.title = cleanInput(thisCustomInfo.title);
+            customInfoOBJ.text = cleanInput(thisCustomInfo.text);
 
             plantOBJ.sections.push(customInfoOBJ);
         }
