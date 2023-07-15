@@ -97,6 +97,9 @@ export default async function handler(
         if(attachment_metas === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment meta parameter not found' }); }
         if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
 
+        console.log("Edible Nutrition: ");
+        console.log(edible_nutrition);
+
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
 

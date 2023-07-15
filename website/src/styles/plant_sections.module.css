@@ -20,6 +20,7 @@
     padding: .5%;
     justify-items: start;
     margin-left: 13%;
+    word-wrap: anywhere;
 }
 
 /*

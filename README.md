@@ -101,9 +101,11 @@ http://localhost:3000/api/auth/callback/github
 * Under account permissions set Email addresses to read only
 * Once completed creation, create a new client secret
 * Copy the config into .env.local
-
-
-
+5. Run the site
+```sh
+ cd website
+ npm run dev
+```
 
 ## Usage
 
@@ -115,7 +117,7 @@ To add an API key create a new entry in the auth table with the 'entry' column b
 ```sh
 INSERT INTO auth (auth_entry, auth_type)
 VALUES ('api_key', 'api');
-
+```
 To whitelist a email, create a new entry in the auth table with the 'entry' column being the email and the 'type' being 'email'
 ```sh
 INSERT INTO auth (auth_entry, auth_type)
