@@ -101,7 +101,9 @@ http://localhost:3000/api/auth/callback/github
 * Under account permissions set Email addresses to read only
 * Once completed creation, create a new client secret
 * Copy the config into .env.local
-5. Run the site
+5. Other OAuth Setup:
+* Follow NextAuth.js's [documentation](https://next-auth.js.org/configuration/providers/oauth) to setup other OAuth providers
+6. Run the site
 ```sh
  cd website
  npm run dev
