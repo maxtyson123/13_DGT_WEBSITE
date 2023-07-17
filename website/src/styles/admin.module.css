@@ -65,6 +65,12 @@
     width: 100%;
     display: grid;
     align-items: center;
+    text-align: center;
+}
+
+.adminPanel h1{
+    color: var(--text-dark);
+    font-size: 48px;
 }
 
 .adminPanel .table{

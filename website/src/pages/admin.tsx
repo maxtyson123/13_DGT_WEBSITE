@@ -13,10 +13,18 @@ import {Error} from "@/components/error";
 import Image from "next/image";
 import axios from "axios";
 import {DropdownInput, SmallInput} from "@/components/input_sections";
+import {useRouter} from "next/router";
 
 interface authEntry {
     value: string,
     type: string,
+}
+
+interface plantEntry {
+    id: number,
+    english_name: string,
+    maori_name: string,
+    latin_name: string,
 }
 
 export default function PlantIndex(){
@@ -26,6 +34,7 @@ export default function PlantIndex(){
     const { data: session } = useSession()
     const [userAllowed, setUserAllowed] = React.useState(0)
     const [authData, setAuthData] = React.useState<authEntry[]>([])
+    const [plantData, setPlantData] = React.useState<plantEntry[]>([])
 
     // New User Data
     const [newAuthEntry, setNewAuthEntry] = React.useState("")
@@ -37,9 +46,12 @@ export default function PlantIndex(){
     const updateNewAuthEntry = (value: string) => { setError(""); setNewAuthEntry(value) }
     const updateNewAuthType = (value: string) => { setError(""); setNewAuthType(value) }
 
+    const router = useRouter()
+
     // Check the user is authed
     useEffect(() => {
-        checkUser().then(() => {console.log("Finished checking user auth")}).catch((error) => {console.log(error)})
+        if(userAllowed == 0)
+            checkUser().then(() => {console.log("Finished checking user auth")}).catch((error) => {console.log(error)})
     }, [session])
 
     const checkUser = async () => {
@@ -48,7 +60,6 @@ export default function PlantIndex(){
 
         // If there is no logged-in user then return
         if (!session?.user?.email){
-            setUserAllowed(1)
             return
         }
 
@@ -60,6 +71,7 @@ export default function PlantIndex(){
         if(data.message == "User whitelisted"){
             setUserAllowed(2)
             await getAdminAuthData()
+            await getPlantData()
         }else{
             setError("User is not admin")
             setUserAllowed(1)
@@ -79,10 +91,25 @@ export default function PlantIndex(){
                 auths.push({value: data[i].auth_entry, type: data[i].auth_type})
         }
 
-
-
         // Set the plant auths
         setAuthData(auths)
+    }
+
+    const getPlantData = async () => {
+        const response = await axios.get("/api/plants/search?getNames=true")
+        const data = response.data.data
+
+        // Create an array to store the plant auths (for each name)
+        let plants: plantEntry[] = []
+        setPlantData(plants)
+
+        // Loop through the data and set the plants
+        for (let i = 0; i < data.length; i++) {
+            plants.push({id: data[i].id, english_name: data[i].english_name, maori_name: data[i].maori_name, latin_name: data[i].latin_name})
+        }
+
+        // Set the plant plants
+        setPlantData(plants)
     }
 
     const addAuthEntry = async () => {
@@ -118,6 +145,19 @@ export default function PlantIndex(){
 
         // Reload the auth data
         await getAdminAuthData()
+
+    }
+
+    const removePlant = async (id: number) => {
+
+            // Clear the error
+            setError("")
+
+            // Update the auth entry
+            const response = await axios.get("/api/plants/remove?id=" + id)
+
+            // Reload the auth data
+            await getPlantData()
 
     }
 
@@ -172,6 +212,7 @@ export default function PlantIndex(){
                             userAllowed == 2 ?
                                 <div className={styles.adminPanel}>
                                     <br/>
+                                    <h1> Users </h1>
                                     <br/>
                                     <table>
                                         <tr>
@@ -198,6 +239,32 @@ export default function PlantIndex(){
                                             </td>
                                             <td> <button onClick={addAuthEntry}> Add </button></td>
                                         </tr>
+
+                                    </table>
+                                    <br/>
+                                    <h1> Plants </h1>
+                                    <table>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>English Name</th>
+                                            <th>Latin Name</th>
+                                            <th>Maori Name</th>
+                                            <th>Change</th>
+                                            <th>Delete</th>
+                                        </tr>
+
+                                        {plantData.map((plant, index) => (
+                                            <tr key={index}>
+                                                <td> {plant.id} </td>
+                                                <td> {plant.english_name} </td>
+                                                <td> {plant.latin_name} </td>
+                                                <td> {plant.maori_name} </td>
+                                                <td> <button onClick={()=>{
+                                                    router.push("/plants/create?id=" + plant.id)
+                                                }}> Edit </button> </td>
+                                                <td> <button onClick={() => {removePlant(plant.id)}}> Remove </button> </td>
+                                            </tr>
+                                        ))}
 
                                     </table>
                                 </div>
