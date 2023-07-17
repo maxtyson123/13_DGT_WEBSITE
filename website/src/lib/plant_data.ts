@@ -18,6 +18,7 @@ export interface PlantData {
     long_description:   string;
     author:             string;
     last_modified:      string;
+    display_image:      string;
     attachments:        AttachmentData[];
     sections:           any[];
 }
@@ -35,6 +36,7 @@ export interface PlantDataApi {
     long_description:           string;
     author:                     string;
     last_modified:              string;
+    display_image:              string;
     months_ready_events:        string[];
     months_ready_start_months:  string[];
     months_ready_end_months:    string[];
@@ -315,6 +317,7 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.long_description             == null
         || apiData.author                       == null
         || apiData.last_modified                == null
+        || apiData.display_image                == null
         || apiData.months_ready_events          == null
         || apiData.months_ready_start_months    == null
         || apiData.months_ready_end_months      == null
@@ -360,6 +363,7 @@ export function ValidPlantData(plantData : PlantData) : boolean {
         || plantData.long_description       == null
         || plantData.author                 == null
         || plantData.last_modified          == null
+        || plantData.display_image          == null
         || plantData.months_ready_for_use   == null
         || plantData.use                    == null
         || plantData.attachments            == null
@@ -395,6 +399,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.long_description  = apiData.long_description;
     plantData.author            = apiData.author;
     plantData.last_modified     = apiData.last_modified;
+    plantData.display_image     = apiData.display_image;
 
     // Image info
     for(let i = 0; i < apiData.attachment_paths.length; i++) {
@@ -532,6 +537,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.long_description  = plantData.long_description;
     apiData.author            = plantData.author;
     apiData.last_modified     = plantData.last_modified;
+    apiData.display_image     = plantData.display_image;
 
     // Date info
     for(let i = 0; i < plantData.months_ready_for_use.length; i++) {
@@ -611,6 +617,7 @@ export function emptyPlantData(){
         long_description:       "",
         author:                 "",
         last_modified:          "",
+        display_image:          "",
         attachments:            [],
         sections:               [],
     };
@@ -633,6 +640,7 @@ export function emptyPlantApiData(){
         long_description:           "",
         author:                     "",
         last_modified:              new Date().toISOString(),
+        display_image:              "",
         months_ready_events:        [],
         months_ready_start_months:  [],
         months_ready_end_months:    [],

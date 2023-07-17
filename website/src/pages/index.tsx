@@ -7,14 +7,12 @@ import Section from "@/components/section";
 import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import {PlantCardApi, PlantCardLoading} from "@/components/plant_card";
-import Image from "next/image";
 import Stats from "@/components/stats";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import ScrollingPlant from "@/components/scrolling_plant";
-import Link from "next/link";
 import {globalStyles} from "@/lib/global_css";
 
 export default function Home() {
@@ -22,7 +20,7 @@ export default function Home() {
 
     // Stats for the featured plants
     const [isLoading, setIsLoading] = React.useState(true)
-    const [plantIds, setPlantIds] = React.useState([0,0,0])
+    const [plantIds, setPlantIds] = React.useState([0,0,0,0,0,0])
     const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
 
     // Don't fetch the data again if it has already been fetched
@@ -58,13 +56,13 @@ export default function Home() {
             // Use the api to get the plant ids
             try{
                 // Make the api call
-                const response = await axios.get("/api/plants/random?amount=3")
+                const response = await axios.get("/api/plants/random?amount=6")
 
                 // API returns the data as "data" which axios also uses, so we need to use response.data.data
                 const data = response.data.data
 
                 // Create an array to store the ids
-                let ids = [0,0,0]
+                let ids = [0,0,0,0,0,0]
 
                 // Loop through the data and set the ids
                 for (let i = 0; i < data.length; i++) {
@@ -105,14 +103,24 @@ export default function Home() {
 
                        {/* Place the title and description on the left */}
                        <div className={styles.title}>
-                           <h1 > Rongoa </h1>
+                           <h1 > Rongoā </h1>
                        </div>
 
 
                        <p className={styles.description}>
-                           Welcome to {location}, here you will find a database full of rich information about rongoa. You can <Link href={"/search"}> search </Link> for a specific plant or see a index of all the plants in our database <Link href={"/plant_index"}> here</Link>.
-                           <br/> <br/>
-                           Each plant has its own page full with content, where you can discover information such as the plants craft uses, medical uses, edible uses and much more!
+                           Welcome to this rongoā website
+                           <br/>
+                           The information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)
+                           <br/>
+                           Please note this website is created and maintained by volunteers.
+                           <br/>
+                           If you have useful information or Images that you would like to contribute,
+                           <br/>
+                           - or if you would like to volunteer time with research / data input
+                           <br/>
+                           - or you find this information useful and would like to donate financially
+                           <br/>
+                           please contact placeholder email.
                        </p>
 
                        <div className={styles.searchBox}>
@@ -137,6 +145,10 @@ export default function Home() {
                             <PlantCardLoading/>
                             <PlantCardLoading/>
                             <PlantCardLoading/>
+                            <PlantCardLoading/>
+                            <PlantCardLoading/>
+                            <PlantCardLoading/>
+                            <PlantCardLoading/>
                         </>
                         :
                         <>
@@ -144,30 +156,12 @@ export default function Home() {
                             <PlantCardApi id={plantIds[0]}/>
                             <PlantCardApi id={plantIds[1]}/>
                             <PlantCardApi id={plantIds[2]}/>
+                            <PlantCardApi id={plantIds[3]}/>
+                            <PlantCardApi id={plantIds[4]}/>
+                            <PlantCardApi id={plantIds[5]}/>
                         </>
 
                     }
-                </div>
-            </Section>
-
-
-            <Section autoPadding>
-                {/* A page break to give the user a break from the content */}
-                <div className={globalStyles.gridCentre}>
-                    <div className={styles.pageBreak}>
-                        <Image
-                            src={"/media/images/fern.png"}
-                            alt={"fern"}
-                            width={400}
-                            height={400}
-                        />
-                        <Image
-                            src={"/media/images/kowhai.png"}
-                            alt={"kowhai"}
-                            width={400}
-                            height={400}
-                        />
-                    </div>
                 </div>
             </Section>
 

@@ -20,6 +20,8 @@ type PlantCardProps = {
 export default function PlantCardData({ data }: PlantCardProps){
 
     const [names, setNames] = useState(["None", "None", "None"])
+    const [mainImage, setMainImage] = useState("/media/images/loading.gif")
+    const [mainImageAlt, setMainImageAlt] = useState("Loading")
 
     // Run on page start
     useEffect(() => {
@@ -29,11 +31,42 @@ export default function PlantCardData({ data }: PlantCardProps){
 
     }, [data])
 
-    // Store all the images
-    const images = data.attachments.filter((attachment) => attachment.type === "image")
+    useEffect(() => {
+        // Get all the attachments with image type
+        let images = data?.attachments.filter((attachment) => attachment.type === "image")
 
-    // Get a random image index
-    const image_index = Math.floor(Math.random() * images.length)
+        // Set the main image
+        switch (data?.display_image){
+
+            case "Default":
+                setMainImage("/media/images/default_noImage.png")
+                setMainImageAlt("Default Image")
+                break;
+
+            case "Random":
+                // Get a random index and set the image
+                if(images){
+                    let image = images[Math.floor(Math.random() * images.length)]
+                    setMainImage(image.path)
+                    setMainImageAlt((image.meta as ImageMetaData).name)
+                }
+                break;
+
+            default:
+                // Find the image with the same name as the display image
+                if(images){
+                    let image = images.find((image) => (image.meta as ImageMetaData).name === data?.display_image)
+                    if(!image){
+                        break;
+                    }
+                    setMainImage(image.path)
+                    setMainImageAlt((image.meta as ImageMetaData).name)
+                }
+                break;
+
+        }
+    }, [])
+
 
     return(
         <>
@@ -43,8 +76,8 @@ export default function PlantCardData({ data }: PlantCardProps){
                 {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
                     <Image
-                         src={images[0] ? images[image_index].path : "/media/images/loading.gif"}
-                         alt={images[0] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                         src={mainImage}
+                         alt={mainImageAlt}
                          fill
                          style={{objectFit: "contain"}}
                     />

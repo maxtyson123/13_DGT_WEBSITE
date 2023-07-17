@@ -93,23 +93,37 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
     // Store the nutrition amd preparation section in a ref
     const nutritionRef = useRef<HTMLParagraphElement>(null)
     const preparationRef = useRef<HTMLParagraphElement>(null)
+    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
+    const [altState, setAltState] = useState<string>("Loading")
+    const [creditsState, setCreditsState] = useState<string>("Loading")
 
-    // Get the image of the part of the plant
-    let image_index = images.findIndex((image) => {
-        return (image.meta as ImageMetaData).name == section.image_of_part
-    })
+    useEffect(() => {
+        // Get the image of the part of the plant
+        if(section.image_of_part == "Default"){
+            setImageState("/media/images/default_noImage.png")
+            setAltState("No Image")
+            setCreditsState("")
+        }else{
+            let image_index = images.findIndex((image) => {
+                return (image.meta as ImageMetaData).name == section.image_of_part
+            })
+            setImageState(images[image_index].path)
+            setAltState((images[image_index].meta as ImageMetaData).name)
+            setCreditsState((images[image_index].meta as ImageMetaData).credits)
+        }
+    }, [])
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
                 <Image
-                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    src={imageState}
+                    alt={altState}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
             </div>
         </>
     )
@@ -173,23 +187,37 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     const medUseRef = useRef<HTMLDivElement>(null)
     const preparationRef = useRef<HTMLDivElement>(null)
 
-    // Get the image of the part of the plant
-    let image_index = images.findIndex((image) => {
-        return (image.meta as ImageMetaData).name == section.image
-    })
+    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
+    const [altState, setAltState] = useState<string>("Loading")
+    const [creditsState, setCreditsState] = useState<string>("Loading")
 
+    useEffect(() => {
+        // Get the image of the part of the plant
+        if(section.image == "Default"){
+            setImageState("/media/images/default_noImage.png")
+            setAltState("No Image")
+            setCreditsState("")
+        }else{
+            let image_index = images.findIndex((image) => {
+                return (image.meta as ImageMetaData).name == section.image
+            })
+            setImageState(images[image_index].path)
+            setAltState((images[image_index].meta as ImageMetaData).name)
+            setCreditsState((images[image_index].meta as ImageMetaData).credits)
+        }
+    }, [])
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
                 <Image
-                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    src={imageState}
+                    alt={altState}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
             </div>
         </>
     )
@@ -251,23 +279,37 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     const craft_useRef = useRef<HTMLDivElement>(null)
     const additional_infoRef = useRef<HTMLDivElement>(null)
 
-    // Find the same image name in the images array
-    let image_index = images.findIndex((image) => {
-        return (image.meta as ImageMetaData).name == section.image
-    })
+    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
+    const [altState, setAltState] = useState<string>("Loading")
+    const [creditsState, setCreditsState] = useState<string>("Loading")
 
+    useEffect(() => {
+        // Get the image of the part of the plant
+        if(section.image == "Default"){
+            setImageState("/media/images/default_noImage.png")
+            setAltState("No Image")
+            setCreditsState("")
+        }else{
+            let image_index = images.findIndex((image) => {
+                return (image.meta as ImageMetaData).name == section.image
+            })
+            setImageState(images[image_index].path)
+            setAltState((images[image_index].meta as ImageMetaData).name)
+            setCreditsState((images[image_index].meta as ImageMetaData).credits)
+        }
+    }, [])
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
                 <Image
-                    src={images[image_index] ? images[image_index].path : "/media/images/loading.gif"}
-                    alt={images[image_index] ? (images[image_index].meta as ImageMetaData).name : "Loading"}
+                    src={imageState}
+                    alt={altState}
                     fill
                     style={{objectFit: "contain"}}
 
                 />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {images[image_index] ? (images[image_index].meta as ImageMetaData).credits : "Uncredited"} </p>
+                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
             </div>
         </>
     )

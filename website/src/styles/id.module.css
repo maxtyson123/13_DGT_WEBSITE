@@ -233,8 +233,9 @@
      Make the bottom images smaller as now they take up the entire screen width, make it long
      */
     .bottomImages{
-        width: 50%;
+        width: 85%;
         height: 1400px;
+        font-size: 50px;
     }
 
     /*

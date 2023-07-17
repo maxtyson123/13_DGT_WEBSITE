@@ -24,6 +24,7 @@ export default function PlantPage() {
     // States for the images
     const [currentImage, setCurrentImage] = React.useState(0)
     const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
+    const [isMobile, setIsMobile] = React.useState(false)
 
     // Error state
     const [error, setError] = React.useState("")
@@ -75,7 +76,7 @@ export default function PlantPage() {
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
     }
-    
+
     // Fetch the plant data from the api for this plant on load
     useEffect(() => {
 
@@ -88,6 +89,30 @@ export default function PlantPage() {
 
 
     }, []);
+
+    // Handle screensize changes
+    useEffect(() => {
+
+        // If the screen is mobile sized, set the isMobile state to true
+        const handleResize = () => {
+            if (window.outerWidth < 800 || window.innerWidth < 800) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        }
+
+        // Add an event listener to the window to check if the screen size changes
+        window.addEventListener("resize", handleResize);
+
+        // Call the handleResize function to check the screen size on load
+        handleResize();
+
+        // Remove the event listener when the component is unmounted
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    }, [])
 
     // Update content when the plant data changes
     const setMainImageFromIndex = (index: number) => {
@@ -108,6 +133,7 @@ export default function PlantPage() {
 
     }
 
+    // Load the data when the plant data changes
     useEffect(() => {
 
         // Set the description
@@ -116,28 +142,57 @@ export default function PlantPage() {
             div.innerHTML = plantData ? plantData.long_description : "Loading...";
         }
 
+        // Get all the attachments with image type
+        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+
         // Set the main image
-        setMainImageFromIndex(0)
+        switch (plantData?.display_image){
+
+            case "Default":
+                setMainImage("/media/images/default_noImage.png")
+                break;
+
+            case "Random":
+                // Get a random index and set the image
+                if(images)
+                    setMainImageFromIndex(Math.floor(Math.random() * images.length))
+                break;
+
+            default:
+                // Find the image with the same name as the display image
+                if(images)
+                    setMainImageFromIndex(images.findIndex((image) => (image.meta as ImageMetaData).name === plantData?.display_image))
+
+        }
 
     }, [plantData]);
 
     const changeImage = (index: number) => {
 
-            // Get all the attachments with image type
-            let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+        // Get all the attachments with image type
+        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
 
-            // If there are no images then return
-            if(!images)
-                return
+        // If there are no images then return
+        if(!images)
+            return
 
-            // If the index is out of bounds then return
-            if(index < 0 || index + currentImage >= images.length - 2)
-                return;
+        // If the index is out of bounds then return
+        if(index < 0)
+            return;
 
-            // Set the current image
-            setCurrentImage(index)
+        console.log(index)
+        console.log(images.length)
+
+        // If current image is the last image then return (minus 4 because there are 4 images shown after the current one)
+        if(index >= images.length - 4)
+            return;
+
+        // Set the current image
+        setCurrentImage(index)
 
     }
+
+
 
     return (
         <>
@@ -174,7 +229,7 @@ export default function PlantPage() {
                             <div className={styles.usesContianer}>
 
                                 {plantData && plantData.use.map((use, index) => (
-                                        <p key={index} className={styles.smallInline}>{convertUseTag(use)}</p>
+                                    <p key={index} className={styles.smallInline}>{convertUseTag(use)}</p>
                                 ))}
 
                             </div>
@@ -190,62 +245,62 @@ export default function PlantPage() {
             </Section>
 
             <Section autoPadding>
-               <div className={styles.plantMainInfo}>
+                <div className={styles.plantMainInfo}>
 
-                   {/* If there is an error then display it */}
-                   { error === "" ? null : <Error error={error}/>}
+                    {/* If there is an error then display it */}
+                    { error === "" ? null : <Error error={error}/>}
 
-                      <div className={"row"}>
+                    <div className={"row"}>
 
-                          {/* Show the preferred name as the title and the others as the subtitle */}
-                          <div className={"column"}>
-                              <h1> {plantNames[0]} </h1>
-                              <h2> {plantNames[1]} | {plantNames[2]} </h2>
+                        {/* Show the preferred name as the title and the others as the subtitle */}
+                        <div className={"column"}>
+                            <h1> {plantNames[0]} </h1>
+                            <h2> {plantNames[1]} | {plantNames[2]} </h2>
 
-                              {/* The contents of this is set by JS as the description is in html format and that won't work as plaintext*/}
-                             <div className={styles.description} id={"large_description"}> </div>
-                          </div>
+                            {/* The contents of this is set by JS as the description is in html format and that won't work as plaintext*/}
+                            <div className={styles.description} id={"large_description"}> </div>
+                        </div>
 
-                          <div className={"column"}>
+                        <div className={"column"}>
 
 
-                              <div className={styles.plantImageContainer}>
+                            <div className={styles.plantImageContainer}>
 
-                                  {/* The main image, will be set to the first image until the users scrolls below to another one */}
-                                  <div className={styles.mainImage}>
-                                      <Image src={mainImage} alt={`${plantNames[0]} Header Image`} fill style={{objectFit: "contain"}}/>
-                                  </div>
+                                {/* The main image, will be set to the first image until the users scrolls below to another one */}
+                                <div className={styles.mainImage}>
+                                    <Image src={mainImage} alt={`${plantNames[0]} Header Image`} fill style={{objectFit: "contain"}}/>
+                                </div>
 
-                                  {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
-                                  <div className={styles.bottomImages}>
+                                {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
+                                <div className={styles.bottomImages}>
 
-                                      {/* Decrement the current image by 1 */}
-                                      <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/> </button>
+                                    {/* Decrement the current image by 1 */}
+                                    <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/> </button>
 
-                                      {/* Loop through 5 creating 5 images */}
-                                      {plantData && plantData.attachments.filter((attachment, index) => index <= 4 && attachment.type === "image").map((attachment, index) => (
-                                            <>
-                                              {/* On click set the main image to the image clicked */}
-                                              <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
+                                    {/* Loop through 5 creating 5 images */}
+                                    {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
+                                        <>
+                                            {/* On click set the main image to the image clicked */}
+                                            <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
 
-                                                   {/* The image, use the current shown image plus the index to get the correct 5 */}
-                                                    <Image
-                                                        src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                        alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
-                                                        fill
-                                                        style={{objectFit: "contain"}}
-                                                    />
-                                                </button>
-                                              </>
-                                      ))}
+                                                {/* The image, use the current shown image plus the index to get the correct 5 */}
+                                                <Image
+                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
+                                                    alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
+                                                    fill
+                                                    style={{objectFit: "contain"}}
+                                                />
+                                            </button>
+                                        </>
+                                    ))}
 
-                                      {/* Decrement the current image by 1 */}
-                                      <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/> </button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-               </div>
+                                    {/* Decrement the current image by 1 */}
+                                    <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/> </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Section>
 
             <Section autoPadding>
@@ -274,7 +329,7 @@ export default function PlantPage() {
                         <AutoSection
                             section={section}
                             images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
-                            isLeft={index % 2 === 0}
+                            isLeft={isMobile ? true : index % 2 === 0}
                             key={index}
                         />
                     ))}
@@ -293,7 +348,7 @@ export default function PlantPage() {
                                     </div>
                                 </div>
                             </>
-                        :
+                            :
                             <>
                             </>
                     }
@@ -324,8 +379,8 @@ export default function PlantPage() {
             </Section>
 
             <ScrollToTop/>
-                
-           
+
+
         </>
     );
 }

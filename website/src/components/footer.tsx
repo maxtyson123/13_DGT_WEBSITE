@@ -41,7 +41,7 @@ export default function Footer() {
 
                 {/* Links to the other pages */}
                 <div className={styles.links}>
-                    <h1> Rongoa </h1>
+                    <h1> Rongoā </h1>
                     <ul>
                         {/* Loop through the pageNames array and create a link for each page*/}
                         {pageNames.map((page, index) => (

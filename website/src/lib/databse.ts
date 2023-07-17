@@ -25,6 +25,7 @@ export class SQLDatabase {
     long_description: string;
     author: string;
     last_modified: string;
+    display_image: string;
 
     // Attachments Table
     attachment_path: string;
@@ -85,6 +86,7 @@ export class SQLDatabase {
         this.long_description           = "long_description";
         this.author                     = "author";
         this.last_modified              = "last_modified";
+        this.display_image              = "display_image";
 
         // Attachments Table
         this.attachment_path            = "attachments_path";

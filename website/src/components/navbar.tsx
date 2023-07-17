@@ -93,7 +93,7 @@ function DesktopNavbar({currentPage} : navbarProps){
                 <Link scroll={false} href="/">
                     <Image
                         src="/media/images/logo.svg"
-                        alt="Rongoa Logo"
+                        alt="Rongoā Logo"
                         width={50}
                         height={100}
                         className={styles.logo}
@@ -101,7 +101,7 @@ function DesktopNavbar({currentPage} : navbarProps){
 
                 </Link>
 
-                <Link scroll={false} href="/"> <h1 className={styles.title} > Rongoa </h1> </Link>
+                <Link scroll={false} href="/"> <h1 className={styles.title} > Rongoā </h1> </Link>
 
                 <div className={styles.navBreak}></div>
 
@@ -158,7 +158,7 @@ function MobileNavbar({currentPage} : navbarProps){
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
                 <Link scroll={false} href="/" className={styles.navItem}>
                     <FontAwesomeIcon icon={faLeaf}/>
-                    <p> Rongoa </p>
+                    <p> Rongoā </p>
                 </Link>
 
                 {

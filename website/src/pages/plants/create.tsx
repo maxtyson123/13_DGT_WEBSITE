@@ -1364,7 +1364,17 @@ function InfoDisplayed({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
         setRenderKey(prevState => prevState + 1)
     }
 
-    const images = imageRef ? imageRef.current.map((value, index) => {return  value.state.image_name}) : ["No Images"];
+    let images: string[] = [];
+
+    if(imageRef){
+        if(imageRef.current.length > 0) {
+            images = imageRef.current.map((value, index) => {
+                return value.state.image_name
+            });
+        }
+    }
+
+    images.unshift("Default")
 
     return(
         <>
@@ -1446,6 +1456,7 @@ export default function CreatePlant() {
     const [smallDescription, setSmallDescription]   = useState("")
     const [largeDescription, setLargeDescription]   = useState("")
     const [location, setLocation]                   = useState("")
+    const [displayImage, setDisplayImage]           = useState("")
 
     // Section Refs
     const imageInfoRef                 = useRef<ImageInfo[]>([]);
@@ -1466,6 +1477,7 @@ export default function CreatePlant() {
     const [renderKeyCustom, setRenderKeyCustom] = useState(0);
     const [renderKeySource, setRenderKeySource] = useState(0);
     const [renderKeyFile, setRenderKeyFile] = useState(0);
+    const [renderKeyDisplayImage, setRenderKeyDisplayImage] = useState(0);
 
 
     // Value Handlers
@@ -1476,6 +1488,7 @@ export default function CreatePlant() {
     const handleSmallDescriptionChange = (value : string) => { setSmallDescription(value) };
     const handleLargeDescriptionChange = (value : string) => { setLargeDescription(value) };
     const handleLocationChange = (value : string) => { setLocation(value) };
+    const handleDisplayImageChange = (value : string) => { setDisplayImage(value) };
 
     // New Section Setters
     const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKeyDate(prevState => prevState + 1)}
@@ -1495,7 +1508,7 @@ export default function CreatePlant() {
     const [smallDescriptionValidationState, setSmallDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [largeDescriptionValidationState, setLargeDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [locationValidationState, setLocationValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
-
+    const [displayImageValidationState, setDisplayImageValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
 
     // Update the page title when name changes
     useEffect(() => {
@@ -1516,12 +1529,6 @@ export default function CreatePlant() {
 
     // Validate the input
     const validateInput = () => {
-        // If there is no images then throw an error
-        if(imageInfoRef.current.length === 0){
-            setError("Please add at least one image");
-            scrollToElement("errorSection");
-            return false;
-        }
 
         //Allow for multiple invalid inputs
         let isValid = true;
@@ -1585,6 +1592,13 @@ export default function CreatePlant() {
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "location";
         } else { setLocationValidationState(["success", "No Error"] as [ValidationState, string]) }
+
+        // Display Image
+        if(displayImage === ""){
+            setDisplayImageValidationState(["error", "Please select a display image"])
+            isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "display-image";
+        }else { setDisplayImageValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Validate the image info
         for (let i = 0; i < imageInfoRef.current.length; i++) {
@@ -1715,6 +1729,7 @@ export default function CreatePlant() {
 
         plantOBJ.author = cleanInput(plantOBJ.author);
         plantOBJ.last_modified = new Date().toISOString()
+        plantOBJ.display_image = cleanInput(displayImage);
 
         // Image info
         for(let i = 0; i < imageInfoRef.current.length; i++) {
@@ -2432,12 +2447,27 @@ export default function CreatePlant() {
         }
     }
 
+    // Images used to select the display image
+    const displayImageRef = useRef(["Default"]);
+
     // When the names are updated re-render the sections that use images
     const updateNames = () => {
         setRenderKeyEdible(prevState => prevState + 1)
         setRenderKeyMedical(prevState => prevState + 1)
         setRenderKeyCraft(prevState => prevState + 1)
+        setRenderKeyDisplayImage(prevState => prevState + 1)
+
+        displayImageRef.current = []
+
+        if(imageInfoRef.current.length > 0) {
+            displayImageRef.current = imageInfoRef.current.map((value, index) => {
+                return value.state.image_name
+            });
+            displayImageRef.current.unshift("Random")
+        }
+        displayImageRef.current.unshift("Default")
     }
+
 
     useEffect(() => {
 
@@ -2583,6 +2613,21 @@ export default function CreatePlant() {
                                             changeEventHandler={handleLocationChange}
                                         />
                                     </div>
+
+                                    {/* Plant Display Image */}
+                                    <div className={styles.formItem} id={"display-image"} >
+                                        <DropdownInput
+                                            key={renderKeyDisplayImage}
+                                            placeHolder={"Display Image"}
+                                            defaultValue={importedJSON.display_image}
+                                            required={true}
+                                            state={displayImageValidationState[0]}
+                                            errorText={displayImageValidationState[1]}
+                                            options={displayImageRef.current}
+                                            changeEventHandler={handleDisplayImageChange}
+                                        />
+                                    </div>
+
                                 </div>
 
                                 {/* Months ready for use */}

@@ -4,7 +4,7 @@
     <img src="/website/public/media/images/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Rongoa Website</h3>
+<h3 align="center">Rongoā Website</h3>
 
   <p align="center">
     A website to dynamically display information about various New Zealand  plants and their usages
@@ -93,7 +93,7 @@ npm install
 
 4. Github Setup:
 * Go to [Github Apps](https://github.com/settings/apps) and press 'New App'
-* Set the GitHub App name to Rongoa
+* Set the GitHub App name to Rongoā
 * Set the homepage and callback URLs to your site, e.g.
 ```sh
 http://localhost:3000/api/auth/callback/github

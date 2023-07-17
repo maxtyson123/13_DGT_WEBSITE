@@ -10,6 +10,7 @@ CREATE TABLE plants (
     long_description TEXT,
     author TEXT,
     last_modified DATE,
+    display_image TEXT,
 	PRIMARY KEY (id)
 );
 
