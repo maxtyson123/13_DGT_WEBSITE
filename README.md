@@ -115,6 +115,11 @@ http://localhost:3000/api/auth/callback/github
 To change accessibility settings of the site, click on the credits chip in the bottom left to open a pop-up where you can toggle dark mode or dyslexic mode.
 
 ##### Whitelist users
+
+To whitelist a user, go to the [/admin](https://13-dgt-website.vercel.app/admin) page and enter the email of the user you wish to whitelist. Once you are finished, press the add button.
+
+You will have to first mannually add your email in the database to get acess to that page for the first time, once done you can add future users from the admin panel.
+
 To add an API key create a new entry in the auth table with the 'entry' column being the key and the 'type' being 'api'
 ```sh
 INSERT INTO auth (auth_entry, auth_type)
