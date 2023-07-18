@@ -41,8 +41,8 @@ export default async function handler(
         const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
         // Check if the user is allowed to upload
-        if(!await CheckWhitelisted(request, response, client)) {
-            return response.status(401).json({ error: 'User not authorised to remove data' });
+        if(!(await CheckWhitelisted(request, response, client))) {
+            return response.status(401).json({ error: 'User not authorised to remove data'});
         }
 
         // Create the query

@@ -28,6 +28,8 @@ export default async function handler(
            operation,
            entry,
            type,
+           nickname,
+           permissions
         } = request.query;
 
         console.log(operation)
@@ -39,25 +41,24 @@ export default async function handler(
         switch (operation) {
             case "add":
                 // Check if the entry is valid
-                if(!entry || !type){
-                    return response.status(400).json({ error: 'Missing entry or type'});
+                if(!entry || !type || !nickname || !permissions){
+                    return response.status(400).json({ error: 'Missing entry, type, nickname or permissions'});
                 }
 
                 // Make the query
-                query = `INSERT INTO auth (${tables.auth_entry}, ${tables.auth_type}) VALUES ('${entry}', '${type}')`;
-
+                query = `INSERT INTO auth (${tables.auth_entry}, ${tables.auth_type}, ${tables.auth_nickname}, ${tables.auth_permissions}) VALUES ('${entry}', '${type}', '${nickname}', '${permissions}')`;
                 const new_auths = await makeQuery(query, client)
                 return response.status(200).json({ data: new_auths });
 
 
             case "remove":
                 // Check if the entry is valid
-                if(!entry || !type){
-                    return response.status(400).json({ error: 'Missing entry or type'});
+                if(!entry || !type || !nickname || !permissions){
+                    return response.status(400).json({ error: 'Missing entry, type, nickname or permissions'});
                 }
 
                 // Make the query
-                query = `DELETE FROM auth WHERE ${tables.auth_entry} = '${entry}' AND ${tables.auth_type} = '${type}'`;
+                query = `DELETE FROM auth WHERE ${tables.auth_entry} = '${entry}' AND ${tables.auth_type} = '${type}' AND ${tables.auth_nickname} = '${nickname}' AND ${tables.auth_permissions} = '${permissions}'`;
 
                 const remove_auths = await makeQuery(query, client)
                 return response.status(200).json({ data: remove_auths });

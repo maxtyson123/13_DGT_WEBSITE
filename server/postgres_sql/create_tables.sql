@@ -121,5 +121,7 @@ REFERENCES plants(id);
 CREATE TABLE auth (
     id SERIAL PRIMARY KEY,
     entry TEXT,
-    type TEXT
+    type TEXT,
+    nickname TEXT,
+    permissions TEXT,
 );

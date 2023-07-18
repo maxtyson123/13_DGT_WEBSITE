@@ -103,5 +103,7 @@ CREATE TABLE edible (
 CREATE TABLE auth (
     id SERIAL PRIMARY KEY,
     auth_entry TEXT,
-    auth_type TEXT
+    auth_type TEXT,
+    auth_nickname TEXT,
+    auth_permissions TEXT
 );

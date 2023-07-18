@@ -68,6 +68,8 @@ export class SQLDatabase {
     // Auth Table
     auth_entry: string;
     auth_type: string;
+    auth_nickname: string;
+    auth_permissions: string;
 
     constructor() {
         this.database = "rongoa8jwons3_rongoadb"
@@ -129,6 +131,8 @@ export class SQLDatabase {
         // Auth Table
         this.auth_entry                 = "auth_entry";
         this.auth_type                  = "auth_type";
+        this.auth_nickname              = "auth_nickname";
+        this.auth_permissions           = "auth_permissions";
 
     }
 }
@@ -194,6 +198,8 @@ export class PostgresSQL extends SQLDatabase{
         // Auth Table
         this.auth_entry                 = "entry";
         this.auth_type                  = "type";
+        this.auth_nickname              = "nickname";
+        this.auth_permissions           = "permissions";
     }
 }
 

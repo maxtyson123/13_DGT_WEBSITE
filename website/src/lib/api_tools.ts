@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {getTables, makeQuery} from "@/lib/databse";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {USE_POSTGRES} from "@/lib/constants";
 
 /**
  * Get the origin of the request from the headers of a next api request
@@ -61,7 +62,7 @@ export async function CheckWhitelisted(request: NextApiRequest, response: NextAp
         // If there is a user session then get the email otherwise default to the API key
         if(session){
             if(session.user === undefined){
-                return false;
+                return null;
             }
             const user_email = session.user.email;
 
@@ -81,7 +82,7 @@ export async function CheckWhitelisted(request: NextApiRequest, response: NextAp
 
         // If there is no API key then return an error
         if(!api_key) {
-            return false;
+            return null;
         }
 
         // Check if the API key is allowed in the database
@@ -93,8 +94,11 @@ export async function CheckWhitelisted(request: NextApiRequest, response: NextAp
 
     // Check if the user is allowed to upload
     if(!auth_result) {
-        return true;
+        return null;
     }else{
-        return true;
+        if(USE_POSTGRES)
+            return auth_result[0].permissions;      //TODO: UNTESTED
+        else
+            return auth_result[0].auth_permissions;
     }
 }

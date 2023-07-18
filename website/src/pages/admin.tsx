@@ -14,10 +14,13 @@ import Image from "next/image";
 import axios from "axios";
 import {DropdownInput, SmallInput} from "@/components/input_sections";
 import {useRouter} from "next/router";
+import {USE_POSTGRES} from "@/lib/constants";
 
 interface authEntry {
     value: string,
     type: string,
+    nickname: string,
+    permissions: string,
 }
 
 interface plantEntry {
@@ -39,13 +42,13 @@ export default function PlantIndex(){
     // New User Data
     const [newAuthEntry, setNewAuthEntry] = React.useState("")
     const [newAuthType, setNewAuthType] = React.useState("")
+    const [newAuthNickname, setNewAuthNickname] = React.useState("")
+    const [newAuthPermissions, setNewAuthPermissions] = React.useState("")
 
     // Error
     const [error, setError] = React.useState("")
 
-    const updateNewAuthEntry = (value: string) => { setError(""); setNewAuthEntry(value) }
-    const updateNewAuthType = (value: string) => { setError(""); setNewAuthType(value) }
-
+    // Router
     const router = useRouter()
 
     // Check the user is authed
@@ -69,7 +72,11 @@ export default function PlantIndex(){
 
         // If the message is a success then the user is admin
         if(data.message == "User whitelisted"){
-            setUserAllowed(2)
+            if(data.permissions == "admin"){
+                setUserAllowed(3)
+            }else{
+                setUserAllowed(2)
+            }
             await getAdminAuthData()
             await getPlantData()
         }else{
@@ -88,7 +95,12 @@ export default function PlantIndex(){
 
         // Loop through the data and set the auths
         for (let i = 0; i < data.length; i++) {
-                auths.push({value: data[i].auth_entry, type: data[i].auth_type})
+            if(USE_POSTGRES){
+                auths.push({value: data[i].entry, type: data[i].type, nickname: data[i].nickname, permissions: data[i].permissions})
+            }else{
+                auths.push({value: data[i].auth_entry, type: data[i].auth_type, nickname: data[i].auth_nickname, permissions: data[i].auth_permissions})
+            }
+
         }
 
         // Set the plant auths
@@ -118,18 +130,13 @@ export default function PlantIndex(){
         setError("")
 
         // Check the new auth entry is valid
-        if(newAuthEntry == ""){
-            setError("Please enter an entry")
-            return
-        }
-
-        if(newAuthType == ""){
-            setError("Please enter a type")
-            return
-        }
+        if(newAuthEntry == ""){ setError("Please enter an entry"); return}
+        if(newAuthType == ""){ setError("Please enter a type"); return}
+        if(newAuthNickname == ""){ setError("Please enter a nickname"); return}
+        if(newAuthPermissions == ""){ setError("Please enter permissions"); return}
 
         // Update the auth entry
-        const response = await axios.get("/api/auth/edit_auth?operation=add&entry=" + newAuthEntry + "&type=" + newAuthType)
+        const response = await axios.get("/api/auth/edit_auth?operation=add&entry=" + newAuthEntry + "&type=" + newAuthType + "&nickname=" + newAuthNickname + "&permissions=" + newAuthPermissions)
 
         // Reload the auth data
         await getAdminAuthData()
@@ -141,7 +148,7 @@ export default function PlantIndex(){
         setError("")
 
         // Update the auth entry
-        const response = await axios.get("/api/auth/edit_auth?operation=remove&entry=" + entry + "&type=" + type)
+        const response = await axios.get("/api/auth/edit_auth?operation=remove&entry=" + entry + "&type=" + type + "&nickname=" + newAuthNickname + "&permissions=" + newAuthPermissions)
 
         // Reload the auth data
         await getAdminAuthData()
@@ -208,69 +215,100 @@ export default function PlantIndex(){
                             error ?
                                 <Error error={error}/> : <></>
                         }
+
+                        <div className={styles.adminPanel}>
+                            <br/>
                         {
-                            userAllowed == 2 ?
-                                <div className={styles.adminPanel}>
-                                    <br/>
-                                    <h1> Users </h1>
-                                    <br/>
-                                    <table>
-                                        <tr>
-                                            <th>Auth Entry</th>
-                                            <th>Auth Type</th>
-                                            <th>Action</th>
-                                        </tr>
+                        userAllowed == 3 ?
+                            <>
+                            <h1> Users </h1>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <th>Entry</th>
+                                    <th>Type</th>
+                                    <th>Nickname</th>
+                                    <th>Permissions</th>
+                                    <th>Action</th>
+                                </tr>
 
-                                    {authData.map((auth, index) => (
-                                        <tr key={index}>
-                                            <td> {auth.value} </td>
-                                            <td> { auth.type.charAt(0).toUpperCase() + auth.type.slice(1)} </td>
-                                            <td> <button onClick={()=>{
-                                                removeAuthEntry(auth.value, auth.type)
-                                            }}> Remove </button> </td>
-                                        </tr>
-                                    ))}
-                                        <tr>
-                                            <td>
-                                                <SmallInput placeHolder={"New Entry"} required={false} state={"normal"} changeEventHandler={setNewAuthEntry}/>
-                                            </td>
-                                            <td>
-                                                <DropdownInput placeHolder={"Type"} required={false} state={"normal"} options={["email", "api"]} changeEventHandler={setNewAuthType}/>
-                                            </td>
-                                            <td> <button onClick={addAuthEntry}> Add </button></td>
-                                        </tr>
+                            {authData.map((auth, index) => (
+                                <tr key={index}>
+                                    <td> {auth.value} </td>
+                                    <td> { auth.type.charAt(0).toUpperCase() + auth.type.slice(1)} </td>
+                                    <td> { auth.nickname} </td>
+                                    <td> { auth.permissions.charAt(0).toUpperCase() + auth.permissions.slice(1)} </td>
+                                    <td> <button onClick={()=>{
+                                        removeAuthEntry(auth.value, auth.type)
+                                    }}> Remove </button> </td>
+                                </tr>
+                            ))}
+                                <tr>
+                                    <td>
+                                        <SmallInput placeHolder={"New Entry"} required={false} state={"normal"} changeEventHandler={setNewAuthEntry}/>
+                                    </td>
+                                    <td>
+                                        <DropdownInput placeHolder={"Type"} required={false} state={"normal"} options={["email", "api"]} changeEventHandler={setNewAuthType}/>
+                                    </td>
+                                    <td>
+                                        <SmallInput placeHolder={"Nickname"} required={false} state={"normal"} changeEventHandler={setNewAuthNickname}/>
+                                    </td>
+                                    <td>
+                                        <DropdownInput placeHolder={"Permissions"} required={false} state={"normal"} options={["member", "admin"]} changeEventHandler={setNewAuthPermissions}/>
+                                    </td>
+                                    <td> <button onClick={addAuthEntry}> Add </button></td>
+                                </tr>
 
-                                    </table>
-                                    <br/>
-                                    <h1> Plants </h1>
-                                    <table>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>English Name</th>
-                                            <th>Latin Name</th>
-                                            <th>Maori Name</th>
-                                            <th>Change</th>
-                                            <th>Delete</th>
-                                        </tr>
-
-                                        {plantData.map((plant, index) => (
-                                            <tr key={index}>
-                                                <td> {plant.id} </td>
-                                                <td> {plant.english_name} </td>
-                                                <td> {plant.latin_name} </td>
-                                                <td> {plant.maori_name} </td>
-                                                <td> <button onClick={()=>{
-                                                    router.push("/plants/create?id=" + plant.id)
-                                                }}> Edit </button> </td>
-                                                <td> <button onClick={() => {removePlant(plant.id)}}> Remove </button> </td>
+                            </table>
+                            </>
+                            :
+                            <></>
+                            }
+                            {
+                                userAllowed >= 2 ?
+                                    <>
+                                        <br/>
+                                        <h1> Plants </h1>
+                                        <button className={styles.createPlant} onClick={()=>{router.push("/plants/create")}}> Add Plant </button>
+                                        <br/>
+                                        <table>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>English Name</th>
+                                                <th>Latin Name</th>
+                                                <th>Maori Name</th>
+                                                <th>Change</th>
+                                                <th>Delete</th>
                                             </tr>
-                                        ))}
 
-                                    </table>
-                                </div>
-                                :
-                                <></>
-                        }
+                                            {plantData.map((plant, index) => (
+                                                <tr key={index}>
+                                                    <td> {plant.id} </td>
+                                                    <td> {plant.english_name} </td>
+                                                    <td> {plant.latin_name} </td>
+                                                    <td> {plant.maori_name} </td>
+                                                    <td> <button onClick={()=>{
+                                                        router.push("/plants/create?id=" + plant.id)
+                                                    }}> Edit </button> </td>
+                                                    <td>
+                                                        {userAllowed == 3?
+                                                            <>
+                                                                <button onClick={() => {removePlant(plant.id)}}> Remove </button>
+                                                            </>
+                                                            :
+                                                            <>
+                                                                Not Allowed
+                                                            </>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </table>
+                                    </>
+                                    :
+                                    <></>
+                            }
+                        </div>
                     </>
                 }
             </Section>

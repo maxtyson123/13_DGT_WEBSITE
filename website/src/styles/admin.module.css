@@ -100,3 +100,11 @@
     background-color: var(--darker-secondary-gray);
     color: var(--secondary-gray)
 }
+
+.adminPanel .createPlant {
+    width: 100%;
+    background-color: var(--main-green);
+    color: var(--text-light);
+    font-size: 24px;
+    box-shadow: 0 2px 2px var(--shadow-less);
+}
