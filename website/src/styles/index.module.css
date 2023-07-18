@@ -9,13 +9,6 @@
     grid-row-gap: 25px;
 }
 
-.title{
-    background: url("/media/images/pohotukawa.png");
-    background-size: cover;
-    -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
-    padding: 0;
-}
 
 /*
  Make the title have a font size of 60px and a line height of 103%.
@@ -23,11 +16,21 @@
  */
 .title h1{
     font-size: 60px;
-    line-height: 103%;
     padding: 4%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: rgba(0, 0, 0, 0.2);
+}
+
+/**
+ Move the hero image behind the text and make it cover the whole container.
+ Make it smaller and lighter to make the text stand out.
+ Move to the left so that the edge touches the edge of the container.
+
+ */
+.heroImage{
+    z-index: -1;
+    object-fit: cover;
+    scale: 0.9;
+    margin-left: 5%;
+    opacity: 0.6;
 }
 
 /*

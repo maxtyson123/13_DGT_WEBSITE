@@ -194,7 +194,7 @@ export default function PlantIndex(){
                             userAllowed == 0 ?
                                 <div className={styles.loadingAdminData}>
                                     <Image
-                                        src={"/media/images/loading.gif"}
+                                        src={"/media/images/old_loading.gif"}
                                         alt={"loading"}
                                         width={100}
                                         height={100}

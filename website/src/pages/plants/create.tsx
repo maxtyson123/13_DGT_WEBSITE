@@ -2492,10 +2492,10 @@ export default function CreatePlant() {
             <Section autoPadding>
 
                 {/* If something is set to be loading on the page then show the loading screen */}
-                { isLoading ?
+                { !isLoading ?
                     <div className={styles.loadingContainer}>
-                        <Image src={"/media/images/loading.gif"} alt={"Loading.."} width={100} height={100}/>
-                        <h1> Loading... </h1>
+                        <Image src={"/media/images/old_loading.gif"} alt={"Loading.."} width={100} height={100}/>
+                        <h1>Uploading...</h1>
                         <h2>{progressMessage}...</h2>
                     </div>
                     : null}

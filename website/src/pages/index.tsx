@@ -12,8 +12,8 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
-import ScrollingPlant from "@/components/scrolling_plant";
 import {globalStyles} from "@/lib/global_css";
+import Image from "next/image";
 
 export default function Home() {
     const pageName = "Home"
@@ -96,15 +96,20 @@ export default function Home() {
                   {/* Container for the welcome message and search box */}
                    <div className={styles.welcomeContainer}>
 
-                       {/* Place the plant model on the right */}
-                       <div className={styles.plantContainer}>
-                           <ScrollingPlant/>
-                       </div>
+                       <Image
+                           src={"/media/images/hero_image.png"}
+                           alt={"Plant Hero Image"}
+                           fill={true}
+                           className={styles.heroImage}
+                       />
 
                        {/* Place the title and description on the left */}
                        <div className={styles.title}>
                            <h1 > Rongoā </h1>
                        </div>
+
+                       {/* Spacing */}
+                       <div></div>
 
 
                        <p className={styles.description}>
