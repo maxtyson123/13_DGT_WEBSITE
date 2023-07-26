@@ -15,8 +15,6 @@ interface plantEntry {
 }
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-const numbers = "0123456789".split("")
-const symbols = "!@#$%^&*()_+-=[]{};':\",./<>?".split("")
 
 export default function PlantIndex(){
     const pageName = "Plant Index"
@@ -137,19 +135,6 @@ export default function PlantIndex(){
                             })
                         }
 
-                        {/* Loop through the numbers and add a link for each number */}
-                        {
-                            numbers.map((number) => {
-                                return <p key={number} onClick={() => {scrollID(number)}}>{number}</p>
-                            })
-                        }
-
-                        {/* Loop through the symbols and add a link for each symbol */}
-                        {
-                            symbols.map((symbol) => {
-                                return <p key={symbol} onClick={() => {scrollID(symbol)}}>{symbol}</p>
-                            })
-                        }
 
 
 
@@ -164,20 +149,6 @@ export default function PlantIndex(){
                     })
                 }
 
-                {/* Loop through the numbers and add a section for each number */}
-                {
-                    numbers.map((number) => {
-                        return <PlantIndexEntry key={number} letter={number} plants={plants}/>
-                    })
-                }
-
-                {/* Loop through the symbols and add a section for each symbol */}
-                {
-                    symbols.map((symbol) => {
-                        return <PlantIndexEntry key={symbol} letter={symbol} plants={plants}/>
-                    })
-
-                }
             </Section>
 
             {/* Page footer */}
