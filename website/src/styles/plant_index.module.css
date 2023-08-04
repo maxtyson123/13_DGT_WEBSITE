@@ -102,3 +102,15 @@
     justify-items: center;
     scale: 0.8;
 }
+
+.info{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    background-color: var(--secondary-gray);
+    padding: 20px;
+    border-radius: 20px;
+
+}

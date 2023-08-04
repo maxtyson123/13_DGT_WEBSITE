@@ -1,8 +1,9 @@
 import styles from "@/styles/credits.module.css";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCodeBranch} from "@fortawesome/free-solid-svg-icons";
+import {faCodeBranch, faCopyright} from "@fortawesome/free-solid-svg-icons";
 import {DarkMode, Dyslexic} from "@/components/accessibility";
+import Image from "next/image";
 
 /**
  * Renders the Credits component which displays the credits information and additional accessibility options.
@@ -46,6 +47,43 @@ export default function Credits(){
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+interface CreditedImageProps {
+    url: string,
+    alt: string,
+    credits: string,
+    colour?: string
+}
+
+export function CreditedImage({url, alt, credits, colour = "gray"}: CreditedImageProps) {
+
+    const [backgroundColour, setBackgroundColour] = useState(styles.gray)
+
+    useEffect(() => {
+        switch (colour) {
+            case "gray":
+                setBackgroundColour(styles.gray)
+                break
+            case "white":
+                setBackgroundColour(styles.white)
+                break
+        }
+    }, [])
+
+
+
+    return(
+        <>
+            <Image
+                src={url}
+                alt={alt}
+                fill
+                style={{objectFit: "contain"}}
+            />
+            <p className={styles.credits + " " + backgroundColour}> <FontAwesomeIcon icon={faCopyright}/> {credits} </p>
         </>
     )
 }

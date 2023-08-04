@@ -14,6 +14,7 @@ import {convertUseTag} from "@/components/plant_card";
 import Image from "next/image";
 import {AttachmentSection, AutoSection, SourceSection} from "@/components/plant_sections";
 import {Error} from "@/components/error";
+import {CreditedImage} from "@/components/credits";
 
 export default function PlantPage() {
 
@@ -24,6 +25,7 @@ export default function PlantPage() {
     // States for the images
     const [currentImage, setCurrentImage] = React.useState(0)
     const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
+    const [mainImageCredits, setMainImageCredits] = React.useState("")
     const [isMobile, setIsMobile] = React.useState(false)
 
     // Error state
@@ -95,7 +97,7 @@ export default function PlantPage() {
 
         // If the screen is mobile sized, set the isMobile state to true
         const handleResize = () => {
-            if (window.outerWidth < 800 || window.innerWidth < 800) {
+            if (window.outerWidth < 1500 || window.innerWidth < 1500) {
                 setIsMobile(true);
             } else {
                 setIsMobile(false);
@@ -130,6 +132,7 @@ export default function PlantPage() {
 
         // Set the current image
         setMainImage(images[index].path)
+        setMainImageCredits((images[index].meta as ImageMetaData).credits)
 
     }
 
@@ -268,7 +271,7 @@ export default function PlantPage() {
 
                                 {/* The main image, will be set to the first image until the users scrolls below to another one */}
                                 <div className={styles.mainImage}>
-                                    <Image src={mainImage} alt={`${plantNames[0]} Header Image`} fill style={{objectFit: "contain"}}/>
+                                    <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`} credits={mainImageCredits}/>
                                 </div>
 
                                 {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}

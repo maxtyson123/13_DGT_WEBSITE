@@ -49,3 +49,27 @@
 .item a{
     margin-left: 5px;
 }
+
+/*
+ Credits for the image needs to be displayed on top of the image so use absolute positioning with z index
+ Make the background the secondary gray and the text dark
+ Round the corners in a way that keeps the roundness of the image container
+ */
+.credits{
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 20px 0 20px;
+    padding: 2px 8px 2px 8px;
+}
+
+.gray{
+    color: var(--text-dark);
+    background-color: var(--secondary-gray);
+}
+
+.white{
+    color: var(--text-dark);
+    background-color: var(--main-background);
+}

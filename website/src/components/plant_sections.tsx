@@ -1,9 +1,7 @@
 import styles from "@/styles/plant_sections.module.css"
 import React, {useEffect, useRef, useState} from "react";
-import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faCopyright,
     faFile,
     faFileAlt,
     faFileArchive,
@@ -30,6 +28,7 @@ import {
     SourceSectionData
 } from "@/lib/plant_data";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
+import {CreditedImage} from "@/components/credits";
 
 interface AutoSectionProps{
     section: any
@@ -116,14 +115,7 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <Image
-                    src={imageState}
-                    alt={altState}
-                    fill
-                    style={{objectFit: "contain"}}
-
-                />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
+                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
             </div>
         </>
     )
@@ -210,14 +202,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <Image
-                    src={imageState}
-                    alt={altState}
-                    fill
-                    style={{objectFit: "contain"}}
-
-                />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
+                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
             </div>
         </>
     )
@@ -302,14 +287,7 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <Image
-                    src={imageState}
-                    alt={altState}
-                    fill
-                    style={{objectFit: "contain"}}
-
-                />
-                <p className={styles.credits}> <FontAwesomeIcon icon={faCopyright}/> {creditsState} </p>
+                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
             </div>
         </>
     )

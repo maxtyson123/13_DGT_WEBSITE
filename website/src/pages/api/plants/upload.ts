@@ -115,6 +115,13 @@ export default async function handler(
         let getIDQuery = "(SELECT id FROM new_plant)";
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
+        // If the attachment paths have / in them then get the last part of the path
+        for(let i = 0; i < attachment_paths.length; i++){
+            if(attachment_paths[i].includes("/")){
+                attachment_paths[i] = attachment_paths[i].split("/").pop();
+            }
+        }
+
         // If it is editing then insert at the id instead of generating a new one
         if(edit_id){
             insertQuery += `${tables.id}, `;

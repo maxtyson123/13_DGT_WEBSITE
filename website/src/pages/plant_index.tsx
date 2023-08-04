@@ -8,10 +8,12 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/plant_index.module.css";
 import axios from "axios";
 import Stats from "@/components/stats";
+import {DropdownInput} from "@/components/input_sections";
 
 interface plantEntry {
     id: number,
     name: string,
+    tag: string
 }
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
@@ -19,10 +21,15 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 export default function PlantIndex(){
     const pageName = "Plant Index"
     const [plants, setPlants] = React.useState<plantEntry[] | null>(null)
+    const [uses, setUses] = React.useState<plantEntry[] | null>(null)
+    const [indexItems, setIndexItems] = React.useState<plantEntry[] | null>(null)
+
+    // Filter
+    const [currentFilter, setCurrentFilter] = React.useState<string>("Plant Names")
+    const filterOptions = ["Plant Names", "English Names", "Maori Names", "Latin Names", "Plant Uses", "Craft Uses", "Medical Uses", "Edible Uses"]
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
-
 
     // Get the plant ids
     useEffect(() => {
@@ -58,17 +65,17 @@ export default function PlantIndex(){
 
                 // If there is an english name then add it to the array
                 if (data[i].english_name !== null) {
-                    ids.push({id: data[i].id, name: data[i].english_name})
+                    ids.push({id: data[i].id, name: data[i].english_name, tag: "english"})
                 }
 
                 // If there is a maori name then add it to the array
                 if (data[i].maori_name !== null) {
-                    ids.push({id: data[i].id, name: data[i].maori_name})
+                    ids.push({id: data[i].id, name: data[i].maori_name, tag: "maori"})
                 }
 
                 // If there is a latin name then add it to the array
                 if (data[i].latin_name !== null) {
-                    ids.push({id: data[i].id, name: data[i].latin_name})
+                    ids.push({id: data[i].id, name: data[i].latin_name, tag: "latin"})
                 }
 
             }
@@ -83,6 +90,10 @@ export default function PlantIndex(){
             // TODO: Handle error
 
         }
+    }
+
+    const getPlantUses = async () => {
+
     }
 
     // Instead of using a link to scroll to the element, use this function as it gives space for the navbar and scrolls smoothly
@@ -101,6 +112,66 @@ export default function PlantIndex(){
             window.scrollTo({ top: dims.top - 150 + window.scrollY, behavior: 'smooth' });
         }
     }
+
+    useEffect(() => {
+
+        if(!plants) return;
+
+        // Filter the plants based on the current filter
+        let items : plantEntry[] = []
+
+        // The uses may not have been fetched yet
+        if(currentFilter.includes("Uses")){
+            if(!uses){
+                getPlantUses().then(() => {console.log("Finished getting plant uses")}).catch((error) => {console.log(error)})
+                return;
+            }
+        }
+
+
+        switch (currentFilter) {
+            case "Plant Names":
+                items = plants
+                break;
+
+            case "English Names":
+                items = plants.filter((plant) => {return plant.tag === "english"})
+                break;
+
+            case "Maori Names":
+                items = plants.filter((plant) => {return plant.tag === "maori"})
+                break;
+
+            case "Latin Names":
+                items = plants.filter((plant) => {return plant.tag === "latin"})
+                break;
+
+            case "Plant Uses":
+                if(!uses) break;
+                items = uses
+                break;
+
+            case "Craft Uses":
+                if(!uses) break;
+                items = uses.filter((use) => {return use.tag === "craft"})
+                break;
+
+            case "Medical Uses":
+                if(!uses) break;
+                items = uses.filter((use) => {return use.tag === "medical"})
+                break;
+
+            case "Edible Uses":
+                if(!uses) break;
+                items = uses.filter((use) => {return use.tag === "edible"})
+                break;
+
+        }
+
+        // Update the index items
+        setIndexItems(items)
+
+    }, [plants, currentFilter, uses])
 
     return(
         <>
@@ -122,6 +193,15 @@ export default function PlantIndex(){
                 </div>
             </Section>
 
+            <Section autoPadding>
+                <div className={styles.info}>
+                    <p> This page contains a list of all the plants on the website. The plants are sorted alphabetically. </p>
+                    <p> Click on a plant to view its page. </p>
+                    <p> Use the dropdown below to select what the index should display</p>
+                    <DropdownInput placeHolder={"Index Filter"} required={false} state={"normal"} options={filterOptions} defaultValue={"Plant Names"} changeEventHandler={setCurrentFilter}/>
+                </div>
+            </Section>
+
             {/* Ids */}
             <Section autoPadding>
                 <div className={styles.topBar}>
@@ -135,17 +215,13 @@ export default function PlantIndex(){
                             })
                         }
 
-
-
-
                     </div>
-
                 </div>
 
                 {/* Loop through the alphabet and add a section for each letter */}
                 {
                     alphabet.map((letter) => {
-                        return <PlantIndexEntry key={letter} letter={letter} plants={plants}/>
+                        return <PlantIndexEntry key={letter} letter={letter} plants={indexItems}/>
                     })
                 }
 

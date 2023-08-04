@@ -3,6 +3,7 @@ import Link from "next/link";
 import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
+import {CreditedImage} from "@/components/credits";
 
 // Define the props for the plant card and the types for the plant data
 type PlantCardProps = {
@@ -22,6 +23,7 @@ export default function PlantCardData({ data }: PlantCardProps){
     const [names, setNames] = useState(["None", "None", "None"])
     const [mainImage, setMainImage] = useState("/media/images/loading.gif")
     const [mainImageAlt, setMainImageAlt] = useState("Loading")
+    const [mainImageCredits, setMainImageCredits] = useState("None")
 
     // Run on page start
     useEffect(() => {
@@ -61,6 +63,7 @@ export default function PlantCardData({ data }: PlantCardProps){
                     }
                     setMainImage(image.path)
                     setMainImageAlt((image.meta as ImageMetaData).name)
+                    setMainImageCredits((image.meta as ImageMetaData).credits)
                 }
                 break;
 
@@ -75,12 +78,7 @@ export default function PlantCardData({ data }: PlantCardProps){
 
                 {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
-                    <Image
-                         src={mainImage}
-                         alt={mainImageAlt}
-                         fill
-                         style={{objectFit: "contain"}}
-                    />
+                    <CreditedImage url={mainImage} alt={mainImageAlt} credits={mainImageCredits} colour={"white"}/>
                 </div>
 
                 {/* Title, category, description*/}
