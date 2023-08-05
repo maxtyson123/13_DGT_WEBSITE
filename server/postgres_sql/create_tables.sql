@@ -49,6 +49,7 @@ CREATE TABLE medical (
     id SERIAL PRIMARY KEY,
     plant_id INTEGER REFERENCES plants(id),
     medical_type TEXT,
+    use_identifier TEXT,
     use TEXT,
     image TEXT,
     preparation TEXT
@@ -64,6 +65,7 @@ CREATE TABLE craft (
     id SERIAL PRIMARY KEY,
     plant_id INTEGER REFERENCES plants(id),
     part_of_plant TEXT,
+    use_identifier TEXT,
     use TEXT,
     image TEXT,
     additional_info TEXT
@@ -106,6 +108,7 @@ CREATE TABLE edible (
     id SERIAL PRIMARY KEY,
     plant_id INTEGER REFERENCES plants(id),
     part_of_plant TEXT,
+    use_identifier TEXT,
     image_of_part TEXT,
     nutrition TEXT,
     preparation TEXT,

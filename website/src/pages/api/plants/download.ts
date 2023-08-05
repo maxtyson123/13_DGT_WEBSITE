@@ -62,7 +62,17 @@ export default async function handler(
             switch (tableArray[i]) {
                 case 'plants':
                     // Select all the plant data
-                    selector += ` plants.${tables.preferred_name}, plants.${tables.english_name}, plants.${tables.maori_name}, plants.${tables.latin_name}, plants.${tables.location_found}, plants.${tables.small_description}, plants.${tables.long_description}, plants.${tables.author}, plants.${tables.last_modified}, plants.${tables.display_image},`;
+                    selector += ` 
+                                    plants.${tables.preferred_name}, 
+                                    plants.${tables.english_name}, 
+                                    plants.${tables.maori_name}, 
+                                    plants.${tables.latin_name}, 
+                                    plants.${tables.location_found}, 
+                                    plants.${tables.small_description}, 
+                                    plants.${tables.long_description}, 
+                                    plants.${tables.author}, 
+                                    plants.${tables.last_modified}, 
+                                    plants.${tables.display_image},`;
                     break;
 
                 case 'months_ready_for_use':
@@ -86,7 +96,7 @@ export default async function handler(
                 case 'edible':
 
                     // Select all the edible data and make them into an array
-                    selector += `edible.edible_parts, edible.edible_images, edible.edible_nutrition, edible.edible_preparation, edible.edible_preparation_type,`;
+                    selector += `edible.edible_parts, edible.edible_use_identifiers, edible.edible_images, edible.edible_nutrition, edible.edible_preparation, edible.edible_preparation_type,`;
 
                     // Join the edible table
                     joiner += ` 
@@ -94,6 +104,7 @@ export default async function handler(
                                 SELECT
                                 plant_id,
                                 ${joinCommand}(${tables.edible_part_of_plant}) AS edible_parts,
+                                ${joinCommand}(${tables.edible_use_identifier}) AS edible_use_identifiers,
                                 ${joinCommand}(${tables.edible_image_of_part}) AS edible_images,
                                 ${joinCommand}(${tables.edible_nutrition}) AS edible_nutrition,
                                 ${joinCommand}(${tables.edible_preparation}) AS edible_preparation,
@@ -107,7 +118,7 @@ export default async function handler(
                 case 'medical':
 
                     // Select all the medical data and make them into an array
-                    selector += `medical.medical_types, medical.medical_uses, medical.medical_images, medical.medical_preparation,`;
+                    selector += `medical.medical_types, medical.medical_use_identifiers, medical.medical_uses, medical.medical_images, medical.medical_preparation,`;
 
                     // Join the medical table
                     joiner += `
@@ -115,6 +126,7 @@ export default async function handler(
                                 SELECT
                                 plant_id,
                                 ${joinCommand}(${tables.medical_type}) AS medical_types,
+                                ${joinCommand}(${tables.medical_use_identifier}) AS medical_use_identifiers,
                                 ${joinCommand}(${tables.medical_use}) AS medical_uses,
                                 ${joinCommand}(${tables.medical_image}) AS medical_images,
                                 ${joinCommand}(${tables.medical_preparation}) AS medical_preparation
@@ -127,7 +139,7 @@ export default async function handler(
                 case 'craft':
 
                     // Select all the craft data and make them into an array
-                    selector += `craft.craft_parts, craft.craft_uses, craft.craft_images, craft.craft_additional_info,`;
+                    selector += `craft.craft_parts, craft.craft_use_identifiers, craft.craft_uses, craft.craft_images, craft.craft_additional_info,`;
 
                     // Join the craft table
                     joiner += `
@@ -135,6 +147,7 @@ export default async function handler(
                                 SELECT
                                 plant_id,
                                 ${joinCommand}(${tables.craft_part_of_plant}) AS craft_parts,
+                                ${joinCommand}(${tables.craft_use_identifier}) AS craft_use_identifiers,
                                 ${joinCommand}(${tables.craft_use}) AS craft_uses,
                                 ${joinCommand}(${tables.craft_image}) AS craft_images,
                                 ${joinCommand}(${tables.craft_additional_info}) AS craft_additional_info

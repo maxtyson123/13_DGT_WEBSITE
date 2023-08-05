@@ -41,15 +41,18 @@ export interface PlantDataApi {
     months_ready_start_months:  string[];
     months_ready_end_months:    string[];
     edible_parts:               string[];
+    edible_use_identifiers:     string[];
     edible_images:              string[];
     edible_nutrition:           string[];
     edible_preparation:         string[];
     edible_preparation_type:    string[];
     medical_types:              string[];
+    medical_use_identifiers:    string[];
     medical_uses:               string[];
     medical_images:             string[];
     medical_preparation:        string[];
     craft_parts:                string[];
+    craft_use_identifiers:      string[];
     craft_uses:                 string[];
     craft_images:               string[];
     craft_additional_info:      string[];
@@ -94,6 +97,7 @@ export interface FileMetaData{
 export interface EdibleSectionData{
     type:               string;
     part_of_plant:      string;
+    use_identifier:    string;
     image_of_part:      string;
     nutrition:          string;
     preparation:        string;
@@ -108,6 +112,7 @@ export interface EdibleSectionData{
 export interface MedicalSectionData{
     type:               string;
     medical_type:       string;
+    use_identifier:     string;
     use:                string;
     image:              string;
     preparation:        string;
@@ -121,6 +126,7 @@ export interface MedicalSectionData{
 export interface CraftSectionData{
     type:               string;
     part_of_plant:      string;
+    use_identifier:     string;
     use:                string;
     image:              string;
     additonal_info:     string;
@@ -201,6 +207,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
     // If this plant has no edible section, set the edible parts to an empty array
     if (apiData.edible_parts == null) {
         apiData.edible_parts                = [];
+        apiData.edible_use_identifiers      = [];
         apiData.edible_images               = [];
         apiData.edible_nutrition            = [];
         apiData.edible_preparation          = [];
@@ -210,6 +217,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
     // If this plant has no medical section, set the medical types to an empty array
     if (apiData.medical_types == null) {
         apiData.medical_types           = [];
+        apiData.medical_use_identifiers = [];
         apiData.medical_uses            = [];
         apiData.medical_images          = [];
         apiData.medical_preparation     = [];
@@ -218,6 +226,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
     // If this plant has no craft section, set the craft parts to an empty array
     if (apiData.craft_parts == null) {
         apiData.craft_parts             = [];
+        apiData.craft_use_identifiers   = [];
         apiData.craft_uses              = [];
         apiData.craft_images            = [];
         apiData.craft_additional_info   = [];
@@ -250,6 +259,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
 
         // Craft data needs to be parsed
         apiData.craft_parts             = tryParse(apiData.craft_parts)
+        apiData.craft_use_identifiers   = tryParse(apiData.craft_use_identifiers)
         apiData.craft_uses              = tryParse(apiData.craft_uses)
         apiData.craft_images            = tryParse(apiData.craft_images)
         apiData.craft_additional_info   = tryParse(apiData.craft_additional_info)
@@ -261,6 +271,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
 
         // Edible data needs to be parsed
         apiData.edible_parts                = tryParse(apiData.edible_parts)
+        apiData.edible_use_identifiers      = tryParse(apiData.edible_use_identifiers)
         apiData.edible_images               = tryParse(apiData.edible_images)
         apiData.edible_nutrition            = tryParse(apiData.edible_nutrition)
         apiData.edible_preparation          = tryParse(apiData.edible_preparation)
@@ -268,6 +279,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
 
         // Medical data needs to be parsed
         apiData.medical_types           = tryParse(apiData.medical_types)
+        apiData.medical_use_identifiers = tryParse(apiData.medical_use_identifiers)
         apiData.medical_uses            = tryParse(apiData.medical_uses)
         apiData.medical_images          = tryParse(apiData.medical_images)
         apiData.medical_preparation     = tryParse(apiData.medical_preparation)
@@ -322,15 +334,18 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.months_ready_start_months    == null
         || apiData.months_ready_end_months      == null
         || apiData.edible_parts                 == null
+        || apiData.edible_use_identifiers       == null
         || apiData.edible_images                == null
         || apiData.edible_nutrition             == null
         || apiData.edible_preparation           == null
         || apiData.edible_preparation_type      == null
         || apiData.medical_types                == null
+        || apiData.medical_use_identifiers      == null
         || apiData.medical_uses                 == null
         || apiData.medical_images               == null
         || apiData.medical_preparation          == null
         || apiData.craft_parts                  == null
+        || apiData.craft_use_identifiers        == null
         || apiData.craft_uses                   == null
         || apiData.craft_images                 == null
         || apiData.craft_additional_info        == null
@@ -434,6 +449,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         let edibleInfoOBJ = {
             type: "edible",
             part_of_plant:      apiData.edible_parts[i],
+            use_identifier:     apiData.edible_use_identifiers[i],
             image_of_part:      apiData.edible_images[i],
             nutrition:          apiData.edible_nutrition[i],
             preparation:        apiData.edible_preparation[i],
@@ -453,6 +469,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         let medicalInfoOBJ = {
             type: "medical",
             medical_type:   apiData.medical_types[i],
+            use_identifier: apiData.medical_use_identifiers[i],
             use:            apiData.medical_uses[i],
             image:          apiData.medical_images[i],
             preparation:    apiData.medical_preparation[i],
@@ -471,6 +488,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
         let craftInfoOBJ = {
             type: "craft",
             part_of_plant:      apiData.craft_parts[i],
+            use_identifier:     apiData.craft_use_identifiers[i],
             use:                apiData.craft_uses[i],
             image:              apiData.craft_images[i],
             additonal_info:     apiData.craft_additional_info[i],
@@ -560,6 +578,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
         switch (plantData.sections[i].type) {
             case "edible":
                 apiData.edible_parts.push(plantData.sections[i].part_of_plant);
+                apiData.edible_use_identifiers.push(plantData.sections[i].use_identifier);
                 apiData.edible_images.push(plantData.sections[i].image_of_part);
                 apiData.edible_nutrition.push(plantData.sections[i].nutrition);
                 apiData.edible_preparation.push(plantData.sections[i].preparation);
@@ -568,6 +587,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
 
             case "medical":
                 apiData.medical_types.push(plantData.sections[i].medical_type);
+                apiData.medical_use_identifiers.push(plantData.sections[i].use_identifier);
                 apiData.medical_uses.push(plantData.sections[i].use);
                 apiData.medical_images.push(plantData.sections[i].image);
                 apiData.medical_preparation.push(plantData.sections[i].preparation);
@@ -575,6 +595,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
 
             case "craft":
                 apiData.craft_parts.push(plantData.sections[i].part_of_plant);
+                apiData.craft_use_identifiers.push(plantData.sections[i].use_identifier);
                 apiData.craft_uses.push(plantData.sections[i].use);
                 apiData.craft_images.push(plantData.sections[i].image);
                 apiData.craft_additional_info.push(plantData.sections[i].additonal_info);
@@ -645,15 +666,18 @@ export function emptyPlantApiData(){
         months_ready_start_months:  [],
         months_ready_end_months:    [],
         edible_parts:               [],
+        edible_use_identifiers:     [],
         edible_images:              [],
         edible_nutrition:           [],
         edible_preparation:         [],
         edible_preparation_type:    [],
         medical_types:              [],
+        medical_use_identifiers:    [],
         medical_uses:               [],
         medical_images:             [],
         medical_preparation:        [],
         craft_parts:                [],
+        craft_use_identifiers:      [],
         craft_uses:                 [],
         craft_images:               [],
         craft_additional_info:      [],

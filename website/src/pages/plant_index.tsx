@@ -23,6 +23,7 @@ export default function PlantIndex(){
     const [plants, setPlants] = React.useState<plantEntry[] | null>(null)
     const [uses, setUses] = React.useState<plantEntry[] | null>(null)
     const [indexItems, setIndexItems] = React.useState<plantEntry[] | null>(null)
+    const [renderKey, setRenderKey] = React.useState<number>(0)
 
     // Filter
     const [currentFilter, setCurrentFilter] = React.useState<string>("Plant Names")
@@ -37,8 +38,8 @@ export default function PlantIndex(){
         if (dataFetch.current)
             return
         dataFetch.current = true
-
         getPlantIDs().then(() => {console.log("Finished getting plant ids")}).catch((error) => {console.log(error)})
+        getPlantUses().then(() => {console.log("Finished getting plant uses")}).catch((error) => {console.log(error)})
     }, [])
 
     const getPlantIDs = async () => {
@@ -93,7 +94,35 @@ export default function PlantIndex(){
     }
 
     const getPlantUses = async () => {
+        try{
 
+            console.log("Getting plant uses")
+
+            // Get the ids from the api
+            const response = await axios.get("/api/plants/uses?getValues=true")
+
+            console.log(response)
+
+            // Get the plant ids from the response
+            const data = response.data.data
+
+            // Create an array to store the plant uses (for each plant)
+            let uses: plantEntry[] = []
+
+            // Loop through the data and set the uses
+            for (let i = 0; i < data.length; i++) {
+                uses.push({id: data[i].id, name: data[i].identifier, tag: data[i].type})
+            }
+
+            // Set the plant uses
+            setUses(uses)
+
+        }catch (e) {
+            console.log(e)
+
+            // TODO: Handle error
+
+        }
     }
 
     // Instead of using a link to scroll to the element, use this function as it gives space for the navbar and scrolls smoothly
@@ -115,19 +144,13 @@ export default function PlantIndex(){
 
     useEffect(() => {
 
+        // Ensure that the plants and uses have been fetched
         if(!plants) return;
+        if(!uses) return;
 
         // Filter the plants based on the current filter
         let items : plantEntry[] = []
-
-        // The uses may not have been fetched yet
-        if(currentFilter.includes("Uses")){
-            if(!uses){
-                getPlantUses().then(() => {console.log("Finished getting plant uses")}).catch((error) => {console.log(error)})
-                return;
-            }
-        }
-
+        setIndexItems(items)
 
         switch (currentFilter) {
             case "Plant Names":
@@ -169,7 +192,12 @@ export default function PlantIndex(){
         }
 
         // Update the index items
+        console.log(items)
         setIndexItems(items)
+
+        // Re render the components
+        setRenderKey(Math.random())
+
 
     }, [plants, currentFilter, uses])
 
@@ -221,7 +249,7 @@ export default function PlantIndex(){
                 {/* Loop through the alphabet and add a section for each letter */}
                 {
                     alphabet.map((letter) => {
-                        return <PlantIndexEntry key={letter} letter={letter} plants={indexItems}/>
+                        return <PlantIndexEntry key={letter + renderKey} letter={letter} plants={indexItems}/>
                     })
                 }
 

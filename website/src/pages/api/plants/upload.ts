@@ -36,15 +36,18 @@ export default async function handler(
             months_ready_start_months,
             months_ready_end_months,
             edible_parts,
+            edible_use_identifiers,
             edible_images,
             edible_nutrition,
             edible_preparation,
             edible_preparation_type,
             medical_types,
+            medical_use_identifiers,
             medical_uses,
             medical_images,
             medical_preparation,
             craft_parts,
+            craft_use_identifiers,
             craft_uses,
             craft_images,
             craft_additional_info,
@@ -78,15 +81,18 @@ export default async function handler(
         if(months_ready_start_months === null)  { return response.status(missingParametersErrorCode).json({ error: 'Months ready start months parameter not found' }); }
         if(months_ready_end_months === null)    { return response.status(missingParametersErrorCode).json({ error: 'Months ready end months parameter not found' }); }
         if(edible_parts === null)               { return response.status(missingParametersErrorCode).json({ error: 'Edible parts parameter not found' }); }
+        if(edible_use_identifiers === null)     { return response.status(missingParametersErrorCode).json({ error: 'Edible use identifiers parameter not found' }); }
         if(edible_images === null)              { return response.status(missingParametersErrorCode).json({ error: 'Edible images parameter not found' }); }
         if(edible_nutrition === null)           { return response.status(missingParametersErrorCode).json({ error: 'Edible nutrition parameter not found' }); }
         if(edible_preparation === null)         { return response.status(missingParametersErrorCode).json({ error: 'Edible preparation parameter not found' }); }
         if(edible_preparation_type === null)    { return response.status(missingParametersErrorCode).json({ error: 'Edible preparation type parameter not found' }); }
         if(medical_types === null)              { return response.status(missingParametersErrorCode).json({ error: 'Medical types parameter not found' }); }
+        if(medical_use_identifiers === null)    { return response.status(missingParametersErrorCode).json({ error: 'Medical use identifiers parameter not found' }); }
         if(medical_uses === null)               { return response.status(missingParametersErrorCode).json({ error: 'Medical uses parameter not found' }); }
         if(medical_images === null)             { return response.status(missingParametersErrorCode).json({ error: 'Medical images parameter not found' }); }
         if(medical_preparation === null)        { return response.status(missingParametersErrorCode).json({ error: 'Medical preparation parameter not found' }); }
         if(craft_parts === null)                { return response.status(missingParametersErrorCode).json({ error: 'Craft parts parameter not found' }); }
+        if(craft_use_identifiers === null)      { return response.status(missingParametersErrorCode).json({ error: 'Craft use identifiers parameter not found' }); }
         if(craft_uses === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Craft uses parameter not found' }); }
         if(craft_images === null)               { return response.status(missingParametersErrorCode).json({ error: 'Craft images parameter not found' }); }
         if(craft_additional_info === null)      { return response.status(missingParametersErrorCode).json({ error: 'Craft additional info parameter not found' }); }
@@ -162,12 +168,12 @@ export default async function handler(
         if(edible_parts.length > 0) {
 
             // Tell the query that we are adding to the edible parts table
-            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_image_of_part}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
+            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_use_identifier}, ${tables.edible_image_of_part}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
 
             // Loop through each of the edible parts
             for(let i = 0; i < edible_parts.length; i++) {
                 // Add the data to the query
-                query += `(${getIDQuery}, '${edible_parts[i]}', '${edible_images[i]}', '${edible_nutrition[i]}', '${edible_preparation[i]}', '${edible_preparation_type[i]}')`;
+                query += `(${getIDQuery}, '${edible_parts[i]}', '${edible_use_identifiers[i]}', '${edible_images[i]}', '${edible_nutrition[i]}', '${edible_preparation[i]}', '${edible_preparation_type[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < edible_parts.length - 1) {
@@ -182,12 +188,12 @@ export default async function handler(
         if(medical_types.length > 0) {
 
             // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}) VALUES `;
+            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}) VALUES `;
 
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
                 // Add the data to the query
-                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}')`;
+                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_use_identifiers[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < medical_types.length - 1) {
@@ -202,13 +208,13 @@ export default async function handler(
         if(craft_parts.length > 0) {
 
             // Tell the query that we are adding to the craft parts table
-            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use}, ${tables.craft_image}, ${tables.craft_additional_info}) VALUES `;
+            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use_identifier}, ${tables.craft_use}, ${tables.craft_image}, ${tables.craft_additional_info}) VALUES `;
 
 
             // Loop through each of the craft parts
             for(let i = 0; i < craft_parts.length; i++) {
                 // Add the data to the query
-                query += `(${getIDQuery}, '${craft_parts[i]}', '${craft_uses[i]}', '${craft_images[i]}', '${craft_additional_info[i]}')`;
+                query += `(${getIDQuery}, '${craft_parts[i]}', '${craft_use_identifiers[i]}', '${craft_uses[i]}', '${craft_images[i]}', '${craft_additional_info[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < craft_parts.length - 1) {

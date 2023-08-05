@@ -35,6 +35,7 @@ export class SQLDatabase {
 
     // Craft Table
     craft_part_of_plant: string;
+    craft_use_identifier: string;
     craft_use: string;
     craft_additional_info: string;
     craft_image: string;
@@ -45,6 +46,7 @@ export class SQLDatabase {
 
     // Edible Table
     edible_part_of_plant: string;
+    edible_use_identifier: string;
     edible_image_of_part: string;
     edible_nutrition: string;
     edible_preparation: string;
@@ -52,6 +54,7 @@ export class SQLDatabase {
 
     // Medical Table
     medical_type: string;
+    medical_use_identifier: string;
     medical_use: string;
     medical_image: string;
     medical_preparation: string;
@@ -98,6 +101,7 @@ export class SQLDatabase {
 
         // Craft Table
         this.craft_part_of_plant        = "craft_part_of_plant";
+        this.craft_use_identifier       = "craft_use_identifier";
         this.craft_use                  = "craft_use";
         this.craft_additional_info      = "craft_additional_info";
         this.craft_image                = "craft_image";
@@ -108,6 +112,7 @@ export class SQLDatabase {
 
         // Edible Table
         this.edible_part_of_plant       = "edible_part_of_plant";
+        this.edible_use_identifier      = "edible_use_identifier";
         this.edible_image_of_part       = "edible_image";
         this.edible_nutrition           = "edible_nutrition";
         this.edible_preparation         = "edible_preparation";
@@ -115,6 +120,7 @@ export class SQLDatabase {
 
         // Medical Table
         this.medical_type               = "medical_type";
+        this.medical_use_identifier     = "medical_use_identifier";
         this.medical_use                = "medical_use";
         this.medical_image              = "medical_image";
         this.medical_preparation        = "medical_preparation";
@@ -165,6 +171,7 @@ export class PostgresSQL extends SQLDatabase{
 
         // Craft Table
         this.craft_part_of_plant        = "part_of_plant";
+        this.craft_use_identifier       = "use_identifier";
         this.craft_use                  = "use";
         this.craft_additional_info      = "additional_info";
         this.craft_image                = "image";
@@ -175,6 +182,7 @@ export class PostgresSQL extends SQLDatabase{
 
         // Edible Table
         this.edible_part_of_plant       = "part_of_plant";
+        this.edible_use_identifier      = "use_identifier";
         this.edible_image_of_part       = "image_of_part";
         this.edible_nutrition           = "nutrition";
         this.edible_preparation         = "preparation";
@@ -182,6 +190,7 @@ export class PostgresSQL extends SQLDatabase{
 
         // Medical Table
         this.medical_type               = "medical_type";
+        this.medical_use_identifier     = "use_identifier";
         this.medical_use                = "use";
         this.medical_image              = "image";
         this.medical_preparation        = "preparation";

@@ -287,6 +287,7 @@ class CraftInfo {
     // Store the data for the section at its current state
     state = {
         partOfPlant:    "",
+        useIdentifier: "",
         use:            "",
         additionalInfo: "",
         image:          "",
@@ -295,6 +296,7 @@ class CraftInfo {
     // Store the validation state for each input
     valid = {
         partOfPlant:    ["normal", "No Error"] as [ValidationState, string],
+        useIdentifier: ["normal", "No Error"] as [ValidationState, string],
         use:            ["normal", "No Error"] as [ValidationState, string],
         additionalInfo: ["normal", "No Error"] as [ValidationState, string],
         image:          ["normal", "No Error"] as [ValidationState, string],
@@ -303,6 +305,7 @@ class CraftInfo {
     section: JSX.Element = <></>;
 
     // Change Handlers that update the state
+    handUseIdentifierChange     = (value : string) => {this.state.useIdentifier  = value};
     handleUseValueChange        = (value : string) => {this.state.use              = value};
     handleAdditionalInfoChange  = (value : string) => {this.state.additionalInfo   = value};
     handlePartOfPlantChange     = (value : string) => { this.state.partOfPlant     = value};
@@ -313,6 +316,7 @@ class CraftInfo {
     updateSection = () => {
         this.setSection(
             <CraftSection
+                useIdentifierHandler = {this.handUseIdentifierChange}
                 useValueHandler = {this.handleUseValueChange}
                 additionalInfoHandler = {this.handleAdditionalInfoChange}
                 partOfPlantHandler = {this.handlePartOfPlantChange}
@@ -343,11 +347,18 @@ class CraftInfo {
             isValid = false;
         }else{ this.valid.partOfPlant = ["success", "No Error"] as [ValidationState, string]; }
 
+        // If there is no use identifier selected then show an error otherwise the input is valid
+        if(this.state.useIdentifier === "") {
+            this.valid.useIdentifier = ["error", "Please select a use identifier"] as [ValidationState, string];
+            isValid = false;
+        }else{ this.valid.useIdentifier = ["success", "No Error"] as [ValidationState, string]; }
+
         // If there is no use selected then show an error otherwise the input is valid
         if(this.state.use === "") {
             this.valid.use = ["error", "Please enter how this plant is used"] as [ValidationState, string];
             isValid = false;
         }else{ this.valid.use = ["success", "No Error"] as [ValidationState, string]; }
+
 
         // If there is no additional info entered then ignore as not required otherwise the input is valid
         if(this.state.additionalInfo !== "") {
@@ -375,23 +386,26 @@ class CraftInfo {
 
 // Define the types for the props
 type CraftSectionProps = {
+    useIdentifierHandler:   (value: string) => void;
     useValueHandler:        (value: string) => void;
     additionalInfoHandler:  (value: string) => void;
     partOfPlantHandler:     (value: string) => void;
     valid: {
         partOfPlant:    [ValidationState, string];
+        useIdentifier: [ValidationState, string];
         use:            [ValidationState, string];
         additionalInfo: [ValidationState, string];
         image:          [ValidationState, string];
     }
     state: {
         partOfPlant:    string;
+        useIdentifier: string;
         use:            string;
         additionalInfo: string;
         image:          string;
     }
 }
-export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlantHandler, valid, state}: CraftSectionProps){
+export function CraftSection({useIdentifierHandler, useValueHandler, additionalInfoHandler, partOfPlantHandler, valid, state}: CraftSectionProps){
 
     return(
         <>
@@ -409,6 +423,17 @@ export function CraftSection({useValueHandler, additionalInfoHandler, partOfPlan
                 />
             </div>
 
+            {/* Use Identifier */}
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Use Identifier"}
+                    defaultValue={state.useIdentifier}
+                    required={true}
+                    state={valid.useIdentifier[0]}
+                    errorText={valid.useIdentifier[1]}
+                    changeEventHandler={useIdentifierHandler}
+                />
+            </div>
 
             {/* Use */}
             <div className={styles.formItem}>
@@ -442,6 +467,7 @@ class MedicalInfo {
     // Store the data for the section at its current state
     state = {
         type:           "",
+        useIdentifier: "",
         use:            "",
         preparation:    "",
         image:          "",
@@ -450,6 +476,7 @@ class MedicalInfo {
     // Store the validation state for each input
     valid = {
         type:           ["normal", "No Error"] as [ValidationState, string],
+        useIdentifier: ["normal", "No Error"] as [ValidationState, string],
         use:            ["normal", "No Error"] as [ValidationState, string],
         preparation:    ["normal", "No Error"] as [ValidationState, string],
         image:          ["normal", "No Error"] as [ValidationState, string],
@@ -459,6 +486,7 @@ class MedicalInfo {
 
     // Change Handlers that update the state
     handleTypeChange            = (value : string) => { this.state.type        = value};
+    handleUseIdentifierChange   = (value : string) => {this.state.useIdentifier = value};
     handeUseValueChange         = (value : string) => {this.state.use          = value};
     handlePreparationChange     = (value : string) => {this.state.preparation  = value};
     handleImageChange           = (value : string) => {this.state.image        = value};
@@ -469,6 +497,7 @@ class MedicalInfo {
         this.setSection(
             <MedicalUseSection
                 medicalTypeHandler={this.handleTypeChange}
+                medicalUseIdentifierHandler={this.handleUseIdentifierChange}
                 useValueHandler={this.handeUseValueChange}
                 preparationHandler={this.handlePreparationChange}
                 valid={this.valid}
@@ -497,6 +526,12 @@ class MedicalInfo {
             this.valid.type = ["error", "Please select if the plant is used internally or externally"] as [ValidationState, string];
             isValid = false;
         }else { this.valid.type = ["success", "No Error"] as [ValidationState, string]; }
+
+        // If there is no use identifier entered then show an error otherwise the input is valid
+        if(this.state.useIdentifier === "") {
+            this.valid.useIdentifier = ["error", "Please identify how this plant is used in a medical context"] as [ValidationState, string];
+            isValid = false;
+        }else { this.valid.useIdentifier = ["success", "No Error"] as [ValidationState, string]; }
 
         // If there is no use selected then show an error otherwise the input is valid
         if(this.state.use === "") {
@@ -532,22 +567,25 @@ class MedicalInfo {
 // Define the types for the props
 type MedicalUseSectionProps = {
     medicalTypeHandler:     (value: string) => void;
+    medicalUseIdentifierHandler: (value: string) => void;
     useValueHandler:        (value: string) => void;
     preparationHandler:     (value: string) => void;
     valid: {
         type:           [ValidationState, string];
+        useIdentifier: [ValidationState, string];
         use:            [ValidationState, string];
         preparation:    [ValidationState, string];
         image:          [ValidationState, string];
     }
     state: {
         type:           string;
+        useIdentifier: string;
         use:            string;
         preparation:    string;
         image:          string;
     }
 }
-export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparationHandler, valid, state}: MedicalUseSectionProps){
+export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandler, useValueHandler, preparationHandler, valid, state}: MedicalUseSectionProps){
 
     return(
         <>
@@ -561,6 +599,17 @@ export function MedicalUseSection({medicalTypeHandler, useValueHandler, preparat
                     errorText={valid.type[1]}
                     options={["Internal", "External"]}
                     changeEventHandler={medicalTypeHandler}
+                />
+            </div>
+
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Use Identifier"}
+                    defaultValue={state.useIdentifier}
+                    required={true}
+                    state={valid.useIdentifier[0]}
+                    errorText={valid.useIdentifier[1]}
+                    changeEventHandler={medicalUseIdentifierHandler}
                 />
             </div>
 
@@ -596,6 +645,7 @@ class EdibleInfo {
     // Store the data for the section at its current state
     state = {
         partOfPlant:        "",
+        useIdentifier:     "",
         nutritionalValue:   "",
         preparation:        "",
         preparationType:    "",
@@ -605,6 +655,7 @@ class EdibleInfo {
     // Store the validation state for each input
     valid = {
         partOfPlant:        ["normal", "No Error"] as [ValidationState, string],
+        useIdentifier:     ["normal", "No Error"] as [ValidationState, string],
         nutritionalValue:   ["normal", "No Error"] as [ValidationState, string],
         preparation:        ["normal", "No Error"] as [ValidationState, string],
         preparationType:    ["normal", "No Error"] as [ValidationState, string],
@@ -615,6 +666,7 @@ class EdibleInfo {
 
     // Change Handlers that update the state
     handlePartOfPlantChange         = (value : string) => { this.state.partOfPlant     = value};
+    handleUseIdentifierChange       = (value : string) => {this.state.useIdentifier  = value};
     handleNutritionalValueChange    = (value : string) => {this.state.nutritionalValue = value};
     handlePreparationChange         = (value : string) => {this.state.preparation      = value};
     handlePreparationTypeChange     = (value : string) => {this.state.preparationType  = value};
@@ -626,6 +678,7 @@ class EdibleInfo {
         this.setSection(
             <EdibleUseSection
                 partOfPlantHandler={this.handlePartOfPlantChange}
+                useIdentifierHandler={this.handleUseIdentifierChange}
                 nutritionalValueHandler={this.handleNutritionalValueChange}
                 preparationHandler={this.handlePreparationChange}
                 preparationTypeHandler={this.handlePreparationTypeChange}
@@ -659,6 +712,12 @@ class EdibleInfo {
             this.valid.partOfPlant = ["error", "Please select what part of the plant is edible"];
             isValid = false;
         }else { this.valid.partOfPlant = ["success", "No Error"] as [ValidationState, string]; }
+
+        // If there is no use identifier entered then show an error otherwise the input is valid
+        if(this.state.useIdentifier === "") {
+            this.valid.useIdentifier = ["error", "Please enter a use identifier"];
+            isValid = false;
+        } else { this.valid.useIdentifier = ["success", "No Error"] as [ValidationState, string]; }
 
         // If there is no nutritional value entered then ignore as not required otherwise the input is valid
         if (this.state.nutritionalValue !== "") {
@@ -699,11 +758,13 @@ class EdibleInfo {
 // Edible Use Section Props
 type EdibleUseSectionProps = {
     partOfPlantHandler:      (value: string) => void;
+    useIdentifierHandler:    (value: string) => void;
     nutritionalValueHandler: (value: string) => void;
     preparationTypeHandler:  (value: string) => void;
     preparationHandler:      (value: string) => void;
     valid: {
         partOfPlant:        [ValidationState, string];
+        useIdentifier:     [ValidationState, string];
         nutritionalValue:   [ValidationState, string];
         preparation:        [ValidationState, string];
         preparationType:    [ValidationState, string];
@@ -712,13 +773,14 @@ type EdibleUseSectionProps = {
     }
     state: {
         partOfPlant:        string;
+        useIdentifier:     string;
         nutritionalValue:   string;
         preparation:        string;
         preparationType:    string;
         image:        string;
     }
 }
-export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
 
     return(
         <>
@@ -732,6 +794,17 @@ export function EdibleUseSection({partOfPlantHandler, nutritionalValueHandler, p
                     errorText={valid.partOfPlant[1]}
                     options={PLANT_PARTS}
                     changeEventHandler={partOfPlantHandler}
+                />
+            </div>
+
+            <div className={styles.formItem}>
+                <SmallInput
+                    placeHolder={"Use Identifier"}
+                    defaultValue={state.useIdentifier}
+                    required={true}
+                    state={valid.useIdentifier[0]}
+                    errorText={valid.useIdentifier[1]}
+                    changeEventHandler={useIdentifierHandler}
                 />
             </div>
 
@@ -1479,7 +1552,6 @@ export default function CreatePlant() {
     const [renderKeyFile, setRenderKeyFile] = useState(0);
     const [renderKeyDisplayImage, setRenderKeyDisplayImage] = useState(0);
 
-
     // Value Handlers
     const handleEnglishNameChange = (value : string) => { setEnglishName(value); };
     const handleMoariNameChange = (value : string) => { setMoariName(value); };
@@ -1805,6 +1877,7 @@ export default function CreatePlant() {
             let edibleInfoOBJ = {
                 type: "edible",
                 part_of_plant: "",
+                use_identifier: "",
                 image_of_part: "",
                 nutrition: "",
                 preparation: "",
@@ -1812,6 +1885,7 @@ export default function CreatePlant() {
             } as EdibleSectionData;
 
             edibleInfoOBJ.part_of_plant = cleanInput(thisEdibleInfo.partOfPlant);
+            edibleInfoOBJ.use_identifier = cleanInput(thisEdibleInfo.useIdentifier);
             edibleInfoOBJ.image_of_part = cleanInput(thisEdibleInfo.image);
             edibleInfoOBJ.nutrition = cleanInput(thisEdibleInfo.nutritionalValue);
             edibleInfoOBJ.preparation = cleanInput(thisEdibleInfo.preparation);
@@ -1832,12 +1906,14 @@ export default function CreatePlant() {
             let medicalInfoOBJ = {
                 type: "medical",
                 medical_type: "",
+                use_identifier: "",
                 use: "",
                 image: "",
                 preparation: "",
             } as MedicalSectionData;
 
             medicalInfoOBJ.medical_type = cleanInput(thisMedicalInfo.type);
+            medicalInfoOBJ.use_identifier = cleanInput(thisMedicalInfo.useIdentifier);
             medicalInfoOBJ.use = cleanInput(thisMedicalInfo.use);
             medicalInfoOBJ.image = cleanInput(thisMedicalInfo.image);
             medicalInfoOBJ.preparation = cleanInput(thisMedicalInfo.preparation);
@@ -1857,12 +1933,14 @@ export default function CreatePlant() {
             let craftInfoOBJ = {
                 type: "craft",
                 part_of_plant: "",
+                use_identifier: "",
                 use: "",
                 image: "",
                 additonal_info: "",
             } as CraftSectionData;
 
             craftInfoOBJ.part_of_plant = cleanInput(thisCraftInfo.partOfPlant);
+            craftInfoOBJ.use_identifier = cleanInput(thisCraftInfo.useIdentifier);
             craftInfoOBJ.use = cleanInput(thisCraftInfo.use);
             craftInfoOBJ.image = cleanInput(thisCraftInfo.image);
             craftInfoOBJ.additonal_info = cleanInput(thisCraftInfo.additionalInfo);
@@ -2004,6 +2082,7 @@ export default function CreatePlant() {
 
                     // Update the values
                     edibleSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
+                    edibleSection.handleUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutritional_value)
                     edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
@@ -2024,6 +2103,7 @@ export default function CreatePlant() {
                     // Update the values
                     medicalSection.handleTypeChange(jsonContents.sections[i].medical_type)
                     medicalSection.handlePreparationChange(jsonContents.sections[i].preparation)
+                    medicalSection.handleUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     medicalSection.handeUseValueChange(jsonContents.sections[i].use)
                     medicalSection.handleImageChange(jsonContents.sections[i].image)
 
@@ -2041,6 +2121,7 @@ export default function CreatePlant() {
 
                     // Update the values
                     craftSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
+                    craftSection.handUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     craftSection.handleUseValueChange(jsonContents.sections[i].use)
                     craftSection.handleAdditionalInfoChange(jsonContents.sections[i].additonal_info)
                     craftSection.handleImageChange(jsonContents.sections[i].image)
