@@ -1523,7 +1523,7 @@ export default function CreatePlant() {
 
     // Value Setters
     const [englishName, setEnglishName]             = useState("")
-    const [moariName, setMoariName]                 = useState("")
+    const [maoriName, setMaoriName]                 = useState("")
     const [latinName, setLatinName]                 = useState("")
     const [preferredName, setPreferredName]         = useState("")
     const [smallDescription, setSmallDescription]   = useState("")
@@ -1554,7 +1554,7 @@ export default function CreatePlant() {
 
     // Value Handlers
     const handleEnglishNameChange = (value : string) => { setEnglishName(value); };
-    const handleMoariNameChange = (value : string) => { setMoariName(value); };
+    const handleMaoriNameChange = (value : string) => { setMaoriName(value); };
     const handleLatinNameChange = (value : string) => { setLatinName(value); };
     const handleDropDownChange = (value : string) => { setPreferredName(value) };
     const handleSmallDescriptionChange = (value : string) => { setSmallDescription(value) };
@@ -1574,7 +1574,7 @@ export default function CreatePlant() {
 
     // Section States
     const [englishNameValidationState, setEnglishNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
-    const [moariNameValidationState, setMoariNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [maoriNameValidationState, setMaoriNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [latinNameValidationState, setLatinNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [preferredNameValidationState, setPreferredNameValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [smallDescriptionValidationState, setSmallDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
@@ -1589,15 +1589,15 @@ export default function CreatePlant() {
                 setPlantName(englishName);
                 break;
 
-            case "Moari":
-                setPlantName(moariName);
+            case "Maori":
+                setPlantName(maoriName);
                 break;
 
             case "Latin":
                 setPlantName(latinName);
                 break
         }
-    }, [englishName, moariName, latinName, preferredName]);
+    }, [englishName, maoriName, latinName, preferredName]);
 
     // Validate the input
     const validateInput = () => {
@@ -1617,14 +1617,14 @@ export default function CreatePlant() {
             }
         } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]);  }
 
-        // Moari Name
-        if(moariName === ""){
-            if(preferredName === "Moari"){
-                setMoariNameValidationState(["error", "Required if preferred name is Moari"])
+        // Maori Name
+        if(maoriName === ""){
+            if(preferredName === "Maori"){
+                setMaoriNameValidationState(["error", "Required if preferred name is Maori"])
                 isValid = false;
-                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "moari-name";
+                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "maori-name";
             }
-        }else { setMoariNameValidationState(["success", "No Error"] as [ValidationState, string]) }
+        }else { setMaoriNameValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Latin Name
         if(latinName === ""){
@@ -1789,7 +1789,7 @@ export default function CreatePlant() {
         // Basic info
         plantOBJ.preferred_name = cleanInput(preferredName);
         plantOBJ.english_name = cleanInput(englishName);
-        plantOBJ.moari_name =   cleanInput(moariName);
+        plantOBJ.maori_name =   cleanInput(maoriName);
         plantOBJ.latin_name =   cleanInput(latinName);
         plantOBJ.location_found = cleanInput(location);
         plantOBJ.small_description = cleanInput(smallDescription)
@@ -2624,14 +2624,14 @@ export default function CreatePlant() {
                                             changeEventHandler={handleEnglishNameChange}
                                         />
                                     </div>
-                                    <div className={styles.formItem} id={"moari-name"}>
+                                    <div className={styles.formItem} id={"maori-name"}>
                                         <SmallInput
-                                            placeHolder={"Moari Name"}
-                                            defaultValue={importedJSON.moari_name}
+                                            placeHolder={"Maori Name"}
+                                            defaultValue={importedJSON.maori_name}
                                             required={false}
-                                            state={moariNameValidationState[0]}
-                                            errorText={moariNameValidationState[1]}
-                                            changeEventHandler={handleMoariNameChange}
+                                            state={maoriNameValidationState[0]}
+                                            errorText={maoriNameValidationState[1]}
+                                            changeEventHandler={handleMaoriNameChange}
                                         />
                                     </div>
                                     <div className={styles.formItem} id={"latin-name"}>
@@ -2653,7 +2653,7 @@ export default function CreatePlant() {
                                             required={true}
                                             state={preferredNameValidationState[0]}
                                             errorText={preferredNameValidationState[1]}
-                                            options={["English", 'Moari', "Latin"]}
+                                            options={["English", 'Maori', "Latin"]}
                                             changeEventHandler={handleDropDownChange}
                                         />
                                     </div>

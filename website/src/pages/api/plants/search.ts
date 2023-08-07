@@ -31,7 +31,7 @@ export default async function handler(
         // If the user specified a name, get the plant id from the plants database
         let shouldGetNames = ``;
         if(getNames){
-            shouldGetNames = `, english_name, maori_name, latin_name`;
+            shouldGetNames = `, english_name, maori_name, latin_name, preferred_name`;
         }
 
         // Get the plant id from the plants database

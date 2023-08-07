@@ -2,7 +2,7 @@
   "id": "1",
   "preferred_name": "maori",
   "english_name": "Pepper Tree",
-  "moari_name": "Kawakawa",
+  "maori_name": "Kawakawa",
   "latin_name": "none",
   "use": ["food", "medical_internal", "medical_external"],
   "months_ready_for_use": [

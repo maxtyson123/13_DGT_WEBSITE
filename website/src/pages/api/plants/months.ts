@@ -26,7 +26,7 @@ export default async function handler(
                 plants.${tables.id}, 
                 plants.${tables.english_name}, 
                 plants.${tables.latin_name}, 
-                plants.${tables.maori_name} as moari_name, 
+                plants.${tables.maori_name} as maori_name, 
                 plants.${tables.preferred_name}, 
                 months_ready_for_use.${tables.months_start_month}, 
                 months_ready_for_use.${tables.months_end_month}, 

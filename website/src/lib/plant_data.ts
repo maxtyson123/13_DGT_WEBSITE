@@ -9,7 +9,7 @@ export interface PlantData {
     id:                 number;
     preferred_name:     string;
     english_name:       string;
-    moari_name:         string;
+    maori_name:         string;
     latin_name:         string;
     use:                string[];
     months_ready_for_use: MonthsReadyData[];
@@ -371,7 +371,7 @@ export function ValidPlantData(plantData : PlantData) : boolean {
 
     return !(plantData.preferred_name       == null
         || plantData.english_name           == null
-        || plantData.moari_name             == null
+        || plantData.maori_name             == null
         || plantData.latin_name             == null
         || plantData.location_found         == null
         || plantData.small_description      == null
@@ -407,7 +407,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     // Basic info
     plantData.preferred_name    = apiData.preferred_name;
     plantData.english_name      = apiData.english_name;
-    plantData.moari_name        = apiData.maori_name;
+    plantData.maori_name        = apiData.maori_name;
     plantData.latin_name        = apiData.latin_name;
     plantData.location_found    = apiData.location_found;
     plantData.small_description = apiData.small_description;
@@ -548,7 +548,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     // Basic info
     apiData.preferred_name    = plantData.preferred_name;
     apiData.english_name      = plantData.english_name;
-    apiData.maori_name        = plantData.moari_name;
+    apiData.maori_name        = plantData.maori_name;
     apiData.latin_name        = plantData.latin_name;
     apiData.location_found    = plantData.location_found;
     apiData.small_description = plantData.small_description;
@@ -629,7 +629,7 @@ export function emptyPlantData(){
         id:                     1,
         preferred_name:         "",
         english_name:           "",
-        moari_name:             "",
+        maori_name:             "",
         latin_name:             "",
         use:                    [],
         months_ready_for_use:   [],
@@ -708,12 +708,12 @@ export function getNamesInPreference(data: PlantData){
     switch (data.preferred_name){
         case "English":
             localNames[0] = data.english_name
-            localNames[1] = data.moari_name
+            localNames[1] = data.maori_name
             localNames[2] = data.latin_name
             break
 
-        case "Moari":
-            localNames[0] = data.moari_name
+        case "Maori":
+            localNames[0] = data.maori_name
             localNames[1] = data.english_name
             localNames[2] = data.latin_name
             break
@@ -721,7 +721,7 @@ export function getNamesInPreference(data: PlantData){
         case "Latin":
             localNames[0] = data.latin_name
             localNames[1] = data.english_name
-            localNames[2] = data.moari_name
+            localNames[2] = data.maori_name
             break
     }
 

@@ -9,6 +9,7 @@ import styles from "@/styles/plant_index.module.css";
 import axios from "axios";
 import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";
+import {getNamesInPreference} from "@/lib/plant_data";
 
 interface plantEntry {
     id: number,
@@ -20,6 +21,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
 export default function PlantIndex(){
     const pageName = "Plant Index"
+    const [plantData, setPlantData] = React.useState<any>(null)
     const [plants, setPlants] = React.useState<plantEntry[] | null>(null)
     const [uses, setUses] = React.useState<plantEntry[] | null>(null)
     const [indexItems, setIndexItems] = React.useState<plantEntry[] | null>(null)
@@ -56,6 +58,9 @@ export default function PlantIndex(){
 
             // Get the plant ids from the response
             const data = response.data.data
+
+            // Store the data
+            setPlantData(data)
 
             // Create an array to store the plant ids (for each name)
             let ids: plantEntry[] = []
@@ -111,7 +116,19 @@ export default function PlantIndex(){
 
             // Loop through the data and set the uses
             for (let i = 0; i < data.length; i++) {
-                uses.push({id: data[i].id, name: data[i].identifier, tag: data[i].type})
+
+                // Split the item into two if there is a comma
+                let split = data[i].identifier.split(",")
+
+                // If there is a comma then add all the items to the array
+                for (let j = 0; j < split.length; j++) {
+                    uses.push(
+                        {
+                            id: data[i].id,
+                            name: split[j],
+                            tag: data[i].type
+                        })
+                }
             }
 
             // Set the plant uses
@@ -191,12 +208,30 @@ export default function PlantIndex(){
 
         }
 
+        // If the filter is a use then add the plant name to the use
+        if(currentFilter.includes("Uses")) {
+
+            // Loop through the items and the plant data
+            for(let i = 0; i < items.length; i++) {
+                for(let j = 0; j < plantData.length; j++) {
+
+                    // If the  ID  is the same then add the plant name to the use
+                    if(items[i].id === plantData[j].id) {
+
+                        // Get the preffered name
+                        items[i].name += (" - " + getNamesInPreference(plantData[j])[0])
+                        break
+                    }
+                }
+            }
+        }
+
         // Update the index items
         console.log(items)
         setIndexItems(items)
 
         // Re render the components
-        setRenderKey(Math.random())
+        setRenderKey(prevState => prevState + 1)
 
 
     }, [plants, currentFilter, uses])
@@ -238,8 +273,8 @@ export default function PlantIndex(){
                     <div className={styles.contentsLinks}>
                         {/* Loop through the alphabet and add a link for each letter */}
                         {
-                            alphabet.map((letter) => {
-                                return <p key={letter} onClick={() => {scrollID(letter)}}>{letter}</p>
+                            alphabet.map((letter, index) => {
+                                return <p key={index} onClick={() => {scrollID(letter)}}>{letter}</p>
                             })
                         }
 
@@ -247,11 +282,13 @@ export default function PlantIndex(){
                 </div>
 
                 {/* Loop through the alphabet and add a section for each letter */}
+                <div>
                 {
                     alphabet.map((letter) => {
                         return <PlantIndexEntry key={letter + renderKey} letter={letter} plants={indexItems}/>
                     })
                 }
+                </div>
 
             </Section>
 
@@ -284,11 +321,11 @@ function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
                         plants ?
 
                             // Loop through the plants and add a list item for each plant that starts with the specified letter
-                            plants.map((plant) => {
+                            plants.map((plant,   index) => {
                                 if(!plant.name)
                                     return <></>
                                 if (plant.name[0].toLowerCase() === letter.toLowerCase()) {
-                                    return <li key={plant.id} onClick={() => {window.location.href = "/plants/" + plant.id}}>{plant.name}</li>
+                                    return <li key={index} onClick={() => {window.location.href = "/plants/" + plant.id}}>{plant.name}</li>
                                 }})
                             :
                             // If the plants haven't been fetched, then display a loading message
