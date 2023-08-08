@@ -2,6 +2,7 @@ import React from "react";
 
 var $ = require("jquery");
 if (typeof window !== "undefined") {
+    // @ts-ignore   -  This is a hack to get around the fact that the window object doesn't like jquery in nextjs
     window.$ = window.jQuery = require("jquery");
 }
 
