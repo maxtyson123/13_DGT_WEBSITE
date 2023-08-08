@@ -129,3 +129,12 @@ body{
     justify-content: center;
     align-items: center;
 }
+
+.owl-carousel .owl-stage {
+    display: flex;
+    align-items: center;
+}
+
+.owl-carousel .owl-stage-outer{
+    overflow: visible !important;
+}

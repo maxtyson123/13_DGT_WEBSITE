@@ -110,6 +110,13 @@
     align-items: baseline;
 }
 
+.sliderItem{
+    display: grid;
+    height: 100%;
+    align-items: center;
+    justify-items: center;
+}
+
 @media only screen and (max-width: 1400px) {
 
     /*

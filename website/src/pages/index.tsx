@@ -14,6 +14,7 @@ import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import {globalStyles} from "@/lib/global_css";
 import Image from "next/image";
+import Slider from "@/components/slider";
 
 export default function Home() {
     const pageName = "Home"
@@ -55,14 +56,21 @@ export default function Home() {
 
             // Use the api to get the plant ids
             try{
+                const amountToGet = 8
+
                 // Make the api call
-                const response = await axios.get("/api/plants/random?amount=6")
+                const response = await axios.get(`/api/plants/random?amount=${amountToGet}`)
 
                 // API returns the data as "data" which axios also uses, so we need to use response.data.data
                 const data = response.data.data
 
                 // Create an array to store the ids
-                let ids = [0,0,0,0,0,0]
+                let ids = []
+
+                // Fill the ids with 0s
+                for (let i = 0; i < amountToGet; i++) {
+                    ids[i] = 0
+                }
 
                 // Loop through the data and set the ids
                 for (let i = 0; i < data.length; i++) {
@@ -141,32 +149,33 @@ export default function Home() {
                 {/* Section title */}
                 <h1 className={styles.sectionTitle}>Featured Plants</h1>
 
-                {/* Container that centers the cards */}
-                <div className={styles.cardsContainer}>
                     {
                         isLoading ?
-                        <>
-                            {/* While the data is being fetched, display the loading cards */}
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                            <PlantCardLoading/>
-                        </>
-                        :
-                        <>
-                            {/* Once the data has been fetched, load the individual card's data */}
-                            <PlantCardApi id={plantIds[0]}/>
-                            <PlantCardApi id={plantIds[1]}/>
-                            <PlantCardApi id={plantIds[2]}/>
-                            <PlantCardApi id={plantIds[3]}/>
-                            <PlantCardApi id={plantIds[4]}/>
-                            <PlantCardApi id={plantIds[5]}/>
-                        </>
+                            <>
+                                <PlantCardLoading/>
+                                <PlantCardLoading/>
+                                <PlantCardLoading/>
+                            </>
+                            :
+                            <>
+                                <Slider>
+                                    {/* Once the data has been fetched, load the individual card's data */}
+                                    {plantIds.map((id) => (
+                                       <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
+                                    ))}
+
+                                </Slider>
+
+                            </>
 
                     }
+
+
+
+
+                {/* Container that centers the cards */}
+                <div className={styles.cardsContainer}>
+
                 </div>
             </Section>
 
