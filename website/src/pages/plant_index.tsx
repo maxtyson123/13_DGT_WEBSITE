@@ -122,6 +122,10 @@ export default function PlantIndex(){
 
                 // If there is a comma then add all the items to the array
                 for (let j = 0; j < split.length; j++) {
+
+                    // Remove space from the start and end of the string
+                    split[j] = split[j].trim()
+
                     uses.push(
                         {
                             id: data[i].id,
@@ -133,6 +137,7 @@ export default function PlantIndex(){
 
             // Set the plant uses
             setUses(uses)
+            console.log(uses)
 
         }catch (e) {
             console.log(e)
