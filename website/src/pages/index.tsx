@@ -152,9 +152,11 @@ export default function Home() {
                     {
                         isLoading ?
                             <>
-                                <PlantCardLoading/>
-                                <PlantCardLoading/>
-                                <PlantCardLoading/>
+                                <Slider>
+                                    <PlantCardLoading/>
+                                    <PlantCardLoading/>
+                                    <PlantCardLoading/>
+                                </Slider>
                             </>
                             :
                             <>

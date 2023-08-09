@@ -20,10 +20,29 @@ type SliderProps = {
 
 };
 
+const Responsive = {
+    0: {
+        items: 1,
+    },
+    700: {
+        items: 1.5,
+    },
+    950: {
+        items: 2,
+    },
+    1100: {
+        items: 2.5,
+    },
+    1500: {
+        items: 3.5,
+    }
+}
+
 export default function Slider({children} :   SliderProps) {
     return(
         <>
             <OwlCarousel
+                responsive={Responsive}
                 className={styles.owlCarousel}
                 autoplay={true}
                 autoplayTimeout={5000}
