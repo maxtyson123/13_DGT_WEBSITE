@@ -5,7 +5,7 @@ import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/search.module.css";
+import styles from "@/styles/components/search.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
@@ -17,6 +17,7 @@ export default function Search(){
 
     // Stats
     const [query, setQuery] = useState<string | null>(null)
+    const [includeMushrooms, setIncludeMushrooms] = useState<boolean>(true)
     const [duration, setDuration] = useState(0)
     const [amount, setAmount] = useState(0)
 
@@ -49,6 +50,11 @@ export default function Search(){
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('query');
 
+        const includeMushrooms = urlParams.get('include_mushrooms');
+        console.log(includeMushrooms)
+        console.log(includeMushrooms == "true")
+        setIncludeMushrooms(includeMushrooms == "true")
+
         // Check if the query is null
         if (query === null || query === "")
             return
@@ -75,11 +81,11 @@ export default function Search(){
         dataFetch.current = true
 
         // Begin getting the search results
-        getSearchResults(query).then()
+        getSearchResults(query, includeMushrooms == "true").then()
 
     }, [])
 
-    const getSearchResults = async (name: string) => {
+    const getSearchResults = async (name: string, mushroons: boolean) => {
 
         const startTime = Date.now()
 
@@ -87,8 +93,9 @@ export default function Search(){
             console.log("Getting search results")
 
             // Get the search results
-            const response = await axios.get(`/api/plants/search?name=${name}`)
-
+            const response = await axios.get(`/api/plants/search?name=${name}&mushrooms=${mushroons ? "include" : "exclude"}`)
+            console.log(mushroons ? "include" : "exclude")
+            console.log(mushroons)
             // Get the data from the response
             const data = response.data.data
 
@@ -192,10 +199,21 @@ export default function Search(){
                         className={styles.searchButton}
                         onClick={() => {
                             const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
-                            window.location.href = `/search?query=${userInput}`
+                            const includeMushrooms = (document.getElementById("plant_type") as HTMLInputElement).checked
+                            window.location.href = `/search?query=${userInput}&include_mushrooms=${includeMushrooms}`
                         }}>
                         <FontAwesomeIcon icon={faSearch}/>
                     </button>
+                </div>
+                <div className={styles.searchBoxContainer}>
+                    <div className={styles.searchFilterContainer}>
+                        <h3>Filter by:</h3>
+
+                        <div className={styles.searchFilter}>
+                            <input type="checkbox" id="plant_type" name="plant_type" defaultChecked={includeMushrooms}/>
+                            <label htmlFor="plant_type"> Include Mushrooms in search? </label>
+                        </div>
+                    </div>
                 </div>
 
             </Section>

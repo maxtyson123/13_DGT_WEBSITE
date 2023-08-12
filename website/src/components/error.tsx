@@ -1,4 +1,4 @@
-import styles from "@/styles/error.module.css"
+import styles from "@/styles/components/error.module.css"
 import React from "react";
 
 interface ErrorProps{

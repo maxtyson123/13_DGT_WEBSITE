@@ -13,7 +13,7 @@
     top: 0;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.466);
     display: grid;
-    grid-template-columns: repeat(2, .15fr) 1fr repeat(4, .15fr);
+    grid-template-columns: repeat(2, .15fr) 1fr repeat(5, .12fr);
     grid-template-rows: 1fr;
     grid-column-gap: 20px;
     align-items: center;

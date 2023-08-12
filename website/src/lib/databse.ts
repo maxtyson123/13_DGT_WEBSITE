@@ -26,6 +26,7 @@ export class SQLDatabase {
     author: string;
     last_modified: string;
     display_image: string;
+    plant_type: string;
 
     // Attachments Table
     attachment_path: string;
@@ -92,6 +93,7 @@ export class SQLDatabase {
         this.author                     = "author";
         this.last_modified              = "last_modified";
         this.display_image              = "display_image";
+        this.plant_type                 = "plant_type";
 
         // Attachments Table
         this.attachment_path            = "attachments_path";

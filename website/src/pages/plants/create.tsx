@@ -1530,6 +1530,7 @@ export default function CreatePlant() {
     const [largeDescription, setLargeDescription]   = useState("")
     const [location, setLocation]                   = useState("")
     const [displayImage, setDisplayImage]           = useState("")
+    const [plantType, setPlantType]                 = useState("")
 
     // Section Refs
     const imageInfoRef                 = useRef<ImageInfo[]>([]);
@@ -1561,6 +1562,7 @@ export default function CreatePlant() {
     const handleLargeDescriptionChange = (value : string) => { setLargeDescription(value) };
     const handleLocationChange = (value : string) => { setLocation(value) };
     const handleDisplayImageChange = (value : string) => { setDisplayImage(value) };
+    const handlePlantTypeChange = (value : string) => { setPlantType(value) };
 
     // New Section Setters
     const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKeyDate(prevState => prevState + 1)}
@@ -1581,6 +1583,7 @@ export default function CreatePlant() {
     const [largeDescriptionValidationState, setLargeDescriptionValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [locationValidationState, setLocationValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
     const [displayImageValidationState, setDisplayImageValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
+    const [plantTypeValidationState, setPlantTypeValidationState] = useState(["normal", "No Error"] as [ValidationState, string])
 
     // Update the page title when name changes
     useEffect(() => {
@@ -1671,6 +1674,13 @@ export default function CreatePlant() {
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "display-image";
         }else { setDisplayImageValidationState(["success", "No Error"] as [ValidationState, string]) }
+
+        // Plant Type
+        if(plantType === ""){
+            setPlantTypeValidationState(["error", "Please select a plant type"])
+            isValid = false;
+            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "plant-type";
+        } else { setPlantTypeValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Validate the image info
         for (let i = 0; i < imageInfoRef.current.length; i++) {
@@ -1794,14 +1804,36 @@ export default function CreatePlant() {
         plantOBJ.location_found = cleanInput(location);
         plantOBJ.small_description = cleanInput(smallDescription)
         plantOBJ.long_description = cleanInput(largeDescription)
-        if(session && session.user)
-            plantOBJ.author = session.user.name ? session.user.name : "Unknown";
-        else
-            plantOBJ.author = "Unknown";
-
-        plantOBJ.author = cleanInput(plantOBJ.author);
+        plantOBJ.author = "Unknown";
         plantOBJ.last_modified = new Date().toISOString()
         plantOBJ.display_image = cleanInput(displayImage);
+        plantOBJ.plant_type = cleanInput(plantType);
+
+        // Get the plant author
+        if(session && session.user){
+
+            // If there is a user then set the author to the user's name
+            if (session.user.name)
+                plantOBJ.author = session.user.name;
+
+            // Get the previous author
+            let prevAuthors = importedJSON.author;
+
+            // If there is a previous author then add it to the list
+            if(prevAuthors){
+                // Split at the comma
+                let prevAuthorsList = prevAuthors.split(",");
+
+                // Check if the current author is already in the list and remove it if it is
+                if(prevAuthorsList.includes(plantOBJ.author)) {
+                    prevAuthorsList.splice(prevAuthorsList.indexOf(plantOBJ.author), 1);
+                }
+
+                // Add the prev authors to the author list
+                plantOBJ.author = plantOBJ.author + "," + prevAuthorsList.join(",");
+            }
+        }
+
 
         // Image info
         for(let i = 0; i < imageInfoRef.current.length; i++) {
@@ -2549,7 +2581,6 @@ export default function CreatePlant() {
         displayImageRef.current.unshift("Default")
     }
 
-
     useEffect(() => {
 
         // Register the updateNames names function to the image info object as it doest have a reference to the render keys of the other sections
@@ -2706,6 +2737,19 @@ export default function CreatePlant() {
                                             errorText={displayImageValidationState[1]}
                                             options={displayImageRef.current}
                                             changeEventHandler={handleDisplayImageChange}
+                                        />
+                                    </div>
+
+                                    {/* Plant Type */}
+                                    <div className={styles.formItem} id={"plant-type"}>
+                                        <DropdownInput
+                                            placeHolder={"Plant Type"}
+                                            defaultValue={importedJSON.plant_type}
+                                            required={true}
+                                            state={plantTypeValidationState[0]}
+                                            errorText={plantTypeValidationState[1]}
+                                            options={["Plant", "Mushroom"]}
+                                            changeEventHandler={handlePlantTypeChange}
                                         />
                                     </div>
 

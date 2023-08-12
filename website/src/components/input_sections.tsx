@@ -1,4 +1,4 @@
-import styles from "@/styles/input_sections.module.css";
+import styles from "@/styles/components/input_sections.module.css";
 import React, {useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";

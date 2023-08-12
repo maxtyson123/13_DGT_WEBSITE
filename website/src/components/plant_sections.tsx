@@ -1,4 +1,4 @@
-import styles from "@/styles/plant_sections.module.css"
+import styles from "@/styles/components/plant_sections.module.css"
 import React, {useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {

@@ -72,7 +72,8 @@ export default async function handler(
                                     plants.${tables.long_description}, 
                                     plants.${tables.author}, 
                                     plants.${tables.last_modified}, 
-                                    plants.${tables.display_image},`;
+                                    plants.${tables.display_image},
+                                    plants.${tables.plant_type},`;
                     break;
 
                 case 'months_ready_for_use':

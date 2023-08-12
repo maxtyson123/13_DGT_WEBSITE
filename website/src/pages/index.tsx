@@ -56,7 +56,7 @@ export default function Home() {
 
             // Use the api to get the plant ids
             try{
-                const amountToGet = 8
+                const amountToGet = 3
 
                 // Make the api call
                 const response = await axios.get(`/api/plants/random?amount=${amountToGet}`)
@@ -152,11 +152,9 @@ export default function Home() {
                     {
                         isLoading ?
                             <>
-                                <Slider>
                                     <PlantCardLoading/>
                                     <PlantCardLoading/>
                                     <PlantCardLoading/>
-                                </Slider>
                             </>
                             :
                             <>

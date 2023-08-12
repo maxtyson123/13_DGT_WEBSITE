@@ -1,4 +1,4 @@
-import styles from "@/styles/stats.module.css"
+import styles from "@/styles/components/stats.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useRef, useState} from "react";

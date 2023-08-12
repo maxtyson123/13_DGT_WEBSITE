@@ -1,4 +1,4 @@
-import styles from "@/styles/credits.module.css";
+import styles from "@/styles/components/credits.module.css";
 import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCodeBranch, faCopyright} from "@fortawesome/free-solid-svg-icons";

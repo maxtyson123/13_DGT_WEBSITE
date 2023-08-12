@@ -45,6 +45,22 @@
     justify-content: center;
 }
 
+.searchFilterContainer{
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    width: 60%;
+}
+
+.searchFilterContainer h3{
+    font-size: 24px;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    text-align: center;
+}
+
+
 /*
  Make the search box that up 60% of the screen and have a constant height of 75px
  Round the corners of the box on the left, not the right as that is where the button is

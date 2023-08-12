@@ -1,4 +1,4 @@
-import styles from "@/styles/scroll_to_top.module.css";
+import styles from "@/styles/components/scroll_to_top.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useState} from "react";

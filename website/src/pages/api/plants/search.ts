@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, makeQuery} from "@/lib/databse";
+import {getClient, getTables, makeQuery} from "@/lib/databse";
 
 export default async function handler(
     request: NextApiRequest,
@@ -16,21 +16,24 @@ export default async function handler(
     const client = await getClient()
 
     // Get the ID and table from the query string
-    const {
+    let {
         amount,
         name,
-        getNames
+        getNames,
+        mushrooms
     } = request.query;
 
     // Try querying the database
     try {
+
+        const tables = getTables()
 
         // Assemble the query
         let query = ``;
 
         // If the user specified a name, get the plant id from the plants database
         let shouldGetNames = ``;
-        if(getNames){
+        if (getNames) {
             shouldGetNames = `, english_name, maori_name, latin_name, preferred_name`;
         }
 
@@ -38,14 +41,36 @@ export default async function handler(
         query += ` SELECT id ${shouldGetNames} FROM plants`;
 
         // Select what the user entered
-        if(name){
+        if (name) {
             query += ` WHERE english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
         }
 
         // Only get a certain amount
-        if(amount){
+        if (amount) {
             query += ` LIMIT ${amount}`
         }
+
+        // Filter mushrooms
+        if (!mushrooms){
+            mushrooms = "exclude"
+        }
+
+        switch (mushrooms) {
+                case "include":
+                    break;
+
+                case "exclude":
+                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    break;
+
+                case "only":
+                    query += ` WHERE ${tables.plant_type} LIKE '%Mushroom%'`;
+                    break;
+
+                default:
+                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    break;
+            }
 
         // Return the plants that match the query
         const plantIds = await makeQuery(query, client)

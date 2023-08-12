@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
-import styles from "@/styles/search_box.module.css";
+import styles from "@/styles/components/search_box.module.css";
 
 /**
  * Search box component. Renders a search box that redirects to the search page when submitted.

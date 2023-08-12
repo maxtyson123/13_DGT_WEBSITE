@@ -1,4 +1,4 @@
-import styles from "@/styles/page_header.module.css"
+import styles from "@/styles/components/page_header.module.css"
 import Image from 'next/image';
 import React, {useEffect, useRef} from "react";
 

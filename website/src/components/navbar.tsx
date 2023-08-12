@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
-import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch, faSpa} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import styles from "@/styles/navbar.module.css"
+import styles from "@/styles/components/navbar.module.css"
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
@@ -11,6 +11,7 @@ import {IconProp} from "@fortawesome/fontawesome-svg-core";
 export const pageNames = [
     ["Home", faHome, "/"],
     ["Plant Index", faBook, "/plant_index"],
+    ["Mushrooms", faSpa, "/mushrooms"],
     ["Calender", faCalendar, "/calender"],
     ["Search", faSearch, "/search"],
 ];

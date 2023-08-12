@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import styles from "@/styles/footer.module.css";
+import styles from "@/styles/components/footer.module.css";
 import SearchBox from "@/components/search_box";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

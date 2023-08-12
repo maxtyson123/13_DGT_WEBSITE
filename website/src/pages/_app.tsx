@@ -1,5 +1,5 @@
-import '@/styles/globals.css'
-import "@/styles/quill.snow.css";
+import '@/styles/components/globals.css'
+import "@/styles/components/quill.snow.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import type {AppProps} from 'next/app'

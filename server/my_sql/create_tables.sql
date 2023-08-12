@@ -11,6 +11,7 @@ CREATE TABLE plants (
     author TEXT,
     last_modified DATE,
     display_image TEXT,
+    plant_type TEXT,
 	PRIMARY KEY (id)
 );
 

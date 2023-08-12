@@ -1,4 +1,4 @@
-import styles from "@/styles/plant_card.module.css"
+import styles from "@/styles/components/plant_card.module.css"
 import Link from "next/link";
 import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
 import {useEffect, useRef, useState} from "react";
