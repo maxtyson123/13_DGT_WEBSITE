@@ -15,6 +15,7 @@ import Image from "next/image";
 import {AttachmentSection, AutoSection, SourceSection} from "@/components/plant_sections";
 import {Error} from "@/components/error";
 import {CreditedImage} from "@/components/credits";
+import {useSession} from "next-auth/react";
 
 export default function PlantPage() {
 
@@ -30,6 +31,9 @@ export default function PlantPage() {
 
     // Error state
     const [error, setError] = React.useState("")
+
+    // Get the logged-in user
+    const { data: session } = useSession()
 
     // Set up the router
     const router = useRouter()
@@ -195,6 +199,12 @@ export default function PlantPage() {
 
     }
 
+    const editThisPlant = () => {
+
+        router.push("/plants/create?id=" + plantData?.id)
+
+    }
+
 
 
     return (
@@ -248,6 +258,7 @@ export default function PlantPage() {
             </Section>
 
             <Section autoPadding>
+                { session ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button>  :  <></> }
                 <div className={styles.plantMainInfo}>
 
                     {/* If there is an error then display it */}
