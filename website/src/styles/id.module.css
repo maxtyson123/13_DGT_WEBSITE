@@ -204,6 +204,13 @@
     background-color: var(--darker-secondary-gray);
 }
 
+.plantImageDescription{
+    background-color: var(--secondary-gray);
+    border-radius: 0px 0px 20px 20px;
+    margin-top: -20px;
+    padding: 30px 10px 10px;
+}
+
 @media only screen and (max-width: 800px) {
 
     /*

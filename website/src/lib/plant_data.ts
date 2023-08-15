@@ -75,9 +75,9 @@ export interface PlantDataApi {
  * @see {@link AttachmentSectionData}
  */
 export interface ImageMetaData {
-    name:       string;
-    credits:    string;
-    tags:       string[];
+    name:           string;
+    credits:        string;
+    description:    string;
 }
 
 /**

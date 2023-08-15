@@ -231,6 +231,9 @@ export default function PlantIndex(){
             }
         }
 
+        // If the item has "Not Set" in it then remove it
+        items = items.filter((item) => {return !item.name.includes("Not Set")})
+
         // Update the index items
         console.log(items)
         setIndexItems(items)

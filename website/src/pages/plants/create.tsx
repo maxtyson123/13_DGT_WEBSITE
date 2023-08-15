@@ -856,14 +856,14 @@ class ImageInfo{
         image_data:     string;
         image_name:     string;
         image_credit:   string;
-        image_tags:     string;
+        image_description:     string;
         image_file:     File | null;
     } = {
         image_url:      "",
         image_data:     "",
         image_name:     "",
         image_credit:   "",
-        image_tags:     "",
+        image_description:     "",
         image_file:     null,
     }
 
@@ -872,7 +872,7 @@ class ImageInfo{
         image_url:      ["normal", "No Error"] as [ValidationState, string],
         image_name:     ["normal", "No Error"] as [ValidationState, string],
         image_credit:   ["normal", "No Error"] as [ValidationState, string],
-        image_tags:     ["normal", "No Error"] as [ValidationState, string],
+        image_description:     ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
@@ -885,7 +885,7 @@ class ImageInfo{
     handleDataChange        = (value : string) => {this.state.image_data  = value};
     handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
     handleCreditChange      = (value : string) => {this.state.image_credit = value};
-    handleTagsChange        = (value : string) => {this.state.image_tags   = value};
+    handleDescriptionChange        = (value : string) => {this.state.image_description   = value};
 
     // Update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -897,7 +897,7 @@ class ImageInfo{
                 imageURLHandler={this.handeURLChange}
                 imageDataURLHandler={this.handleDataChange}
                 creditHandler={this.handleCreditChange}
-                tagsHandler={this.handleTagsChange}
+                descriptionHandler={this.handleDescriptionChange}
                 valid={this.valid}
                 state={this.state}
             />
@@ -954,22 +954,22 @@ type ImageSectionProps = {
     imageDataURLHandler:   (value: string) => void;
     imageFileHandler:       (file: File)    => void;
     creditHandler:          (value: string) => void;
-    tagsHandler:            (value: string) => void;
+    descriptionHandler:            (value: string) => void;
     valid: {
         image_url:  [ValidationState, string];
         image_name: [ValidationState, string];
         image_credit: [ValidationState, string];
-        image_tags: [ValidationState, string];
+        image_description: [ValidationState, string];
     }
     state: {
         image_url:  string;
         image_data: string;
         image_name: string;
         image_credit: string;
-        image_tags: string;
+        image_description: string;
     }
 }
-export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, imageDataURLHandler, creditHandler, tagsHandler, state, valid}: ImageSectionProps){
+export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, imageDataURLHandler, creditHandler, descriptionHandler, state, valid}: ImageSectionProps){
 
     const [localURL, setLocalURL] = useState(1);
 
@@ -1051,17 +1051,16 @@ export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, im
                 />
             </div>
 
-            {/* Image tags */}
+            {/* Image description */}
             <div className={styles.formItem}>
                 <SmallInput
-                    placeHolder={"Image Tags (seperated by a comma)"}
-                    defaultValue={state.image_tags}
+                    placeHolder={"Short Image Description"}
+                    defaultValue={state.image_description}
                     required={false}
-                    state={valid.image_tags[0]}
-                    errorText={valid.image_tags[1]}
-                    changeEventHandler={tagsHandler}
+                    state={valid.image_description[0]}
+                    errorText={valid.image_description[1]}
+                    changeEventHandler={descriptionHandler}
                 />
-                <p>Example tags: <span>transparent, in_season, out_season, whole_plant, leaf_top, leaf_underside, stem, fruit, bud</span></p>
             </div>
         </>
     )
@@ -1845,20 +1844,10 @@ export default function CreatePlant() {
                 meta: {
                     "name": cleanInput(thisImageInfo.image_name),
                     "credits": cleanInput(thisImageInfo.image_credit),
-                    "tags": [""],
+                    "description": cleanInput(thisImageInfo.image_description),
                 },
                 downloadable: false,
             } as AttachmentData;
-
-            // Split the tags by comma
-            if(thisImageInfo.image_tags !== ""){
-                (imageInfoOBJ.meta as ImageMetaData).tags = thisImageInfo.image_tags.split(",");
-            }
-
-            // Remove any spaces at the start of tags
-            for(let i = 0; i <  (imageInfoOBJ.meta as ImageMetaData).tags.length; i++){
-                (imageInfoOBJ.meta as ImageMetaData).tags[i] =  cleanInput((imageInfoOBJ.meta as ImageMetaData).tags[i].trim());
-            }
 
             plantOBJ.attachments.push(imageInfoOBJ);
         }
@@ -2070,7 +2059,7 @@ export default function CreatePlant() {
                 const metaData = jsonContents.attachments[i].meta as ImageMetaData
                 imageSection.handleNameChange(metaData.name)
                 imageSection.handleCreditChange(metaData.credits)
-                imageSection.handleTagsChange(metaData.tags.join(", "))
+                imageSection.handleDescriptionChange(metaData.description)
 
                 // Re-render the section
                 imageSection.reRenderSection()
@@ -2199,6 +2188,9 @@ export default function CreatePlant() {
 
             }
         }
+
+        // Update the image names in the image sections
+        updateNames()
     }
 
     const importPlant = () =>
