@@ -9,6 +9,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 
+
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -107,7 +108,6 @@ export default async function handler(
                             }
                         });
                     });
-
 
                     // Upload the file
                     ftp.put(file[0].path, remotePath, (ftpErr) => {

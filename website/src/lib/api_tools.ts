@@ -38,6 +38,14 @@ export function GetOrigin(request: NextApiRequest){
     return protocol + "//" + host;
 }
 
+/**
+ * Check if the user is allowed to upload data to the database
+ *
+ * @param request
+ * @param response
+ * @param client
+ * @return {string | null} - The permissions of the user or null if the user is not allowed to upload (example: "admin" or "member")
+ */
 export async function CheckWhitelisted(request: NextApiRequest, response: NextApiResponse, client: any){
 
     let {api_key} = request.query;

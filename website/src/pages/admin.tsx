@@ -194,6 +194,21 @@ export default function PlantIndex(){
 
     }
 
+    const handleDownload = async () => {
+        try {
+            const response = await fetch('/api/files/backup_files');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'images.zip';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return(
         <>
             {/* The header and navbar */}
@@ -245,6 +260,7 @@ export default function PlantIndex(){
                                         {
                                             userAllowed == 3 ?
                                                 <>
+                                                    <button onClick={handleDownload}>Download Images</button>
                                                     <h1> Users </h1>
                                                     <br/>
                                                     <table>
