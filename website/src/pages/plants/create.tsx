@@ -1757,7 +1757,7 @@ export default function CreatePlant() {
             }
         }
 
-        // If the previous error message is this on then remove it
+        // If the previous error message from this is on then remove it as there are no issues
         if(error === "Please fix the fields below" || error === "Please add at least one image"){
             setError("")
         }
@@ -2004,6 +2004,50 @@ export default function CreatePlant() {
             customInfoOBJ.text = cleanInput(thisCustomInfo.text);
 
             plantOBJ.sections.push(customInfoOBJ);
+        }
+
+        // Loop through the sections to double check that the images they use are in the attachments
+        for(let i = 0; i < plantOBJ.sections.length; i++) {
+
+            // Only Edible, Medical and Craft sections have images
+            if (!(plantOBJ.sections[i].type === "edible" || plantOBJ.sections[i].type === "medical" || plantOBJ.sections[i].type === "craft"))
+                continue
+
+            // Get the image (for whatever reason edible stores it differently)
+            const image = plantOBJ.sections[i].type == "edible" ? (plantOBJ.sections[i] as EdibleSectionData).image_of_part : (plantOBJ.sections[i] as MedicalSectionData).image;
+
+            // If the image is Default then continue:
+            if (image === "Default")
+                continue
+
+            // Store whether the image is valid
+            let validImage = false;
+
+            // Check if the image name is in the attachments
+            for (let j = 0; j < plantOBJ.attachments.length; j++) {
+                if ((plantOBJ.attachments[j].meta as ImageMetaData).name === image) {
+                    // If it is then this section is valid
+                    validImage = true;
+                }
+            }
+
+            // If the image isn't valid then set it to default
+            if (!validImage) {
+                if (plantOBJ.sections[i].type == "edible") {
+                    (plantOBJ.sections[i] as EdibleSectionData).image_of_part = "Default";
+                } else {
+                    (plantOBJ.sections[i] as MedicalSectionData).image = "Default";
+                }
+
+                // Show an error
+                setError(`One or more images in the sections are not in the attachments, they have been set to default, you may want to fix this: ${image}`)
+
+                // Load the new json with the default image
+                loadJson(plantOBJ);
+
+                // Return null to stop the rest of the function
+                return null;
+            }
         }
 
         return plantOBJ;
@@ -2265,6 +2309,10 @@ export default function CreatePlant() {
         // Generate the JSON file
         const plantOBJ = generateJSON();
 
+        // If the plantOBJ is null then there was an error
+        if(plantOBJ == null)
+            return;
+
         // Download the JSON file
         const element = document.createElement("a");
         const file = new Blob([JSON.stringify(plantOBJ)], {type: 'text/plain'});
@@ -2286,6 +2334,10 @@ export default function CreatePlant() {
 
         // Generate the JSON file
         const jsonData = generateJSON();
+
+        // If the plantOBJ is null then there was an error
+        if(jsonData == null)
+            return;
 
         // Convert the JSON file to API format
         let uploadApiData = ConvertPlantDataIntoApi(jsonData) as any
