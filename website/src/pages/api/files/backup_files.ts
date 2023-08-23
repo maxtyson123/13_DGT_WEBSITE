@@ -111,10 +111,10 @@ export default async function handler(
         const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
         // Check if the user is allowed to back up
-        if((await CheckWhitelisted(request, response, client)) == "admin") {
-            return response.status(401).json({ error: 'User not authorised to access data'});
+        const permission = await CheckWhitelisted(request, response, client);
+        if(permission !== "admin") {
+            return response.status(401).json({ error: 'User not authorised to access data', user: permission});
         }
-
 
         // Get the file urls
         const fileUrls = await fetchFileUrlsFromFTP();

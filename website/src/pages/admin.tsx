@@ -194,19 +194,40 @@ export default function PlantIndex(){
 
     }
 
-    const handleDownload = async () => {
+    const handleFilesDownload = async () => {
         try {
+            setLoading(true)
+            setLoadingMessage("Downloading files...")
             const response = await fetch('/api/files/backup_files');
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'images.zip';
+            a.download = "backup-files-" + new Date().toISOString().slice(0, 10) + ".zip";
             a.click();
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error(error);
         }
+        setLoading(false)
+    };
+
+    const handleDatabaseDownload = async () => {
+        try {
+            setLoading(true)
+            setLoadingMessage("Downloading database...")
+            const response = await fetch('/api/files/backup_database');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "backup-database-" + new Date().toISOString().slice(0, 10) + ".json";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        }
+        setLoading(false)
     };
 
     return(
@@ -260,7 +281,11 @@ export default function PlantIndex(){
                                         {
                                             userAllowed == 3 ?
                                                 <>
-                                                    <button onClick={handleDownload}>Download Images</button>
+                                                    <h1> Back Up </h1>
+                                                    <br/>
+                                                    <button className={styles.backupButton} onClick={handleFilesDownload}>Download Files</button>
+                                                    <button className={styles.backupButton} onClick={handleDatabaseDownload}>Download Database</button>
+                                                    <br/>
                                                     <h1> Users </h1>
                                                     <br/>
                                                     <table>
