@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {USE_POSTGRES} from "@/lib/constants";
-import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
 import archiver from 'archiver';
 import fs from 'fs';
@@ -61,7 +61,7 @@ async function fetchFileUrlsFromFTP() {
                                     continue
 
                                 // Get the file url
-                                const fileUrl = `${process.env.NEXT_PUBLIC_FTP_PUBLIC_URL}plants/${subDir.name}/${file.name}`;
+                                const fileUrl = `${process.env.NEXT_PUBLIC_FTP_PUBLIC_URL}/plants/${subDir.name}/${file.name}`;
 
                                 // Add the file url to the list
                                 fileUrls.push(fileUrl);

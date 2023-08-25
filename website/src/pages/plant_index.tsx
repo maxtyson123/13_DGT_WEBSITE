@@ -234,6 +234,14 @@ export default function PlantIndex(){
         // If the item has "Not Set" in it then remove it
         items = items.filter((item) => {return !item.name.includes("Not Set")})
 
+        // Order the items alphabetically
+items.sort((a, b) => {
+            if(a.name < b.name) { return -1; }
+            if(a.name > b.name) { return 1; }
+            return 0;
+        })
+
+
         // Update the index items
         console.log(items)
         setIndexItems(items)
