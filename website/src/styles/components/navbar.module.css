@@ -5,7 +5,6 @@
  Give the navbar a box shadow to make it stand out from the background.
  */
 .navbar {
-    overflow: hidden;
     background-color: rgba(10, 44, 9, 0.6);
     position: fixed;
     z-index: 2;
@@ -77,6 +76,26 @@
     border-bottom: 2px solid white;
 }
 
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.466);
+    background-color: rgba(10, 44, 9, 0.6);
+    z-index: -1;
+    padding-top: 10px;
+}
+
+.navItem:hover .dropdownContent, .activePage:hover .dropdownContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    grid-row-gap: 10px;
+    width: 6%;
+    overflow: hidden;
+}
+
+
 @media only screen and (max-width: 600px) {
 }
 
@@ -88,11 +107,11 @@
 @media only screen and (max-width: 600px) {
     .expanded .activePage, .expanded .navItem{
         border-bottom: 0;
-
     }
 
     .close{
         border-bottom: 2px solid white;
     }
+
 
 }

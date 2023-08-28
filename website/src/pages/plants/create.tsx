@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/create.module.css";
+import styles from "@/styles/plants/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 import {

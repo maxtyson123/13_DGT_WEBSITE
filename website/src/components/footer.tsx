@@ -4,8 +4,47 @@ import styles from "@/styles/components/footer.module.css";
 import SearchBox from "@/components/search_box";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {pageNames} from "@/components/navbar";
+import {PageName, pageNames} from "@/components/navbar";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
+
+interface footerEntryProps {
+    page: PageName,
+    mobile?: boolean
+}
+function FooterEntry({page, mobile} : footerEntryProps) {
+
+    if(page.children.length > 0 && !mobile) {
+        return (
+            <Link scroll={false} href={String(page.path)} className={styles.link}>
+                <FontAwesomeIcon className={"inline"} icon={page.icon as IconProp}/>
+                <p className={"inline"}>{String(page.name)}</p>
+                {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
+                {/* It Contains the icon and the name of the page*/}
+
+                {page.children.map((child, index) => (
+                    <FooterEntry page={child} key={index}/>
+                ))}
+            </Link>
+        )
+    }
+    else {
+        return(
+            <>
+                <Link scroll={false} href={String(page.path)} className={styles.link}>
+                    <FontAwesomeIcon className={"inline"} icon={page.icon as IconProp}/>
+                    <p className={"inline"}>{String(page.name)}</p>
+                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
+                    {/* It Contains the icon and the name of the page*/}
+                </Link>
+                {page.children.map((child, index) => (
+                    <FooterEntry page={child} key={index}/>
+                ))}
+            </>
+
+
+        )
+    }
+}
 
 /**
  * Renders the Footer component which displays a footer at the bottom of the page with a search box and links to other pages.
@@ -46,12 +85,7 @@ export default function Footer() {
                         {/* Loop through the pageNames array and create a link for each page*/}
                         {pageNames.map((page, index) => (
                             <li key={index}>
-                                <Link scroll={false} href={String(page[2])} className={styles.link}>
-                                    <FontAwesomeIcon className={"inline"} icon={page[1] as IconProp}/>
-                                    <p className={"inline"}>{String(page[0])}</p>
-                                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
-                                    {/* It Contains the icon and the name of the page*/}
-                                </Link>
+                                <FooterEntry page={page} key={index}/>
                             </li>
                         ))}
                     </ul>

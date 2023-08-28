@@ -16,6 +16,15 @@
     color: var(--text-light);
 }
 
+.allPlants{
+    text-align: center;
+}
+
+.allPlants h1{
+    font-size: 64px;
+    color: var(--text-dark);
+}
+
 @media only screen and (max-width: 1300px) {
     .mushroomContainer{
         grid-template-columns: repeat(2, 1fr);

@@ -8,13 +8,24 @@ import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
 // Export it so that it can be used in the footer, that way it is easier to keep the navbar and footer in sync with what links they have
-export const pageNames = [
-    ["Home", faHome, "/"],
-    ["Plant Index", faBook, "/plant_index"],
-    ["Mushrooms", faSpa, "/mushrooms"],
-    ["Calender", faCalendar, "/calender"],
-    ["Search", faSearch, "/search"],
+
+export interface PageName {
+    name: string,
+    icon: IconProp,
+    path: string,
+    children: PageName[]
+}
+
+export const pageNames : PageName[] = [
+    {name: "Home", icon: faHome, path: "/", children: []},
+    {name: "Plants", icon: faLeaf, path: "/plants/", children: [
+        {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
+    ]},
+    {name: "Plant Index", icon: faBook, path: "/plant_index", children: []},
+    {name: "Calender", icon: faCalendar, path: "/calender", children: []},
+    {name: "Search", icon: faSearch, path: "/search", children: []},
 ];
+
 
 /**
  * Navbar component. Renders either the mobile or desktop version of the navbar based on the screen size.
@@ -109,17 +120,56 @@ function DesktopNavbar({currentPage} : navbarProps){
 
                 {/* Loop through the pageNames array and create a link for each page*/}
                 {pageNames.map((page, index) => (
-                    <Link key={index} scroll={false} href={String(page[2])} className={currentPage === page[0] ? styles.activePage : styles.navItem}>
-                        <FontAwesomeIcon icon={page[1] as IconProp}/>
-                        <p>{String(page[0])}</p>
-                        {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
-                        {/* It Contains the icon and the name of the page*/}
-                    </Link>
+                        <NavEntry page={page} currentPage={currentPage} key={index}/>
                 ))}
 
             </div>
         </>
     )
+}
+
+interface navEntryProps {
+    page: PageName,
+    currentPage: string,
+    mobile?: boolean
+}
+export function NavEntry({page, currentPage, mobile} : navEntryProps) {
+
+    if(page.children.length > 0 && !mobile) {
+        return (
+                <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
+                    <FontAwesomeIcon icon={page.icon as IconProp}/>
+                    <p>{String(page.name)}</p>
+                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
+                    {/* It Contains the icon and the name of the page*/}
+
+
+                    <div className={styles.dropdownContent}>
+                        {page.children.map((child, index) => (
+                            <NavEntry page={child} currentPage={currentPage} key={index}/>
+                        ))}
+                    </div>
+
+                </Link>
+        )
+    }
+    else {
+        return(
+            <>
+                <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
+                    <FontAwesomeIcon icon={page.icon as IconProp}/>
+                    <p>{String(page.name)}</p>
+                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
+                    {/* It Contains the icon and the name of the page*/}
+                </Link>
+                {page.children.map((child, index) => (
+                    <NavEntry page={child} currentPage={currentPage} key={index}/>
+                ))}
+            </>
+
+
+        )
+    }
 }
 
 /**
@@ -135,7 +185,7 @@ function DesktopNavbar({currentPage} : navbarProps){
  */
 function MobileNavbar({currentPage} : navbarProps){
 
-    const page = pageNames.find((page) => page[0] === currentPage);
+    const page = pageNames.find((page) => page.name === currentPage);
 
     const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -166,23 +216,13 @@ function MobileNavbar({currentPage} : navbarProps){
                     page === undefined || isExpanded ?
                         <div></div>
                         :
-                        <Link scroll={false} href={String(page[2])} className={styles.activePage}>
-                            <FontAwesomeIcon icon={page[1] as IconProp}/>
-                            <p>{String(page[0])}</p>
-                            {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
-                            {/* It Contains the icon and the name of the page*/}
-                        </Link>
+                        <NavEntry page={page} currentPage={currentPage} mobile/>
                 }
 
                 {
                     isExpanded ?
                         <>{pageNames.map((page, index) => (
-                                <Link key={index} scroll={false} href={String(page[2])} className={currentPage === page[0] ? styles.activePage : styles.navItem}>
-                                    <FontAwesomeIcon icon={page[1] as IconProp}/>
-                                    <p>{String(page[0])}</p>
-                                    {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
-                                    {/* It Contains the icon and the name of the page*/}
-                                </Link>
+                            <NavEntry page={page} currentPage={currentPage} key={index} mobile/>
                             ))}</>
                         :
                         <></>
