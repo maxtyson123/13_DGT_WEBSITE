@@ -16,13 +16,14 @@
     color: var(--text-light);
 }
 
-.allPlants{
+.subtitle{
     text-align: center;
 }
 
-.allPlants h1{
+.title{
     font-size: 64px;
     color: var(--text-dark);
+    text-align: center;
 }
 
 @media only screen and (max-width: 1300px) {

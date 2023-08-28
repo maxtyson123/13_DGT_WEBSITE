@@ -153,6 +153,10 @@
     justify-items: center;
 }
 
+.allPlants{
+    text-align: center;
+}
+
 @media only screen and (max-width: 1400px) {
 
     /*

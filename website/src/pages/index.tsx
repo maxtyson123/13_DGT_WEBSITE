@@ -17,6 +17,7 @@ import Image from "next/image";
 import Slider from "@/components/slider";
 import {AttachmentData, fetchPlant, ImageMetaData} from "@/lib/plant_data";
 import {CreditedImage} from "@/components/credits";
+import {QueryClient} from "@tanstack/react-query";
 
 export default function Home() {
     const pageName = "Home"
@@ -34,6 +35,8 @@ export default function Home() {
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
+
+    const queryClient = new QueryClient()
 
     // Get the plant ids when the page loads
     useEffect(() => {

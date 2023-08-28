@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch, faSpa} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -19,7 +19,7 @@ export interface PageName {
 export const pageNames : PageName[] = [
     {name: "Home", icon: faHome, path: "/", children: []},
     {name: "Plants", icon: faLeaf, path: "/plants/", children: [
-        {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
+     //   {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
     ]},
     {name: "Plant Index", icon: faBook, path: "/plant_index", children: []},
     {name: "Calender", icon: faCalendar, path: "/calender", children: []},

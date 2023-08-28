@@ -20,13 +20,15 @@ export default async function handler(
         amount,
         name,
         getNames,
-        mushrooms
+        mushrooms,
+        page,
     } = request.query;
 
     // Try querying the database
     try {
 
         const tables = getTables()
+        const amountPerPage = 3
 
         // Assemble the query
         let query = ``;
@@ -71,6 +73,15 @@ export default async function handler(
                     query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
                     break;
             }
+
+        // If the user specified a page, get the correct page
+        if (page) {
+
+            let currentPage = parseInt(page as string)
+
+
+            query += ` LIMIT ${amountPerPage} OFFSET ${(currentPage - 1) * amountPerPage}`
+        }
 
         // Return the plants that match the query
         const plantIds = await makeQuery(query, client)

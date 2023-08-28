@@ -1,0 +1,39 @@
+.plantCardContainer{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.loadMore{
+    width: 80%;
+    background-color: var(--main-green);
+    color: var(--text-light);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px var(--shadow-less);
+}
+
+@media only screen and (max-width: 1400px) {
+
+    /*
+     Can only fit two cards on the screen at a time with this width.
+     */
+    .plantCardContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media only screen and (max-width: 1000px) {
+
+    /*
+     Can only fit one card on the screen at a time with this width.
+     */
+    .plantCardContainer {
+        grid-template-columns: 1fr;
+    }
+
+}
