@@ -4,6 +4,7 @@ import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {CreditedImage} from "@/components/credits";
+import {useRouter} from "next/router";
 
 // Define the props for the plant card and the types for the plant data
 type PlantCardProps = {
@@ -24,6 +25,7 @@ export default function PlantCardData({ data }: PlantCardProps){
     const [mainImage, setMainImage] = useState("/media/images/loading.gif")
     const [mainImageAlt, setMainImageAlt] = useState("Loading")
     const [mainImageCredits, setMainImageCredits] = useState("None")
+    const router = useRouter()
 
     // Run on page start
     useEffect(() => {
@@ -71,6 +73,11 @@ export default function PlantCardData({ data }: PlantCardProps){
     }, [])
 
 
+    const goToIndex = (filter: string) => {
+        router.push("/plant_index?filter=" + filter.split(" ")[0].toLowerCase())
+    }
+
+
     return(
         <>
             {/* Shadowed div that holds the card contents*/}
@@ -96,7 +103,7 @@ export default function PlantCardData({ data }: PlantCardProps){
 
                     {/* Map through the tags and display them */}
                     {data.use.map((useName, index) => (
-                        <p key={index} className={styles.useText}>{
+                        <p key={index} className={styles.useText} onClick={()=>{goToIndex( convertUseTag(useName))}}>{
                             convertUseTag(useName)
                         }</p>
                     ))}

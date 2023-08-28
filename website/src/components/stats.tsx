@@ -4,6 +4,7 @@ import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-
 import React, {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 /**
  * Stats component. Shows the number of plants in the database, and the number of plants for each use.
@@ -25,6 +26,9 @@ export default function Stats(){
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
+
+    // Page routing
+    const router = useRouter()
 
     async function fetchData() {
         try {
@@ -106,6 +110,11 @@ export default function Stats(){
         fetchData().then();
     }, []);
 
+    const goToIndex = (filter: string) => {
+        router.push("/plant_index?filter=" + filter)
+    }
+
+
     return(
         <>
             <div className={styles.statsSection}>
@@ -117,28 +126,28 @@ export default function Stats(){
                 <div className={styles.statsRowContainer}>
 
                     {/* Each stat is a div with the number central and the icon and value inline */}
-                    <div className={styles.stat}>
+                    <div className={styles.stat} onClick={() => {goToIndex("plants")}}>
                         <h2> {numberOfPlants} </h2>
                         <FontAwesomeIcon icon={faSeedling} className={styles.inline}/>
                         <p className={styles.inline}> Plants </p>
                     </div>
 
                     {/* Each stat is a div with the number central and the icon and value inline */}
-                    <div className={styles.stat}>
+                    <div className={styles.stat} onClick={() => {goToIndex("edible")}}>
                         <h2> {numberOfEdiblePlants} </h2>
                         <FontAwesomeIcon icon={faBowlFood} className={styles.inline}/>
                         <p className={styles.inline}> Edible </p>
                     </div>
 
                     {/* Each stat is a div with the number central and the icon and value inline */}
-                    <div className={styles.stat}>
+                    <div className={styles.stat} onClick={() => {goToIndex("medical")}}>
                         <h2> {numberOfMedicalPlants} </h2>
                         <FontAwesomeIcon icon={faBookMedical} className={styles.inline}/>
                         <p className={styles.inline}> Medical </p>
                     </div>
 
                     {/* Each stat is a div with the number central and the icon and value inline */}
-                    <div className={styles.stat}>
+                    <div className={styles.stat} onClick={() => {goToIndex("craft")}}>
                         <h2> {numberOfCraftPlants} </h2>
                         <FontAwesomeIcon icon={faTools} className={styles.inline}/>
                         <p className={styles.inline}> Craft </p>

@@ -36,6 +36,14 @@
  */
 .stat{
     font-size: 40px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 18px;
+
+}
+
+.stat:hover{
+    background-color: rgba(108, 107, 107, 0.05);
 }
 
 /*

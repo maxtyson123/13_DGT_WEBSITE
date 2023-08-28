@@ -36,6 +36,37 @@ export default function PlantIndex(){
 
     // Get the plant ids
     useEffect(() => {
+
+        // Get the filter from the url
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('filter');
+
+        // Set the filter to the url filter if it exists
+        if (filter){
+
+            switch (filter) {
+                case "plants":
+                    setCurrentFilter("Plant Names")
+                    break
+
+                case "edible":
+                    setCurrentFilter("Edible Uses")
+                    break
+
+                case "craft":
+                    setCurrentFilter("Craft Uses")
+                    break
+
+                case "medical":
+                    setCurrentFilter("Medical Uses")
+                    break
+
+                default:
+                    setCurrentFilter("Plant Names")
+            }
+
+        }
+
         // Prevent the data from being fetched again
         if (dataFetch.current)
             return
@@ -277,7 +308,14 @@ items.sort((a, b) => {
                     <p> This page contains a list of all the plants on the website. The plants are sorted alphabetically. </p>
                     <p> Click on a plant to view its page. </p>
                     <p> Use the dropdown below to select what the index should display</p>
-                    <DropdownInput placeHolder={"Index Filter"} required={false} state={"normal"} options={filterOptions} defaultValue={"Plant Names"} changeEventHandler={setCurrentFilter}/>
+                    <DropdownInput
+                        placeHolder={"Index Filter"}
+                        required={false}
+                        state={"normal"}
+                        options={filterOptions}
+                        defaultValue={currentFilter}
+                        changeEventHandler={setCurrentFilter}
+                    />
                 </div>
             </Section>
 

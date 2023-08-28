@@ -135,10 +135,13 @@
     border-radius: 15px;
     padding: 2% 4% 2% 4%;
     margin: 2%;
-
+    cursor: pointer;
     font-size: 14px;
     text-align: center;
+}
 
+.useText:hover{
+    background: var(--darker-secondary-gray);
 }
 
 /*
