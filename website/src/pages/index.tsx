@@ -15,6 +15,8 @@ import axios from "axios";
 import {globalStyles} from "@/lib/global_css";
 import Image from "next/image";
 import Slider from "@/components/slider";
+import {AttachmentData, fetchPlant, ImageMetaData} from "@/lib/plant_data";
+import {CreditedImage} from "@/components/credits";
 
 export default function Home() {
     const pageName = "Home"
@@ -23,6 +25,12 @@ export default function Home() {
     const [isLoading, setIsLoading] = React.useState(true)
     const [plantIds, setPlantIds] = React.useState([0,0,0,0,0,0])
     const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
+    const [featuredImage , setFeaturedImage] = React.useState<AttachmentData>({
+        type: "image",
+        path: "/media/images/about_image.jpeg",
+        meta: {name: "About Image", description: "Image for the about page", credit: "Test"},
+        downloadable: false
+    })
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
@@ -85,10 +93,39 @@ export default function Home() {
                 saveToCache("plantIds", ids)
 
             } catch (error) {
-                console.log(error)
+                    console.log(error)
             }
         }
     }
+
+    // Update featured image when the plant ids change
+    useEffect(() => {
+        // Get the featured image by selecting a random image from the featured plants
+        let featuredPlantId = plantIds[Math.floor(Math.random() * plantIds.length)]
+
+        // Get the plant data
+        fetchPlant(featuredPlantId).then((data) => {
+
+            // If the plant data is null, return
+            if (!data)
+                return
+
+            // Get all the attachments with image type
+            let images = data.attachments.filter((attachment) => attachment.type === "image")
+
+            // Get a random index and set the image
+            let randomIndex = Math.floor(Math.random() * images.length)
+
+            // Set the featured image
+            setFeaturedImage(images[randomIndex])
+
+            // Log the random image
+            console.log("Random image: " + images[randomIndex].path)
+
+        }).catch((error) => {
+            console.log(error)
+        })
+    }, [plantIds])
 
     return (
         <>
@@ -121,19 +158,7 @@ export default function Home() {
 
 
                        <p className={styles.description}>
-                           Welcome to this rongoā website
-                           <br/>
-                           The information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)
-                           <br/>
-                           Please note this website is created and maintained by volunteers.
-                           <br/>
-                           If you have useful information or Images that you would like to contribute,
-                           <br/>
-                           - or if you would like to volunteer time with research / data input
-                           <br/>
-                           - or you find this information useful and would like to donate financially
-                           <br/>
-                           please contact placeholder email.
+                           This website is a resource for information about rongoā Māori, the traditional Māori healing system. It is intended to be a resource for anyone interested in learning more about rongoā, including practitioners, students, and members of the general public.
                        </p>
 
                        <div className={styles.searchBox}>
@@ -142,6 +167,36 @@ export default function Home() {
 
                    </div>
                 </PageHeader>
+            </Section>
+
+            {/* Section for about the website */}
+            <Section autoPadding>
+                {/* Section title */}
+                <h1 className={styles.sectionTitle}>About</h1>
+
+                {/* Container for the image and the text */}
+                <div className={styles.aboutContainer}>
+
+                    {/* Image */}
+                    <div className={styles.aboutImage}>
+                        <CreditedImage url={featuredImage.path} alt={(featuredImage.meta as ImageMetaData).description} credits={(featuredImage.meta as ImageMetaData).credits} colour={"white"}/>
+                    </div>
+
+                    {/* Text */}
+                    <div className={styles.aboutText}>
+                        <p> Welcome to this rongoā website</p>
+                        <p> This website is a resource for information about rongoā Māori, the traditional Māori healing system. It is intended to be a resource for anyone interested in learning more about rongoā, including practitioners, students, and members of the general public.</p>
+                        <p> Please note that the information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)</p>
+                        <p> This site is designed and populated by volunteers. Information is provided by a variety of sources, including books, websites, and personal experience. </p>
+                        <p> Please contact us at <a href={"mailto:placeholder@email.com"}>placeholder@email.com</a> if:</p>
+                        <ul>
+                            <li>You have useful information or Images that you would like to contribute</li>
+                            <li>You would like to volunteer time with research / data input</li>
+                            <li>You find this information useful and would like to donate financially</li>
+                            <li>You have any questions or comments about the site</li>
+                        </ul>
+                    </div>
+                </div>
             </Section>
 
             {/* Section for the featured plants */}

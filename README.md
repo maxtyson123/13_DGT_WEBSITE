@@ -10,7 +10,7 @@
     A website to dynamically display information about various New Zealand  plants and their usages
     <br/>
     <br/>
-    <a href="https://github.com/maxtyson123/13_DGT_WEBSITE"><strong>Explore the docs »</strong></a>
+    <a href="https://maxtyson123.github.io/13_DGT_WEBSITE/doc/code"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
     <a href="https://13-dgt-website.vercel.app/">View Demo</a>

@@ -43,6 +43,42 @@
     padding-left: 4%;
 }
 
+.aboutContainer{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 50px;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: 20px;
+}
+
+.aboutContainer a{
+    color: var(--blue);
+    text-decoration: underline;
+}
+
+.aboutContainer a:hover{
+    color: var(--main-green);
+}
+
+.aboutContainer ul{
+    list-style-type: circle;
+    padding-left: 4%;
+}
+
+/*
+ Make the image container take up the whole width of the container and have a height of 600px.
+ Make the corners rounded and hide any overflow.
+ */
+.aboutImage{
+    position: relative;
+    height: 600px;
+    border-radius: 20px;
+    overflow: hidden;
+
+}
+
 /*
  Style the link in the description to be a light blue.
  */
@@ -133,15 +169,15 @@
     /*
      Can only fit one card on the screen at a time with this width.
      */
-    .cardsContainer {
+    .cardsContainer,  .aboutContainer, .welcomeContainer {
         grid-template-columns: 1fr;
     }
+
 
     /*
      Make the welcome container go into a singular column.
      */
     .welcomeContainer{
-        grid-template-columns: 1fr;
         grid-template-rows: 1fr;
     }
 
