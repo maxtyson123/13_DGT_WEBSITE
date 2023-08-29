@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch, faSpa} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -19,7 +19,7 @@ export interface PageName {
 export const pageNames : PageName[] = [
     {name: "Home", icon: faHome, path: "/", children: []},
     {name: "Plants", icon: faLeaf, path: "/plants/", children: [
-     //   {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
+        {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
     ]},
     {name: "Plant Index", icon: faBook, path: "/plant_index", children: []},
     {name: "Calender", icon: faCalendar, path: "/calender", children: []},
@@ -131,11 +131,23 @@ function DesktopNavbar({currentPage} : navbarProps){
 interface navEntryProps {
     page: PageName,
     currentPage: string,
-    mobile?: boolean
+    mobile?: boolean,
+    expanded?: boolean
 }
-export function NavEntry({page, currentPage, mobile} : navEntryProps) {
+export function NavEntry({page, currentPage, mobile, expanded = true} : navEntryProps) {
 
-    if(page.children.length > 0 && !mobile) {
+    // State to keep track of if the page has children
+    const [hasChildren, setHasChildren] = React.useState(false);
+
+
+    // When the component is mounted, check if the page has children
+    useEffect(() => {
+        if(page.children.length > 0) {
+            setHasChildren(true);
+        }
+    }, [])
+
+    if(hasChildren && !mobile) {
         return (
                 <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
                     <FontAwesomeIcon icon={page.icon as IconProp}/>
@@ -162,7 +174,7 @@ export function NavEntry({page, currentPage, mobile} : navEntryProps) {
                     {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
                     {/* It Contains the icon and the name of the page*/}
                 </Link>
-                {page.children.map((child, index) => (
+                {expanded && page.children.map((child, index) => (
                     <NavEntry page={child} currentPage={currentPage} key={index}/>
                 ))}
             </>
@@ -216,13 +228,13 @@ function MobileNavbar({currentPage} : navbarProps){
                     page === undefined || isExpanded ?
                         <div></div>
                         :
-                        <NavEntry page={page} currentPage={currentPage} mobile/>
+                        <NavEntry page={page} currentPage={currentPage} mobile expanded={isExpanded}/>
                 }
 
                 {
                     isExpanded ?
                         <>{pageNames.map((page, index) => (
-                            <NavEntry page={page} currentPage={currentPage} key={index} mobile/>
+                            <NavEntry page={page} currentPage={currentPage} key={index} mobile expanded={isExpanded}/>
                             ))}</>
                         :
                         <></>

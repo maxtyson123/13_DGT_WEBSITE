@@ -33,7 +33,7 @@ export default function Mushrooms(){
                 <div>
 
                     {/* Section title */}
-                    <h1 className={styles.title}>All Plants</h1>
+                    <h1 className={styles.title}>All Mushrooms</h1>
                     <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>
                     <QueryClientProvider client={queryClient}>
                         <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"}/>

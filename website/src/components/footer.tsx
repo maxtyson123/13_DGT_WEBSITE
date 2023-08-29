@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "@/styles/components/footer.module.css";
 import SearchBox from "@/components/search_box";
 import Link from "next/link";
@@ -12,8 +12,18 @@ interface footerEntryProps {
     mobile?: boolean
 }
 function FooterEntry({page, mobile} : footerEntryProps) {
+    // State to keep track of if the page has children
+    const [hasChildren, setHasChildren] = React.useState(false);
 
-    if(page.children.length > 0 && !mobile) {
+
+    // When the component is mounted, check if the page has children
+    useEffect(() => {
+        if(page.children.length > 0) {
+            setHasChildren(true);
+        }
+    }, [])
+
+    if(hasChildren && !mobile) {
         return (
             <Link scroll={false} href={String(page.path)} className={styles.link}>
                 <FontAwesomeIcon className={"inline"} icon={page.icon as IconProp}/>
@@ -54,6 +64,7 @@ function FooterEntry({page, mobile} : footerEntryProps) {
 export default function Footer() {
     return (
         <>
+            <p className={styles.mobileDisclaimer}>Please note that the information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)</p>
             <div className={styles.footer}>
 
                 {/* Make the image container go behind the content*/}
@@ -75,6 +86,7 @@ export default function Footer() {
                 {/* Search box */}
                 <div className={styles.searchBoxContainer}>
                     <SearchBox/>
+                    <p>Please note that the information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)</p>
                 </div>
 
 

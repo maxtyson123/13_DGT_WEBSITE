@@ -27,6 +27,15 @@
     width: 80%;
 }
 
+.searchBoxContainer p{
+    color: rgba(255, 255, 255, 0.74);
+    margin-top: 30px;
+}
+
+.mobileDisclaimer{
+    display: none;
+}
+
 /*
  The links should be a medium size and white
  */
@@ -60,5 +69,12 @@
 
     .searchBoxContainer{
         display: none;
+    }
+
+    .mobileDisclaimer{
+        display: block;
+        text-align: center;
+        padding: 5%;
+        color: red;
     }
 }
