@@ -45,7 +45,7 @@ export default async function handler(
 
         // Select what the user entered
         if (name) {
-            whereString += ` english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
+            whereString += ` (english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%')`;
         }
 
         // Filter mushrooms
@@ -58,15 +58,15 @@ export default async function handler(
                     break;
 
                 case "exclude":
-                    whereString += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    whereString += ` AND (${tables.plant_type} NOT LIKE '%Mushroom%')`;
                     break;
 
                 case "only":
-                    whereString += ` WHERE ${tables.plant_type} LIKE '%Mushroom%'`;
+                    whereString += ` AND (${tables.plant_type} LIKE '%Mushroom%')`;
                     break;
 
                 default:
-                    whereString += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    whereString += ` AND (${tables.plant_type} NOT LIKE '%Mushroom%')`;
                     break;
             }
 
