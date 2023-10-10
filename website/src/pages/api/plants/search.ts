@@ -32,6 +32,7 @@ export default async function handler(
 
         // Assemble the query
         let query = ``;
+        let whereString = ' WHERE'
 
         // If the user specified a name, get the plant id from the plants database
         let shouldGetNames = ``;
@@ -44,12 +45,7 @@ export default async function handler(
 
         // Select what the user entered
         if (name) {
-            query += ` WHERE english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
-        }
-
-        // Only get a certain amount
-        if (amount) {
-            query += ` LIMIT ${amount}`
+            whereString += ` english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
         }
 
         // Filter mushrooms
@@ -62,25 +58,33 @@ export default async function handler(
                     break;
 
                 case "exclude":
-                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    whereString += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
                     break;
 
                 case "only":
-                    query += ` WHERE ${tables.plant_type} LIKE '%Mushroom%'`;
+                    whereString += ` WHERE ${tables.plant_type} LIKE '%Mushroom%'`;
                     break;
 
                 default:
-                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    whereString += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
                     break;
             }
+
+        // Add the where string
+        query += whereString;
 
         // If the user specified a page, get the correct page
         if (page) {
 
             let currentPage = parseInt(page as string)
 
-
             query += ` LIMIT ${amountPerPage} OFFSET ${(currentPage - 1) * amountPerPage}`
+        }else{
+
+            // Only get a certain amount
+            if (amount) {
+                query += ` LIMIT ${amount}`
+            }
         }
 
         // Return the plants that match the query
