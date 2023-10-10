@@ -234,46 +234,27 @@ export default function Home() {
             </Section>
 
             {/* Section for the featured plants */}
-            <Section autoPadding>
+            <Section>
                 {/* Section title */}
                 <h1 className={styles.sectionTitle}>Featured Plants</h1>
 
                     {
                         isLoading ?
                             <>
-                                {isMobile ?
-                                    <>
-                                        <PlantCardLoading/>
-                                        <PlantCardLoading/>
-                                        <PlantCardLoading/>
-                                    </>
-                                    :
-
-                                    <Slider>
-                                        <PlantCardLoading/>
-                                        <PlantCardLoading/>
-                                        <PlantCardLoading/>
-                                    </Slider>
-                                }
+                                <Slider>
+                                    <PlantCardLoading/>
+                                    <PlantCardLoading/>
+                                    <PlantCardLoading/>
+                                </Slider>
                             </>
                             :
                             <>
-                                {isMobile ?
-                                    <>
-                                        {/* Once the data has been fetched, load the individual card's data */}
-                                        {plantIds.map((id) => (
-                                            <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
-                                        ))}
-                                    </>
-                                    :
-
-                                    <Slider>
-                                        {/* Once the data has been fetched, load the individual card's data */}
-                                        {plantIds.map((id) => (
-                                            <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
-                                        ))}
-                                    </Slider>
-                                }
+                                <Slider>
+                                    {/* Once the data has been fetched, load the individual card's data */}
+                                    {plantIds.map((id) => (
+                                        <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
+                                    ))}
+                                </Slider>
                             </>
 
                     }

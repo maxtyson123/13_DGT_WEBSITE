@@ -43,7 +43,7 @@ export default function Slider({children} :   SliderProps) {
         <>
             <OwlCarousel
                 responsive={Responsive}
-                className={styles.owlCarousel}
+                className={styles.slider}
                 autoplay={true}
                 autoplayTimeout={5000}
                 autoplayHoverPause={true}
