@@ -24,7 +24,7 @@ export default async function handler(
         }
 
         // Get the data from the request
-        const {
+        let {
            operation,
            entry,
            type,
@@ -37,29 +37,29 @@ export default async function handler(
         if(!operation){
             return response.status(400).json({ error: 'Missing operation'});
         }
+
+        // Check if the entry is valid
+        if(operation != "fetch")
+        if(!entry || !type || !nickname || !permissions){
+            return response.status(400).json({ error: 'Missing entry, type, nickname or permissions', entry: entry, type: type, nickname: nickname, permissions: permissions});
+        }
+
+        // Convert entry to string
+        if(entry)
+            entry = Buffer.from(entry as string, 'base64').toString('ascii');
+
         let query = "";
         switch (operation) {
             case "add":
-                // Check if the entry is valid
-                if(!entry || !type || !nickname || !permissions){
-                    return response.status(400).json({ error: 'Missing entry, type, nickname or permissions'});
-                }
-
                 // Make the query
                 query = `INSERT INTO auth (${tables.auth_entry}, ${tables.auth_type}, ${tables.auth_nickname}, ${tables.auth_permissions}) VALUES ('${entry}', '${type}', '${nickname}', '${permissions}')`;
                 const new_auths = await makeQuery(query, client)
                 return response.status(200).json({ data: new_auths });
 
-
             case "remove":
-                // Check if the entry is valid
-                if(!entry || !type || !nickname || !permissions){
-                    return response.status(400).json({ error: 'Missing entry, type, nickname or permissions'});
-                }
-
                 // Make the query
                 query = `DELETE FROM auth WHERE ${tables.auth_entry} = '${entry}' AND ${tables.auth_type} = '${type}' AND ${tables.auth_nickname} = '${nickname}' AND ${tables.auth_permissions} = '${permissions}'`;
-
+                console.log(query)
                 const remove_auths = await makeQuery(query, client)
                 return response.status(200).json({ data: remove_auths });
 

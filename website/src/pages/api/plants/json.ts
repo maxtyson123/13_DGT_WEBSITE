@@ -50,8 +50,9 @@ export default async function handler(
                 plantsInfo = plantsInfo.data;
 
                 // If there is no plant data, return an error
-                if (plantsInfo.data.error) {
-                    return response.status(404).json({ error: plantsInfo.data.error, message: "No data" });
+                if (!plantsInfo.data)
+                {
+                    return response.status(404).json({ error: plantsInfo.data?.error, message: "No data" });
                 }
 
 
@@ -129,7 +130,7 @@ export default async function handler(
 
     } catch (error) {
         // If there is an error, return the error
-        return response.status(500).json({ error:  (error as Error).message });
+        return response.status(500).json({ error:  (error as Error).message});
     }
 
 }

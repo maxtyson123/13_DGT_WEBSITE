@@ -32,6 +32,7 @@ export default async function handler(
 
         // Assemble the query
         let query = ``;
+        let selector = "WHERE"
 
         // If the user specified a name, get the plant id from the plants database
         let shouldGetNames = ``;
@@ -44,12 +45,8 @@ export default async function handler(
 
         // Select what the user entered
         if (name) {
-            query += ` WHERE english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%'`;
-        }
-
-        // Only get a certain amount
-        if (amount) {
-            query += ` LIMIT ${amount}`
+            query += ` ${selector} (english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%')`;
+            selector = "AND";
         }
 
         // Filter mushrooms
@@ -62,17 +59,22 @@ export default async function handler(
                     break;
 
                 case "exclude":
-                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    query += ` ${selector} ${tables.plant_type} NOT LIKE '%Mushroom%'`;
                     break;
 
                 case "only":
-                    query += ` WHERE ${tables.plant_type} LIKE '%Mushroom%'`;
+                    query += ` ${selector} ${tables.plant_type} LIKE '%Mushroom%'`;
                     break;
 
                 default:
-                    query += ` WHERE ${tables.plant_type} NOT LIKE '%Mushroom%'`;
+                    query += ` ${selector} ${tables.plant_type} NOT LIKE '%Mushroom%'`;
                     break;
             }
+
+        // Only get a certain amount
+        if (amount) {
+            query += ` LIMIT ${amount}`
+        }
 
         // If the user specified a page, get the correct page
         if (page) {

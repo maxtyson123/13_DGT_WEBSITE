@@ -154,8 +154,15 @@ export default function PlantIndex(){
         setLoading(true)
         setLoadingMessage("Adding new auth entry...")
 
-        // Update the auth entry
-        const response = await axios.get("/api/auth/edit_auth?operation=add&entry=" + newAuthEntry + "&type=" + newAuthType + "&nickname=" + newAuthNickname + "&permissions=" + newAuthPermissions)
+
+
+        try {
+            // Update the auth entry
+            const response = await axios.get("/api/auth/edit_auth?operation=add&entry=" + Buffer.from(newAuthEntry).toString('base64') + "&type=" + newAuthType + "&nickname=" + newAuthNickname + "&permissions=" + newAuthPermissions)
+        }
+        catch (error) {
+            setError("Error adding new auth entry")
+        }
 
         // Reload the auth data
         await getAdminAuthData()
@@ -169,8 +176,16 @@ export default function PlantIndex(){
 
         setLoading(true)
         setLoadingMessage("Removing auth entry...")
+
+        // Convert to base64
+        entry = Buffer.from(entry).toString('base64')
+
         // Update the auth entry
-        const response = await axios.get("/api/auth/edit_auth?operation=remove&entry=" + entry + "&type=" + type + "&nickname=" + nickname + "&permissions=" + permissions)
+        try {
+            const response = await axios.get("/api/auth/edit_auth?operation=remove&entry=" + entry + "&type=" + type + "&nickname=" + nickname + "&permissions=" + permissions)
+        } catch (error) {
+            setError("Error removing auth entry")
+        }
 
         // Reload the auth data
         await getAdminAuthData()
@@ -197,7 +212,7 @@ export default function PlantIndex(){
     const handleFilesDownload = async () => {
         try {
             setLoading(true)
-            setLoadingMessage("Downloading files...")
+            setLoadingMessage("Downloading files... (this may take a while)");
             const response = await fetch('/api/files/backup_files');
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);

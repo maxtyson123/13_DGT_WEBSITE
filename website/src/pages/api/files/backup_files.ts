@@ -36,7 +36,7 @@ async function fetchFileUrlsFromFTP() {
                     return;
                 }
 
-                // Create a promise for each sub directory
+                // Create a promise for each subdirectory
                 const subDirectoryPromises = list.map(subDir => {
                     return new Promise<void>((resolveSubDir, rejectSubDir) => {
 
