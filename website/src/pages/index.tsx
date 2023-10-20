@@ -1,3 +1,5 @@
+//set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v20.8.0-win-x64\node-v20.8.0-win-x64
+
 import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/index.module.css"
@@ -24,6 +26,9 @@ export default function Home() {
 
     // Stats for the featured plants
     const [isLoading, setIsLoading] = React.useState(true)
+    const [isMobile, setIsMobile] = React.useState(false)
+
+
     const [plantIds, setPlantIds] = React.useState([0,0,0,0,0,0])
     const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
     const [featuredImage , setFeaturedImage] = React.useState<AttachmentData>({
@@ -32,6 +37,8 @@ export default function Home() {
         meta: {name: "About Image", description: "Image for the about page", credit: "Test"},
         downloadable: false
     })
+
+
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
@@ -130,6 +137,30 @@ export default function Home() {
         })
     }, [plantIds])
 
+    // Handle screensize changes
+    useEffect(() => {
+
+        // If the screen is mobile sized, set the isMobile state to true
+        const handleResize = () => {
+            if (window.outerWidth < 600 || window.innerWidth < 600) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        }
+
+        // Add an event listener to the window to check if the screen size changes
+        window.addEventListener("resize", handleResize);
+
+        // Call the handleResize function to check the screen size on load
+        handleResize();
+
+        // Remove the event listener when the component is unmounted
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    }, [])
+
     return (
         <>
             {/* Set up the page header and navbar */}
@@ -203,27 +234,27 @@ export default function Home() {
             </Section>
 
             {/* Section for the featured plants */}
-            <Section autoPadding>
+            <Section>
                 {/* Section title */}
                 <h1 className={styles.sectionTitle}>Featured Plants</h1>
 
                     {
                         isLoading ?
                             <>
+                                <Slider>
                                     <PlantCardLoading/>
                                     <PlantCardLoading/>
                                     <PlantCardLoading/>
+                                </Slider>
                             </>
                             :
                             <>
                                 <Slider>
                                     {/* Once the data has been fetched, load the individual card's data */}
                                     {plantIds.map((id) => (
-                                       <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
+                                        <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
                                     ))}
-
                                 </Slider>
-
                             </>
 
                     }
