@@ -1,5 +1,8 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v18.18.2-win-x64\node-v18.18.2-win-x64
 
+//TODO:
+// - Rework database object logic - make it easier to add and modify columns
+
 import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/index.module.css"
@@ -20,6 +23,7 @@ import Slider from "@/components/slider";
 import {AttachmentData, fetchPlant, ImageMetaData} from "@/lib/plant_data";
 import {CreditedImage} from "@/components/credits";
 import {QueryClient} from "@tanstack/react-query";
+import {ModalImage} from "@/components/modal";
 
 export default function Home() {
     const pageName = "Home"
@@ -37,6 +41,7 @@ export default function Home() {
         meta: {name: "About Image", description: "Image for the about page", credit: "Test"},
         downloadable: false
     })
+    const [featuredImageShown, setFeaturedImageShown] = React.useState(false)
 
 
 
@@ -47,13 +52,14 @@ export default function Home() {
 
     // Get the plant ids when the page loads
     useEffect(() => {
-
         setLocation(window.location.host)
 
         // Prevent the data from being fetched again
         if (dataFetch.current)
             return
         dataFetch.current = true
+
+        setIsLoading(true);
 
         getPlantIDs().then(() => {console.log("Plant IDs fetched")} ).catch((error) => {console.log(error)});
     }, [])
@@ -114,6 +120,7 @@ export default function Home() {
         let featuredPlantId = plantIds[Math.floor(Math.random() * plantIds.length)]
 
         // Get the plant data
+        if(featuredPlantId !== 0)
         fetchPlant(featuredPlantId).then((data) => {
 
             // If the plant data is null, return
@@ -123,15 +130,15 @@ export default function Home() {
             // Get all the attachments with image type
             let images = data.attachments.filter((attachment) => attachment.type === "image")
 
+            // If there are no images, return
+            if(images.length === 0)
+                return
+
             // Get a random index and set the image
             let randomIndex = Math.floor(Math.random() * images.length)
 
             // Set the featured image
             setFeaturedImage(images[randomIndex])
-
-            // Log the random image
-            console.log("Random image: " + images[randomIndex].path)
-
         }).catch((error) => {
             console.log(error)
         })
@@ -160,6 +167,11 @@ export default function Home() {
             window.removeEventListener("resize", handleResize);
         }
     }, [])
+
+
+    const toggleFeaturedImage = () => {
+        setFeaturedImageShown(!featuredImageShown)
+    }
 
     return (
         <>
@@ -212,8 +224,10 @@ export default function Home() {
                 <div className={styles.aboutContainer}>
 
                     {/* Image */}
-                    <div className={styles.aboutImage}>
+                    <div className={styles.aboutImage} onClick={toggleFeaturedImage}>
+                        <ModalImage url={featuredImage.path} description={(featuredImage.meta as ImageMetaData).description} show={featuredImageShown} hideCallback={toggleFeaturedImage}/>
                         <CreditedImage url={featuredImage.path} alt={(featuredImage.meta as ImageMetaData).description} credits={(featuredImage.meta as ImageMetaData).credits} colour={"white"}/>
+
                     </div>
 
                     {/* Text */}
@@ -252,7 +266,7 @@ export default function Home() {
                                 <Slider>
                                     {/* Once the data has been fetched, load the individual card's data */}
                                     {plantIds.map((id) => (
-                                        <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>
+                                        <>{(id != 0) && <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>}</>
                                     ))}
                                 </Slider>
                             </>

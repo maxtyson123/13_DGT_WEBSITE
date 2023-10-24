@@ -154,6 +154,8 @@ export function PlantCardApi({id}: PlantCardApiProps) {
 
     useEffect(() => {
 
+
+
         // Prevent the data from being fetched again
         if (dataFetch.current)
             return
