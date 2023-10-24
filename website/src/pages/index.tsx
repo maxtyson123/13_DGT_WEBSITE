@@ -1,4 +1,4 @@
-//set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v20.8.0-win-x64\node-v20.8.0-win-x64
+//set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v18.18.2-win-x64\node-v18.18.2-win-x64
 
 import React, {useEffect, useRef} from "react";
 
