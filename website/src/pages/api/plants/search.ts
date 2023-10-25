@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
+import {escapeMacron} from "@/lib/plant_data";
 
 export default async function handler(
     request: NextApiRequest,
@@ -45,6 +46,7 @@ export default async function handler(
 
         // Select what the user entered
         if (name) {
+            name = escapeMacron(name as string)
             query += ` ${selector} (english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%')`;
             selector = "AND";
         }
@@ -84,6 +86,10 @@ export default async function handler(
 
             query += ` LIMIT ${amountPerPage} OFFSET ${(currentPage - 1) * amountPerPage}`
         }
+
+        console.log("=================================")
+        console.log(query)
+        console.log("=================================")
 
         // Return the plants that match the query
         const plantIds = await makeQuery(query, client)
