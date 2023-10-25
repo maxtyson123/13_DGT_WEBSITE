@@ -3,7 +3,9 @@ import {
     CleanAPIData,
     ConvertApiIntoPlantData,
     ConvertPlantDataIntoApi,
-    fixAttachmentsPaths, macronsForDisplay,
+    convertTableDataToPlantData,
+    fixAttachmentsPaths,
+    macronsForDisplay,
     PlantData,
     PlantDataApi,
     ValidPlantData
@@ -28,7 +30,7 @@ export default async function handler(
 
 
     // Get the ID and table from the query string
-    const { operation, json, id } = request.query;
+    const { operation, json, id, tableName } = request.query;
 
     // Try running the operation
     try {
@@ -123,6 +125,28 @@ export default async function handler(
 
                 // Return the data
                 return response.status(200).json({ data: result.data });
+
+            case "convert":
+                // tableName
+
+                // Check if there is the tableName param
+                if (!tableName) {
+                    // If it doesn't exist, return an error
+                    return response.status(400).json({ error: 'No tableName param found' });
+                }
+
+                // Get the spreadsheet data
+                let spreadSheetJSON = await axios.get(`http://gsx2json.com/api?id=${process.env.PLANT_SPREADSHEET}&sheet=${tableName}`);
+
+                // If there is a code error, return the error
+                if(spreadSheetJSON.data.code){
+                    return response.status(500).json({ error: spreadSheetJSON.data.message });
+                }
+
+                let plantData = convertTableDataToPlantData(spreadSheetJSON.data)
+                plantData = macronsForDisplay(plantData);
+
+                return response.status(200).json({ data: plantData });
 
             default:
                 // If the operation is not found, return an error

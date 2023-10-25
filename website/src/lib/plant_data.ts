@@ -936,3 +936,108 @@ export function macronsForDatabase(plant: PlantData){
     return plant;
 }
 
+export function convertTableDataToPlantData(tableData: any): PlantData {
+
+    let plant: PlantData = emptyPlantData();
+
+    let columns = tableData.columns.undefined;
+    let rows = tableData.rows;
+
+
+
+    for (let i = 0; i < columns.length; i++) {
+        switch (columns[i]) {
+            case "Plant:":
+                plant.preferred_name = columns[i += 2];
+                plant.english_name = columns[i += 2];
+                plant.maori_name = columns[i += 2];
+                plant.latin_name = columns[i += 2];
+                i += 2; // Months should be done by user because of inconsistencies
+                plant.location_found = columns[i += 2];
+                i += 2; // Uses are handled later
+                plant.small_description = columns[i += 2];
+                plant.long_description = columns[i += 2];
+                break;
+
+            case "Edible Section:":
+                // If it isn't already in the use array, add it
+                if(!plant.use.includes("edible")){
+                    plant.use.push("edible");
+                }
+                let edibleInfoOBJ = {
+                    type: "edible",
+                    part_of_plant: columns[i += 2],
+                    use_identifier: "",
+                    image_of_part: "",
+                    nutrition: columns[i += 3], // Plus 4 as image is skipped
+                    preparation_type: columns[i += 2],
+                    preparation: columns[i += 2]
+                } as EdibleSectionData;
+
+                plant.sections.push(edibleInfoOBJ);
+                break;
+
+            case "Medical Section":
+                // If it isn't already in the use array, add it
+                if(!plant.use.includes("medical")){
+                    plant.use.push("medical");
+                }
+
+                let medicalInfoOBJ = {
+                    type: "medical",
+                    medical_type: columns[i += 2],
+                    use_identifier: "",
+                    use: columns[i += 2],
+                    image: "",
+                    preparation: columns[i += 2]
+                } as MedicalSectionData;
+
+                plant.sections.push(medicalInfoOBJ);
+                break;
+
+            case "Craft Section":
+                // If it isn't already in the use array, add it
+                if(!plant.use.includes("craft")){
+                    plant.use.push("craft");
+                }
+
+                let craftInfoOBJ = {
+                    type: "craft",
+                    part_of_plant: columns[i += 2],
+                    use_identifier: "",
+                    use: columns[i += 2],
+                    image: "",
+                    additonal_info: columns[i += 2]
+                } as CraftSectionData;
+
+                plant.sections.push(craftInfoOBJ);
+                break;
+
+            case "History":
+                let customInfoOBJ = {
+                    type: "custom",
+                    title: "History",
+                    text: columns[i += 2]
+                } as CustomSectionData;
+
+                plant.sections.push(customInfoOBJ);
+                break;
+
+            case "References:":
+                // Rest of the data is sources
+                for (let j = i + 3; j < columns.length; j++) {
+                    let sourceInfoOBJ = {
+                        type: "source",
+                        source_type: columns[j],
+                        data: columns[j += 1]
+                    } as SourceSectionData;
+
+                    plant.sections.push(sourceInfoOBJ);
+                }
+                break;
+        }
+    }
+
+
+    return plant;
+}
