@@ -16,6 +16,7 @@ import {AttachmentSection, AutoSection, SourceSection} from "@/components/plant_
 import {Error} from "@/components/error";
 import {CreditedImage} from "@/components/credits";
 import {useSession} from "next-auth/react";
+import {ModalImage} from "@/components/modal";
 
 export default function PlantPage() {
 
@@ -27,6 +28,7 @@ export default function PlantPage() {
     const [currentImage, setCurrentImage] = React.useState(0)
     const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
     const [mainImageMetaData, setMainImageMetaData] = React.useState<ImageMetaData | null>(null)
+    const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
 
     // Render key to re render stuff on resize
@@ -209,6 +211,10 @@ export default function PlantPage() {
 
     }
 
+    const toggleMainImage = () => {
+        setShowMainImage(!showMainImage)
+    }
+
 
 
     return (
@@ -285,7 +291,8 @@ export default function PlantPage() {
                             <div className={styles.plantImageContainer}>
 
                                 {/* The main image, will be set to the first image until the users scrolls below to another one */}
-                                <div className={styles.mainImage}>
+                                <div className={styles.mainImage} onClick={toggleMainImage}>
+                                    <ModalImage url={mainImage} description={mainImageMetaData ? mainImageMetaData.description : ""} show={showMainImage} hideCallback={toggleMainImage}/>
                                     <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`} credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
                                 </div>
 
