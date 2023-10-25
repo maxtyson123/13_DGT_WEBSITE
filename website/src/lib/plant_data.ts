@@ -803,3 +803,136 @@ export function fixAttachmentsPaths (plant: PlantData) {
 
     return plant;
 }
+
+/**
+ * Replaces any macron escape codes with the macron character
+ *
+ * @param {plant} plant - The plant data to fix the macrons of
+ * @returns {plant} - The plant data with the fixed macrons
+ */
+export function macronsForDisplay(plant: PlantData) {
+
+    function convertMacron(str: string) {
+        return str
+            .replaceAll("macron_a", "ā")
+            .replaceAll("macron_e", "ē")
+            .replaceAll("macron_i", "ī")
+            .replaceAll("macron_o", "ō")
+            .replaceAll("macron_u", "ū")
+            .replaceAll("macron_A", "Ā")
+            .replaceAll("macron_E", "Ē")
+            .replaceAll("macron_I", "Ī")
+            .replaceAll("macron_O", "Ō")
+            .replaceAll("macron_U", "Ū")
+    }
+
+    plant.english_name = convertMacron(plant.english_name)
+    plant.maori_name = convertMacron(plant.maori_name)
+    plant.latin_name = convertMacron(plant.latin_name)
+    plant.long_description = convertMacron(plant.long_description)
+    plant.small_description = convertMacron(plant.small_description)
+
+    // Loop through the sections
+    for (let i = 0; i < plant.sections.length; i++) {
+
+        switch (plant.sections[i].type) {
+            case "edible":
+                plant.sections[i].part_of_plant = convertMacron(plant.sections[i].part_of_plant)
+                plant.sections[i].nutrition = convertMacron(plant.sections[i].nutrition)
+                plant.sections[i].preparation = convertMacron(plant.sections[i].preparation)
+                break;
+
+            case "medical":
+                plant.sections[i].use = convertMacron(plant.sections[i].use)
+                plant.sections[i].preparation = convertMacron(plant.sections[i].preparation)
+                break;
+
+            case "craft":
+                plant.sections[i].part_of_plant = convertMacron(plant.sections[i].part_of_plant)
+                plant.sections[i].use = convertMacron(plant.sections[i].use)
+                plant.sections[i].additonal_info = convertMacron(plant.sections[i].additonal_info)
+                break;
+
+            case "custom":
+                plant.sections[i].title = convertMacron(plant.sections[i].title)
+                plant.sections[i].text = convertMacron(plant.sections[i].text)
+                break;
+
+            case "source":
+                plant.sections[i].data = convertMacron(plant.sections[i].data)
+                break;
+
+            default:
+                break;
+
+        }
+    }
+    return plant;
+}
+
+/**
+ * Replaces any macron characters with the macron escape codes
+ *
+ * @param {plant} plant - The plant data to fix the macrons of
+ * @returns {plant} - The plant data with the fixed macrons
+ */
+export function macronsForDatabase(plant: PlantData){
+
+    function convertMacron(str: string) {
+        return str
+            .replaceAll("ā", "macron_a")
+            .replaceAll("ē", "macron_e")
+            .replaceAll("ī", "macron_i")
+            .replaceAll("ō", "macron_o")
+            .replaceAll("ū", "macron_u")
+            .replaceAll("Ā", "macron_A")
+            .replaceAll("Ē", "macron_E")
+            .replaceAll("Ī", "macron_I")
+            .replaceAll("Ō", "macron_O")
+            .replaceAll("Ū", "macron_U")
+    }
+
+    plant.english_name = convertMacron(plant.english_name)
+    plant.maori_name = convertMacron(plant.maori_name)
+    plant.latin_name = convertMacron(plant.latin_name)
+    plant.long_description = convertMacron(plant.long_description)
+    plant.small_description = convertMacron(plant.small_description)
+
+    // Loop through the sections
+    for (let i = 0; i < plant.sections.length; i++) {
+
+        switch (plant.sections[i].type) {
+            case "edible":
+                plant.sections[i].part_of_plant = convertMacron(plant.sections[i].part_of_plant)
+                plant.sections[i].nutrition = convertMacron(plant.sections[i].nutrition)
+                plant.sections[i].preparation = convertMacron(plant.sections[i].preparation)
+                break;
+
+            case "medical":
+                plant.sections[i].use = convertMacron(plant.sections[i].use)
+                plant.sections[i].preparation = convertMacron(plant.sections[i].preparation)
+                break;
+
+            case "craft":
+                plant.sections[i].part_of_plant = convertMacron(plant.sections[i].part_of_plant)
+                plant.sections[i].use = convertMacron(plant.sections[i].use)
+                plant.sections[i].additonal_info = convertMacron(plant.sections[i].additonal_info)
+                break;
+
+            case "custom":
+                plant.sections[i].title = convertMacron(plant.sections[i].title)
+                plant.sections[i].text = convertMacron(plant.sections[i].text)
+                break;
+
+            case "source":
+                plant.sections[i].data = convertMacron(plant.sections[i].data)
+                break;
+
+            default:
+                break;
+
+        }
+    }
+    return plant;
+}
+

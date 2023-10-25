@@ -3,7 +3,7 @@ import {
     CleanAPIData,
     ConvertApiIntoPlantData,
     ConvertPlantDataIntoApi,
-    fixAttachmentsPaths,
+    fixAttachmentsPaths, macronsForDisplay,
     PlantData,
     PlantDataApi,
     ValidPlantData
@@ -80,6 +80,7 @@ export default async function handler(
 
                 // Fix the data
                 plantOBJ = fixAttachmentsPaths(plantOBJ);
+                plantOBJ = macronsForDisplay(plantOBJ)
 
                 return response.status(200).json({ data: plantOBJ, apiData: apiData});
 

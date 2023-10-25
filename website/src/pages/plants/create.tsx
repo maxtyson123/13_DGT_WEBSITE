@@ -22,7 +22,7 @@ import {
     fetchPlant,
     FileMetaData,
     fixAttachmentsPaths,
-    ImageMetaData,
+    ImageMetaData, macronsForDatabase,
     MedicalSectionData,
     MonthsReadyData,
     PlantData,
@@ -2333,11 +2333,14 @@ export default function CreatePlant() {
         }
 
         // Generate the JSON file
-        const jsonData = generateJSON();
+        let jsonData = generateJSON();
 
         // If the plantOBJ is null then there was an error
         if(jsonData == null)
             return;
+
+        // Fix the macrons
+        jsonData = macronsForDatabase(jsonData);
 
         // Convert the JSON file to API format
         let uploadApiData = ConvertPlantDataIntoApi(jsonData) as any
