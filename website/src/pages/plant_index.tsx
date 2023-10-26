@@ -9,7 +9,7 @@ import styles from "@/styles/plant_index.module.css";
 import axios from "axios";
 import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";
-import {escapeMacron, getNamesInPreference} from "@/lib/plant_data";
+import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
 interface plantEntry {
     id: number,
@@ -102,17 +102,17 @@ export default function PlantIndex(){
 
                 // If there is an english name then add it to the array
                 if (data[i].english_name !== null) {
-                    ids.push({id: data[i].id, name: escapeMacron(data[i].english_name), tag: "english"})
+                    ids.push({id: data[i].id, name: macronCodeToChar(data[i].english_name, numberDictionary), tag: "english"})
                 }
 
                 // If there is a maori name then add it to the array
                 if (data[i].maori_name !== null) {
-                    ids.push({id: data[i].id, name: escapeMacron(data[i].maori_name), tag: "maori"})
+                    ids.push({id: data[i].id, name: macronCodeToChar(data[i].maori_name, numberDictionary), tag: "maori"})
                 }
 
                 // If there is a latin name then add it to the array
                 if (data[i].latin_name !== null) {
-                    ids.push({id: data[i].id, name: escapeMacron(data[i].latin_name), tag: "latin"})
+                    ids.push({id: data[i].id, name: macronCodeToChar(data[i].latin_name, numberDictionary), tag: "latin"})
                 }
 
             }

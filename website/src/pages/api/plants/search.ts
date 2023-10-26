@@ -1,6 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
-import {escapeMacron} from "@/lib/plant_data";
 
 export default async function handler(
     request: NextApiRequest,
@@ -46,8 +45,16 @@ export default async function handler(
 
         // Select what the user entered
         if (name) {
-            name = escapeMacron(name as string)
-            query += ` ${selector} (english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%')`;
+
+            let replaceChars = ["ā", "ē", "ī", "ō", "ū", "Ā", "Ē", "Ī", "Ō", "Ū", "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"]
+
+            // Replace macrons with wildcard
+            for (let i = 0; i < replaceChars.length; i++) {
+                name = (name as string).replaceAll(replaceChars[i], `_`)
+            }
+
+
+            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%')`;
             selector = "AND";
         }
 
