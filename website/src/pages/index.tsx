@@ -54,6 +54,8 @@ export default function Home() {
     useEffect(() => {
         setLocation(window.location.host)
 
+        
+
         // Prevent the data from being fetched again
         if (dataFetch.current)
             return

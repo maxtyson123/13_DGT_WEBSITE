@@ -22,7 +22,8 @@ import {
     fetchPlant,
     FileMetaData,
     fixAttachmentsPaths,
-    ImageMetaData, macronsForDatabase,
+    ImageMetaData,
+    macronsForDatabase,
     MedicalSectionData,
     MonthsReadyData,
     PlantData,
@@ -2148,7 +2149,7 @@ export default function CreatePlant() {
                     // Update the values
                     edibleSection.handlePartOfPlantChange(jsonContents.sections[i].part_of_plant)
                     edibleSection.handleUseIdentifierChange(jsonContents.sections[i].use_identifier)
-                    edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutritional_value)
+                    edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutrition)
                     edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
                     edibleSection.handleImageChange(jsonContents.sections[i].image_of_part)
@@ -2271,6 +2272,11 @@ export default function CreatePlant() {
 
                 // Convert the file contents to JSON
                 let jsonContents = JSON.parse(event.target.result);
+
+                // If the json is from some saved api then extract it from the data
+                if(jsonContents.data)
+                    jsonContents = jsonContents.data
+
                 jsonContents = fixAttachmentsPaths(jsonContents)
                 console.log(fixAttachmentsPaths(jsonContents))
 
