@@ -160,7 +160,7 @@ export default function PlantIndex(){
                     uses.push(
                         {
                             id: data[i].id,
-                            name: split[j],
+                            name: macronCodeToChar(split[j], numberDictionary),
                             tag: data[i].type
                         })
                 }
@@ -255,7 +255,7 @@ export default function PlantIndex(){
                     if(items[i].id === plantData[j].id) {
 
                         // Get the preffered name
-                        items[i].name += (" - " + getNamesInPreference(plantData[j])[0])
+                        items[i].name += (" - " + macronCodeToChar(getNamesInPreference(plantData[j])[0], numberDictionary))
                         break
                     }
                 }

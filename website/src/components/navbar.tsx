@@ -1,10 +1,22 @@
 import React, {useEffect} from "react";
-import {faBars, faBook, faCalendar, faClose, faHome, faLeaf, faSearch, faSpa} from "@fortawesome/free-solid-svg-icons";
+import {
+    faBars,
+    faBook,
+    faCalendar,
+    faClose,
+    faHome,
+    faLeaf,
+    faSearch,
+    faSpa,
+    faUser
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import styles from "@/styles/components/navbar.module.css"
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {getSession} from "next-auth/react";
+import {Session} from "next-auth";
 
 // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
 // Export it so that it can be used in the footer, that way it is easier to keep the navbar and footer in sync with what links they have
@@ -14,16 +26,18 @@ export interface PageName {
     icon: IconProp,
     path: string,
     children: PageName[]
+    image?: string,
 }
 
 export const pageNames : PageName[] = [
     {name: "Home", icon: faHome, path: "/", children: []},
     {name: "Plants", icon: faLeaf, path: "/plants/", children: [
-        {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
+        {name: "Index", icon: faBook, path: "/plant_index", children: []},
+        {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []}
     ]},
-    {name: "Plant Index", icon: faBook, path: "/plant_index", children: []},
     {name: "Calendar", icon: faCalendar, path: "/calendar", children: []},
     {name: "Search", icon: faSearch, path: "/search", children: []},
+    {name: "Account", icon: faUser, path: "/account", children: []}
 ];
 
 
@@ -104,7 +118,7 @@ function DesktopNavbar({currentPage} : navbarProps){
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
                 <Link scroll={false} href="/">
                     <Image
-                        src="/media/images/logo.svg"
+                        src={"/images/logo.png"}
                         alt="Rongoā Logo"
                         width={50}
                         height={100}
@@ -138,12 +152,21 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
 
     // State to keep track of if the page has children
     const [hasChildren, setHasChildren] = React.useState(false);
-
+    const [session, setSession] = React.useState<Session | null>(null);
 
     // When the component is mounted, check if the page has children
     useEffect(() => {
         if(page.children.length > 0) {
             setHasChildren(true);
+        }
+
+        // If the item is the account item get the session
+        if(page.name === "Account") {
+            getSession().then((session) => {
+                setSession(session);
+            }, (error) => {
+                console.log(error);
+            })
         }
     }, [])
 
@@ -169,8 +192,14 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
         return(
             <>
                 <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
-                    <FontAwesomeIcon icon={page.icon as IconProp}/>
-                    <p>{String(page.name)}</p>
+                    {session?.user?.image ?
+                        <img src={session.user.image} alt={"user account"}/>
+                        :
+                        <>
+                            <FontAwesomeIcon icon={page.icon as IconProp}/>
+                            <p>{String(page.name)}</p>
+                        </>
+                    }
                     {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
                     {/* It Contains the icon and the name of the page*/}
                 </Link>

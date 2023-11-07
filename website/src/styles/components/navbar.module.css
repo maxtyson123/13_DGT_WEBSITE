@@ -34,6 +34,14 @@
 
 }
 
+.navbar a img{
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    border-radius: 50%;
+}
+
+
 .mobileNav{
     grid-template-columns: repeat(3, 1fr);
     row-gap: 25px;
@@ -72,10 +80,23 @@
     border-bottom: 4px solid var(--main-green);
 }
 
+
+
 .navItem{
     border-bottom: 2px solid white;
 }
 
+/*
+ Account Image Shouldn't Have a Border
+ */
+.navItem:has(img), .activePage:has(img){
+    border-bottom: 0px
+}
+
+.activePage:hover:has(img), .navItem:hover:has(img){
+    opacity: 0.75;
+    border-bottom: 0px
+}
 
 .dropdownContent {
     display: none;
