@@ -1,12 +1,15 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v18.18.2-win-x64\node-v18.18.2-win-x64
 
 //TODO:
-// - Spice Up the Home Page
-// - Rework database object logic - make it easier to add and modify columns
-// - Prob could do with a optimisation pass
-// - Redo Calendar page
-// - More search filters
-// - Different Plant Creation page
+// - Create New User In database when logging on for the first time | DONE
+// - User session stores data about the user from the database      | DONE
+// - Use user id to store the author of plants
+// - API route to get the plants by author
+// - Display the user's info on the profile page
+// - Edit the user's info
+// - Permissions for users
+// - User api keys
+// - Fix admin page to work with new table
 
 import React, {useEffect, useRef} from "react";
 

@@ -32,7 +32,7 @@ export interface PageName {
 export const pageNames : PageName[] = [
     {name: "Home", icon: faHome, path: "/", children: []},
     {name: "Plants", icon: faLeaf, path: "/plants/", children: [
-        {name: "Index", icon: faBook, path: "/plant_index", children: []},
+        {name: "Index", icon: faBook, path: "/plants/plant_index", children: []},
         {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []}
     ]},
     {name: "Calendar", icon: faCalendar, path: "/calendar", children: []},
@@ -118,7 +118,7 @@ function DesktopNavbar({currentPage} : navbarProps){
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
                 <Link scroll={false} href="/">
                     <Image
-                        src={"/images/logo.png"}
+                        src={"/media/images/logo.svg"}
                         alt="Rongoā Logo"
                         width={50}
                         height={100}

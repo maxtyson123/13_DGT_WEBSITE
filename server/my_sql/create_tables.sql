@@ -103,6 +103,17 @@ CREATE TABLE edible (
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
 
+-- Users
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_name TEXT,
+    user_email TEXT,
+    user_type INT,
+    user_api_keys JSON,
+    user_last_login DATE,
+    PRIMARY KEY (id)
+);
+
 -- User Auth
 CREATE TABLE auth (
     id SERIAL PRIMARY KEY,

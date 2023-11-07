@@ -69,6 +69,13 @@ export class SQLDatabase {
     months_start_month: string;
     months_end_month: string;
 
+    // Users Table
+    user_name: string;
+    user_email: string;
+    user_type: string;
+    user_last_login: string;
+
+
     // Auth Table
     auth_entry: string;
     auth_type: string;
@@ -136,6 +143,12 @@ export class SQLDatabase {
         this.months_start_month         = "months_start_month";
         this.months_end_month           = "months_end_month";
 
+        // Users Table
+        this.user_name                  = "user_name";
+        this.user_email                 = "user_email";
+        this.user_type                  = "user_type";
+        this.user_last_login            = "user_last_login";
+        
         // Auth Table
         this.auth_entry                 = "auth_entry";
         this.auth_type                  = "auth_type";
