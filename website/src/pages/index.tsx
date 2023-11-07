@@ -1,7 +1,12 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v18.18.2-win-x64\node-v18.18.2-win-x64
 
 //TODO:
+// - Spice Up the Home Page
 // - Rework database object logic - make it easier to add and modify columns
+// - Prob could do with a optimisation pass
+// - Redo Calendar page
+// - More search filters
+// - Different Plant Creation page
 
 import React, {useEffect, useRef} from "react";
 

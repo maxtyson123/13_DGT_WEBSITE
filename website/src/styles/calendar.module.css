@@ -3,11 +3,11 @@
     font-size: 64px;
 }
 
-.calenderContainer{
+.calendarContainer{
     width: 100%;
 }
 
-.title, .calenderContainer{
+.title, .calendarContainer{
     color: var(--text-light);
 }
 

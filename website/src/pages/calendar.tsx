@@ -5,13 +5,13 @@ import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/calender.module.css";
+import styles from "@/styles/calendar.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {MONTHS, USE_POSTGRES} from "@/lib/constants"
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
-import {getNamesInPreference, PlantData} from "@/lib/plant_data";
+import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import Link from "next/link";
 
 interface MonthEntry {
@@ -22,8 +22,8 @@ interface MonthEntry {
     event: string
 }
 
-export default function Calender(){
-    const pageName = "Calender"
+export default function Calendar(){
+    const pageName = "Calendar"
 
     // Store the month states
     const [month, setMonth] = React.useState(new Date().getMonth())
@@ -108,7 +108,7 @@ export default function Calender(){
                     id: entry.id,
                     startMonth:  USE_POSTGRES ? MONTHS.indexOf(entry.start_month) : MONTHS.indexOf(entry.months_start_month),
                     endMonth: USE_POSTGRES ? MONTHS.indexOf(entry.end_month) : MONTHS.indexOf(entry.months_end_month),
-                    plant: getNamesInPreference(entry as PlantData)[0],
+                    plant: macronCodeToChar(getNamesInPreference(entry as PlantData)[0], numberDictionary),
                     event: USE_POSTGRES ? entry.event : entry.months_event
                 }
 
@@ -141,15 +141,15 @@ export default function Calender(){
             {/* Page header */}
             <Section>
                <PageHeader size={"small"}>
-                     <h1 className={styles.title}>Calender</h1>
+                     <h1 className={styles.title}>Calendar</h1>
                </PageHeader>
             </Section>
 
-            {/* Calender */}
+            {/* Calendar */}
             <Section autoPadding>
 
-                {/* Calender header */}
-                <div className={styles.calenderContainer}>
+                {/* Calendar header */}
+                <div className={styles.calendarContainer}>
 
                     {/* The current month and the buttons to change the month */}
                     <div className={styles.month}>

@@ -22,7 +22,7 @@ export const pageNames : PageName[] = [
         {name: "Mushrooms", icon: faSpa, path: "/plants/mushrooms", children: []},
     ]},
     {name: "Plant Index", icon: faBook, path: "/plant_index", children: []},
-    {name: "Calender", icon: faCalendar, path: "/calender", children: []},
+    {name: "Calendar", icon: faCalendar, path: "/calendar", children: []},
     {name: "Search", icon: faSearch, path: "/search", children: []},
 ];
 
