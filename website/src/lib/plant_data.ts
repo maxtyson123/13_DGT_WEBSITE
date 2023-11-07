@@ -16,7 +16,7 @@ export interface PlantData {
     location_found:     string;
     small_description:  string;
     long_description:   string;
-    author:             string;
+    author:             number[];
     last_modified:      string;
     display_image:      string;
     plant_type:         string;
@@ -416,10 +416,25 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.location_found    = apiData.location_found;
     plantData.small_description = apiData.small_description;
     plantData.long_description  = apiData.long_description;
-    plantData.author            = apiData.author;
     plantData.last_modified     = apiData.last_modified;
     plantData.display_image     = apiData.display_image;
     plantData.plant_type        = apiData.plant_type;
+
+    // Convert the author into array of ints
+    plantData.author = [];
+
+    if(apiData.author.includes(",")){
+
+        // Split the string into an array
+        let authorArray = apiData.author.split(",");
+
+        // Convert the array of strings into an array of ints
+        for(let i = 0; i < authorArray.length; i++){
+            plantData.author.push(parseInt(authorArray[i]));
+        }
+    }else{
+        plantData.author.push(parseInt(apiData.author));
+    }
 
     // Image info
     for(let i = 0; i < apiData.attachment_paths.length; i++) {
@@ -558,11 +573,10 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.location_found    = plantData.location_found;
     apiData.small_description = plantData.small_description;
     apiData.long_description  = plantData.long_description;
-    apiData.author            = plantData.author;
     apiData.last_modified     = plantData.last_modified;
     apiData.display_image     = plantData.display_image;
     apiData.plant_type        = plantData.plant_type;
-
+    apiData.author            = plantData.author.toString()
 
     // Date info
     for(let i = 0; i < plantData.months_ready_for_use.length; i++) {
@@ -643,7 +657,7 @@ export function emptyPlantData(){
         location_found:         "",
         small_description:      "",
         long_description:       "",
-        author:                 "",
+        author:                 [],
         last_modified:          "",
         display_image:          "",
         plant_type:             "",

@@ -1804,36 +1804,32 @@ export default function CreatePlant() {
         plantOBJ.location_found = cleanInput(location);
         plantOBJ.small_description = cleanInput(smallDescription)
         plantOBJ.long_description = cleanInput(largeDescription)
-        plantOBJ.author = "Unknown";
         plantOBJ.last_modified = new Date().toISOString()
         plantOBJ.display_image = cleanInput(displayImage);
         plantOBJ.plant_type = cleanInput(plantType);
+        plantOBJ.author = [];
 
         // Get the plant author
         if(session && session.user){
 
+            //TODO: Find away to fix this
+            // @ts-ignore
+            let userID = session.user.database.id;
+
             // If there is a user then set the author to the user's name
-            if (session.user.name)
-                plantOBJ.author = session.user.name;
+            if(userID){
 
-            // Get the previous author
-            let prevAuthors = importedJSON.author;
+                let prevAuthors = importedJSON.author;
 
-            // If there is a previous author then add it to the list
-            if(prevAuthors){
-                // Split at the comma
-                let prevAuthorsList = prevAuthors.split(",");
-
-                // Check if the current author is already in the list and remove it if it is
-                if(prevAuthorsList.includes(plantOBJ.author)) {
-                    prevAuthorsList.splice(prevAuthorsList.indexOf(plantOBJ.author), 1);
+                if(prevAuthors){
+                    plantOBJ.author = prevAuthors;
                 }
 
-                // Add the prev authors to the author list
-                plantOBJ.author = plantOBJ.author + "," + prevAuthorsList.join(",");
+                if(!plantOBJ.author.includes(userID)) {
+                    plantOBJ.author.push(userID)
+                }
             }
         }
-
 
         // Image info
         for(let i = 0; i < imageInfoRef.current.length; i++) {

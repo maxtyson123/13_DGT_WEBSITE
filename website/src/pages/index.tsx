@@ -3,8 +3,8 @@
 //TODO:
 // - Create New User In database when logging on for the first time | DONE
 // - User session stores data about the user from the database      | DONE
-// - Use user id to store the author of plants
-// - API route to get the plants by author
+// - Use user id to store the author of plants                      | DONE
+// - API route to get the plants by author                          | DONE
 // - Display the user's info on the profile page
 // - Edit the user's info
 // - Permissions for users
