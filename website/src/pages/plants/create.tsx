@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/plants/create.module.css";
+import styles from "@/styles/pages/plants/create.module.css";
 import HtmlHeader from "@/components/html_header";
 import Navbar from "@/components/navbar";
 import {
@@ -42,6 +42,7 @@ import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudArrowUp, faDoorOpen, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
+import {RongoaUser} from "@/lib/users";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -1811,10 +1812,8 @@ export default function CreatePlant() {
 
         // Get the plant author
         if(session && session.user){
-
-            //TODO: Find away to fix this
-            // @ts-ignore
-            let userID = session.user.database.id;
+            
+            let userID = (session.user as RongoaUser).database.id;
 
             // If there is a user then set the author to the user's name
             if(userID){

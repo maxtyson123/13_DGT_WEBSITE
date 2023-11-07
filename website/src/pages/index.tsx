@@ -13,7 +13,7 @@
 
 import React, {useEffect, useRef} from "react";
 
-import styles from "@/styles/index.module.css"
+import styles from "@/styles/pages/index.module.css"
 import Navbar from "@/components/navbar";
 import HtmlHeader from "@/components/html_header";
 import Section from "@/components/section";

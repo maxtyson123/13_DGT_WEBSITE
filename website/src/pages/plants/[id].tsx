@@ -7,7 +7,7 @@ import Navbar from "@/components/navbar";
 import PageHeader from "@/components/page_header";
 import ScrollToTop from "@/components/scroll_to_top";
 import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
-import styles from "@/styles/plants/id.module.css";
+import styles from "@/styles/pages/plants/id.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {convertUseTag} from "@/components/plant_card";

@@ -1,0 +1,85 @@
+/*
+ Make the text in the welcome container white and any child elements should be flex to align them horizontally.
+ */
+.welcomeContainer{
+    color: white; /* This doesn't change with theming */
+    text-align: center;
+    font-size: 60px;
+}
+
+.accountContainer{
+    background-color: var(--secondary-gray);
+    border-radius: 20px;
+    padding: 20px;
+    color: var(--text-dark);
+    text-align: center;
+    width: 70%;
+}
+
+.lastLogin{
+    text-align: left;
+}
+
+.mainInfo{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+}
+
+.mainInfo h1{
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.mainInfo h2{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.accountImage{
+    background-color: var(--main-green);
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+}
+
+.actionItem{
+    margin-bottom: 30px;
+    width: 90%;
+}
+
+.actionItem button{
+
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+    font-size: 24px;
+    color: var(--text-light);
+    cursor: pointer;
+    width: 100%;
+}
+
+.signOutButton{
+    background-color: orange;
+}
+
+.deleteAccountButton{
+    background-color: red;
+}
+
+.signInButton{
+
+
+    background-color: var(--main-green);
+    border-radius: 20px;
+    padding: 10px;
+    margin: 150px 10px 100px 10px;
+    font-size: 24px;
+    color: var(--text-light);
+    cursor: pointer;
+    width: 80%;
+}

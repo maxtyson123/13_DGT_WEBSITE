@@ -5,7 +5,7 @@ import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/plant_index.module.css";
+import styles from "@/styles/pages/plant_index.module.css";
 import axios from "axios";
 import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";

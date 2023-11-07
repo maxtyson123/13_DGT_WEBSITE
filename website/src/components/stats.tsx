@@ -111,7 +111,7 @@ export default function Stats(){
     }, []);
 
     const goToIndex = (filter: string) => {
-        router.push("/plant_index?filter=" + filter)
+        router.push("/plants/plant_index?filter=" + filter)
     }
 
 

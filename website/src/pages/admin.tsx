@@ -5,7 +5,7 @@ import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
-import styles from "@/styles/admin.module.css";
+import styles from "@/styles/pages/admin.module.css";
 import {signIn, signOut, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";

@@ -31,6 +31,10 @@
     align-items: center;
 }
 
+.twoCols{
+    grid-template-columns: repeat(2, 1fr);
+}
+
 /*
  Make the stat font larger
  */
