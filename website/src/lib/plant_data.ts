@@ -824,6 +824,10 @@ export const textDictionary    = ["macron_a", "macron_e", "macron_i", "macron_o"
 
 
 export function macronCodeToChar(str: string, dict = textDictionary) {
+    // Make sure str is not null or undefined
+    if(str === null || str === undefined)
+        return str
+
     let string = str
 
     for(let i = 0; i < dict.length; i++) {
@@ -889,6 +893,11 @@ export function macronsForDisplay(plant: PlantData) {
 }
 
 export function macronCharToCode(str: string, dict = textDictionary) {
+
+    // Make sure str is not null or undefined
+    if(str === null || str === undefined)
+        return str
+
     let string = str
 
     for(let i = 0; i < dict.length; i++) {
