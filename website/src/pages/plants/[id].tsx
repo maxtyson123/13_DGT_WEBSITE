@@ -17,6 +17,8 @@ import {Error} from "@/components/error";
 import {CreditedImage} from "@/components/credits";
 import {useSession} from "next-auth/react";
 import {ModalImage} from "@/components/modal";
+import Link from "next/link";
+import axios from "axios";
 
 export default function PlantPage() {
 
@@ -30,6 +32,7 @@ export default function PlantPage() {
     const [mainImageMetaData, setMainImageMetaData] = React.useState<ImageMetaData | null>(null)
     const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
+    const [authors, setAuthors] = React.useState<string[]>([])
 
     // Render key to re render stuff on resize
     const [renderKey, setRenderKey] = React.useState(0)
@@ -86,6 +89,19 @@ export default function PlantPage() {
         // Set the plant data
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
+
+        // Get the data for the authors
+        let authors = []
+        for(let author of plantOBJ.author){
+            let authorData = await axios.get("/api/user/data?id=" + author)
+            const authorsData = authorData.data.user
+            if(authorsData){
+                authors.push(authorsData.user_name)
+            }
+        }
+        console.log(authors)
+        setAuthors(authors)
+
     }
 
     // Fetch the plant data from the api for this plant on load
@@ -237,7 +253,11 @@ export default function PlantPage() {
 
                         {/* Author and last modified date. Convert the date into the right format */}
                         <div  className={styles.headerItem}>
-                            <p className={styles.smallInline}>Author: {plantData ? plantData.author : "Author..."}</p>
+                            <p className={styles.smallInline}>Author(s): {plantData?.author.map(
+                                (author, index) => (
+                                    <Link href={"/account/"+author} key={index}>{authors[index]}{index !== plantData.author.length - 1 ? ", " : ""}</Link>
+                                )
+                            )}</p>
                             <p className={styles.smallInline}>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
 
                         </div>

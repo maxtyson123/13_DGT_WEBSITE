@@ -110,7 +110,8 @@ CREATE TABLE users (
     user_email TEXT,
     user_type INT,
     user_api_keys JSON,
-    user_last_login DATE,
+    user_last_login DATETIME,
+    user_image: TEXT,
     PRIMARY KEY (id)
 );
 

@@ -193,7 +193,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
             <>
                 <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
                     {session?.user?.image ?
-                        <img src={session.user.image} alt={"user account"}/>
+                        <img src={session.user.image} alt={"user account"} className={styles.userImage}/>
                         :
                         <>
                             <FontAwesomeIcon icon={page.icon as IconProp}/>

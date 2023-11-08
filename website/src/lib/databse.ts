@@ -74,6 +74,7 @@ export class SQLDatabase {
     user_email: string;
     user_type: string;
     user_last_login: string;
+    user_image: string;
 
 
     // Auth Table
@@ -148,6 +149,8 @@ export class SQLDatabase {
         this.user_email                 = "user_email";
         this.user_type                  = "user_type";
         this.user_last_login            = "user_last_login";
+        this.user_image                 = "user_image";
+
         
         // Auth Table
         this.auth_entry                 = "auth_entry";

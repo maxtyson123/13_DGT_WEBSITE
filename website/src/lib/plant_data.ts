@@ -853,18 +853,21 @@ export function macronsForDisplay(plant: PlantData) {
         switch (plant.sections[i].type) {
             case "edible":
                 plant.sections[i].part_of_plant = macronCodeToChar(plant.sections[i].part_of_plant)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].nutrition = macronCodeToChar(plant.sections[i].nutrition)
                 plant.sections[i].preparation = macronCodeToChar(plant.sections[i].preparation)
                 break;
 
             case "medical":
                 plant.sections[i].use = macronCodeToChar(plant.sections[i].use)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].preparation = macronCodeToChar(plant.sections[i].preparation)
                 break;
 
             case "craft":
                 plant.sections[i].part_of_plant = macronCodeToChar(plant.sections[i].part_of_plant)
                 plant.sections[i].use = macronCodeToChar(plant.sections[i].use)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].additonal_info = macronCodeToChar(plant.sections[i].additonal_info)
                 break;
 
@@ -915,18 +918,21 @@ export function macronsForDatabase(plant: PlantData){
         switch (plant.sections[i].type) {
             case "edible":
                 plant.sections[i].part_of_plant = macronCharToCode(plant.sections[i].part_of_plant)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].nutrition = macronCharToCode(plant.sections[i].nutrition)
                 plant.sections[i].preparation = macronCharToCode(plant.sections[i].preparation)
                 break;
 
             case "medical":
                 plant.sections[i].use = macronCharToCode(plant.sections[i].use)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].preparation = macronCharToCode(plant.sections[i].preparation)
                 break;
 
             case "craft":
                 plant.sections[i].part_of_plant = macronCharToCode(plant.sections[i].part_of_plant)
                 plant.sections[i].use = macronCharToCode(plant.sections[i].use)
+                plant.sections[i].useIdentifier = macronCodeToChar(plant.sections[i].useIdentifier)
                 plant.sections[i].additonal_info = macronCharToCode(plant.sections[i].additonal_info)
                 break;
 
@@ -1051,4 +1057,18 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
 
 
     return plant;
+}
+
+export function dateToString(date: Date | string): string
+{
+    let dateString = ""
+
+    // if its already a string
+    if(typeof date === "string"){
+        dateString = date;
+    }else{
+        dateString = date.toISOString();
+    }
+
+    return dateString.split("T")[1].split(".")[0] + " on " + dateString.split("T")[0]
 }

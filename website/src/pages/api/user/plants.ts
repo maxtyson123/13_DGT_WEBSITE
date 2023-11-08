@@ -3,6 +3,7 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {RongoaUser} from "@/lib/users";
 
 export default async function handler(
     request: NextApiRequest,
@@ -18,7 +19,32 @@ export default async function handler(
     // Get the tables
     const tables = getTables();
 
+    // Get the user id from the request
+    const { id } = request.query
+
+
+    const handleGet = async (userID: string) => {
+        // Fetch the plants
+        let query = `SELECT id, ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.last_modified}, ${tables.plant_type} FROM plants WHERE ${tables.author} LIKE '%,${userID},%' OR ${tables.author} LIKE '${userID},%' OR ${tables.author} LIKE '%,${userID}' OR ${tables.author} LIKE '${userID}'`;
+        console.log(query);
+        const plants = await makeQuery(query, client)
+
+        if (plants.length == 0) {
+            return response.status(400).json({error: 'User doesnt have any plants'});
+        }
+
+        // Return the user
+        return response.status(200).json({data: plants});
+    }
+
     try {
+
+        // If there is an id then return the user with that id
+        if(id) {
+
+            return handleGet(id as string)
+
+        }
 
         // Get the session
         const session = await getServerSession(request, response, authOptions)
@@ -29,20 +55,9 @@ export default async function handler(
         }
 
         // Get the user details
-        // @ts-ignore
-        const user_id = session.user.database.id
+        const user_id = (session.user as RongoaUser).database.id
 
-        // Fetch the plants
-        let query = `SELECT id, ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.last_modified}, ${tables.plant_type} FROM plants WHERE ${tables.author} LIKE '%,${user_id},%' OR ${tables.author} LIKE '${user_id},%' OR ${tables.author} LIKE '%,${user_id}' OR ${tables.author} LIKE '${user_id}'`;
-        console.log(query);
-        const plants = await makeQuery(query, client)
-
-        if(plants.length == 0) {
-            return response.status(400).json({ error: 'User doesnt have any plants'});
-        }
-
-        // Return the user
-        return response.status(200).json({ data: plants });
+        return handleGet(user_id.toString())
 
 
     } catch (error) {

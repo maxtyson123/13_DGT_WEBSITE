@@ -18,22 +18,34 @@ export default async function handler(
     // Get the tables
     const tables = getTables();
 
+    // Get the id
+    const { id } = request.query;
+
+
     try {
 
-        // Get the session
-        const session = await getServerSession(request, response, authOptions)
+        let query = `SELECT * FROM users WHERE id = ${id}`;
 
-        // If there is no session then return an error
-        if(!session || !session.user) {
-            return response.status(401).json({ error: 'User not logged in'});
+        // If there is no id then must be using the user session
+        if(!id) {
+
+
+            // Get the session
+            const session = await getServerSession(request, response, authOptions)
+
+            // If there is no session then return an error
+            if (!session || !session.user) {
+                return response.status(401).json({error: 'User not logged in'});
+            }
+
+            // Get the user details
+            const user_email = session.user.email;
+            const user_name = session.user.name;
+
+            // Fetch the user
+            query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
+
         }
-
-        // Get the user details
-        const user_email = session.user.email;
-        const user_name = session.user.name;
-
-        // Fetch the user
-        let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
         console.log(query);
         const user = await makeQuery(query, client)
 

@@ -81,7 +81,6 @@
 }
 
 
-
 .navItem{
     border-bottom: 2px solid white;
 }
@@ -116,6 +115,12 @@
     overflow: hidden;
 }
 
+.userImage img{
+    width: 150px;
+    height: 150px
+
+}
+
 
 @media only screen and (max-width: 600px) {
 }
@@ -134,5 +139,9 @@
         border-bottom: 2px solid white;
     }
 
+    .expanded .activePage, .userImage{
+        width: 30%;
+        margin: auto;
+    }
 
 }

@@ -14,6 +14,7 @@
     color: var(--text-dark);
     text-align: center;
     width: 70%;
+    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
 .lastLogin{
@@ -45,6 +46,7 @@
     width: 250px;
     height: 250px;
     overflow: hidden;
+    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
 .actionItem{
@@ -82,4 +84,69 @@
     color: var(--text-light);
     cursor: pointer;
     width: 80%;
+}
+
+.tableContainer{
+    width: 100%;
+}
+
+.dataTable{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dataTable td, .dataTable th{
+    padding: 8px;
+}
+
+.dataTable .divider{
+    opacity: 0;
+}
+
+.dataTable thead{
+    background-color: var(--darker-secondary-gray);
+    color: var(--text-light);
+    text-align: left;
+    letter-spacing: 0.05em;
+}
+
+.dataTable button{
+    border-radius: 15px;
+    color: var(--text-light);
+    cursor: pointer;
+    background-color: var(--main-green);
+    padding: 5px 10px 5px 10px;
+}
+
+.dataTable button:hover{
+    background-color: var(--darker-main-green);
+}
+
+.tbody p{
+    text-align: center;
+}
+
+.createButton{
+    margin: 10px;
+    padding: 5px;
+    border-radius: 15px;
+    background-color: var(--main-green);
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+.createButton:hover{
+    background-color: var(--darker-main-green);
+}
+
+@media only screen and (max-width: 800px) {
+    .accountImage{
+        margin-top: 5%;
+        width: 150px;
+        height: 150px;
+    }
+
+    .accountContainer{
+        width: 95%;
+    }
 }

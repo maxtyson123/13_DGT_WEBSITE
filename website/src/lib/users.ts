@@ -20,6 +20,7 @@ export interface UserDatabaseDetails {
     user_type: number,
     user_last_login: string,
     user_api_keys: object,
+    user_image: string,
 
 
 }

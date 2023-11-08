@@ -38,9 +38,9 @@ import axios from "axios";
 import {MONTHS, PLANT_PARTS} from "@/lib/constants"
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCloudArrowUp, faDoorOpen, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {faCloudArrowUp, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
 import {RongoaUser} from "@/lib/users";
 
@@ -2670,12 +2670,6 @@ export default function CreatePlant() {
                     </>
                     :
                     <>
-                        {/* If the user is signed in then show the user details and sign out button */}
-                        <div className={styles.userDetails}>
-                            <p> Signed in as <span className={styles.email}> {session.user ? session.user.email : "No Email"} </span> </p>
-                            <button onClick={() => signOut()}><FontAwesomeIcon icon={faDoorOpen}/> Sign out</button>
-                        </div>
-
                         <div className={"row"}>
 
                             {/* If there is an error then show it */}

@@ -19,8 +19,9 @@
 
 .content{
     background-color: var(--secondary-gray);
-    padding: 1%;
     border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
 .open{

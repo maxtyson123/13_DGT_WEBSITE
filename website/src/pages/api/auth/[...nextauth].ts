@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
                 // Get the user details
                 const user_email = user?.email;
                 const user_name = user?.name;
+                const user_image = user?.image;
                 const user_type = MEMBER_USER_TYPE;
 
                 // Check if there already is a user
@@ -67,8 +68,8 @@ export const authOptions: NextAuthOptions = {
                 console.log(query);
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
-                    // Update the users login time
-                    query = `UPDATE users SET ${tables.user_last_login} = NOW() WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
+                    // Update the users login time and image
+                    query = `UPDATE users SET ${tables.user_last_login} = NOW(), ${tables.user_image} = '${user_image}' WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
                     console.log(query);
                     await makeQuery(query, client)
 
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // Insert the user into the database
-                query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW())`;
+                query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}, ${tables.user_image} ) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW(), '${user_image}')`;
                 const new_user = await makeQuery(query, client)
 
                 // Return that it was completed
