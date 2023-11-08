@@ -131,7 +131,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 setEditor(true)
                 break
         }
-        if(user.user_image != null) setUserImage(user.user_image)
+        if(user.user_image != null || user.user_image != undefined) setUserImage(user.user_image)
         setUserLastLogin(dateToString(user.user_last_login))
         setUserPosts("0")
     }
