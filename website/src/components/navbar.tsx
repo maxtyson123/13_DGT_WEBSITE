@@ -17,6 +17,7 @@ import styles from "@/styles/components/navbar.module.css"
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {getSession} from "next-auth/react";
 import {Session} from "next-auth";
+import {RongoaUser} from "@/lib/users";
 
 // Define items for the navbar, each item is an array with the following format: Name to display, icon, link
 // Export it so that it can be used in the footer, that way it is easier to keep the navbar and footer in sync with what links they have
@@ -193,7 +194,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
             <>
                 <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
                     {session?.user?.image ?
-                        <img src={session.user.image} alt={"user account"} className={styles.userImage}/>
+                        <img src={(session.user as RongoaUser).database.user_image} alt={"user account"} className={styles.userImage}/>
                         :
                         <>
                             <FontAwesomeIcon icon={page.icon as IconProp}/>

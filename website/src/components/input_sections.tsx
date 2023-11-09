@@ -1,8 +1,9 @@
 import styles from "@/styles/components/input_sections.module.css";
-import React, {useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
+import {faCircleCheck, faCloudArrowUp, faFile} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 
 // States for the input
@@ -568,4 +569,149 @@ export function AdvancedTextArea({placeHolder, defaultValue, required, state, er
         </>
     )
 
+}
+
+type FileInputProps = {
+    placeHolder: string;
+    defaultValue?: [string, string];
+    required: boolean;
+    state: ValidationState;
+    errorText?: string;
+    changeEventHandler?: (value: File) => void;
+    size?: [number, number]
+};
+export function FileInput({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler, size = [100, 100]}: FileInputProps){
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+    const [localFileUrl, setLocalFileUrl] = useState("");
+    const [displayType, setDisplayType] = useState("file");
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param event
+     */
+    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
+        // Prevent the default behaviour
+        event.preventDefault();
+
+        // Get the file from the event
+        const selectedFile = event.target.files;
+
+        // If there is no file selected then return
+        if (!selectedFile) {
+            console.log('Please select a file.');
+            return;
+        }
+
+        const file = selectedFile[0];
+
+        setInputValue(file.name);
+        handleFileDisplay(file);
+
+        // Value has changed so state is no longer valid
+        setThisState("normal")
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(file);
+        }
+    }
+
+    const handleFileDisplay = (file: File) => {
+
+        // If it is an image, display it
+        if(file.type.includes("image")) {
+            setLocalFileUrl(URL.createObjectURL(file))
+            setDisplayType("image")
+            return
+        }
+
+        // Set it to file
+        setLocalFileUrl(file.name)
+        setDisplayType("file")
+
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue && localFileUrl === ""){
+            setLocalFileUrl(defaultValue[0])
+            setDisplayType(defaultValue[1])
+        }
+
+
+
+    }, [defaultValue])
+
+    return(
+        <>
+            {/*  The simple text area section */}
+            <div className={styles.fileInput + " " + stateClass} ref={inputRef}>
+
+
+                <div className={styles.selectBorder}>
+                    {/* Show the required text if the input is not focused */}
+                    <p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                        {thisRequired ? 'Required' : ''}
+                    </p>
+
+                    {/* File Input */}
+                    <div className={styles.uploadButton}>
+                        <label htmlFor="files">
+
+                            {localFileUrl ?
+                                <>
+                                    { displayType === "file" && <> <FontAwesomeIcon icon={faFile}/> <p> {localFileUrl} </p> </>}
+                                    { displayType === "image" && <> <Image width={size[0]} height={size[1]} src={localFileUrl} alt=""/> </>}
+                                    <p> Click To Change </p>
+                                </>
+                                :
+                                <>
+                                    <FontAwesomeIcon icon={faCloudArrowUp}/>
+                                    <p> Select File </p>
+                                </>
+                            }
+                           </label>
+                        <input id="files" type="file" onChange={changeHandler} />
+                    </div>
+
+                    {/* Show the success icon if the state is in success and if the input is not focused */}
+                    {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+                    
+                    {/* Show the error text if the state is in error */}
+                    { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
+                </div>
+            </div>
+        </>
+    )
 }

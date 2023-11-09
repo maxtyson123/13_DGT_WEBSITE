@@ -9,7 +9,6 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 
-
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -51,12 +50,18 @@ export default async function handler(
             // Parse the form
             form.parse(request, async (err, fields, files) => {
 
-                const { id, api_key } = fields;
+                let { id, api_key, path } = fields;
 
                 // Check if id is null
                 if(!id){
                     return response.status(400).json({ error: 'No ID' });
                 }
+
+                // Check if path is null
+                if(!path){
+                    path = "plants";
+                }
+
 
                 // Check if the data is being downloaded from the Postgres database
                 let tables = new SQLDatabase();
@@ -89,7 +94,7 @@ export default async function handler(
                 ftp.on('ready', () => {
 
                     // Get the path to upload to
-                    const folder = `/plants/${id}`
+                    const folder = `/${path}/${id}`
                     const remotePath = `${folder}/${file[0].originalFilename}`
                     console.log(remotePath)
 

@@ -1,0 +1,9 @@
+/*
+ Make the text in the welcome container white and any child elements should be flex to align them horizontally.
+ */
+.welcomeContainer{
+    color: white; /* This doesn't change with theming */
+    text-align: center;
+    font-size: 60px;
+}
+

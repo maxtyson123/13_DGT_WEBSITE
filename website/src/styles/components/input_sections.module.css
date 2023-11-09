@@ -166,10 +166,26 @@
     width: 100%;
 }
 
+.fileInput{
+    color: #ABAFB1;
+    background-color: var(--main-background);
+    border-radius: 8px;
+    --top-spacing: 16px;
+    width: 100%;
 
-.editableDiv {
-    padding-top: var(--top-spacing);
-    overflow-wrap: break-word;
-    max-width: 100%;
-    border: none;
+}
+
+.fileInput .uploadButton{
+    padding: var(--top-spacing) 16px 8px 11px;
+}
+
+.uploadButton label{
+    display: grid;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+.uploadButton input[type=file]{
+    display: none;
 }

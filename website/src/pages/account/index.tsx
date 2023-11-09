@@ -210,7 +210,13 @@ export function AccountPage({dataID}: AccountPageProps){
                         <div className={styles.accountContainer}>
 
                             <div className={styles.lastLogin}>
-                                { myAccount && <p>  Last Login: {userLastLogin} </p> }
+                                { myAccount &&
+                                    <>
+                                        <p>  Last Login: {userLastLogin} </p>
+                                        <Link href={"/account/edit"}><button> Edit </button></Link>
+                                    </>
+                                }
+
                             </div>
 
                             <div className={styles.mainInfo}>

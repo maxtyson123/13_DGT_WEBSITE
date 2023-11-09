@@ -5,11 +5,11 @@
 // - User session stores data about the user from the database      | DONE
 // - Use user id to store the author of plants                      | DONE
 // - API route to get the plants by author                          | DONE
-// - Display the user's info on the profile page
-// - Edit the user's info
-// - Permissions for users
-// - User api keys
-// - Fix admin page to work with new table
+// - Display the user's info on the profile page                    | DONE
+// - Edit the user's info                                           | CSS, Refresh Local User
+// - Permissions for users  - who can see what, who can edit what   |
+// - User api keys                                                  |
+// - Rewrite docs for users                                         |
 
 import React, {useEffect, useRef} from "react";
 
