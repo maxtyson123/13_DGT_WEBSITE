@@ -43,6 +43,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudArrowUp, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
 import {RongoaUser} from "@/lib/users";
+import {Loading} from "@/components/loading";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -2653,11 +2654,7 @@ export default function CreatePlant() {
 
                 {/* If something is set to be loading on the page then show the loading screen */}
                 { isLoading ?
-                    <div className={styles.loadingContainer}>
-                        <Image src={"/media/images/old_loading.gif"} alt={"Loading.."} width={100} height={100}/>
-                        <h1>Uploading...</h1>
-                        <h2>{progressMessage}...</h2>
-                    </div>
+                    <Loading progressMessage={progressMessage}/>
                     : null}
 
                 {/* If the user is not signed in then show the sign-in button */}

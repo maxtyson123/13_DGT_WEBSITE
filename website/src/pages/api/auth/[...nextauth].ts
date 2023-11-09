@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
-        async jwt({ token}) {
+        async jwt({ token, trigger, session}) {
 
             // If there isnt the user data in the token the fetch it
             if(!token.user) {
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
                 const client = await getClient()
 
                 // Make the query
-                let query = `SELECT * FROM users WHERE ${tables.user_email} = '${token.email}' AND ${tables.user_name} = '${token.name}'`;
+                let query = `SELECT * FROM users WHERE ${tables.user_email} = '${token.email}'`;
                 console.log(query);
                 const user = await makeQuery(query, client)
 
@@ -40,6 +40,15 @@ export const authOptions: NextAuthOptions = {
                     // Add the user to the token
                     token.user = {};
                 }
+            }
+
+            if (trigger === "update" && session?.database) {
+
+                console.log("Update");
+                token.user = session.database;
+                // @ts-ignore
+                token.user.user_last_login = new Date().toISOString();
+                console.log(token.user);
             }
 
             return token
@@ -64,12 +73,12 @@ export const authOptions: NextAuthOptions = {
                 const user_type = MEMBER_USER_TYPE;
 
                 // Check if there already is a user
-                let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
+                let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}'`;
                 console.log(query);
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
                     // Update the users login time and image
-                    query = `UPDATE users SET ${tables.user_last_login} = NOW(), ${tables.user_image} = '${user_image}' WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
+                    query = `UPDATE users SET ${tables.user_last_login} = NOW() WHERE ${tables.user_email} = '${user_email}'`;
                     console.log(query);
                     await makeQuery(query, client)
 
@@ -91,11 +100,10 @@ export const authOptions: NextAuthOptions = {
                 return false
             }
         },
-        async session({ session, token, user }) {
+        async session({ session, token, trigger, newSession ,  user }) {
 
             //@ts-ignore
             session.user.database = token.user;
-
             return session
         }
     },

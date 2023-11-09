@@ -27,7 +27,7 @@
 
 }
 
-.lastLogin a{
+.lastLogin a, .lastLogin button{
     justify-self: end;
     background-color: var(--main-green);
     border-radius: 20px;
@@ -35,13 +35,17 @@
     padding: 5px 10px 5px 10px;
 }
 
-
+.lastLogin div{
+    justify-self: end;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 10px;
+}
 
 .mainInfo{
     display: grid;
     align-items: center;
     justify-items: center;
-
 }
 
 .mainInfo h1{
@@ -54,6 +58,19 @@
     font-weight: bold;
 }
 
+.mainInfo input{
+    padding: 5px;
+    background-color: var(--secondary-gray) !important;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.toolTip{
+    margin-top: -2.5%;
+    color: #A0A4A6;
+}
+
 .accountImage{
     background-color: var(--main-green);
     border-radius: 50%;
@@ -64,6 +81,15 @@
     overflow: hidden;
     box-shadow: 0 8px 8px var(--shadow-min);
 }
+
+.accountImage img{
+    object-fit: cover;
+}
+
+.accountImageInput div {
+    background-color: var(--secondary-gray) !important;
+}
+
 
 .actionItem{
     margin-bottom: 30px;
@@ -79,6 +105,7 @@
     color: var(--text-light);
     cursor: pointer;
     width: 100%;
+    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
 .signOutButton{

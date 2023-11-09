@@ -8,34 +8,40 @@ import styles from "@/styles/pages/account/index.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPerson} from "@fortawesome/free-solid-svg-icons";
 import {signIn, useSession} from "next-auth/react";
-import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
+import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {globalStyles} from "@/lib/global_css";
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
 import axios from "axios";
+import {dateToString} from "@/lib/plant_data";
+import {Loading} from "@/components/loading";
 
 export default function EditAccount() {
     const pageName = "Account";
 
-    const { data: session } = useSession()
+    const { data: session, update } = useSession()
 
     const router = useRouter()
 
     // User data
     const [userName, setUserName] = React.useState<string>("")
     const [userEmail, setUserEmail] = React.useState<string>("")
+    const [userRole, setUserRole] = React.useState<string>("")
     const [userImage, setUserImage] = React.useState<string>("")
+    const [userLastLogin, setUserLastLogin] = React.useState<string>("")
     const [userLocalImage, setUserLocalImage] = React.useState<File | null>(null)
 
     // Data states
     const [validUserName, setValidUserName] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserEmail, setValidUserEmail] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserImage, setValidUserImage] = React.useState<[ValidationState, string]>(["normal", "no error"])
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const [loadingMessage, setLoadingMessage] = React.useState<string>("")
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
-    const[error, setError] = useState<string>("")
+    const[error, setError] = useState<string>()
 
     useEffect(() => {
 
@@ -60,7 +66,22 @@ export default function EditAccount() {
     const loadUserData = (user: UserDatabaseDetails) => {
         setUserName(user.user_name)
         setUserEmail(user.user_email)
-        if(user.user_image != null || user.user_image != undefined) setUserImage(user.user_image)
+        switch (user.user_type){
+            case MEMBER_USER_TYPE:
+                setUserRole("Member")
+                break
+
+            case ADMIN_USER_TYPE:
+                setUserRole("Admin")
+                break
+
+            case EDITOR_USER_TYPE:
+                setUserRole("Editor")
+                break
+        }
+        if(user.user_image != null && user.user_image != "undefined")
+            setUserImage(user.user_image.replaceAll("s96-c", "s192-c"))
+        setUserLastLogin(dateToString(new Date(user.user_last_login)))
     }
 
     const validateUserDetails = async () => {
@@ -143,10 +164,14 @@ export default function EditAccount() {
         if(!await validateUserDetails())
             return
 
+        setLoading(true)
+
         const userID = (session?.user as RongoaUser).database.id.toString()
 
         // Upload the user image if there is one
         if(userLocalImage !== null) {
+
+            setLoadingMessage("Uploading profile image...")
 
             // Create a new form data object and append the file to it
             const formData = new FormData();
@@ -173,6 +198,8 @@ export default function EditAccount() {
             }
         }
 
+        setLoadingMessage("Updating user data...")
+
         // Update the user data
         try {
 
@@ -189,7 +216,20 @@ export default function EditAccount() {
             console.log(e)
         }
 
+        console.log("User data updated")
 
+        // update the session
+        await update({
+            database: {
+                id: (session?.user as RongoaUser).database.id,
+                user_name: userName,
+                user_email: userEmail,
+                user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image
+            }
+        }).then(r => console.log(r))
+
+        // Push the user back to the account page
+        await router.push("/account")
     }
 
     const loginSection = () => {
@@ -205,49 +245,48 @@ export default function EditAccount() {
     const editSection = () => {
         return (
             <>
-                {/* Users Information */}
+
                 <Section autoPadding>
-                    <div className={styles.userDetailsContainer}>
-                        <h1> Your Details </h1>
+                    <div className={globalStyles.gridCentre}>
+                        <div className={styles.accountContainer}>
 
-                        <div className={styles.userDetail}>
-                            <h2>Username</h2>
-                            <SmallInput
-                                placeHolder={"Enter your nickname"}
-                                required={true}
-                                state={validUserName[0]}
-                                errorText={validUserName[1]}
-                                defaultValue={userName}
-                                changeEventHandler={setUserName}
-                            />
+                            <div className={styles.lastLogin}>
+                                <p>  Last Login: {userLastLogin} </p>
+                                <div>
+                                    <button className={styles.updateButton} onClick={() => updateUserData()}>Update</button>
+                                    <button className={styles.updateButton} onClick={() => router.push("/account")}>Cancel</button>
+                                </div>
+                            </div>
+
+                            <div className={styles.mainInfo}>
+                                <div className={styles.accountImageInput}>
+                                    <FileInput
+                                        placeHolder={"Enter your profile picture"}
+                                        required={false}
+                                        state={validUserImage[0]}
+                                        errorText={validUserImage[1]}
+                                        defaultValue={[userImage, "image"]}
+                                        changeEventHandler={setUserLocalImage}
+                                        size={[250,250]}
+                                        styleClass={styles.accountImage}
+                                    />
+                                </div>
+                                <SmallInput
+                                    placeHolder={"Enter your nickname"}
+                                    required={false}
+                                    state={validUserName[0]}
+                                    errorText={validUserName[1]}
+                                    defaultValue={userName}
+                                    changeEventHandler={setUserName}
+                                />
+                                <p className={styles.toolTip}> Click to Change</p>
+
+                                <h2> {userEmail}</h2>
+                                <h2> {userRole}</h2>
+                            </div>
                         </div>
-
-                        <div className={styles.userDetail}>
-                            <h2>Email</h2>
-                            <SmallInput
-                                placeHolder={"Enter your email"}
-                                required={true}
-                                state={validUserEmail[0]}
-                                errorText={validUserEmail[1]}
-                                defaultValue={userEmail}
-                                changeEventHandler={setUserEmail}
-                            />
-                        </div>
-
-                        <div className={styles.userDetail}>
-                            <h2>Profile Picture</h2>
-                            <FileInput
-                                placeHolder={"Enter your profile picture"}
-                                required={true}
-                                state={validUserImage[0]}
-                                errorText={validUserImage[1]}
-                                defaultValue={[userImage, "image"]}
-                                changeEventHandler={setUserLocalImage}
-                            />
-                        </div>
-
-                        <button className={styles.updateButton} onClick={() => updateUserData()}>Update</button>
                     </div>
+
                 </Section>
 
             </>
@@ -275,8 +314,19 @@ export default function EditAccount() {
 
 
             {/* Error Message */}
-            {error && <Error error={error}/>}
+            {error && <>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Error error={error}/>
+            </>
+            }
 
+            {/* Loading Message */}
+            {loading && <Loading progressMessage={loadingMessage}/>}
+
+            {/* Account Editor */}
             {!session?
                 loginSection()
                 :
@@ -288,6 +338,7 @@ export default function EditAccount() {
             <Section>
                 <Footer/>
             </Section>
+
         </>
 
     )

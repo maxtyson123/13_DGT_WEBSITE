@@ -113,7 +113,9 @@ export function AccountPage({dataID}: AccountPageProps){
 
     }, [session])
 
+
     const loadUserData = (user: UserDatabaseDetails) => {
+
         setUserName(user.user_name)
         setUserEmail(user.user_email)
         switch (user.user_type){
@@ -131,7 +133,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 setEditor(true)
                 break
         }
-        if(user.user_image != null || user.user_image != undefined) setUserImage(user.user_image)
+        if(user.user_image != null && user.user_image != "undefined") setUserImage(user.user_image)
         setUserLastLogin(dateToString(user.user_last_login))
         setUserPosts("0")
     }
@@ -189,7 +191,6 @@ export function AccountPage({dataID}: AccountPageProps){
         await axios.delete("/api/user/delete/")
         await signOutUser()
     }
-
 
     const loginSection = () => {
         return (

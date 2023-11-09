@@ -1070,12 +1070,19 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
 
 export function dateToString(date: Date | string): string
 {
+
     let dateString = ""
 
     // if its already a string
     if(typeof date === "string"){
         dateString = date;
     }else{
+
+        // Check if its a valid date object
+        if(typeof date === "undefined" || isNaN(date.getTime())){
+            return "Invalid Date"
+        }
+
         dateString = date.toISOString();
     }
 

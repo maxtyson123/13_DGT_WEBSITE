@@ -19,6 +19,8 @@ import {useSession} from "next-auth/react";
 import {ModalImage} from "@/components/modal";
 import Link from "next/link";
 import axios from "axios";
+import {Loading} from "@/components/loading";
+import {getFromCache, saveToCache} from "@/lib/cache";
 
 export default function PlantPage() {
 
@@ -33,6 +35,10 @@ export default function PlantPage() {
     const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
     const [authors, setAuthors] = React.useState<string[]>([])
+
+    // Loading
+    const [loading, setLoading] = React.useState(false)
+    const [loadingMessage, setLoadingMessage] = React.useState("Loading...")
 
     // Render key to re render stuff on resize
     const [renderKey, setRenderKey] = React.useState(0)
@@ -52,6 +58,8 @@ export default function PlantPage() {
     const getData = async () => {
 
         console.log("Fetching plant data")
+        setLoading(true)
+        setLoadingMessage("Checking plant id...")
 
         let { id } = router.query
 
@@ -61,6 +69,7 @@ export default function PlantPage() {
             console.log("No id")
 
             setError("Invalid plant id")
+            setLoading(false)
             return;
         }
 
@@ -73,16 +82,19 @@ export default function PlantPage() {
             console.log("Not a number")
 
             setError("Invalid plant id")
+            setLoading(false)
             return
         }
 
         // Fetch the plant data
+        setLoadingMessage("Fetching plant data...")
         const plantOBJ = await fetchPlant(localId)
         console.log(plantOBJ)
 
         // If the plant data is null then there is a problem
         if(!plantOBJ){
             setError("Plant not found")
+            setLoading(false)
             return
         }
 
@@ -91,6 +103,16 @@ export default function PlantPage() {
         setPlantNames(getNamesInPreference(plantOBJ))
 
         // Get the data for the authors
+        setLoadingMessage("Fetching author data...")
+
+
+        const cacheAuthors = getFromCache("plant_" + plantOBJ.id + "_authors")
+        if(cacheAuthors !== null){
+            setAuthors(cacheAuthors)
+            setLoading(false)
+            return
+        }
+
         let authors = []
         for(let author of plantOBJ.author){
             let authorData = await axios.get("/api/user/data?id=" + author)
@@ -100,7 +122,9 @@ export default function PlantPage() {
             }
         }
         console.log(authors)
+        saveToCache("plant_" + plantOBJ.id + "_authors", authors)
         setAuthors(authors)
+        setLoading(false)
 
     }
 
@@ -240,6 +264,8 @@ export default function PlantPage() {
             {/* Set up the page header and navbar */}
             <HtmlHeader currentPage={plantNames[0]}/>
             <Navbar currentPage={plantNames[0]}/>
+
+            {loading && <Loading progressMessage={loadingMessage}/>}
 
             <Section>
                 <PageHeader size={"small"}>

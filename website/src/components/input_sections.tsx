@@ -577,10 +577,11 @@ type FileInputProps = {
     required: boolean;
     state: ValidationState;
     errorText?: string;
+    styleClass?: string;
     changeEventHandler?: (value: File) => void;
     size?: [number, number]
 };
-export function FileInput({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler, size = [100, 100]}: FileInputProps){
+export function FileInput({placeHolder, defaultValue,  required, state, errorText = "", changeEventHandler, size = [100, 100], styleClass}: FileInputProps){
 
     // States to track
     const [thisState, setThisState] = useState(state);
@@ -692,7 +693,7 @@ export function FileInput({placeHolder, defaultValue,  required, state, errorTex
                             {localFileUrl ?
                                 <>
                                     { displayType === "file" && <> <FontAwesomeIcon icon={faFile}/> <p> {localFileUrl} </p> </>}
-                                    { displayType === "image" && <> <Image width={size[0]} height={size[1]} src={localFileUrl} alt=""/> </>}
+                                    { displayType === "image" && <> <Image width={size[0]} height={size[1]} src={localFileUrl} alt="" className={styleClass ? styleClass : ""}/> </>}
                                     <p> Click To Change </p>
                                 </>
                                 :

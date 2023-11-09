@@ -6,7 +6,7 @@
 // - Use user id to store the author of plants                      | DONE
 // - API route to get the plants by author                          | DONE
 // - Display the user's info on the profile page                    | DONE
-// - Edit the user's info                                           | CSS, Refresh Local User
+// - Edit the user's info                                           | DONE
 // - Permissions for users  - who can see what, who can edit what   |
 // - User api keys                                                  |
 // - Rewrite docs for users                                         |

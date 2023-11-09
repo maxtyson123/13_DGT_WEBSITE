@@ -3,6 +3,7 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {RongoaUser} from "@/lib/users";
 
 export default async function handler(
     request: NextApiRequest,
@@ -39,8 +40,9 @@ export default async function handler(
             }
 
             // Get the user details
-            const user_email = session.user.email;
-            const user_name = session.user.name;
+            const user = session.user as RongoaUser;
+            const user_email = user.database.user_email;
+            const user_name = user.database.user_name;
 
             // Fetch the user
             query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
