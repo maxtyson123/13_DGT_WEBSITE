@@ -220,7 +220,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                         alt={userName ? userName : ""} fill={true}/>
                                 </div>
                                 <h1> {userName}</h1>
-                                <h2> {userEmail}</h2>
+                                { myAccount &&  <h2> {userEmail}</h2> }
                                 <h2> {userRole}</h2>
                             </div>
 
@@ -289,7 +289,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                 </tbody>
                             </table>
 
-                            <button className={styles.createButton} onClick={() => router.push("/plants/create")}>Create Plant</button>
+                            {editor && <button className={styles.createButton} onClick={() => router.push("/plants/create")}>Create Plant</button> }
 
                         </div>
                     </DropdownSection>
