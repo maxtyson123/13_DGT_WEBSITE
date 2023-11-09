@@ -224,7 +224,11 @@ export default function EditAccount() {
                 id: (session?.user as RongoaUser).database.id,
                 user_name: userName,
                 user_email: userEmail,
-                user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image
+                user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image,
+                user_api_keys: (session?.user as RongoaUser).database.user_api_keys,
+                user_type: (session?.user as RongoaUser).database.user_type,
+                user_last_login: (session?.user as RongoaUser).database.user_last_login
+
             }
         }).then(r => console.log(r))
 
