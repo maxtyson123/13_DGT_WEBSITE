@@ -1,6 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, makeQuery} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {checkApiPermissions} from "@/lib/api_tools";
 
 export default async function handler(
     request: NextApiRequest,
@@ -23,6 +26,11 @@ export default async function handler(
         // If it doesn't exist, return an error
         return response.status(400).json({ error: 'No amount param found' });
     }
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:random:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try querying the database
     try {

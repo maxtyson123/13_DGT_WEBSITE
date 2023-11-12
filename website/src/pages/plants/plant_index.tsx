@@ -6,10 +6,10 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/plant_index.module.css";
-import axios from "axios";
 import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 interface plantEntry {
     id: number,
@@ -83,7 +83,7 @@ export default function PlantIndex(){
             console.log("Getting plant ids")
 
             // Get the ids from the api
-            const response = await axios.get("/api/plants/search?getNames=true")
+            const response = await makeRequestWithToken("get","/api/plants/search?getNames=true")
 
             console.log(response)
 
@@ -135,7 +135,7 @@ export default function PlantIndex(){
             console.log("Getting plant uses")
 
             // Get the ids from the api
-            const response = await axios.get("/api/plants/uses?getValues=true")
+            const response = await makeRequestWithToken("get","/api/plants/uses?getValues=true")
 
             console.log(response)
 

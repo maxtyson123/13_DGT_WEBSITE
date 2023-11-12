@@ -10,9 +10,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {MONTHS, USE_POSTGRES} from "@/lib/constants"
 import {getFromCache, saveToCache} from "@/lib/cache";
-import axios from "axios";
 import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import Link from "next/link";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 interface MonthEntry {
     id: number,
@@ -84,7 +84,7 @@ export default function Calendar(){
                 console.log("Fetching data")
 
                 // Get the data from the API
-                res = await axios.get('/api/plants/months');
+                res = await makeRequestWithToken("get",'/api/plants/months');
 
                 // Get the contents of the response
                 res = res.data;

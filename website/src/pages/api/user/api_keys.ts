@@ -1,22 +1,24 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables} from "@/lib/databse";
-import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {checkApiPermissions} from "@/lib/api_tools";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    const origin = GetOrigin(request);
-
     // Get the client
     const client = await getClient()
 
     // Get the tables
     const tables = getTables();
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    let permission = await checkApiPermissions(request, response, session, client, "api:user:api_keys:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     try {
 
@@ -41,12 +43,18 @@ export default async function handler(
         switch (operation) {
 
             case "new":
+                permission = await checkApiPermissions(request, response, session, client, "api:user:api_keys:add")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 break
 
             case "remove":
+                permission = await checkApiPermissions(request, response, session, client, "api:user:api_keys:remove")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 break
 
             case "edit":
+                permission = await checkApiPermissions(request, response, session, client, "api:user:api_keys:edit")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 break
 
         }

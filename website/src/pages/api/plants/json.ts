@@ -11,6 +11,11 @@ import {
     ValidPlantData
 } from "@/lib/plant_data";
 import axios from "axios";
+import {getClient} from "@/lib/databse";
+import {checkApiPermissions} from "@/lib/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {downloadPlantData} from "@/pages/api/plants/download";
 
 export default async function handler(
     request: NextApiRequest,
@@ -32,11 +37,23 @@ export default async function handler(
     // Get the ID and table from the query string
     const { operation, json, id, tableName } = request.query;
 
+    // Get the client
+    const client = await getClient()
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:json:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
+
     // Try running the operation
     try {
 
         switch (operation) {
             case 'download':
+
+                const permissionD = await checkApiPermissions(request, response, session, client, "api:plants:json:download")
+                if(!permissionD) return response.status(401).json({error: "Not Authorized"})
+
                 // If the ID is not found, return an error
                 if(!id){
                     return response.status(404).json({ error: 'ID parameter not found' });
@@ -48,23 +65,25 @@ export default async function handler(
                 }
 
                 // Download the data from the database using the download API with the ID and table
-                let plantsInfo = await axios.get(`${url}/api/plants/download?id=${id}&table=plants&table=months_ready_for_use&table=edible&table=medical&table=craft&table=source&table=custom&table=attachments`);
-                plantsInfo = plantsInfo.data;
+                let plantsInfo = await downloadPlantData(["plants", "months_ready_for_use", "edible", "medical", "craft", "source", "custom", "attachments"], Number(id), client)
 
-                // If there is no plant data, return an error
-                if (!plantsInfo.data)
-                {
-                    return response.status(404).json({ error: plantsInfo.data?.error, message: "No data" });
+                // Check if there was an error
+                if(plantsInfo[0] === "error"){
+                    return response.status(404).json({ error: plantsInfo[1] });
                 }
 
+                // Get the data
+                plantsInfo = plantsInfo[1][0];
 
-                // Convert the string date into a date object
-                if(plantsInfo.data.last_modified){
-                    plantsInfo.data.last_modified = new Date(plantsInfo.data.last_modified);
-                }
 
                 // Change the data into the PlantDataApi type
-                let apiData = plantsInfo.data as PlantDataApi;
+                // @ts-ignore
+                let apiData = plantsInfo as PlantDataApi;
+
+                // Convert the string date into a date object
+                if(apiData.last_modified){
+                    apiData.last_modified = new Date(apiData.last_modified).toISOString();
+                }
 
                 // Clean the data
                 apiData = CleanAPIData(apiData);
@@ -74,7 +93,7 @@ export default async function handler(
 
                 // If the data is null then return an error
                 if(!plantOBJ){
-                    return response.status(404).json({ error: 'Plant data count be converted into PlantData', apiData: apiData });
+                    return response.status(404).json({ error: 'Plant data count be converted into PlantData'});
                 }
 
                 // Set the id
@@ -84,9 +103,12 @@ export default async function handler(
                 plantOBJ = fixAttachmentsPaths(plantOBJ);
                 plantOBJ = macronsForDisplay(plantOBJ)
 
-                return response.status(200).json({ data: plantOBJ, apiData: apiData});
+                return response.status(200).json({ data: plantOBJ});
 
             case 'upload':
+
+                const permissionU = await checkApiPermissions(request, response, session, client, "api:plants:json:upload")
+                if(!permissionU) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if the JSON param exists
                 if (!json) {
@@ -127,7 +149,8 @@ export default async function handler(
                 return response.status(200).json({ data: result.data });
 
             case "convert":
-                // tableName
+                const permissionC = await checkApiPermissions(request, response, session, client, "api:plants:json:convert")
+                if(!permissionC) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if there is the tableName param
                 if (!tableName) {

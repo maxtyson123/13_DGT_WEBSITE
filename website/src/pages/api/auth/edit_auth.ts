@@ -1,14 +1,15 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    const origin = GetOrigin(request);
+
+    return response.status(200).json({ data: "Under Development" });
+
+
 
     // Get the client
     const client = await getClient()
@@ -18,10 +19,7 @@ export default async function handler(
 
     // Try uploading the data to the database
     try {
-        // Check if the user is allowed
-        if(!await CheckWhitelisted(request, response, client)) {
-            return response.status(401).json({ error: 'User not allowed to edit the auth data'});
-        }
+
 
         // Get the data from the request
         let {

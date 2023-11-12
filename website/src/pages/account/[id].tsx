@@ -1,6 +1,8 @@
 import {useRouter} from "next/router";
 import {AccountPage} from "@/pages/account/index";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
+import {Error} from "@/components/error";
+import {useSession} from "next-auth/react";
 
 export default function AccountViewer(){
 
@@ -9,9 +11,8 @@ export default function AccountViewer(){
 
     const[userID, setUserID] = useState<any>(null)
 
-    // Don't fetch the data again if it has already been fetched
-    const dataFetch = useRef(false)
-
+    const [error, setError] = useState("")
+    const { data: session } = useSession()
 
     // Check the id
     useEffect(() => {
@@ -20,9 +21,12 @@ export default function AccountViewer(){
 
     }, [router.query]);
 
+
+
     return(
         <>
-            {userID && <AccountPage dataID={userID}/>}
+            { error ? <Error error={error}/> : <AccountPage dataID={userID}/> }
+
         </>
     )
 

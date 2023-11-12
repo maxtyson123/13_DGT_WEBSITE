@@ -16,6 +16,7 @@ import {FileInput, SmallInput, ValidationState} from "@/components/input_section
 import axios from "axios";
 import {dateToString} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function EditAccount() {
     const pageName = "Account";
@@ -120,7 +121,7 @@ export default function EditAccount() {
 
             // Check that the email is not already in use
             try {
-                const response = await axios.get("/api/user/email?email=" + userEmail)
+                const response = await makeRequestWithToken("get","/api/user/email?email=" + userEmail)
 
                 if (response.data.user) {
                     setValidUserEmail(["error", "Email is already in use"])
@@ -181,6 +182,7 @@ export default function EditAccount() {
 
             try {
                 // Send the form data to the server
+                //TODO: Post Methods for api makeRequestWithToken
                 const response = await fetch('/api/files/upload', {
                     method: 'POST',
                     body: formData,

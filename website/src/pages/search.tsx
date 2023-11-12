@@ -9,8 +9,8 @@ import styles from "@/styles/components/search.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
-import axios from "axios";
 import {Error} from "@/components/error";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function Search(){
     const pageName = "Search"
@@ -93,7 +93,7 @@ export default function Search(){
             console.log("Getting search results")
 
             // Get the search results
-            const response = await axios.get(`/api/plants/search?name=${name}&mushrooms=${mushroons ? "include" : "exclude"}`)
+            const response = await makeRequestWithToken("get",`/api/plants/search?name=${name}&mushrooms=${mushroons ? "include" : "exclude"}`)
             console.log(mushroons ? "include" : "exclude")
             console.log(mushroons)
             // Get the data from the response

@@ -33,7 +33,6 @@ import {
 import Section from "@/components/section";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
-import axios from "axios";
 
 import {MONTHS, PLANT_PARTS} from "@/lib/constants"
 import {useRouter} from "next/router";
@@ -42,8 +41,9 @@ import {signIn, useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudArrowUp, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
-import {RongoaUser} from "@/lib/users";
+import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Loading} from "@/components/loading";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -2384,7 +2384,7 @@ export default function CreatePlant() {
 
                    // Remove the plant from the database
                     console.log("REMOVING PLANT")
-                    result = await axios.get(`/api/plants/remove?id=${idNum}`)
+                    result = await makeRequestWithToken("get",`/api/plants/remove?id=${idNum}`)
                     console.log(result)
 
                 } catch (err: any) {
@@ -2421,7 +2421,7 @@ export default function CreatePlant() {
             setProgressMessage("Uploading plant data")
 
             // Upload the data to the database using the upload API by passing each json key as params
-            result = await axios.post(`/api/plants/upload`, uploadApiData);
+            result = await makeRequestWithToken("get",`/api/plants/upload`, uploadApiData);
 
         } catch (err: any) {
             console.log(err);
@@ -2638,6 +2638,19 @@ export default function CreatePlant() {
         }
 
     }, [imageInfoRef.current])
+
+    // Check if the user is allowed to edit plants
+    useEffect(() => {
+
+        // Check if there is a session
+        if(!session || !session.user)
+            return
+
+        // Check if the user can edit
+        if(!checkUserPermissions(session.user as RongoaUser, "pages:plants:edit"))
+            router.push("/plants/" + router.query.id)
+
+    }, [session])
 
     return (
         <>

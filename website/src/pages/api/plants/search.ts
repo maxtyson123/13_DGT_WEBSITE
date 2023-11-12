@@ -1,5 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {checkApiPermissions} from "@/lib/api_tools";
 
 export default async function handler(
     request: NextApiRequest,
@@ -11,9 +14,13 @@ export default async function handler(
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
     }
 
-
     // Get the client
     const client = await getClient()
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:search:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Get the ID and table from the query string
     let {

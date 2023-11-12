@@ -9,8 +9,15 @@ import statsStyles from "@/styles/components/stats.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCamera, faPerson, faSeedling} from "@fortawesome/free-solid-svg-icons";
 import {signIn, signOut, useSession} from "next-auth/react";
-import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser, UserDatabaseDetails} from "@/lib/users";
-import axios from "axios";
+import {
+    ADMIN_USER_TYPE,
+    checkUserPermissions,
+    EDITOR_USER_TYPE,
+    getUserPermissions,
+    MEMBER_USER_TYPE,
+    RongoaUser,
+    UserDatabaseDetails
+} from "@/lib/users";
 import Image from "next/image";
 import {globalStyles} from "@/lib/global_css";
 import {DropdownSection} from "@/components/dropdown_section";
@@ -18,6 +25,7 @@ import {useRouter} from "next/router";
 import Link from "next/link";
 import {dateToString, getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import {Error} from "@/components/error";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function Account() {
 
@@ -53,6 +61,7 @@ export function AccountPage({dataID}: AccountPageProps){
     // States
     const [editor, setEditor] = React.useState<boolean>(false)
     const [myAccount, setMyAccount] = React.useState<boolean>(false)
+    const [hidePrivate, setHidePrivate] = React.useState<boolean>(true)
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
@@ -63,8 +72,11 @@ export function AccountPage({dataID}: AccountPageProps){
         // If there is a user id
         if(dataID){
 
-            // If it is an object then ignore it
+            // Check if it is to be used
             if(dataID != "0"){
+
+                if(!checkUserPermissions(session?.user as RongoaUser, "pages:account:publicAccess"))
+                    setError("You must be logged in to view other users")
 
                 // Try converting the id to a number
                 let localId = parseInt(dataID as string)
@@ -77,6 +89,11 @@ export function AccountPage({dataID}: AccountPageProps){
 
                 // Set the user id
                 setUserID(localId)
+
+                // Check if we are allowed to show private data
+                if(session?.user) {
+                    setHidePrivate(!checkUserPermissions(session.user as RongoaUser, "pages:account:viewPrivateDetails"))
+                }
 
                 // Prevent the data from being fetched again
                 if (dataFetch.current)
@@ -94,9 +111,14 @@ export function AccountPage({dataID}: AccountPageProps){
 
             // This is our account
             setMyAccount(true)
+            setHidePrivate(false)
 
             let user = session.user as RongoaUser
             if(!user) return
+
+            // Log their permissions
+            console.log("User permissions: ")
+            console.log(getUserPermissions(user))
 
             // Load the user data
             loadUserData(user.database)
@@ -138,6 +160,7 @@ export function AccountPage({dataID}: AccountPageProps){
         setUserPosts("0")
     }
 
+
     const fetchData = async (localId: number = 0) => {
 
         console.log("Fetching data")
@@ -146,7 +169,7 @@ export function AccountPage({dataID}: AccountPageProps){
         if(localId != 0) {
             try {
 
-                const user = await axios.get("/api/user/data?id=" + localId)
+                const user = await makeRequestWithToken("get", "/api/user/data?id=" + localId)
                 if(user.data.error){
                     setError("User not found")
                 }
@@ -170,7 +193,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 url += "?id=" + localId
             }
 
-            const plants = await axios.get(url)
+            const plants = await makeRequestWithToken("get",url)
             if(!plants.data.error){
                 setUserPlants(plants.data.data.length.toString())
             }
@@ -188,7 +211,7 @@ export function AccountPage({dataID}: AccountPageProps){
     }
 
     const deleteAccount = async () => {
-        await axios.delete("/api/user/delete/")
+        await makeRequestWithToken("get","/api/user/delete/")
         await signOutUser()
     }
 
@@ -211,7 +234,7 @@ export function AccountPage({dataID}: AccountPageProps){
                         <div className={styles.accountContainer}>
 
                             <div className={styles.lastLogin}>
-                                { myAccount &&
+                                { !hidePrivate &&
                                     <>
                                         <p>  Last Login: {userLastLogin} </p>
                                         <Link href={"/account/edit"}><button> Edit </button></Link>
@@ -227,7 +250,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                         alt={userName ? userName : ""} fill={true}/>
                                 </div>
                                 <h1> {userName}</h1>
-                                { myAccount &&  <h2> {userEmail}</h2> }
+                                { !hidePrivate &&  <h2> {userEmail}</h2> }
                                 <h2> {userRole}</h2>
                             </div>
 
@@ -329,7 +352,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 </Section>
 
                 {/* Users Api Keys */}
-                {myAccount &&
+                {!hidePrivate &&
                     <Section autoPadding>
                         <DropdownSection title={"Api Keys"} open>
                             <div className={styles.tableContainer}>
@@ -389,7 +412,7 @@ export function AccountPage({dataID}: AccountPageProps){
             <Section>
                 <PageHeader size={"small"}>
                     <div className={styles.welcomeContainer}>
-                        <h1>Your Account</h1>
+                        <h1>{userName ? userName + "'s Account" : "Your Account"}</h1>
                     </div>
                 </PageHeader>
             </Section>
@@ -397,13 +420,23 @@ export function AccountPage({dataID}: AccountPageProps){
 
 
             {/* Error Message */}
-            {error && <Error error={error}/>}
+            {error ?
 
-            {!userID && !session?
-                loginSection()
+                <Section autoPadding>
+                    <Error error={error}/>
+                </Section>
+
                 :
-                accountSection()
+                <>
+                    {!userID && !session?
+                        loginSection()
+                        :
+                        accountSection()
+                    }
+                </>
             }
+
+
 
 
             {/* Footer */}

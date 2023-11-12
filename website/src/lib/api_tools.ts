@@ -1,112 +1,113 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getTables, makeQuery} from "@/lib/databse";
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/pages/api/auth/[...nextauth]";
-import {USE_POSTGRES} from "@/lib/constants";
+import {checkPermissions, getUserPermissions, RongoaUser, UserPermissions} from "@/lib/users";
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import {jwtVerify, SignJWT} from "jose";
 
-/**
- * Get the origin of the request from the headers of a next api request
- *
- * @param {NextApiRequest} request - The request of the api cal, if there is no request, the origin will be localhost:3000
- *
- * @see {@link NextApiRequest}
- *
- * @returns {string} - The origin of the request
- */
-export function GetOrigin(request: NextApiRequest){
-    const LOCAL_HOST_ADDRESS = "localhost:3001";
 
-    let host = request.headers?.host || LOCAL_HOST_ADDRESS;
-    let protocol = /^localhost(:\d+)?$/.test(host) ? "http:" : "https:";
+export async function checkApiPermissions(request: NextApiRequest, response: NextApiResponse, session: any, client: any, permission: string) {
 
-    // If server sits behind reverse proxy/load balancer, get the "actual" host ...
-    if (
-        request.headers["x-forwarded-host"] &&
-        typeof request.headers["x-forwarded-host"] === "string"
-    ) {
-        host = request.headers["x-forwarded-host"];
-    }
+    let permissions : UserPermissions | null = null
 
-    // ... and protocol:
-    if (
-        request.headers["x-forwarded-proto"] &&
-        typeof request.headers["x-forwarded-proto"] === "string"
-    ) {
-        protocol = `${request.headers["x-forwarded-proto"]}:`;
-    }
-
-    return protocol + "//" + host;
-}
-
-/**
- * Check if the user is allowed to upload data to the database
- *
- * @param request
- * @param response
- * @param client
- * @return {string | null} - The permissions of the user or null if the user is not allowed to upload (example: "admin" or "member")
- */
-export async function CheckWhitelisted(request: NextApiRequest, response: NextApiResponse, client: any){
-
+    // Check if there is an API key
     let {api_key} = request.query;
+    if(api_key){
 
-    // Check if the user is allowed to upload
-    let auth_query = ""
+        // TODO: Get the api key from the database and check its permissions
 
-    const tables = getTables()
-    const origin = GetOrigin(request);
-
-    // If it is this site then allow user email to authenticate
-    console.log("origin:" + origin)
-    let api =  !(origin === process.env.NEXTAUTH_URL)
-
-    // If we are not usin the API key then use the email
-    if (!api) {
-        console.log("Trying Email");
-
-        // Get the email
-        const session = await getServerSession(request, response, authOptions)
-
-        // If there is a user session then get the email otherwise default to the API key
-        if(session){
-            if(session.user === undefined){
-                return null;
-            }
-            const user_email = session.user.email;
-
-            console.log(user_email);
-
-            // Check if the email is allowed in the database
-            auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${user_email}' AND ${tables.auth_type} = 'email'`;
-        }else{
-            api = true;
-        }
-
-    }
-
-    // If we are using the API key then use the API key
-    if(api){
-        console.log("Using API key");
-
-        // If there is no API key then return an error
-        if(!api_key) {
-            return null;
-        }
-
-        // Check if the API key is allowed in the database
-        auth_query = `SELECT * FROM auth WHERE ${tables.auth_entry} = '${api_key}' AND ${tables.auth_type} = 'api'`;
-    }
-
-    // Run the query
-    const auth_result = await makeQuery(auth_query, client);
-
-    // Check if the user is allowed to upload
-    if(!auth_result) {
-        return null;
     }else{
-        if(USE_POSTGRES)
-            return auth_result[0].permissions;      //TODO: UNTESTED
-        else
-            return auth_result[0].auth_permissions;
+
+            // Get the permissions of the user
+            permissions = getUserPermissions(session?.user as RongoaUser)
+
     }
+
+    let permissionToCheck = permission;
+    const authorization = request.headers.authorization
+    let token: any = authorization?.split(" ")[1]
+    token = await verifyToken(token as string)
+
+    // Replace access with the correct interal/public
+    if(!token){
+        permissionToCheck = permissionToCheck.replace("access", "publicAccess")
+    }else{
+
+        token = token.data
+        // Check if the token is the same as the request url
+        if(token != request.url){
+            console.log("Invalid token: " + token + " != " + request.url)
+            return null
+        }
+        permissionToCheck = permissionToCheck.replace("access", "internalAccess")
+    }
+
+    // Check the permissions
+    if(permissions == null)
+        return null
+
+    // Get the permissions of the user
+    const isAllowed = checkPermissions(permissions, permissionToCheck)
+    console.log(permissionToCheck + ": " + isAllowed)
+    return isAllowed
+
 }
+
+export function getJwtSecretKey() {
+    const secret = process.env.NEXT_PUBLIC_JWT_SECRET_KEY;
+    if (!secret) {
+        throw new Error("JWT Secret key is not matched");
+    }
+    return new TextEncoder().encode(secret);
+}
+
+// Function to generate a token
+const createToken =  async (data: string) => {
+    return await new SignJWT({
+        data: data,
+    })
+        .setProtectedHeader({alg: "HS256"})
+        .setIssuedAt()
+        .setExpirationTime("30s")
+        .sign(getJwtSecretKey())
+
+};
+
+const verifyToken =  async (token: string) => {
+    try {
+        const { payload } = await jwtVerify(token, getJwtSecretKey());
+        return payload;
+    } catch (error) {
+        return null;
+    }
+};
+
+export async function makeRequestWithToken (
+    method: 'get' | 'post' | 'put' | 'delete',
+    url: string,
+    data?: any
+): Promise<AxiosResponse>{
+    // Create a token based on your authentication logic
+    const token = await createToken(url);
+    const baseURL = '/';
+
+    // Configure Axios request
+    const axiosConfig: AxiosRequestConfig = {
+        method,
+        url,
+        baseURL,
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json', // Adjust content type as needed
+        },
+        data,
+    };
+
+    try {
+        // Make the request
+        const response = await axios(axiosConfig);
+        return response;
+    } catch (error : any) {
+        // Handle errors
+        console.error('Request failed:', error.message);
+        throw error;
+    }
+};

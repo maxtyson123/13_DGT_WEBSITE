@@ -1,9 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables} from "@/lib/databse";
-import {GetOrigin} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {RongoaUser} from "@/lib/users";
+import {checkApiPermissions} from "@/lib/api_tools";
 
 export default async function handler(
     request: NextApiRequest,
@@ -11,13 +11,18 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrigin(request);
+    
 
     // Get the client
     const client = await getClient()
 
     // Get the tables
     const tables = getTables();
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:user:delete:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     try {
 

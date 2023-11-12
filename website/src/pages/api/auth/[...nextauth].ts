@@ -21,6 +21,7 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, trigger, session}) {
 
+
             // If there isnt the user data in the token the fetch it
             if(!token.user) {
 
@@ -54,8 +55,6 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         async signIn({ user, account, profile, email, credentials }) {
-
-            console.log("Sign in");
 
             // Get the client
             const client = await getClient()

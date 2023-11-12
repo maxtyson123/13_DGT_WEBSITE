@@ -1,7 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {checkApiPermissions} from "@/lib/api_tools";
+
 
 export default async function handler(
     request: NextApiRequest,
@@ -9,7 +12,7 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrigin(request);
+    
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -18,6 +21,11 @@ export default async function handler(
 
     // Get the client
     const client =  await getClient()
+
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:upload:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try uploading the data to the database
     try {
@@ -112,11 +120,6 @@ export default async function handler(
 
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
-
-        // Check if the user is allowed to upload
-        if(!await CheckWhitelisted(request, response, client)) {
-            return response.status(401).json({ error: 'User not authorised to upload' });
-        }
 
         let insertQuery = "";
         let insetQueryValues = "";

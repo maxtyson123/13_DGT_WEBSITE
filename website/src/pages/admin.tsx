@@ -6,13 +6,9 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/admin.module.css";
-import {signIn, signOut, useSession} from "next-auth/react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDoorOpen, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {useSession} from "next-auth/react";
 import {Error} from "@/components/error";
-import Image from "next/image";
 import axios from "axios";
-import {DropdownInput, SmallInput} from "@/components/input_sections";
 import {useRouter} from "next/router";
 import {USE_POSTGRES} from "@/lib/constants";
 
@@ -50,7 +46,7 @@ export default function PlantIndex(){
     const [newAuthPermissions, setNewAuthPermissions] = React.useState("")
 
     // Error
-    const [error, setError] = React.useState("")
+    const [error, setError] = React.useState("Under Development")
 
     // Router
     const router = useRouter()
@@ -62,7 +58,6 @@ export default function PlantIndex(){
     }, [session])
 
     const checkUser = async () => {
-        setError("")
         setUserAllowed(0)
         setLoading(true)
         setLoadingMessage("Checking user permissions...")
@@ -259,142 +254,7 @@ export default function PlantIndex(){
             </PageHeader>
 
             {/* Admin Panel */}
-            <Section autoPadding>
-                { !session ?
-                    <>
-                        <div className={styles.userDetails}>
-                            <p> Please sign in to edit plants  </p>
-                            <button onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
-                        </div>
-                    </>
-                    :
-                    <>
-                        {/* If the user is signed in then show the user details and sign out button */}
-                        <div className={styles.userDetails}>
-                            <p> Signed in as <span className={styles.email}> {session.user ? session.user.email : "No Email"} </span> </p>
-                            <button onClick={() => signOut()}><FontAwesomeIcon icon={faDoorOpen}/> Sign out</button>
-                        </div>
-                        {
-                           loading ?
-                                <div className={styles.loadingAdminData}>
-                                    <Image
-                                        src={"/media/images/old_loading.gif"}
-                                        alt={"loading"}
-                                        width={100}
-                                        height={100}
-                                    />
-                                    <p> {loadingMessage} </p>
-                                </div>
-                                :
-                                <>
-                                    {
-                                        error ?
-                                            <Error error={error}/> : <></>
-                                    }
-                                    <div className={styles.adminPanel}>
-                                        <br/>
-                                        {
-                                            userAllowed == 3 ?
-                                                <>
-                                                    <h1> Back Up </h1>
-                                                    <br/>
-                                                    <button className={styles.backupButton} onClick={handleFilesDownload}>Download Files</button>
-                                                    <button className={styles.backupButton} onClick={handleDatabaseDownload}>Download Database</button>
-                                                    <br/>
-                                                    <h1> Users </h1>
-                                                    <br/>
-                                                    <table>
-                                                        <tr>
-                                                            <th>Entry</th>
-                                                            <th>Type</th>
-                                                            <th>Nickname</th>
-                                                            <th>Permissions</th>
-                                                            <th>Action</th>
-                                                        </tr>
-
-                                                        {authData.map((auth, index) => (
-                                                            <tr key={index}>
-                                                                <td> {auth.value} </td>
-                                                                <td> { auth.type.charAt(0).toUpperCase() + auth.type.slice(1)} </td>
-                                                                <td> { auth.nickname} </td>
-                                                                <td> { auth.permissions.charAt(0).toUpperCase() + auth.permissions.slice(1)} </td>
-                                                                <td> <button onClick={()=>{
-                                                                    removeAuthEntry(auth.value, auth.type, auth.nickname, auth.permissions)
-                                                                }}> Remove </button> </td>
-                                                            </tr>
-                                                        ))}
-                                                        <tr>
-                                                            <td>
-                                                                <SmallInput placeHolder={"New Entry"} required={false} state={"normal"} changeEventHandler={setNewAuthEntry}/>
-                                                            </td>
-                                                            <td>
-                                                                <DropdownInput placeHolder={"Type"} required={false} state={"normal"} options={["email", "api"]} changeEventHandler={setNewAuthType}/>
-                                                            </td>
-                                                            <td>
-                                                                <SmallInput placeHolder={"Nickname"} required={false} state={"normal"} changeEventHandler={setNewAuthNickname}/>
-                                                            </td>
-                                                            <td>
-                                                                <DropdownInput placeHolder={"Permissions"} required={false} state={"normal"} options={["member", "admin"]} changeEventHandler={setNewAuthPermissions}/>
-                                                            </td>
-                                                            <td> <button onClick={addAuthEntry}> Add </button></td>
-                                                        </tr>
-
-                                                    </table>
-                                                </>
-                                                :
-                                                <></>
-                                        }
-                                        {
-                                            userAllowed >= 2 ?
-                                                <>
-                                                    <br/>
-                                                    <h1> Plants </h1>
-                                                    <button className={styles.createPlant} onClick={()=>{router.push("/plants/create")}}> Add Plant </button>
-                                                    <br/>
-                                                    <table>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>English Name</th>
-                                                            <th>Latin Name</th>
-                                                            <th>Maori Name</th>
-                                                            <th>Change</th>
-                                                            <th>Delete</th>
-                                                        </tr>
-
-                                                        {plantData.map((plant, index) => (
-                                                            <tr key={index}>
-                                                                <td> {plant.id} </td>
-                                                                <td> {plant.english_name} </td>
-                                                                <td> {plant.latin_name} </td>
-                                                                <td> {plant.maori_name} </td>
-                                                                <td> <button onClick={()=>{
-                                                                    router.push("/plants/create?id=" + plant.id)
-                                                                }}> Edit </button> </td>
-                                                                <td>
-                                                                    {userAllowed == 3?
-                                                                        <>
-                                                                            <button onClick={() => {removePlant(plant.id)}}> Remove </button>
-                                                                        </>
-                                                                        :
-                                                                        <>
-                                                                            Not Allowed
-                                                                        </>
-                                                                    }
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </table>
-                                                </>
-                                                :
-                                                <></>
-                                        }
-                                    </div>
-                                </>
-                        }
-                    </>
-                }
-            </Section>
-
+            <Error error={error}/>
 
 
             {/* Page footer */}

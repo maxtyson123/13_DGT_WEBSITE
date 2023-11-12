@@ -1,12 +1,13 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {USE_POSTGRES} from "@/lib/constants";
-import {getClient, PostgresSQL, SQLDatabase} from "@/lib/databse";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
+import {getClient} from "@/lib/databse";
+import {checkApiPermissions} from "@/lib/api_tools";
 import archiver from 'archiver';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 import Client from "ftp";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 async function fetchFileUrlsFromFTP() {
     // FTP config
@@ -96,25 +97,18 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    const origin = GetOrigin(request);
 
     // Get the client
     const client = await getClient()
 
 
+    // Check if the user has the correct permissions
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:files:backup_files:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
+
     // Try uploading the data to the database
     try {
-        let { api_key} = request.query;
-        
-        // Check if the data is being downloaded from the Postgres database
-        const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
-
-        // Check if the user is allowed to back up
-        const permission = await CheckWhitelisted(request, response, client);
-        if(permission !== "admin") {
-            return response.status(401).json({ error: 'User not authorised to access data', user: permission});
-        }
 
         // Get the file urls
         const fileUrls = await fetchFileUrlsFromFTP();

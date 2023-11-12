@@ -154,6 +154,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
     // State to keep track of if the page has children
     const [hasChildren, setHasChildren] = React.useState(false);
     const [session, setSession] = React.useState<Session | null>(null);
+    const [hasImage, setHasImage] = React.useState(false);
 
     // When the component is mounted, check if the page has children
     useEffect(() => {
@@ -169,7 +170,19 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
                 console.log(error);
             })
         }
+
     }, [])
+    useEffect(() => {
+        if (session){
+
+            const user = session.user as RongoaUser
+
+            if(user.database.user_image != "undefined"){
+                setHasImage(true)
+            }
+        }
+
+    }, [session])
 
     if(hasChildren && !mobile) {
         return (
@@ -193,7 +206,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
         return(
             <>
                 <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
-                    {session?.user?.image ?
+                    {hasImage && session ?
                         <img src={(session.user as RongoaUser).database.user_image} alt={"user account"} className={styles.userImage}/>
                         :
                         <>

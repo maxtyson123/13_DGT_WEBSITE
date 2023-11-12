@@ -1,15 +1,14 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {USE_POSTGRES} from "@/lib/constants";
-import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
+import {getClient, getTables, makeQuery} from "@/lib/databse";
+import {checkApiPermissions} from "@/lib/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    const origin = GetOrigin(request);
 
     // Get the client
     const client = await getClient()
@@ -20,13 +19,12 @@ export default async function handler(
         let { api_key} = request.query;
         
         // Check if the data is being downloaded from the Postgres database
-        const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
+        const tables = getTables();
 
-        // Check if the user is allowed to back up
-        const permission = await CheckWhitelisted(request, response, client);
-        if(permission !== "admin") {
-            return response.status(401).json({ error: 'User not authorised to access data', user: permission});
-        }
+        // Check if the user has the correct permissions
+        const session = await getServerSession(request, response, authOptions)
+        const permission = await checkApiPermissions(request, response, session, client, "api:files:backup_database:access")
+        if(!permission) return response.status(401).json({error: "Not Authorized"})
 
         // Create the query
         let query = ``;

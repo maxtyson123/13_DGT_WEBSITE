@@ -1,7 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {USE_POSTGRES} from "@/lib/constants";
 import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {checkApiPermissions} from "@/lib/api_tools";
+
 
 export default async function handler(
     request: NextApiRequest,
@@ -9,13 +12,17 @@ export default async function handler(
 ) {
 
     // Get the origin of the request
-    const origin = GetOrigin(request);
+    
 
     // Get the client
     const client = await getClient()
 
 
-    // Try uploading the data to the database
+    // Check if the user is permitted to access the API
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:remove:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
+
     try {
         let {id, api_key} = request.query;
 
@@ -40,10 +47,6 @@ export default async function handler(
         // Check if the data is being downloaded from the Postgres database
         const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
-        // Check if the user is allowed to upload
-        if(!(await CheckWhitelisted(request, response, client))) {
-            return response.status(401).json({ error: 'User not authorised to remove data'});
-        }
 
         // Create the query
         let query = ``;

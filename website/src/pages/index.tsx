@@ -7,7 +7,7 @@
 // - API route to get the plants by author                          | DONE
 // - Display the user's info on the profile page                    | DONE
 // - Edit the user's info                                           | DONE
-// - Permissions for users  - who can see what, who can edit what   |
+// - Permissions for users  - who can see what, who can edit what   | TODO: Visibility
 // - User api keys                                                  |
 // - Rewrite docs for users                                         |
 
@@ -24,7 +24,6 @@ import Stats from "@/components/stats";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/lib/cache";
-import axios from "axios";
 import {globalStyles} from "@/lib/global_css";
 import Image from "next/image";
 import Slider from "@/components/slider";
@@ -32,6 +31,7 @@ import {AttachmentData, fetchPlant, ImageMetaData} from "@/lib/plant_data";
 import {CreditedImage} from "@/components/credits";
 import {QueryClient} from "@tanstack/react-query";
 import {ModalImage} from "@/components/modal";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function Home() {
     const pageName = "Home"
@@ -93,7 +93,7 @@ export default function Home() {
                 const amountToGet = 3
 
                 // Make the api call
-                const response = await axios.get(`/api/plants/random?amount=${amountToGet}`)
+                const response = await makeRequestWithToken("get",`/api/plants/random?amount=${amountToGet}`)
 
                 // API returns the data as "data" which axios also uses, so we need to use response.data.data
                 const data = response.data.data

@@ -1,10 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
-import {CheckWhitelisted, GetOrigin} from "@/lib/api_tools";
 import {Form} from "multiparty";
 import fs from "fs";
 import Client from "ftp";
+import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
@@ -14,9 +14,6 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    const origin = GetOrigin(request);
-    const session = await getServerSession(request, response, authOptions)
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -25,6 +22,9 @@ export default async function handler(
 
     // Get the client
     const client = await getClient()
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:files:upload:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try uploading the data to the database
     try {
@@ -69,11 +69,6 @@ export default async function handler(
                 // Set the tables to use
                 if(USE_POSTGRES) {
                     tables = new PostgresSQL();
-                }
-
-                // Check if the user is allowed to upload
-                if(!await CheckWhitelisted(request, response, client)) {
-                    return response.status(401).json({ error: 'User not authorised to upload' });
                 }
 
                 // Check if there is an error

@@ -1,6 +1,6 @@
 import {getFromCache, saveToCache} from "@/lib/cache";
-import axios from "axios";
 import {USE_POSTGRES} from "@/lib/constants";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 /**
  * The data for the plant in a more readable format and easier to use programmatically with a lot of the data from the api moved into arrays of objects
@@ -767,7 +767,7 @@ export async function fetchPlant (id: number) {
 
         try {
             // Get the plant data from the api
-            const res = await axios.get(`/api/plants/json?id=${id}&operation=download`);
+            const res = await makeRequestWithToken("get", `/api/plants/json?id=${id}&operation=download`);
             const plantData = res.data.data
 
             // Typecast the plant data to the PlantData type (this is because it is know to return the PlantData type by the api - checking is done there)

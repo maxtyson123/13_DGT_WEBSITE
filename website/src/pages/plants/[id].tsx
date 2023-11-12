@@ -18,9 +18,10 @@ import {CreditedImage} from "@/components/credits";
 import {useSession} from "next-auth/react";
 import {ModalImage} from "@/components/modal";
 import Link from "next/link";
-import axios from "axios";
 import {Loading} from "@/components/loading";
 import {getFromCache, saveToCache} from "@/lib/cache";
+import {checkUserPermissions, RongoaUser} from "@/lib/users";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function PlantPage() {
 
@@ -48,6 +49,7 @@ export default function PlantPage() {
 
     // Get the logged-in user
     const { data: session } = useSession()
+    const [editMode, setEditMode] = React.useState(false)
 
     // Set up the router
     const router = useRouter()
@@ -115,7 +117,7 @@ export default function PlantPage() {
 
         let authors = []
         for(let author of plantOBJ.author){
-            let authorData = await axios.get("/api/user/data?id=" + author)
+            let authorData = await makeRequestWithToken("get","/api/user/data?id=" + author)
             const authorsData = authorData.data.user
             if(authorsData){
                 authors.push(authorsData.user_name)
@@ -256,6 +258,18 @@ export default function PlantPage() {
     }
 
 
+    // Check if the user is an editor
+    useEffect(() => {
+
+
+        // Check if there is a session
+        if(!session || !session.user)
+            return
+
+        // Check if the user can edit
+        setEditMode(checkUserPermissions(session.user as RongoaUser, "pages:plants:edit"))
+
+    }, [session])
 
     return (
         <>
@@ -314,7 +328,7 @@ export default function PlantPage() {
             </Section>
 
             <Section autoPadding>
-                { session ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button>  :  <></> }
+                { editMode ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button>  :  <></> }
                 <div className={styles.plantMainInfo}>
 
                     {/* If there is an error then display it */}

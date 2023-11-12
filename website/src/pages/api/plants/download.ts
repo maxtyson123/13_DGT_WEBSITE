@@ -1,6 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
+import {checkApiPermissions} from "@/lib/api_tools";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(
     request: NextApiRequest,
@@ -14,25 +17,40 @@ export default async function handler(
 
     // Get the client
     const client = await getClient()
+    const session = await getServerSession(request, response, authOptions)
+    const permission = await checkApiPermissions(request, response, session, client, "api:plants:download:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Get the ID and table from the query string
     const { id, table } = request.query;
 
+    // If there is no table parameter, return an error
+    if(!table){
+        return response.status(404).json({ error: 'Table parameter not found' });
+    }
+
+    // If there is no ID parameter, return an error
+    if(!id){
+        return response.status(404).json({ error: 'ID parameter not found' });
+    }
+
+    const data = await downloadPlantData(table, id, client);
+
+    if(data[0] === "error"){
+        return response.status(404).json({ error: data[1] });
+    }
+
+    // Return the data
+    return response.status(200).json({data: data[1][0]})
+
+}
+
+export async function downloadPlantData(table: any, id: any, client: any) {
     const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
 
     // Try downloading the data from the database
     try {
-
-        // If there is no table parameter, return an error
-        if(!table){
-            return response.status(404).json({ error: 'Table parameter not found' });
-        }
-
-        // If there is no ID parameter, return an error
-        if(!id){
-            return response.status(404).json({ error: 'ID parameter not found' });
-        }
 
         // Convert the table to an array if its just one table
         let tableArray = table;
@@ -221,7 +239,7 @@ export default async function handler(
 
         // If the selector is empty, return an error
         if(selector === ''){
-            return response.status(404).json({ error: 'No tables of requested found' });
+            return ["error", "No tables of that type exist"]
         }
 
         // Remove the last comma from the selector
@@ -253,16 +271,15 @@ export default async function handler(
 
         // If the data is empty, return an error
         if(!data)
-            return response.status(500).json({ error: "No data returned", data: data });
+            return ["error", "No data found"];
 
         // If the data is not empty, return the data
-        return response.status(200).json({ data: data[0] });
+        return ["success", data];
 
     } catch (error) {
         console.log(error)
 
         // If there is an error, return the error
-        return response.status(500).json({ error: error });
+        return ["error", error];
     }
-
 }
