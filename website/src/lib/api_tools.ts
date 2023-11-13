@@ -33,8 +33,8 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
 
         token = token.data
         // Check if the token is the same as the request url
-        if(token != request.url){
-            console.log("Invalid token: " + token + " != " + request.url)
+        if(token.split("?")[0] != request.url?.split("?")[0]){
+            console.log("Invalid token: " + token.split("?")[0] + " != " + request.url?.split("?")[0])
             return null
         }
         permissionToCheck = permissionToCheck.replace("access", "internalAccess")
