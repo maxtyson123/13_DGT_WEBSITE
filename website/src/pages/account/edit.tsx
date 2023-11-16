@@ -182,19 +182,13 @@ export default function EditAccount() {
 
             try {
                 // Send the form data to the server
-                //TODO: Post Methods for api makeRequestWithToken
-                const response = await fetch('/api/files/upload', {
-                    method: 'POST',
-                    body: formData,
-                });
+                const response = await makeRequestWithToken('post', '/api/files/upload', formData);
 
-                // If the response is ok then get the json data and set the image url
-                if (response.ok) {
-                    console.log('File uploaded successfully.');
-                } else {
-                    const data = await response.json();
-                    console.log(data);
+                // Check if the file was uploaded successfully
+                if (!response.data.error) {
+                    console.log("File uploaded successfully")
                 }
+
             } catch (error) {
                 console.log('An error occurred.');
             }

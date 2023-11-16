@@ -85,7 +85,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // Insert the user into the database
-                query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}, ${tables.user_image} ) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW(), '${user_image}')`;
+                query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}, ${tables.user_image}, ${tables.user_restricted_access}) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW(), '${user_image}', 0)`;
                 const new_user = await makeQuery(query, client)
 
                 // Return that it was completed

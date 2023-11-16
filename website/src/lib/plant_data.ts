@@ -1,6 +1,7 @@
 import {getFromCache, saveToCache} from "@/lib/cache";
 import {USE_POSTGRES} from "@/lib/constants";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {UserDatabaseDetails} from "@/lib/users";
 
 /**
  * The data for the plant in a more readable format and easier to use programmatically with a lot of the data from the api moved into arrays of objects
@@ -16,7 +17,8 @@ export interface PlantData {
     location_found:     string;
     small_description:  string;
     long_description:   string;
-    author:             number[];
+    authorIDs:           number[];
+    authors:            UserDatabaseDetails[];
     last_modified:      string;
     display_image:      string;
     plant_type:         string;
@@ -51,6 +53,7 @@ export interface PlantDataApi {
     medical_types:              string[];
     medical_use_identifiers:    string[];
     medical_uses:               string[];
+    medical_restricteds:        string[];
     medical_images:             string[];
     medical_preparation:        string[];
     craft_parts:                string[];
@@ -118,6 +121,7 @@ export interface MedicalSectionData{
     use:                string;
     image:              string;
     preparation:        string;
+    restricted:         string;
 }
 
 /**
@@ -223,6 +227,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.medical_uses            = [];
         apiData.medical_images          = [];
         apiData.medical_preparation     = [];
+        apiData.medical_restricteds     = [];
     }
 
     // If this plant has no craft section, set the craft parts to an empty array
@@ -285,6 +290,7 @@ export function CleanAPIData(apiData : PlantDataApi) : PlantDataApi {
         apiData.medical_uses            = tryParse(apiData.medical_uses)
         apiData.medical_images          = tryParse(apiData.medical_images)
         apiData.medical_preparation     = tryParse(apiData.medical_preparation)
+        apiData.medical_restricteds     = tryParse(apiData.medical_restricteds)
 
         // Months data needs to be parsed
         apiData.months_ready_events         = tryParse(apiData.months_ready_events)
@@ -347,6 +353,7 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
         || apiData.medical_uses                 == null
         || apiData.medical_images               == null
         || apiData.medical_preparation          == null
+        || apiData.medical_restricteds          == null
         || apiData.craft_parts                  == null
         || apiData.craft_use_identifiers        == null
         || apiData.craft_uses                   == null
@@ -379,7 +386,7 @@ export function ValidPlantData(plantData : PlantData) : boolean {
         || plantData.location_found         == null
         || plantData.small_description      == null
         || plantData.long_description       == null
-        || plantData.author                 == null
+        || plantData.authorIDs               == null
         || plantData.last_modified          == null
         || plantData.display_image          == null
         || plantData.plant_type             == null
@@ -421,7 +428,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.plant_type        = apiData.plant_type;
 
     // Convert the author into array of ints
-    plantData.author = [];
+    plantData.authorIDs = [];
 
     if(apiData.author.includes(",")){
 
@@ -430,10 +437,10 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
 
         // Convert the array of strings into an array of ints
         for(let i = 0; i < authorArray.length; i++){
-            plantData.author.push(parseInt(authorArray[i]));
+            plantData.authorIDs.push(parseInt(authorArray[i]));
         }
     }else{
-        plantData.author.push(parseInt(apiData.author));
+        plantData.authorIDs.push(parseInt(apiData.author));
     }
 
     // Image info
@@ -493,6 +500,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             use:            apiData.medical_uses[i],
             image:          apiData.medical_images[i],
             preparation:    apiData.medical_preparation[i],
+            restricted:     apiData.medical_restricteds[i],
         } as MedicalSectionData;
 
         // If it isn't already in the use array, add it
@@ -576,7 +584,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.last_modified     = plantData.last_modified;
     apiData.display_image     = plantData.display_image;
     apiData.plant_type        = plantData.plant_type;
-    apiData.author            = plantData.author.toString()
+    apiData.author            = plantData.authorIDs.toString()
 
     // Date info
     for(let i = 0; i < plantData.months_ready_for_use.length; i++) {
@@ -612,6 +620,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
                 apiData.medical_uses.push(plantData.sections[i].use);
                 apiData.medical_images.push(plantData.sections[i].image);
                 apiData.medical_preparation.push(plantData.sections[i].preparation);
+                apiData.medical_restricteds.push(plantData.sections[i].restricted);
                 break;
 
             case "craft":
@@ -657,7 +666,8 @@ export function emptyPlantData(){
         location_found:         "",
         small_description:      "",
         long_description:       "",
-        author:                 [],
+        authorIDs:              [],
+        authors:                [],
         last_modified:          "",
         display_image:          "",
         plant_type:             "",
@@ -699,6 +709,7 @@ export function emptyPlantApiData(){
         medical_uses:               [],
         medical_images:             [],
         medical_preparation:        [],
+        medical_restricteds:        [],
         craft_parts:                [],
         craft_use_identifiers:      [],
         craft_uses:                 [],
@@ -773,6 +784,23 @@ export async function fetchPlant (id: number) {
             // Typecast the plant data to the PlantData type (this is because it is know to return the PlantData type by the api - checking is done there)
             plantOBJ = plantData as PlantData
 
+
+            // Get the authors
+            let authors = []
+            for(let author of plantOBJ.authorIDs){
+                let authorData;
+                try {
+                    authorData = await makeRequestWithToken("get", "/api/user/data?id=" + author)
+                } catch (e) {
+                    console.log(e)
+                    continue
+                }
+                const authorsData = authorData.data.user
+                if(authorsData){
+                    authors.push(authorsData as UserDatabaseDetails)
+                }
+            }
+            plantOBJ.authors = authors
             // Set the plant data in the cache
             saveToCache("plant_" + id, plantOBJ)
 

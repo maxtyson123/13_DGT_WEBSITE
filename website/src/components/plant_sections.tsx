@@ -178,6 +178,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     // Store the use and preparation in a ref to set the contents with html later
     const medUseRef = useRef<HTMLDivElement>(null)
     const preparationRef = useRef<HTMLDivElement>(null)
+    const restrictedRef = useRef<HTMLDivElement>(null)
 
     const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
     const [altState, setAltState] = useState<string>("Loading")
@@ -213,6 +214,7 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
                 <h1> {section.medical_type} Medical Use </h1>
                 <div ref={medUseRef}></div>
                 <div ref={preparationRef}></div>
+                <div ref={restrictedRef}></div>
             </div>
         </>
     )
@@ -226,6 +228,10 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 
         if (preparationRef.current != null){
             preparationRef.current.innerHTML = "<h3> Preparation: </h3> " + section.preparation
+        }
+
+        if (restrictedRef.current != null && section.restricted != ""){
+            restrictedRef.current.innerHTML = "<h3> Restricted: </h3> " + section.restricted
         }
 
     }, [medUseRef, preparationRef, section.use, section.preparation])

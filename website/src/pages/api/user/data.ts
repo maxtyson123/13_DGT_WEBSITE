@@ -25,13 +25,14 @@ export default async function handler(
     const permission = await checkApiPermissions(request, response, session, client, "api:user:data:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
+    const privateData = await checkApiPermissions(request, response, session, client, "data:account:viewPrivateDetails")
+
     try {
 
-        let query = `SELECT * FROM users WHERE id = ${id}`;
+        let query = `SELECT ${privateData ? "*" : "id, user_name, user_type, user_image"} FROM users WHERE id = ${id}`;
 
         // If there is no id then must be using the user session
         if(!id) {
-
 
             // If there is no session then return an error
             if (!session || !session.user) {

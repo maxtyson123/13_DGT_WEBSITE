@@ -19,9 +19,7 @@ import {useSession} from "next-auth/react";
 import {ModalImage} from "@/components/modal";
 import Link from "next/link";
 import {Loading} from "@/components/loading";
-import {getFromCache, saveToCache} from "@/lib/cache";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
-import {makeRequestWithToken} from "@/lib/api_tools";
 
 export default function PlantPage() {
 
@@ -35,8 +33,6 @@ export default function PlantPage() {
     const [mainImageMetaData, setMainImageMetaData] = React.useState<ImageMetaData | null>(null)
     const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
-    const [authors, setAuthors] = React.useState<string[]>([])
-
     // Loading
     const [loading, setLoading] = React.useState(false)
     const [loadingMessage, setLoadingMessage] = React.useState("Loading...")
@@ -104,30 +100,7 @@ export default function PlantPage() {
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
 
-        // Get the data for the authors
-        setLoadingMessage("Fetching author data...")
-
-
-        const cacheAuthors = getFromCache("plant_" + plantOBJ.id + "_authors")
-        if(cacheAuthors !== null){
-            setAuthors(cacheAuthors)
-            setLoading(false)
-            return
-        }
-
-        let authors = []
-        for(let author of plantOBJ.author){
-            let authorData = await makeRequestWithToken("get","/api/user/data?id=" + author)
-            const authorsData = authorData.data.user
-            if(authorsData){
-                authors.push(authorsData.user_name)
-            }
-        }
-        console.log(authors)
-        saveToCache("plant_" + plantOBJ.id + "_authors", authors)
-        setAuthors(authors)
         setLoading(false)
-
     }
 
     // Fetch the plant data from the api for this plant on load
@@ -274,7 +247,6 @@ export default function PlantPage() {
     return (
         <>
 
-
             {/* Set up the page header and navbar */}
             <HtmlHeader currentPage={plantNames[0]}/>
             <Navbar currentPage={plantNames[0]}/>
@@ -293,9 +265,9 @@ export default function PlantPage() {
 
                         {/* Author and last modified date. Convert the date into the right format */}
                         <div  className={styles.headerItem}>
-                            <p className={styles.smallInline}>Author(s): {plantData?.author.map(
+                            <p className={styles.smallInline}>Author(s): {plantData?.authors.map(
                                 (author, index) => (
-                                    <Link href={"/account/"+author} key={index}>{authors[index]}{index !== plantData.author.length - 1 ? ", " : ""}</Link>
+                                    <Link href={"/account/"+author.id} key={index}>{author.user_name}{index !== plantData.authors.length - 1 ? ", " : ""}</Link>
                                 )
                             )}</p>
                             <p className={styles.smallInline}>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>

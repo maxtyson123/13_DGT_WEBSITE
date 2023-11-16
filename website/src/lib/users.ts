@@ -21,6 +21,7 @@ export interface UserDatabaseDetails {
     user_last_login: string,
     user_api_keys: object,
     user_image: string,
+    user_restricted_access: boolean,
 
 
 }
@@ -118,20 +119,29 @@ export interface UserPermissions {
             };
         };
     };
+
     pages: {
         admin: {
             publicAccess: boolean;
         };
         account: {
             publicAccess: boolean;
-            viewPrivateDetails: boolean;
         };
         plants: {
             publicAccess: boolean;
-            viewRestrictedSections: boolean;
             edit: boolean;
         };
     };
+
+    data:{
+        account: {
+            viewPrivateDetails: boolean;
+        };
+
+        plants: {
+            viewRestrictedSections: boolean;
+        };
+    }
 }
 
 export function getUserPermissions(user: RongoaUser | null) {
@@ -253,15 +263,23 @@ export function getUserPermissions(user: RongoaUser | null) {
 
             account: {
                 publicAccess: false,
-                viewPrivateDetails: false,
             },
 
             plants: {
                 publicAccess: true,
-                viewRestrictedSections: false,
                 edit: false,
             },
         },
+
+        data:{
+            account: {
+                viewPrivateDetails: false,
+            },
+
+            plants: {
+                viewRestrictedSections: false,
+            },
+        }
     }
 
     // If there is no user logged in it must be a guest
@@ -270,6 +288,9 @@ export function getUserPermissions(user: RongoaUser | null) {
         console.log("User is guest");
         return permissions;
     }
+
+    // Check if they are allowed to view restricted data
+    permissions.data.plants.viewRestrictedSections = user.database.user_restricted_access;
 
     // If they are a member allow them to use parts of the api non-internally
     if(user.database.user_type >= MEMBER_USER_TYPE) {
@@ -305,27 +326,7 @@ export function getUserPermissions(user: RongoaUser | null) {
 
     // If they are an admin enable all permissions
     if(user.database.user_type == ADMIN_USER_TYPE) {
-
-        // Loop through all api permissions and enable them
-        for (let api in permissions.api) {
-            // @ts-ignore
-            for (let section in permissions.api[api]) {
-                // @ts-ignore
-                for (let permission in permissions.api[api][section]) {
-                    // @ts-ignore
-                    permissions.api[api][section][permission] = true;
-                }
-            }
-        }
-
-        // Loop through all page permissions and enable them
-        for (let page in permissions.pages) {
-            // @ts-ignore
-            for (let permission in permissions.pages[page]) {
-                // @ts-ignore
-                permissions.pages[page][permission] = true;
-            }
-        }
+        permissions = setPermissions(permissions, true)
     }
 
 
@@ -333,6 +334,26 @@ export function getUserPermissions(user: RongoaUser | null) {
 
 }
 
+const setPermissions = (permissions: UserPermissions, value: boolean) : UserPermissions => {
+
+
+    for (let key in permissions) {
+
+        if(!permissions.hasOwnProperty(key)) continue;
+
+        // @ts-ignore
+        if (typeof permissions[key] === "object") {
+            // @ts-ignore
+            permissions[key] = setPermissions(permissions[key], value);
+        } else {
+            // @ts-ignore
+            permissions[key] = value;
+        }
+    }
+
+    return permissions;
+
+}
 
 /**
  * Check if a user has a permission

@@ -26,23 +26,33 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
     let token: any = authorization?.split(" ")[1]
     token = await verifyToken(token as string)
 
-    // Replace access with the correct interal/public
+    // Replace access with the correct internal/public
     if(!token){
         permissionToCheck = permissionToCheck.replace("access", "publicAccess")
     }else{
 
         token = token.data
+        let requestURL = request.url
+
+        // Remove any query parameters
+        token = token.split("?")[0]
+        requestURL = request.url?.split("?")[0]
+
+        // Remove the trailing slash
+        token = token.replace(/\/$/, "")
+        requestURL = requestURL?.replace(/\/$/, "")
+
         // Check if the token is the same as the request url
-        if(token.split("?")[0] != request.url?.split("?")[0]){
-            console.log("Invalid token: " + token.split("?")[0] + " != " + request.url?.split("?")[0])
-            return null
+        if(token != requestURL){
+            console.log("Invalid token: " + token + " != " + requestURL)
+            return false
         }
         permissionToCheck = permissionToCheck.replace("access", "internalAccess")
     }
 
     // Check the permissions
     if(permissions == null)
-        return null
+        return false
 
     // Get the permissions of the user
     const isAllowed = checkPermissions(permissions, permissionToCheck)
@@ -60,7 +70,7 @@ export function getJwtSecretKey() {
 }
 
 // Function to generate a token
-const createToken =  async (data: string) => {
+export const createToken =  async (data: string) => {
     return await new SignJWT({
         data: data,
     })
@@ -96,7 +106,7 @@ export async function makeRequestWithToken (
         baseURL,
         headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json', // Adjust content type as needed
+            'Content-Type': 'multipart/form-data', // Adjust content type as needed
         },
         data,
     };

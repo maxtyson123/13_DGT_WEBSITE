@@ -55,6 +55,7 @@ export default async function handler(
             medical_uses,
             medical_images,
             medical_preparation,
+            medical_restricteds,
             craft_parts,
             craft_use_identifiers,
             craft_uses,
@@ -74,49 +75,6 @@ export default async function handler(
 
         console.log("API/Upload")
         console.log(request.body);
-
-        // Return what parameters are missing
-        const missingParametersErrorCode = 200;
-        if(preferred_name === null)             { return response.status(missingParametersErrorCode).json({ error: 'Preferred name parameter not found' }); }
-        if(english_name === null)               { return response.status(missingParametersErrorCode).json({ error: 'English name parameter not found' }); }
-        if(maori_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Maori name parameter not found' }); }
-        if(latin_name === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Latin name parameter not found' }); }
-        if(location_found === null)             { return response.status(missingParametersErrorCode).json({ error: 'location_found parameter not found' }); }
-        if(small_description === null)          { return response.status(missingParametersErrorCode).json({ error: 'Small description parameter not found' }); }
-        if(long_description === null)           { return response.status(missingParametersErrorCode).json({ error: 'Long description parameter not found' }); }
-        if(author === null)                     { return response.status(missingParametersErrorCode).json({ error: 'Author parameter not found' }); }
-        if(display_image === null)              { return response.status(missingParametersErrorCode).json({ error: 'Display image parameter not found' }); }
-        if(plant_type === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Plant type parameter not found' }); }
-        if(months_ready_events === null)        { return response.status(missingParametersErrorCode).json({ error: 'Months ready events parameter not found' }); }
-        if(months_ready_start_months === null)  { return response.status(missingParametersErrorCode).json({ error: 'Months ready start months parameter not found' }); }
-        if(months_ready_end_months === null)    { return response.status(missingParametersErrorCode).json({ error: 'Months ready end months parameter not found' }); }
-        if(edible_parts === null)               { return response.status(missingParametersErrorCode).json({ error: 'Edible parts parameter not found' }); }
-        if(edible_use_identifiers === null)     { return response.status(missingParametersErrorCode).json({ error: 'Edible use identifiers parameter not found' }); }
-        if(edible_images === null)              { return response.status(missingParametersErrorCode).json({ error: 'Edible images parameter not found' }); }
-        if(edible_nutrition === null)           { return response.status(missingParametersErrorCode).json({ error: 'Edible nutrition parameter not found' }); }
-        if(edible_preparation === null)         { return response.status(missingParametersErrorCode).json({ error: 'Edible preparation parameter not found' }); }
-        if(edible_preparation_type === null)    { return response.status(missingParametersErrorCode).json({ error: 'Edible preparation type parameter not found' }); }
-        if(medical_types === null)              { return response.status(missingParametersErrorCode).json({ error: 'Medical types parameter not found' }); }
-        if(medical_use_identifiers === null)    { return response.status(missingParametersErrorCode).json({ error: 'Medical use identifiers parameter not found' }); }
-        if(medical_uses === null)               { return response.status(missingParametersErrorCode).json({ error: 'Medical uses parameter not found' }); }
-        if(medical_images === null)             { return response.status(missingParametersErrorCode).json({ error: 'Medical images parameter not found' }); }
-        if(medical_preparation === null)        { return response.status(missingParametersErrorCode).json({ error: 'Medical preparation parameter not found' }); }
-        if(craft_parts === null)                { return response.status(missingParametersErrorCode).json({ error: 'Craft parts parameter not found' }); }
-        if(craft_use_identifiers === null)      { return response.status(missingParametersErrorCode).json({ error: 'Craft use identifiers parameter not found' }); }
-        if(craft_uses === null)                 { return response.status(missingParametersErrorCode).json({ error: 'Craft uses parameter not found' }); }
-        if(craft_images === null)               { return response.status(missingParametersErrorCode).json({ error: 'Craft images parameter not found' }); }
-        if(craft_additional_info === null)      { return response.status(missingParametersErrorCode).json({ error: 'Craft additional info parameter not found' }); }
-        if(source_types === null)               { return response.status(missingParametersErrorCode).json({ error: 'Source types parameter not found' }); }
-        if(source_data === null)                { return response.status(missingParametersErrorCode).json({ error: 'Source data parameter not found' }); }
-        if(custom_titles === null)              { return response.status(missingParametersErrorCode).json({ error: 'Custom titles parameter not found' }); }
-        if(custom_text === null)                { return response.status(missingParametersErrorCode).json({ error: 'Custom text parameter not found' }); }
-        if(attachment_paths === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment paths parameter not found' }); }
-        if(attachment_types === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment types parameter not found' }); }
-        if(attachment_metas === null)           { return response.status(missingParametersErrorCode).json({ error: 'Attachment meta parameter not found' }); }
-        if(attachment_downloadable === null)    { return response.status(missingParametersErrorCode).json({ error: 'Attachment downloadable parameter not found' }); }
-
-        console.log("Edible Nutrition: ");
-        console.log(edible_nutrition);
 
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
@@ -193,12 +151,12 @@ export default async function handler(
         if(medical_types.length > 0) {
 
             // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}) VALUES `;
+            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}, ${tables.medical_restricted}) VALUES `;
 
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
                 // Add the data to the query
-                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_use_identifiers[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}')`;
+                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_use_identifiers[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}', '${medical_restricteds[i]}')`;
 
                 // If this is not the last item, add a comma otherwise add a semicolon
                 if(i < medical_types.length - 1) {

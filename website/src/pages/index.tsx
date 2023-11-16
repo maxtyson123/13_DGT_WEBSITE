@@ -7,7 +7,7 @@
 // - API route to get the plants by author                          | DONE
 // - Display the user's info on the profile page                    | DONE
 // - Edit the user's info                                           | DONE
-// - Permissions for users  - who can see what, who can edit what   | TODO: Visibility
+// - Permissions for users                                          | DONE
 // - User api keys                                                  |
 // - Rewrite docs for users                                         |
 

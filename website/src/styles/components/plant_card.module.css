@@ -156,6 +156,36 @@
     background-color: var(--secondary-gray);
 }
 
+/*
+ Make the author container a flexbox and align the content inside it to the start.
+ */
+.authorContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+.author{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    color: var(--text-dark);
+    font-size: 12px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.authorImage{
+    position: relative;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    border: 1px solid var(--main-green);
+    overflow: hidden;
+}
+
 @media only screen and (max-width: 420px) {
 
     /*

@@ -59,6 +59,7 @@ export class SQLDatabase {
     medical_use: string;
     medical_image: string;
     medical_preparation: string;
+    medical_restricted: string;
 
     // Source Table
     source_type: string;
@@ -75,6 +76,7 @@ export class SQLDatabase {
     user_type: string;
     user_last_login: string;
     user_image: string;
+    user_restricted_access: string;
 
 
     // Auth Table
@@ -134,6 +136,7 @@ export class SQLDatabase {
         this.medical_use                = "medical_use";
         this.medical_image              = "medical_image";
         this.medical_preparation        = "medical_preparation";
+        this.medical_restricted         = "medical_restricted";
 
         // Source Table
         this.source_type                = "source_type";
@@ -150,6 +153,7 @@ export class SQLDatabase {
         this.user_type                  = "user_type";
         this.user_last_login            = "user_last_login";
         this.user_image                 = "user_image";
+        this.user_restricted_access     = "user_restricted_access";
 
         
         // Auth Table

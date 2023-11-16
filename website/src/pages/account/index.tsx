@@ -64,7 +64,7 @@ export function AccountPage({dataID}: AccountPageProps){
     const [hidePrivate, setHidePrivate] = React.useState<boolean>(true)
 
     // Don't fetch the data again if it has already been fetched
-    const dataFetch = useRef(false)
+    const dataFetch = useRef("-1")
     const[error, setError] = useState<string>("")
 
     useEffect(() => {
@@ -89,16 +89,17 @@ export function AccountPage({dataID}: AccountPageProps){
 
                 // Set the user id
                 setUserID(localId)
+                setMyAccount(false)
 
                 // Check if we are allowed to show private data
                 if(session?.user) {
-                    setHidePrivate(!checkUserPermissions(session.user as RongoaUser, "pages:account:viewPrivateDetails"))
+                    setHidePrivate(!checkUserPermissions(session.user as RongoaUser, "data:account:viewPrivateDetails"))
                 }
 
                 // Prevent the data from being fetched again
-                if (dataFetch.current)
+                if (dataFetch.current == dataID)
                     return
-                dataFetch.current = true
+                dataFetch.current = dataID as string
 
                 fetchData(localId)
                 return;
@@ -124,16 +125,16 @@ export function AccountPage({dataID}: AccountPageProps){
             loadUserData(user.database)
 
             // Prevent the data from being fetched again
-            if (dataFetch.current)
+            if (dataFetch.current == dataID)
                 return
-            dataFetch.current = true
+            dataFetch.current = dataID as string
 
             // Get the users data
             fetchData()
 
         }
 
-    }, [session])
+    }, [session, dataID])
 
 
     const loadUserData = (user: UserDatabaseDetails) => {
@@ -155,7 +156,13 @@ export function AccountPage({dataID}: AccountPageProps){
                 setEditor(true)
                 break
         }
-        if(user.user_image != null && user.user_image != "undefined") setUserImage(user.user_image)
+
+        // Set the user image
+        if(user.user_image != null && user.user_image != "undefined")
+            setUserImage(user.user_image)
+        else
+            setUserImage("")
+
         setUserLastLogin(dateToString(user.user_last_login))
         setUserPosts("0")
     }
@@ -230,7 +237,7 @@ export function AccountPage({dataID}: AccountPageProps){
             <>
                 {/* Users Information */}
                 <Section autoPadding>
-                    <div className={globalStyles.gridCentre}>
+                    <div className={globalStyles.gridCentre} key={dataID as string}>
                         <div className={styles.accountContainer}>
 
                             <div className={styles.lastLogin}>

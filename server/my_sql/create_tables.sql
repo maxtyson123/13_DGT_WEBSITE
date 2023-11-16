@@ -48,6 +48,7 @@ CREATE TABLE medical (
     medical_use TEXT,
     medical_image TEXT,
     medical_preparation TEXT,
+    medical_restricted TEXT,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );
@@ -112,6 +113,8 @@ CREATE TABLE users (
     user_api_keys JSON,
     user_last_login DATETIME,
     user_image: TEXT,
+    user_image: TEXT,
+    user_restricted_access BOOLEAN,
     PRIMARY KEY (id)
 );
 

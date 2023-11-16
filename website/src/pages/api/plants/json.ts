@@ -64,8 +64,10 @@ export default async function handler(
                     return response.status(404).json({ error: 'ID parameter is not a number' });
                 }
 
+                const restrictedData = await checkApiPermissions(request, response, session, client, "data:plants:viewRestrictedSections")
+
                 // Download the data from the database using the download API with the ID and table
-                let plantsInfo = await downloadPlantData(["plants", "months_ready_for_use", "edible", "medical", "craft", "source", "custom", "attachments"], Number(id), client)
+                let plantsInfo = await downloadPlantData(["plants", "months_ready_for_use", "edible", "medical", "craft", "source", "custom", "attachments"], Number(id), client, restrictedData)
 
                 // Check if there was an error
                 if(plantsInfo[0] === "error"){
@@ -75,10 +77,21 @@ export default async function handler(
                 // Get the data
                 plantsInfo = plantsInfo[1][0];
 
-
                 // Change the data into the PlantDataApi type
                 // @ts-ignore
                 let apiData = plantsInfo as PlantDataApi;
+
+                // If the data is to be restricted then create empty text for the restricted data
+                if(!restrictedData) {
+
+                    // Clear the restricted data
+                    apiData.medical_restricteds = [];
+
+                    // Create empty text for the restricted data
+                    for(let i = 0; i < apiData.medical_types.length; i++){
+                        apiData.medical_restricteds.push("")
+                    }
+                }
 
                 // Convert the string date into a date object
                 if(apiData.last_modified){

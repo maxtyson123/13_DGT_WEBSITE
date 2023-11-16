@@ -19,7 +19,7 @@ type PlantCardProps = {
  *
  * @returns {JSX.Element} The rendered plant card component.
  */
-export default function PlantCardData({ data }: PlantCardProps){
+export default function PlantCardData({ data}: PlantCardProps){
 
     const [names, setNames] = useState(["None", "None", "None"])
     const [mainImage, setMainImage] = useState("/media/images/loading.gif")
@@ -74,7 +74,7 @@ export default function PlantCardData({ data }: PlantCardProps){
 
 
     const goToIndex = (filter: string) => {
-        router.push("/plant_index?filter=" + filter.split(" ")[0].toLowerCase())
+        router.push("/plants/plant_index?filter=" + filter.split(" ")[0].toLowerCase())
     }
 
 
@@ -82,6 +82,19 @@ export default function PlantCardData({ data }: PlantCardProps){
         <>
             {/* Shadowed div that holds the card contents*/}
             <div className={styles.card}>
+
+                <div className={styles.authorContainer}>
+
+                    {/* Map through the authors and display them */}
+                    {data.authors?.map((author, index) => (
+                        <Link href={"/account/" + author.id} key={index} className={styles.author}>
+                            <div className={styles.authorImage}>
+                                <Image src={author.user_image && author.user_image != "undefined" ? author.user_image : "/media/images/logo.svg"} alt={"Profile Picture"} fill/>
+                            </div>
+                            <p className={styles.authorName}>{author.user_name}</p>
+                        </Link>
+                    ))}
+                </div>
 
                 {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
@@ -184,6 +197,21 @@ export function PlantCardLoading(){
             {/* Shadowed div that holds the card contents, add a pulse effect*/}
             <div className={styles.card + " animate-pulse"}>
 
+                <div className={styles.authorContainer}>
+
+                    <div className={styles.author}>
+                        <div className={styles.nullImage}/>
+                        <p className={styles.authorName}> Loading... </p>
+                    </div>
+
+                    <div className={styles.author}>
+                        <div className={styles.nullImage}/>
+                        <p className={styles.authorName}> Loading... </p>
+                    </div>
+
+                </div>
+
+
               {/* Placeholder loading gif */}
                <div className={styles.imageContainer}>
                    <Image
@@ -225,6 +253,22 @@ export function PlantCardNull(){
         <>
             {/* Shadowed div that holds the card contents, add a pulse effect*/}
             <div className={styles.card + " opacity-60"}>
+
+                {/* Author Tags */}
+                <div className={styles.authorContainer}>
+
+                    <div className={styles.author}>
+                        <div className={styles.nullImage}/>
+                        <p className={styles.authorName}> None </p>
+                    </div>
+
+                    <div className={styles.author}>
+                        <div className={styles.nullImage}/>
+                        <p className={styles.authorName}> None </p>
+                    </div>
+
+                </div>
+
                 {/* Placeholder loading gif */}
                 <div className={styles.imageContainer}>
                    <div className={styles.nullImage}/>

@@ -43,7 +43,8 @@ import {faCloudArrowUp, faFile, faPerson} from "@fortawesome/free-solid-svg-icon
 import {globalStyles} from "@/lib/global_css";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Loading} from "@/components/loading";
-import {makeRequestWithToken} from "@/lib/api_tools";
+import {createToken, makeRequestWithToken} from "@/lib/api_tools";
+import axios from "axios";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -473,6 +474,7 @@ class MedicalInfo {
         useIdentifier: "",
         use:            "",
         preparation:    "",
+        restricted:     "",
         image:          "",
     };
 
@@ -482,6 +484,7 @@ class MedicalInfo {
         useIdentifier: ["normal", "No Error"] as [ValidationState, string],
         use:            ["normal", "No Error"] as [ValidationState, string],
         preparation:    ["normal", "No Error"] as [ValidationState, string],
+        restricted:     ["normal", "No Error"] as [ValidationState, string],
         image:          ["normal", "No Error"] as [ValidationState, string],
     }
 
@@ -493,6 +496,7 @@ class MedicalInfo {
     handeUseValueChange         = (value : string) => {this.state.use          = value};
     handlePreparationChange     = (value : string) => {this.state.preparation  = value};
     handleImageChange           = (value : string) => {this.state.image        = value};
+    handleRestrictedChange      = (value : string) => {this.state.restricted   = value};
 
     // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -503,6 +507,7 @@ class MedicalInfo {
                 medicalUseIdentifierHandler={this.handleUseIdentifierChange}
                 useValueHandler={this.handeUseValueChange}
                 preparationHandler={this.handlePreparationChange}
+                restrictedHandler={this.handleRestrictedChange}
                 valid={this.valid}
                 state={this.state}
             />
@@ -548,6 +553,10 @@ class MedicalInfo {
             isValid = false;
         }else { this.valid.preparation = ["success", "No Error"] as [ValidationState, string]; }
 
+
+        // Restricted is optional
+        this.valid.restricted = ["success", "No Error"] as [ValidationState, string];
+
         // If there is no image selected then show an error otherwise the input is valid
         if(this.state.image === "") {
             this.valid.image = ["error", "Please select what image is related to the medical use of this plant"] as [ValidationState, string];
@@ -573,12 +582,14 @@ type MedicalUseSectionProps = {
     medicalUseIdentifierHandler: (value: string) => void;
     useValueHandler:        (value: string) => void;
     preparationHandler:     (value: string) => void;
+    restrictedHandler:      (value: string) => void;
     valid: {
         type:           [ValidationState, string];
-        useIdentifier: [ValidationState, string];
+        useIdentifier:  [ValidationState, string];
         use:            [ValidationState, string];
         preparation:    [ValidationState, string];
         image:          [ValidationState, string];
+        restricted:     [ValidationState, string];
     }
     state: {
         type:           string;
@@ -586,9 +597,10 @@ type MedicalUseSectionProps = {
         use:            string;
         preparation:    string;
         image:          string;
+        restricted:     string;
     }
 }
-export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandler, useValueHandler, preparationHandler, valid, state}: MedicalUseSectionProps){
+export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandler, useValueHandler, preparationHandler, restrictedHandler, valid, state}: MedicalUseSectionProps){
 
     return(
         <>
@@ -637,6 +649,18 @@ export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandl
                     state={valid.preparation[0]}
                     errorText={valid.preparation[1]}
                     changeEventHandler={preparationHandler}
+                />
+            </div>
+
+            {/* Restricted */}
+            <div className={styles.formItem}>
+                <AdvancedTextArea
+                    placeHolder={"Restricted Information"}
+                    defaultValue={state.restricted}
+                    required={false}
+                    state={valid.restricted[0]}
+                    errorText={valid.restricted[1]}
+                    changeEventHandler={restrictedHandler}
                 />
             </div>
         </>
@@ -1809,7 +1833,7 @@ export default function CreatePlant() {
         plantOBJ.last_modified = new Date().toISOString()
         plantOBJ.display_image = cleanInput(displayImage);
         plantOBJ.plant_type = cleanInput(plantType);
-        plantOBJ.author = [];
+        plantOBJ.authorIDs = [];
 
         // Get the plant author
         if(session && session.user){
@@ -1819,14 +1843,14 @@ export default function CreatePlant() {
             // If there is a user then set the author to the user's name
             if(userID){
 
-                let prevAuthors = importedJSON.author;
+                let prevAuthors = importedJSON.authorIDs;
 
                 if(prevAuthors){
-                    plantOBJ.author = prevAuthors;
+                    plantOBJ.authorIDs = prevAuthors;
                 }
 
-                if(!plantOBJ.author.includes(userID)) {
-                    plantOBJ.author.push(userID)
+                if(!plantOBJ.authorIDs.includes(userID)) {
+                    plantOBJ.authorIDs.push(userID)
                 }
             }
         }
@@ -1928,6 +1952,7 @@ export default function CreatePlant() {
                 use: "",
                 image: "",
                 preparation: "",
+                restricted: "",
             } as MedicalSectionData;
 
             medicalInfoOBJ.medical_type = cleanInput(thisMedicalInfo.type);
@@ -1935,6 +1960,7 @@ export default function CreatePlant() {
             medicalInfoOBJ.use = cleanInput(thisMedicalInfo.use);
             medicalInfoOBJ.image = cleanInput(thisMedicalInfo.image);
             medicalInfoOBJ.preparation = cleanInput(thisMedicalInfo.preparation);
+            medicalInfoOBJ.restricted = cleanInput(thisMedicalInfo.restricted);
 
             // If it isn't already in the use array, add it
             if(!plantOBJ.use.includes("medical_"+medicalInfoOBJ.medical_type)){
@@ -2168,6 +2194,7 @@ export default function CreatePlant() {
                     medicalSection.handleUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     medicalSection.handeUseValueChange(jsonContents.sections[i].use)
                     medicalSection.handleImageChange(jsonContents.sections[i].image)
+                    medicalSection.handleRestrictedChange(jsonContents.sections[i].restricted)
 
                     // Re-render the section
                     medicalSection.reRenderSection()
@@ -2421,7 +2448,11 @@ export default function CreatePlant() {
             setProgressMessage("Uploading plant data")
 
             // Upload the data to the database using the upload API by passing each json key as params
-            result = await makeRequestWithToken("get",`/api/plants/upload`, uploadApiData);
+            result = await axios.post(`/api/plants/upload`, uploadApiData, {
+                headers: {
+                    Authorization: `Bearer ${await createToken("/api/plants/upload")}`,
+                }
+            });
 
         } catch (err: any) {
             console.log(err);
@@ -2592,18 +2623,13 @@ export default function CreatePlant() {
 
         try {
             // Send the form data to the server
-            const response = await fetch('/api/files/upload', {
-                method: 'POST',
-                body: formData,
-            });
+            const response = await makeRequestWithToken('post', '/api/files/upload', formData);
 
-            // If the response is ok then get the json data and set the image url
-            if (response.ok) {
-                console.log('File uploaded successfully.');
-            } else {
-                const data = await response.json();
-                console.log(data);
+            // Check if the file was uploaded successfully
+            if (!response.data.error) {
+                console.log("File uploaded successfully")
             }
+
         } catch (error) {
             console.log('An error occurred.');
         }
@@ -2648,7 +2674,7 @@ export default function CreatePlant() {
 
         // Check if the user can edit
         if(!checkUserPermissions(session.user as RongoaUser, "pages:plants:edit"))
-            router.push("/plants/" + router.query.id)
+            router.push(router.query.id ? "/plants/" + router.query.id : "/")
 
     }, [session])
 

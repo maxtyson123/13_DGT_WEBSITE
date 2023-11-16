@@ -34,7 +34,8 @@ export default async function handler(
         return response.status(404).json({ error: 'ID parameter not found' });
     }
 
-    const data = await downloadPlantData(table, id, client);
+    const restrictedData = await checkApiPermissions(request, response, session, client, "data:plants:viewRestrictedSections")
+    const data = await downloadPlantData(table, id, client, restrictedData);
 
     if(data[0] === "error"){
         return response.status(404).json({ error: data[1] });
@@ -45,7 +46,7 @@ export default async function handler(
 
 }
 
-export async function downloadPlantData(table: any, id: any, client: any) {
+export async function downloadPlantData(table: any, id: any, client: any, restrictedData: boolean) {
     const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
 
@@ -137,7 +138,7 @@ export async function downloadPlantData(table: any, id: any, client: any) {
                 case 'medical':
 
                     // Select all the medical data and make them into an array
-                    selector += `medical.medical_types, medical.medical_use_identifiers, medical.medical_uses, medical.medical_images, medical.medical_preparation,`;
+                    selector += `medical.medical_types, medical.medical_use_identifiers, medical.medical_uses, medical.medical_images, medical.medical_preparation,${restrictedData ? "medical.medical_restricteds," : ""}`;
 
                     // Join the medical table
                     joiner += `
@@ -149,6 +150,7 @@ export async function downloadPlantData(table: any, id: any, client: any) {
                                 ${joinCommand}(${tables.medical_use}) AS medical_uses,
                                 ${joinCommand}(${tables.medical_image}) AS medical_images,
                                 ${joinCommand}(${tables.medical_preparation}) AS medical_preparation
+                                ${restrictedData ? ("," + joinCommand + "(" + tables.medical_restricted + ") AS medical_restricteds") : ""}
                                 FROM medical
                                 WHERE plant_id = ${id}
                                 GROUP BY plant_id
