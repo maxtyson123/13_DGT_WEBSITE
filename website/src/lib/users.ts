@@ -291,6 +291,7 @@ export function getUserPermissions(user: RongoaUser | null) {
 
     // Check if they are allowed to view restricted data
     permissions.data.plants.viewRestrictedSections = user.database.user_restricted_access;
+    console.log("User is allowed to view restricted data: " + permissions.data.plants.viewRestrictedSections);
 
     // If they are a member allow them to use parts of the api non-internally
     if(user.database.user_type >= MEMBER_USER_TYPE) {

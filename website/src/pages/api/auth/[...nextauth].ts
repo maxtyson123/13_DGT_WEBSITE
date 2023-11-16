@@ -25,6 +25,7 @@ export const authOptions: NextAuthOptions = {
             // If there isnt the user data in the token the fetch it
             if(!token.user) {
 
+                console.log("Refresh");
                 // Get the tables and client
                 const tables = getTables();
                 const client = await getClient()
@@ -100,7 +101,6 @@ export const authOptions: NextAuthOptions = {
             }
         },
         async session({ session, token, trigger, newSession ,  user }) {
-
             //@ts-ignore
             session.user.database = token.user;
             return session

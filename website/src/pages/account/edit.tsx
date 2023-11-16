@@ -13,7 +13,6 @@ import {globalStyles} from "@/lib/global_css";
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
-import axios from "axios";
 import {dateToString} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
 import {makeRequestWithToken} from "@/lib/api_tools";
@@ -205,8 +204,10 @@ export default function EditAccount() {
 
             if(userLocalImage !== null) url += "&image=" + process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name
 
-            const userData = await axios.get(url)
+            const userData = await makeRequestWithToken("put", url)
             console.log(userData)
+            console.log(url)
+            console.log("User data updated")
 
         } catch (e) {
             console.log(e)
@@ -223,7 +224,8 @@ export default function EditAccount() {
                 user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image,
                 user_api_keys: (session?.user as RongoaUser).database.user_api_keys,
                 user_type: (session?.user as RongoaUser).database.user_type,
-                user_last_login: (session?.user as RongoaUser).database.user_last_login
+                user_last_login: (session?.user as RongoaUser).database.user_last_login,
+                user_restricted_access: (session?.user as RongoaUser).database.user_restricted_access
 
             }
         }).then(r => console.log(r))

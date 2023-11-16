@@ -32,6 +32,8 @@ import {CreditedImage} from "@/components/credits";
 import {QueryClient} from "@tanstack/react-query";
 import {ModalImage} from "@/components/modal";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {useSession} from "next-auth/react";
+import {UserDatabaseDetails} from "@/lib/users";
 
 export default function Home() {
     const pageName = "Home"
@@ -39,7 +41,7 @@ export default function Home() {
     // Stats for the featured plants
     const [isLoading, setIsLoading] = React.useState(true)
     const [isMobile, setIsMobile] = React.useState(false)
-
+   const { data: session, update } = useSession()
 
     const [plantIds, setPlantIds] = React.useState([0,0,0,0,0,0])
     const [location, setLocation] = React.useState("13-dgt-website.vercel.app")
@@ -70,9 +72,32 @@ export default function Home() {
         dataFetch.current = true
 
         setIsLoading(true);
-
         getPlantIDs().then(() => {console.log("Plant IDs fetched")} ).catch((error) => {console.log(error)});
     }, [])
+
+    useEffect(() => {
+        if (session?.user) {
+            checkUserRefresh()
+        }
+    }, [session])
+
+
+    const checkUserRefresh = async () => {
+
+        if(!getFromCache("user_data_refreshed")) {
+            console.log("Refreshing user data")
+
+            const userData = await makeRequestWithToken("get", "/api/user/data/")
+
+            if(!userData.data?.user)
+                return
+
+            const user = userData.data.user as UserDatabaseDetails
+
+            update({database: user})
+            saveToCache("user_data_refreshed", true)
+        }
+    }
 
     /**
      * Gets 3 random IDs from the database to be used for the featured plants

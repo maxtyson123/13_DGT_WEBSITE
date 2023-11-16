@@ -114,22 +114,13 @@ http://localhost:3000/api/auth/callback/github
 ##### Accessibility Settings
 To change accessibility settings of the site, click on the credits chip in the bottom left to open a pop-up where you can toggle dark mode or dyslexic mode.
 
-##### Whitelist users
+##### Users
 
-To whitelist a user, go to the [/admin](https://13-dgt-website.vercel.app/admin) page and enter the email of the user you wish to whitelist. Once you are finished, press the add button.
+[TODO] To whitelist a user, go to the [/admin](https://13-dgt-website.vercel.app/admin) page and enter the email of the user you wish to whitelist. Once you are finished, press the add button.
 
-You will have to first mannually add your email in the database to get acess to that page for the first time, once done you can add future users from the admin panel.
+You will first have to manually set your account to type 2 in the databse
 
-To add an API key create a new entry in the auth table with the 'entry' column being the key and the 'type' being 'api'
-```sh
-INSERT INTO auth (auth_entry, auth_type)
-VALUES ('api_key', 'api');
-```
-To whitelist a email, create a new entry in the auth table with the 'entry' column being the email and the 'type' being 'email'
-```sh
-INSERT INTO auth (auth_entry, auth_type)
-VALUES ('example@example.com', 'email');
-```
+To add an api key, go to the user profile page and press the generate api key button. This will generate a new api key for you to use.
 
 ##### Create Plants
 Go to the [/plants/create](https://13-dgt-website.vercel.app/plants/create) page and enter the information for the plant. Once you are finished, press the upload button, or if you wish to continue creating the plant later, press generate JSON (note: images and attachments will have to be selected again).
