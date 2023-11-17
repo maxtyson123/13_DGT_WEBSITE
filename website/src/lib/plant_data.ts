@@ -795,7 +795,7 @@ export async function fetchPlant (id: number) {
                     console.log(e)
                     continue
                 }
-                const authorsData = authorData.data.user
+                const authorsData = authorData.data.data
                 if(authorsData){
                     authors.push(authorsData as UserDatabaseDetails)
                 }
@@ -1110,6 +1110,9 @@ export function dateToString(date: Date | string): string
         if(typeof date === "undefined" || isNaN(date.getTime())){
             return "Invalid Date"
         }
+
+        // Add an hour to the date because of timezone issues
+        date.setHours(date.getHours() + 1);
 
         dateString = date.toISOString();
     }

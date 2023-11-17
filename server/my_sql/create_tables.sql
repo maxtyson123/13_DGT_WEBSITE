@@ -110,19 +110,22 @@ CREATE TABLE users (
     user_name TEXT,
     user_email TEXT,
     user_type INT,
-    user_api_keys JSON,
     user_last_login DATETIME,
-    user_image: TEXT,
     user_image: TEXT,
     user_restricted_access BOOLEAN,
     PRIMARY KEY (id)
 );
 
--- User Auth
-CREATE TABLE auth (
-    id SERIAL PRIMARY KEY,
-    auth_entry TEXT,
-    auth_type TEXT,
-    auth_nickname TEXT,
-    auth_permissions TEXT
+-- Api Keys
+CREATE TABLE apikey (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT,
+    api_key_name TEXT,
+    api_key_value TEXT,
+    api_key_last_used DATETIME,
+    api_key_permissions TEXT,
+    api_key_logs JSON,
+	PRIMARY KEY (id),
+	FOREIGN KEY (user_id) REFERENCES users(id)
 );
+

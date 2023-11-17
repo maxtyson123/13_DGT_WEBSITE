@@ -78,12 +78,13 @@ export class SQLDatabase {
     user_image: string;
     user_restricted_access: string;
 
-
-    // Auth Table
-    auth_entry: string;
-    auth_type: string;
-    auth_nickname: string;
-    auth_permissions: string;
+    // Api Keys Table
+    user_id: string;
+    api_key_name: string;
+    api_key_value: string;
+    api_key_last_used: string;
+    api_key_permissions: string;
+    api_key_logs: string;
 
     constructor() {
         this.database = "rongoa8jwons3_rongoadb"
@@ -155,13 +156,13 @@ export class SQLDatabase {
         this.user_image                 = "user_image";
         this.user_restricted_access     = "user_restricted_access";
 
-        
-        // Auth Table
-        this.auth_entry                 = "auth_entry";
-        this.auth_type                  = "auth_type";
-        this.auth_nickname              = "auth_nickname";
-        this.auth_permissions           = "auth_permissions";
-
+        // Api Keys Table
+        this.user_id                    = "user_id";
+        this.api_key_name               = "api_key_name";
+        this.api_key_value              = "api_key_value";
+        this.api_key_last_used          = "api_key_last_used";
+        this.api_key_permissions        = "api_key_permissions";
+        this.api_key_logs              = "api_key_logs";
     }
 }
 
@@ -225,12 +226,6 @@ export class PostgresSQL extends SQLDatabase{
         this.months_event               = "event";
         this.months_start_month         = "start_month";
         this.months_end_month           = "end_month";
-
-        // Auth Table
-        this.auth_entry                 = "entry";
-        this.auth_type                  = "type";
-        this.auth_nickname              = "nickname";
-        this.auth_permissions           = "permissions";
     }
 }
 

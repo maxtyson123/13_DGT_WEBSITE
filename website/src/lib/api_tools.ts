@@ -2,17 +2,32 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {checkPermissions, getUserPermissions, RongoaUser, UserPermissions} from "@/lib/users";
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import {jwtVerify, SignJWT} from "jose";
+import {getFromCache, saveToCache} from "@/lib/cache";
 
-
-export async function checkApiPermissions(request: NextApiRequest, response: NextApiResponse, session: any, client: any, permission: string) {
+export async function checkApiPermissions(request: NextApiRequest, response: NextApiResponse, session: any, client: any, makeQuery: any, permission: string) {
 
     let permissions : UserPermissions | null = null
+
+    let api_key_data = null
 
     // Check if there is an API key
     let {api_key} = request.query;
     if(api_key){
 
-        // TODO: Get the api key from the database and check its permissions
+        console.log("API key: " + api_key)
+
+        // Make the query
+        const query = `SELECT api_key_permissions, api_key_logs FROM apikey WHERE api_key_value = '${api_key}'`
+        const result = await makeQuery(query, client)
+
+        // Check if the API key exists
+        if(result.length == 0) return false
+
+        // Get the permissions
+        permissions = JSON.parse(result[0].api_key_permissions)
+
+        // Get the api key data
+        api_key_data = result[0]
 
     }else{
 
@@ -57,6 +72,21 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
     // Get the permissions of the user
     const isAllowed = checkPermissions(permissions, permissionToCheck)
     console.log(permissionToCheck + ": " + isAllowed)
+
+    // If the api key was used then store the action in the log
+    if(api_key && api_key_data) {
+
+        // Parse the log
+        let log = JSON.parse(api_key_data.api_key_logs)
+
+        // Add the action to the log
+        log.push({time: new Date().toISOString(), action: "Attempt to access " + permissionToCheck + " on " + request.url + ": " + (isAllowed ? "Allowed" : "Denied")})
+
+        // Update the log
+        const query = `UPDATE apikey SET api_key_logs = '${JSON.stringify(log)}', api_key_last_used = NOW() WHERE api_key_value = '${api_key}'`
+        await makeQuery(query, client)
+    }
+
     return isAllowed
 
 }
@@ -121,3 +151,18 @@ export async function makeRequestWithToken (
         throw error;
     }
 };
+
+
+export async function makeCachedRequest(key: string, url: string){
+
+    let cache = getFromCache(key)
+    if(cache){
+        return cache
+    }
+    cache = await makeRequestWithToken("get",url)
+    if(!cache.data.error){
+
+        saveToCache(key, cache.data.data)
+    }
+    return cache.data.data
+}

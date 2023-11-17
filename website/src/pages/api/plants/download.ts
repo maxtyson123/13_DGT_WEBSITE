@@ -18,7 +18,7 @@ export default async function handler(
     // Get the client
     const client = await getClient()
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:plants:download:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:download:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Get the ID and table from the query string
@@ -34,7 +34,7 @@ export default async function handler(
         return response.status(404).json({ error: 'ID parameter not found' });
     }
 
-    const restrictedData = await checkApiPermissions(request, response, session, client, "data:plants:viewRestrictedSections")
+    const restrictedData = await checkApiPermissions(request, response, session, client, makeQuery, "data:plants:viewRestrictedSections")
     const data = await downloadPlantData(table, id, client, restrictedData);
 
     if(data[0] === "error"){

@@ -13,7 +13,7 @@ import {
     ADMIN_USER_TYPE,
     checkUserPermissions,
     EDITOR_USER_TYPE,
-    getUserPermissions,
+    getStrings,
     MEMBER_USER_TYPE,
     RongoaUser,
     UserDatabaseDetails
@@ -25,7 +25,8 @@ import {useRouter} from "next/router";
 import Link from "next/link";
 import {dateToString, getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import {Error} from "@/components/error";
-import {makeRequestWithToken} from "@/lib/api_tools";
+import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
+import {Loading} from "@/components/loading";
 
 export default function Account() {
 
@@ -55,17 +56,21 @@ export function AccountPage({dataID}: AccountPageProps){
     const [userPlants, setUserPlants] = React.useState<string>("")
     const [userPosts, setUserPosts] = React.useState<string>("")
     const [userPlantsData, setUserPlantsData] = React.useState([])
+    const [userPostsData, setUserPostsData] = React.useState([])
+    const [userApiKeysData, setUserApiKeysData] = React.useState([])
+    const [userApiKeysShown, setUserApiKeysShown] = React.useState<boolean[]>([])
     const [userID, setUserID] = React.useState<number>(0)
 
-
     // States
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const [loadingMessage, setLoadingMessage] = React.useState<string>("Loading...")
+    const[error, setError] = useState<string>("")
     const [editor, setEditor] = React.useState<boolean>(false)
     const [myAccount, setMyAccount] = React.useState<boolean>(false)
     const [hidePrivate, setHidePrivate] = React.useState<boolean>(true)
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef("-1")
-    const[error, setError] = useState<string>("")
 
     useEffect(() => {
 
@@ -75,8 +80,11 @@ export function AccountPage({dataID}: AccountPageProps){
             // Check if it is to be used
             if(dataID != "0"){
 
-                if(!checkUserPermissions(session?.user as RongoaUser, "pages:account:publicAccess"))
+                if(!checkUserPermissions(session?.user as RongoaUser, "pages:account:publicAccess")){
                     setError("You must be logged in to view other users")
+                    setLoading(false)
+                    return
+                }
 
                 // Try converting the id to a number
                 let localId = parseInt(dataID as string)
@@ -84,6 +92,8 @@ export function AccountPage({dataID}: AccountPageProps){
                 // If it is not a number then there is a problem
                 if(isNaN(localId)){
                     console.log("Not a number")
+                    setError("User not found")
+                    setLoading(false)
                     return
                 }
 
@@ -115,11 +125,10 @@ export function AccountPage({dataID}: AccountPageProps){
             setHidePrivate(false)
 
             let user = session.user as RongoaUser
-            if(!user) return
-
-            // Log their permissions
-            console.log("User permissions: ")
-            console.log(getUserPermissions(user))
+            if(!user){
+                setLoading(false)
+                return
+            }
 
             // Load the user data
             loadUserData(user.database)
@@ -170,47 +179,97 @@ export function AccountPage({dataID}: AccountPageProps){
 
     const fetchData = async (localId: number = 0) => {
 
+        setLoading(true)
+
         console.log("Fetching data")
 
         // If we are viewing a user then we need to get their data
         if(localId != 0) {
             try {
+                setLoadingMessage("Fetching user data...")
 
-                const user = await makeRequestWithToken("get", "/api/user/data?id=" + localId)
-                if(user.data.error){
+                // Get the data
+                const user = await makeCachedRequest("userData_" + localId, "/api/user/data?id=" + localId)
+                if(!user){
                     setError("User not found")
+                    setLoading(false)
+                    return
                 }
-                loadUserData(user.data.user)
+                loadUserData(user)
 
                 // Override the editor state
                 setEditor(false)
 
             } catch (e) {
                 console.log(e)
+                setLoading(false)
                 setError("User not found")
+                return
             }
         }
 
 
         // Get the users plants
         try {
-            let url = "/api/user/plants"
+            setLoadingMessage("Fetching plants...")
 
+            // Create the url
+            let url = "/api/user/plants"
             if(localId != 0) {
                 url += "?id=" + localId
             }
 
-            const plants = await makeRequestWithToken("get",url)
-            if(!plants.data.error){
-                setUserPlants(plants.data.data.length.toString())
+            // Get the data
+            let plants = await makeCachedRequest("userPlantsData_" + localId, url)
+
+            // Update the state variables
+            if(plants){
+                setUserPlants(plants.length.toString())
+                setUserPlantsData(plants)
+            }else{
+                setUserPlants("0")
+                setUserPlantsData([])
             }
-            setUserPlantsData(plants.data.data)
+
         } catch (e) {
 
             // User has no plants
             console.log(e)
             setUserPlants("0")
         }
+
+        // Get the users posts
+
+        // Get the users api keys
+        try {
+
+            setLoadingMessage("Fetching API keys...")
+
+
+            // Create the url
+            let apiUrl = "/api/user/api_keys?operation=fetch"
+            if(localId != 0 && checkUserPermissions(session?.user as RongoaUser, "data:account:viewPrivateDetails")) {
+                console.log("Can view private details")
+                apiUrl += "&publicUserID=" + localId
+            }
+
+            // Get the data
+            let apikeys = await makeCachedRequest("userApiKeysData_" + localId, apiUrl)
+            if(!apikeys)
+                apikeys = []
+
+            // Update the state variables
+            setUserApiKeysData(apikeys)
+
+        } catch (e) {
+
+            // User has no plants
+            console.log(e)
+            setUserPlants("0")
+        }
+
+        console.log("Finished fetching data")
+        setLoading(false)
     }
 
     const signOutUser = async () => {
@@ -220,16 +279,6 @@ export function AccountPage({dataID}: AccountPageProps){
     const deleteAccount = async () => {
         await makeRequestWithToken("get","/api/user/delete/")
         await signOutUser()
-    }
-
-    const loginSection = () => {
-        return (
-            <>
-                <div className={globalStyles.gridCentre}>
-                    <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
-                </div>
-            </>
-        )
     }
 
     const accountSection = () => {
@@ -363,12 +412,13 @@ export function AccountPage({dataID}: AccountPageProps){
                     <Section autoPadding>
                         <DropdownSection title={"Api Keys"} open>
                             <div className={styles.tableContainer}>
-                                <table className={styles.dataTable}>
+                                <table className={styles.dataTable} key={userApiKeysShown.toString()}>
                                     <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Key</th>
+                                        <th>Value</th>
+                                        <th>Last used</th>
                                         <th>Permissions</th>
                                         <th className={styles.divider}>Divider</th>
                                         <th>View</th>
@@ -376,11 +426,34 @@ export function AccountPage({dataID}: AccountPageProps){
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><p> No API Keys Found </p></td>
-                                    </tr>
+                                    {userApiKeysData.length > 0 ? userApiKeysData.map((apiKey: any, index) => (
+                                        <tr key={apiKey.id}>
+                                            <td>{apiKey.id}</td>
+                                            <td>{apiKey.api_key_name}</td>
+                                            <td>{apiKey.api_key_value}</td>
+                                            <td>{dateToString(new Date(apiKey.api_key_last_used))}</td>
+                                            <td>{getStrings(JSON.parse(apiKey.api_key_permissions)).join(", ")}</td>
+                                            <td className={styles.divider}>Divider</td>
+                                            <td>
+                                                <Link href={"/plants/" + apiKey.id}>
+                                                    <button className={styles.viewButton}>View</button>
+                                                </Link>
+                                            </td>
+
+                                            {editor && <td>
+                                                <Link href={"/plants/create?id=" + apiKey.id}>
+                                                    <button className={styles.editButton}>Edit</button>
+                                                </Link>
+                                            </td>}
+                                        </tr>
+                                    )) : <tr>
+                                        <td><p> No Api Keys Found </p></td>
+                                    </tr>}
                                     </tbody>
                                 </table>
+
+                                {editor && <button className={styles.createButton} onClick={() => router.push("/account/keys/create")}>Create Key</button> }
+
                             </div>
                         </DropdownSection>
                     </Section>
@@ -425,6 +498,9 @@ export function AccountPage({dataID}: AccountPageProps){
             </Section>
 
 
+            {/* Loading Message */}
+            {loading && <Loading progressMessage={loadingMessage}/>}
+
 
             {/* Error Message */}
             {error ?
@@ -452,5 +528,15 @@ export function AccountPage({dataID}: AccountPageProps){
             </Section>
         </>
 
+    )
+}
+
+export const loginSection = () => {
+    return (
+        <>
+            <div className={globalStyles.gridCentre}>
+                <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
+            </div>
+        </>
     )
 }

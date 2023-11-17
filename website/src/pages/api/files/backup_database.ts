@@ -23,7 +23,7 @@ export default async function handler(
 
         // Check if the user has the correct permissions
         const session = await getServerSession(request, response, authOptions)
-        const permission = await checkApiPermissions(request, response, session, client, "api:files:backup_database:access")
+        const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:files:backup_database:access")
         if(!permission) return response.status(401).json({error: "Not Authorized"})
 
         // Create the query

@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {USE_POSTGRES} from "@/lib/constants";
 import {Form} from "multiparty";
 import fs from "fs";
@@ -23,7 +23,7 @@ export default async function handler(
     // Get the client
     const client = await getClient()
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:files:upload:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:files:upload:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try uploading the data to the database

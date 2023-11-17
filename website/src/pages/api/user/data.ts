@@ -22,10 +22,10 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:user:data:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:data:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
-    const privateData = await checkApiPermissions(request, response, session, client, "data:account:viewPrivateDetails")
+    const privateData = await checkApiPermissions(request, response, session, client, makeQuery, "data:account:viewPrivateDetails")
 
     try {
 
@@ -56,7 +56,7 @@ export default async function handler(
         }
 
         // Return the user
-        return response.status(200).json({ user: user[0] });
+        return response.status(200).json({ data: user[0] });
 
 
     } catch (error) {

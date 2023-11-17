@@ -5,9 +5,7 @@ import Section from "@/components/section";
 import Footer from "@/components/footer";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPerson} from "@fortawesome/free-solid-svg-icons";
-import {signIn, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {globalStyles} from "@/lib/global_css";
 import {useRouter} from "next/router";
@@ -16,6 +14,7 @@ import {FileInput, SmallInput, ValidationState} from "@/components/input_section
 import {dateToString} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {loginSection} from "@/pages/account/index";
 
 export default function EditAccount() {
     const pageName = "Account";
@@ -122,7 +121,7 @@ export default function EditAccount() {
             try {
                 const response = await makeRequestWithToken("get","/api/user/email?email=" + userEmail)
 
-                if (response.data.user) {
+                if (response.data.data) {
                     setValidUserEmail(["error", "Email is already in use"])
                     return false
                 }
@@ -222,7 +221,6 @@ export default function EditAccount() {
                 user_name: userName,
                 user_email: userEmail,
                 user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image,
-                user_api_keys: (session?.user as RongoaUser).database.user_api_keys,
                 user_type: (session?.user as RongoaUser).database.user_type,
                 user_last_login: (session?.user as RongoaUser).database.user_last_login,
                 user_restricted_access: (session?.user as RongoaUser).database.user_restricted_access
@@ -232,16 +230,6 @@ export default function EditAccount() {
 
         // Push the user back to the account page
         await router.push("/account")
-    }
-
-    const loginSection = () => {
-        return (
-            <>
-                <div className={globalStyles.gridCentre}>
-                    <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
-                </div>
-            </>
-        )
     }
 
     const editSection = () => {

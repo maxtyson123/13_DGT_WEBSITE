@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient} from "@/lib/databse";
+import {getClient, makeQuery} from "@/lib/databse";
 import {checkApiPermissions} from "@/lib/api_tools";
 import archiver from 'archiver';
 import fs from 'fs';
@@ -104,7 +104,7 @@ export default async function handler(
 
     // Check if the user has the correct permissions
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:files:backup_files:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:files:backup_files:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try uploading the data to the database

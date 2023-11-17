@@ -8,7 +8,7 @@
 // - Display the user's info on the profile page                    | DONE
 // - Edit the user's info                                           | DONE
 // - Permissions for users                                          | DONE
-// - User api keys                                                  |
+// - User api keys                                                  | Create page CSS, View Logs, Edit Name/Permissions, Delete
 // - Rewrite docs for users                                         |
 
 import React, {useEffect, useRef} from "react";
@@ -92,7 +92,7 @@ export default function Home() {
             if(!userData.data?.user)
                 return
 
-            const user = userData.data.user as UserDatabaseDetails
+            const user = userData.data.data as UserDatabaseDetails
 
             update({database: user})
             saveToCache("user_data_refreshed", true)

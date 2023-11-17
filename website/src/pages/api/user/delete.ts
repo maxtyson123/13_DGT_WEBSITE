@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, getTables} from "@/lib/databse";
+import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {RongoaUser} from "@/lib/users";
@@ -21,7 +21,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:user:delete:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:delete:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     try {
@@ -42,10 +42,10 @@ export default async function handler(
         // Remove the user
         let query = `DELETE FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
         console.log(query);
-        const removed = await client.query(query);
+        const removed = makeQuery(query, client)
 
         // Return the user
-        return response.status(200).json({removed: removed.affectedRows});
+        return response.status(200).json({data : removed});
 
 
     } catch (error) {

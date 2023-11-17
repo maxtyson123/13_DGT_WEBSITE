@@ -20,7 +20,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:plants:months:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:months:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try downloading the data from the database

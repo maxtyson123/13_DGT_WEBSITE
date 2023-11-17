@@ -11,7 +11,7 @@ import {
     ValidPlantData
 } from "@/lib/plant_data";
 import axios from "axios";
-import {getClient} from "@/lib/databse";
+import {getClient, makeQuery} from "@/lib/databse";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
@@ -42,7 +42,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, "api:plants:json:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:json:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try running the operation
@@ -51,7 +51,7 @@ export default async function handler(
         switch (operation) {
             case 'download':
 
-                const permissionD = await checkApiPermissions(request, response, session, client, "api:plants:json:download")
+                const permissionD = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:json:download")
                 if(!permissionD) return response.status(401).json({error: "Not Authorized"})
 
                 // If the ID is not found, return an error
@@ -64,7 +64,7 @@ export default async function handler(
                     return response.status(404).json({ error: 'ID parameter is not a number' });
                 }
 
-                const restrictedData = await checkApiPermissions(request, response, session, client, "data:plants:viewRestrictedSections")
+                const restrictedData = await checkApiPermissions(request, response, session, client, makeQuery, "data:plants:viewRestrictedSections")
 
                 // Download the data from the database using the download API with the ID and table
                 let plantsInfo = await downloadPlantData(["plants", "months_ready_for_use", "edible", "medical", "craft", "source", "custom", "attachments"], Number(id), client, restrictedData)
@@ -120,7 +120,7 @@ export default async function handler(
 
             case 'upload':
 
-                const permissionU = await checkApiPermissions(request, response, session, client, "api:plants:json:upload")
+                const permissionU = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:json:upload")
                 if(!permissionU) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if the JSON param exists
@@ -162,7 +162,7 @@ export default async function handler(
                 return response.status(200).json({ data: result.data });
 
             case "convert":
-                const permissionC = await checkApiPermissions(request, response, session, client, "api:plants:json:convert")
+                const permissionC = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:json:convert")
                 if(!permissionC) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if there is the tableName param

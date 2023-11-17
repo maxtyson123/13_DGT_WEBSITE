@@ -19,11 +19,8 @@ export interface UserDatabaseDetails {
     user_email: string,
     user_type: number,
     user_last_login: string,
-    user_api_keys: object,
     user_image: string,
     user_restricted_access: boolean,
-
-
 }
 
 export interface UserPermissions {
@@ -96,6 +93,7 @@ export interface UserPermissions {
                 add: boolean;
                 remove: boolean;
                 edit: boolean;
+                fetch: boolean;
             };
             data: {
                 publicAccess: boolean;
@@ -144,9 +142,8 @@ export interface UserPermissions {
     }
 }
 
-export function getUserPermissions(user: RongoaUser | null) {
-
-    let permissions : UserPermissions = {
+export const getDefaultPermissions = () : UserPermissions => {
+    return {
         api: {
             auth: {
                 edit_auth: {
@@ -221,11 +218,12 @@ export function getUserPermissions(user: RongoaUser | null) {
 
             user: {
                 api_keys: {
-                    publicAccess: true,
+                    publicAccess: false,
                     internalAccess: true,
                     add: true,
                     remove: true,
                     edit: true,
+                    fetch: true,
                 },
 
                 data: {
@@ -271,7 +269,7 @@ export function getUserPermissions(user: RongoaUser | null) {
             },
         },
 
-        data:{
+        data: {
             account: {
                 viewPrivateDetails: false,
             },
@@ -281,6 +279,11 @@ export function getUserPermissions(user: RongoaUser | null) {
             },
         }
     }
+}
+
+export function getUserPermissions(user: RongoaUser | null) {
+
+    let permissions : UserPermissions = getDefaultPermissions();
 
     // If there is no user logged in it must be a guest
     if(user == null)
@@ -291,7 +294,6 @@ export function getUserPermissions(user: RongoaUser | null) {
 
     // Check if they are allowed to view restricted data
     permissions.data.plants.viewRestrictedSections = user.database.user_restricted_access;
-    console.log("User is allowed to view restricted data: " + permissions.data.plants.viewRestrictedSections);
 
     // If they are a member allow them to use parts of the api non-internally
     if(user.database.user_type >= MEMBER_USER_TYPE) {
@@ -393,4 +395,39 @@ export function checkPermissions(permissions: UserPermissions, permission: strin
 
 }
 
+export function getStrings(permissions: UserPermissions) {
 
+    let strings: string[] = []
+
+    // Loop through the permissions
+    for (let key in permissions) {
+
+        if(!permissions.hasOwnProperty(key)) continue;
+
+        // @ts-ignore
+        let value = permissions[key] as any
+
+        // If the value is an object, then loop through it
+        if (typeof value === "object") {
+
+            // Add the sub values to the strings
+            let subStrings = getStrings(value)
+            for (let subString of subStrings) {
+                strings.push(key + ":" + subString)
+            }
+
+        } else {
+
+            // Check if the permission is true
+            if (value === true && key !== "internalAccess") {
+                if (key === "publicAccess") {
+                    strings.push("access")
+                }else{
+                    strings.push(key)
+                }
+
+            }
+        }
+    }
+    return strings
+}
