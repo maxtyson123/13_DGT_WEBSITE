@@ -270,7 +270,7 @@ export default function PlantPage() {
                                     <Link href={"/account/"+author.id} key={index}>{author.user_name}{index !== plantData.authors.length - 1 ? ", " : ""}</Link>
                                 )
                             )}</p>
-                            <p className={styles.smallInline}>Last Modified: {plantData ? (plantData.last_modified).slice(0,10).replaceAll("-", "/") : "00/00/00"}</p>
+                            <p className={styles.smallInline}>Last Modified: {plantData ? new Date(plantData.last_modified).toLocaleString().split(",")[0] : "00/00/00"}</p>
 
                         </div>
 

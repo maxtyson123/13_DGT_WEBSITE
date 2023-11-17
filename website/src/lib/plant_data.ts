@@ -1095,27 +1095,3 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
 
     return plant;
 }
-
-export function dateToString(date: Date | string): string
-{
-
-    let dateString = ""
-
-    // if its already a string
-    if(typeof date === "string"){
-        dateString = date;
-    }else{
-
-        // Check if its a valid date object
-        if(typeof date === "undefined" || isNaN(date.getTime())){
-            return "Invalid Date"
-        }
-
-        // Add an hour to the date because of timezone issues
-        date.setHours(date.getHours() + 1);
-
-        dateString = date.toISOString();
-    }
-
-    return dateString.split("T")[1].split(".")[0] + " on " + dateString.split("T")[0]
-}

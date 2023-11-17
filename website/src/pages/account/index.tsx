@@ -23,7 +23,7 @@ import {globalStyles} from "@/lib/global_css";
 import {DropdownSection} from "@/components/dropdown_section";
 import {useRouter} from "next/router";
 import Link from "next/link";
-import {dateToString, getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
+import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import {Error} from "@/components/error";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {Loading} from "@/components/loading";
@@ -172,7 +172,7 @@ export function AccountPage({dataID}: AccountPageProps){
         else
             setUserImage("")
 
-        setUserLastLogin(dateToString(user.user_last_login))
+        setUserLastLogin(new Date(user.user_last_login).toLocaleString())
         setUserPosts("0")
     }
 
@@ -281,6 +281,22 @@ export function AccountPage({dataID}: AccountPageProps){
         await signOutUser()
     }
 
+    const deleteKey = async (keyID: string) => {
+
+        // Delete the key
+        try{
+            await makeRequestWithToken("get","/api/user/api_keys?operation=remove&id=" + keyID)
+        } catch (e) {
+            console.log(e)
+        }
+
+        // Clear the key data
+        localStorage.removeItem("userApiKeysData_" + userID)
+
+        // Reload the data
+        fetchData(userID)
+    }
+
     const accountSection = () => {
         return (
             <>
@@ -355,7 +371,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                         <td>{plant.id}</td>
                                         <td>{macronCodeToChar(getNamesInPreference(plant as PlantData)[0], numberDictionary)}</td>
                                         <td>{plant.plant_type}</td>
-                                        <td>{dateToString(new Date(plant.last_modified))}</td>
+                                        <td>{new Date(plant.last_modified).toLocaleString()}</td>
                                         <td className={styles.divider}>Divider</td>
                                         <td>
                                             <Link href={"/plants/" + plant.id}>
@@ -422,7 +438,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                         <th>Permissions</th>
                                         <th className={styles.divider}>Divider</th>
                                         <th>View</th>
-                                        {editor && <th>Edit</th>}
+                                        {editor && <th>Delete</th>}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -431,19 +447,17 @@ export function AccountPage({dataID}: AccountPageProps){
                                             <td>{apiKey.id}</td>
                                             <td>{apiKey.api_key_name}</td>
                                             <td>{apiKey.api_key_value}</td>
-                                            <td>{dateToString(new Date(apiKey.api_key_last_used))}</td>
+                                            <td>{new Date(apiKey.api_key_last_used).toLocaleString()}</td>
                                             <td>{getStrings(JSON.parse(apiKey.api_key_permissions)).join(", ")}</td>
                                             <td className={styles.divider}>Divider</td>
                                             <td>
-                                                <Link href={"/plants/" + apiKey.id}>
+                                                <Link href={"/account/keys/" + apiKey.id + "_" + userID}>
                                                     <button className={styles.viewButton}>View</button>
                                                 </Link>
                                             </td>
 
                                             {editor && <td>
-                                                <Link href={"/plants/create?id=" + apiKey.id}>
-                                                    <button className={styles.editButton}>Edit</button>
-                                                </Link>
+                                                <button className={styles.editButton} onClick={() => {deleteKey(apiKey.id)}}>Delete</button>
                                             </td>}
                                         </tr>
                                     )) : <tr>

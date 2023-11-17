@@ -92,8 +92,8 @@
 
 
 .actionItem{
-    margin-bottom: 30px;
     width: 90%;
+    margin: auto;
 }
 
 .actionItem button{
@@ -194,3 +194,89 @@
         width: 95%;
     }
 }
+
+.keysCreatorContainer, .keyViewerContainer{
+    background-color: var(--secondary-gray);
+    border-radius: 20px;
+    padding: 20px;
+    color: var(--text-dark);
+    text-align: center;
+    width: 70%;
+    box-shadow: 0 8px 8px var(--shadow-min);
+    margin: auto;
+}
+
+.keyItem{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-items: start;
+    margin-bottom: 20px;
+    column-gap: 20px;
+}
+
+.keyItem input[type="checkbox"] {
+
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    justify-self: end;
+
+}
+
+.keyViewerContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 95%;
+}
+
+.keyViewerContainer h2, .keyViewerContainer div:has(input){
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    grid-column: span 2;
+    justify-self: center;
+}
+
+.keyViewerContainer div:has(input) *{
+    text-align: center;
+}
+
+/* Make the children inline */
+.keyViewItem *,.logItem *{
+    display: inline;
+}
+
+.keyViewerDropdowns{
+    padding-top: 50px;
+    width: 95%;
+    margin: auto;
+
+}
+
+.permissionItem{
+    padding: 10px;
+}
+
+.logItem{
+    padding: 5px 15px 5px 0px;
+}
+
+.logItem h3{
+    padding-left: 5px;
+    background-color: var(--darker-secondary-gray);
+}
+
+.logItem .success{
+    color: green;
+}
+
+.logItem .error{
+    color: red;
+}
+
+.editButtons{
+    grid-column: span 2;
+    justify-self: end;
+}
+

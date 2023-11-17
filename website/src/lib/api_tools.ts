@@ -79,8 +79,19 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
         // Parse the log
         let log = JSON.parse(api_key_data.api_key_logs)
 
+        // Check if the log is at its limit
+        if(log.length >= 100 && !checkPermissions(permissions, "data:logs:unlimitedApiLogEntries")){
+
+            // Remove the item at 1 because don't want to remove the first item as its the creation data
+            log.splice(1, 1)
+
+            // Overwrite the new item to state that the log is at its limit
+            log[1] = {time: new Date().toISOString(), action: "Previous log entries have been removed as the log is at its limit of 100 entries"}
+
+        }
+
         // Add the action to the log
-        log.push({time: new Date().toISOString(), action: "Attempt to access " + permissionToCheck + " on " + request.url + ": " + (isAllowed ? "Allowed" : "Denied")})
+        log.push({time: new Date().toISOString(), action: "Attempt to access " + permissionToCheck + " on " + request.url?.replace(`api_key=${api_key}`, '') + ": " + (isAllowed ? "Allowed" : "Denied")})
 
         // Update the log
         const query = `UPDATE apikey SET api_key_logs = '${JSON.stringify(log)}', api_key_last_used = NOW() WHERE api_key_value = '${api_key}'`

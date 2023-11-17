@@ -11,7 +11,6 @@ import {globalStyles} from "@/lib/global_css";
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
 import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
-import {dateToString} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {loginSection} from "@/pages/account/index";
@@ -80,7 +79,7 @@ export default function EditAccount() {
         }
         if(user.user_image != null && user.user_image != "undefined")
             setUserImage(user.user_image.replaceAll("s96-c", "s192-c"))
-        setUserLastLogin(dateToString(new Date(user.user_last_login)))
+        setUserLastLogin(new Date(user.user_last_login).toLocaleString())
     }
 
     const validateUserDetails = async () => {

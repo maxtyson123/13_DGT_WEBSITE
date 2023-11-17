@@ -1,16 +1,5 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v18.18.2-win-x64\node-v18.18.2-win-x64
 
-//TODO:
-// - Create New User In database when logging on for the first time | DONE
-// - User session stores data about the user from the database      | DONE
-// - Use user id to store the author of plants                      | DONE
-// - API route to get the plants by author                          | DONE
-// - Display the user's info on the profile page                    | DONE
-// - Edit the user's info                                           | DONE
-// - Permissions for users                                          | DONE
-// - User api keys                                                  | Create page CSS, View Logs, Edit Name/Permissions, Delete
-// - Rewrite docs for users                                         |
-
 import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/pages/index.module.css"

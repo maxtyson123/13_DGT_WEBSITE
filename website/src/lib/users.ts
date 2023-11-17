@@ -94,6 +94,7 @@ export interface UserPermissions {
                 remove: boolean;
                 edit: boolean;
                 fetch: boolean;
+                clearLogs: boolean;
             };
             data: {
                 publicAccess: boolean;
@@ -139,6 +140,10 @@ export interface UserPermissions {
         plants: {
             viewRestrictedSections: boolean;
         };
+
+        logs: {
+            unlimitedApiLogEntries: boolean;
+        }
     }
 }
 
@@ -224,6 +229,7 @@ export const getDefaultPermissions = () : UserPermissions => {
                     remove: true,
                     edit: true,
                     fetch: true,
+                    clearLogs: true,
                 },
 
                 data: {
@@ -276,6 +282,10 @@ export const getDefaultPermissions = () : UserPermissions => {
 
             plants: {
                 viewRestrictedSections: false,
+            },
+
+            logs: {
+                unlimitedApiLogEntries: false,
             },
         }
     }

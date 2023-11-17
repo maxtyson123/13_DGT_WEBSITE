@@ -91,8 +91,6 @@ export function AccountPage({dataID}: AccountPageProps){
             updatePermissions(permissions, keys, permissionValue)
 
         }
-
-        console.log(permissions)
         return permissions
 
     }
@@ -105,6 +103,9 @@ export function AccountPage({dataID}: AccountPageProps){
         if (keyName === "") {
             setKeyNameState(["error", "Key name cannot be empty"])
             setLoading(false)
+
+            // Scroll to the top of the page
+            window.scrollTo(0, 0)
             return
         }else {
             setKeyNameState(["success", ""])
@@ -126,6 +127,9 @@ export function AccountPage({dataID}: AccountPageProps){
         if(!hasPermission){
             setError("You must have atleast one permission set to true")
             setLoading(false)
+
+            // Scroll to the top of the page
+            window.scrollTo(0, 0)
             return
         }
 
@@ -158,24 +162,20 @@ export function AccountPage({dataID}: AccountPageProps){
                             <SmallInput placeHolder={"Enter Name..."} required={true} state={keyNameState[0]} errorText={keyNameState[1]} changeEventHandler={setKeyName}/>
                         </div>
 
-                        <div className={styles.keyItem}>
-                            <h2>Key Permissions</h2>
-                            <div className={styles.keyPermissionsContainer}>
-                                {keyPermissions.map((permission, index) => {
-                                    return (
-                                        <div key={index} className={styles.keyPermissionItem}>
-                                            {/* Check box for the permission */}
-                                            <label htmlFor={permission}>{permission}</label>
-                                            <input type={"checkbox"} id={permission} name={permission} value={permission}/>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </div>
+                        <h2>Permissions</h2>
 
-                        <div className={styles.keyItem}>
-                            <button className={styles.createKeyButton} onClick={uploadKey}>Create Key</button>
-                        </div>
+                        {keyPermissions.map((permission, index) => {
+                            return (
+                                <div key={index} className={styles.keyItem}>
+                                    {/* Check box for the permission */}
+                                    <label htmlFor={permission}>{permission}</label>
+                                    <input type={"checkbox"} id={permission} name={permission} value={permission}/>
+
+                                </div>
+                            )
+                        })}
+
+                        <button className={styles.createButton} onClick={uploadKey}>Create Key</button>
 
                     </div>
                 </Section>

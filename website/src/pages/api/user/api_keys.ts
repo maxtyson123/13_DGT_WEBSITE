@@ -72,7 +72,15 @@ export default async function handler(
             case "remove":
                 permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:remove")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
-                break
+
+                // Check if the key id is set
+                if(!id) return response.status(400).json({ error: 'Missing parameters'});
+
+                // Delete the key
+                query = `DELETE FROM apikey WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
+                await makeQuery(query, client)
+
+                return response.status(200).json({ data: { key: id }});
 
             case "edit":
                 permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:edit")
@@ -82,7 +90,6 @@ export default async function handler(
             case "fetch":
                 permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:fetch")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
-
 
                 if(publicUserID && privateData){
                     query = `SELECT * FROM apikey WHERE ${tables.user_id} = '${publicUserID}'`;
@@ -100,6 +107,39 @@ export default async function handler(
 
                 // Return the keys
                 return response.status(200).json({ data: keys });
+
+            case "clearLogs":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:clearLogs")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
+
+                // Check if the key id is set
+                console.log(id);
+                if(!id) return response.status(400).json({ error: 'Missing parameters'});
+
+                // Get the previous logs
+                query = `SELECT ${tables.api_key_logs} FROM apikey WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
+                let oldLogs = await makeQuery(query, client)
+
+                // Check if there were any logs
+                if(oldLogs.length === 0) {
+                    return response.status(404).json({ error: 'No logs found'});
+                }
+
+                // Parse the logs
+                oldLogs = JSON.parse(oldLogs[0].api_key_logs)
+
+                // Clear everything but the creation log
+                let newLogs = [oldLogs[0]]
+
+                // Update the logs
+                query = `UPDATE apikey SET ${tables.api_key_logs} = '${JSON.stringify(newLogs)}' WHERE id = '${id}'`;
+                await makeQuery(query, client)
+
+                return response.status(200).json({ data: { logs: newLogs }});
+
+            default:
+                return response.status(400).json({ error: 'Invalid operation'});
+
         }
 
 
