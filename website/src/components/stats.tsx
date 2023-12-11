@@ -5,6 +5,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 /**
  * Stats component. Shows the number of plants in the database, and the number of plants for each use.
@@ -45,7 +46,7 @@ export default function Stats(){
             }else{
 
                 // Get the data from the API
-                res = await axios.get('/api/plants/uses');
+                res = await makeRequestWithToken("get", "/api/plants/uses")
 
                 // Get the contents of the response
                 res = res.data;

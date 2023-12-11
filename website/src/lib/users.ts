@@ -206,7 +206,7 @@ export const getDefaultPermissions = () : UserPermissions => {
                 },
 
                 search: {
-                    publicAccess: false,
+                    publicAccess: true,
                     internalAccess: true,
                 },
 

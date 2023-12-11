@@ -5,6 +5,7 @@ import styles from "@/styles/components/infiniteloading.module.css"
 import {PlantCardApi} from "@/components/plant_card";
 import React, {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 interface InfiniteLoadingProps {
     searchQuery: string
@@ -15,9 +16,10 @@ export function InfiniteLoading({searchQuery} : InfiniteLoadingProps) {
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
        ['plants'],
         async ({pageParam = 1}) => {
-                    const res = await fetch(`${searchQuery}&page=${pageParam}`);
-                    return res.json();
-                },
+           console.log("Fetching page " + pageParam + " of " + searchQuery)
+                    const data = await makeRequestWithToken("get", `${searchQuery}&page=${pageParam}`)
+                    return data.data;
+        },
         {
             getNextPageParam: (_, pages) => {
                 return pages.length + 1;

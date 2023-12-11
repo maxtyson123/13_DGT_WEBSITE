@@ -289,8 +289,8 @@ export default function Home() {
                             <>
                                 <Slider>
                                     {/* Once the data has been fetched, load the individual card's data */}
-                                    {plantIds.map((id) => (
-                                        <>{(id != 0) && <div key={id} className={styles.sliderItem}> <PlantCardApi id={id}/></div>}</>
+                                    {plantIds.map((id, index) => (
+                                        <>{(id != 0) && <div key={index} className={styles.sliderItem}> <PlantCardApi id={id}/></div>}</>
                                     ))}
                                 </Slider>
                             </>
