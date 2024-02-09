@@ -5,6 +5,9 @@
  */
 .pageHeader{
     --headerHeight: 0vh;
+    color: white; /* This doesn't change with theming */
+    text-align: center;
+    font-size: 60px;
 }
 
 /*
