@@ -1,0 +1,23 @@
+.adminHeaderContainer h1{
+    font-size: 60px;
+    padding: 4%;
+    color: var(--text-dark);
+}
+
+.adminHeaderContainer button{
+    background-color: var(--main-green);
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+    font-size: 24px;
+    color: var(--text-light);
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 8px 8px var(--shadow-min);
+}
+
+.adminDataContainer{
+    display: flex;
+    justify-content: space-between;
+    padding: 4%;
+}

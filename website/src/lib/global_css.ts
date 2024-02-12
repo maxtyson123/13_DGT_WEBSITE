@@ -4,5 +4,6 @@ export const globalStyles = {
     gridFlex : "gridFlex",
     column : "column",
     row : "row",
+    container: "container",
 
 }

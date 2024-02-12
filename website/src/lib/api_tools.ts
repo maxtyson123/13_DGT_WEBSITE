@@ -17,7 +17,7 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
         console.log("API key: " + api_key)
 
         // Make the query
-        const query = `SELECT api_key_permissions, api_key_logs FROM apikey WHERE api_key_value = '${api_key}'`
+        const query = `SELECT api_key_permissions, api_key_logs FROM api_key WHERE api_key_value = '${api_key}'`
         const result = await makeQuery(query, client)
 
         // Check if the API key exists
@@ -94,7 +94,7 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
         log.push({time: new Date().toISOString(), action: "Attempt to access " + permissionToCheck + " on " + request.url?.replace(`api_key=${api_key}`, '') + ": " + (isAllowed ? "Allowed" : "Denied")})
 
         // Update the log
-        const query = `UPDATE apikey SET api_key_logs = '${JSON.stringify(log)}', api_key_last_used = NOW() WHERE api_key_value = '${api_key}'`
+        const query = `UPDATE api_key SET api_key_logs = '${JSON.stringify(log)}', api_key_last_used = NOW() WHERE api_key_value = '${api_key}'`
         await makeQuery(query, client)
     }
 

@@ -12,9 +12,9 @@ import {Loading} from "@/components/loading";
 import {Error} from "@/components/error";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {makeCachedRequest} from "@/lib/api_tools";
+import {globalStyles} from "@/lib/global_css";
 export default function Admin(){
-    const pageName = "admin";
-
+    const pageName = "Admin";
 
     const { data: session } = useSession()
 
@@ -32,35 +32,62 @@ export default function Admin(){
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
     useEffect(() => {
+
+        // Check the user permissions
+        if(session?.user)
+        if(!checkUserPermissions(session?.user as RongoaUser, "pages:admin:publicAccess")){
+            setError("You do not have permission toasdasd access this page.")
+            setLoading(false)
+            return
+        }
+
         // Fetch the data
         if (dataFetch.current)
             return
 
         dataFetch.current = true
         fetchData()
-    }, [])
+    }, [session])
 
     const fetchData = async () => {
 
-        // Check the user permissions
-        if(!checkUserPermissions(session?.user as RongoaUser, "pages:admin:publicAccess")){
-            setError("You do not have permission to access this page.")
-            setLoading(false)
-            return
-        }
+        // Set the loading message
+        setLoading(true)
 
         // Fetch the user count
         setLoadingMessage("Fetching user count...")
+        const users = await makeCachedRequest("user_stats", "/api/auth/random?amount=9999999")
+        if(!users){
+            setError("User data not found")
+            setLoading(false)
+            return
+        }
+        console.log(users)
+
+        // Store the number of users
+        let userCount = 0
+        for (const user in users.data){
+            console.log(user)
+            userCount += 1
+        }
+        setNumberOfUsers(userCount)
+
 
         // Fetch the plant count
         setLoadingMessage("Fetching plant count...")
-        const user = await makeCachedRequest("plant_stats", "/api/plants/uses")
-        if(!user){
+        const plants = await makeCachedRequest("plant_stats", "/api/plants/uses")
+        if(!plants){
             setError("Plant data not found")
             setLoading(false)
             return
         }
-        setNumberOfPlants(user.data.length)
+
+        // Store the number of plants
+        let plantCount = 0
+        for (const use in plants.data)
+            plantCount += 1
+        setNumberOfPlants(plantCount)
+
 
         // Fetch the settings count
         setLoadingMessage("Fetching settings count...")
@@ -74,34 +101,43 @@ export default function Admin(){
             <>
 
                 {/* Section for the welcome message and search box */}
-                <Section>
-                    <div className={styles.adminHeaderContainer}>
-                        <h1>Welcome to the Admin Page</h1>
-                        <p>Here you can manage the website content and settings.</p>
+                <Section autoPadding>
+                    <div className={globalStyles.gridCentre}>
+                        <div className={globalStyles.container}>
+                            <div className={styles.adminHeaderContainer}>
+                                <h1>Welcome to the Admin Page</h1>
 
-                        <Link href={"/admin/plants"}>
-                            <button>Manage Plants</button>
-                        </Link>
-                        <Link href={"/admin/users"}>
-                            <button>Manage Users</button>
-                        </Link>
-                        <Link href={"/admin/settings"}>
-                            <button>Manage Settings</button>
-                        </Link>
+                                <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
+                                <p>Current Time: {new Date().toLocaleString()}</p>
+
+                                <br/>
+                                <p>Here you can manage the website content and settings.</p>
+
+                                <Link href={"/admin/plants"}>
+                                    <button>Manage Plants</button>
+                                </Link>
+                                <Link href={"/admin/users"}>
+                                    <button>Manage Users</button>
+                                </Link>
+                                <Link href={"/admin/settings"}>
+                                    <button>Manage Settings</button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
 
                     <div className={styles.adminDataContainer}>
                         <div className={styles.adminData}>
                             <h2>Plants</h2>
-                            <p>There are currently 0 plants in the database.</p>
+                            <p>There are currently {numberOfPlants} plants in the database.</p>
                         </div>
                         <div className={styles.adminData}>
                             <h2>Users</h2>
-                            <p>There are currently 0 users in the database.</p>
+                            <p>There are currently {numberOfUsers} users in the database.</p>
                         </div>
                         <div className={styles.adminData}>
                             <h2>Settings</h2>
-                            <p>There are currently 0 settings in the database.</p>
+                            <p>There are currently {numberOfSettings} settings in the database.</p>
                         </div>
                     </div>
                 </Section>

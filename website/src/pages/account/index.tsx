@@ -303,7 +303,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 {/* Users Information */}
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre} key={dataID as string}>
-                        <div className={styles.accountContainer}>
+                        <div className={globalStyles.container}>
 
                             <div className={styles.lastLogin}>
                                 { !hidePrivate &&

@@ -63,7 +63,7 @@ export default async function handler(
                 let logs = [{time: Date.now(), action: "Created"}]
 
                 // Insert the key
-                query = `INSERT INTO apikey (${tables.user_id}, ${tables.api_key_name}, ${tables.api_key_value}, ${tables.api_key_permissions}, ${tables.api_key_logs}, ${tables.api_key_last_used} ) VALUES ('${userId}', '${keyName}', '${key}', '${permissions}', '${JSON.stringify(logs)}', NOW())`;
+                query = `INSERT INTO api_key (${tables.user_id}, ${tables.api_key_name}, ${tables.api_key_value}, ${tables.api_key_permissions}, ${tables.api_key_logs}, ${tables.api_key_last_used} ) VALUES ('${userId}', '${keyName}', '${key}', '${permissions}', '${JSON.stringify(logs)}', NOW())`;
                 const inserted = await makeQuery(query, client);
 
                 // Return the key
@@ -77,7 +77,7 @@ export default async function handler(
                 if(!id) return response.status(400).json({ error: 'Missing parameters'});
 
                 // Delete the key
-                query = `DELETE FROM apikey WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
+                query = `DELETE FROM api_key WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
                 await makeQuery(query, client)
 
                 return response.status(200).json({ data: { key: id }});
@@ -92,9 +92,9 @@ export default async function handler(
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 if(publicUserID && privateData){
-                    query = `SELECT * FROM apikey WHERE ${tables.user_id} = '${publicUserID}'`;
+                    query = `SELECT * FROM api_key WHERE ${tables.user_id} = '${publicUserID}'`;
                 }else{
-                    query = `SELECT * FROM apikey WHERE ${tables.user_id} = '${userId}'`;
+                    query = `SELECT * FROM api_key WHERE ${tables.user_id} = '${userId}'`;
                 }
 
                 console.log(query);
@@ -117,7 +117,7 @@ export default async function handler(
                 if(!id) return response.status(400).json({ error: 'Missing parameters'});
 
                 // Get the previous logs
-                query = `SELECT ${tables.api_key_logs} FROM apikey WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
+                query = `SELECT ${tables.api_key_logs} FROM api_key WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
                 let oldLogs = await makeQuery(query, client)
 
                 // Check if there were any logs
@@ -132,7 +132,7 @@ export default async function handler(
                 let newLogs = [oldLogs[0]]
 
                 // Update the logs
-                query = `UPDATE apikey SET ${tables.api_key_logs} = '${JSON.stringify(newLogs)}' WHERE id = '${id}'`;
+                query = `UPDATE api_key SET ${tables.api_key_logs} = '${JSON.stringify(newLogs)}' WHERE id = '${id}'`;
                 await makeQuery(query, client)
 
                 return response.status(200).json({ data: { logs: newLogs }});

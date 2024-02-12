@@ -33,6 +33,10 @@ export interface UserPermissions {
                 remove: boolean;
                 fetch: boolean;
             };
+            random: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            };
         };
         files: {
             backup_database: {
@@ -157,7 +161,12 @@ export const getDefaultPermissions = () : UserPermissions => {
                     add: false,
                     remove: false,
                     fetch: false,
-                }
+                },
+
+                random: {
+                    publicAccess: false,
+                    internalAccess: false,
+                },
             },
 
             files: {

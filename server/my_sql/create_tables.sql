@@ -117,7 +117,7 @@ CREATE TABLE users (
 );
 
 -- Api Keys
-CREATE TABLE apikey (
+CREATE TABLE api_key (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT,
     api_key_name TEXT,
