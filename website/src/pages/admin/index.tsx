@@ -62,16 +62,9 @@ export default function Admin(){
             setLoading(false)
             return
         }
-        console.log(users)
 
         // Store the number of users
-        let userCount = 0
-        for (const user in users.data){
-            console.log(user)
-            userCount += 1
-        }
-        setNumberOfUsers(userCount)
-
+        setNumberOfUsers(users.length)
 
         // Fetch the plant count
         setLoadingMessage("Fetching plant count...")
@@ -84,7 +77,7 @@ export default function Admin(){
 
         // Store the number of plants
         let plantCount = 0
-        for (const use in plants.data)
+        for (const use in plants)
             plantCount += 1
         setNumberOfPlants(plantCount)
 
@@ -129,15 +122,15 @@ export default function Admin(){
                     <div className={styles.adminDataContainer}>
                         <div className={styles.adminData}>
                             <h2>Plants</h2>
-                            <p>There are currently {numberOfPlants} plants in the database.</p>
+                            <p>There are currently <strong>{numberOfPlants}</strong> plants in the database.</p>
                         </div>
                         <div className={styles.adminData}>
                             <h2>Users</h2>
-                            <p>There are currently {numberOfUsers} users in the database.</p>
+                            <p>There are currently <strong>{numberOfUsers}</strong> users in the database.</p>
                         </div>
                         <div className={styles.adminData}>
                             <h2>Settings</h2>
-                            <p>There are currently {numberOfSettings} settings in the database.</p>
+                            <p>There are currently <strong>{numberOfSettings}</strong> settings in the database.</p>
                         </div>
                     </div>
                 </Section>

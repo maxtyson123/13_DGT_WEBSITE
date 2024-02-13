@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const webpack = require("webpack");
+const { withAxiom } = require('next-axiom');
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -38,4 +39,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withAxiom(nextConfig);

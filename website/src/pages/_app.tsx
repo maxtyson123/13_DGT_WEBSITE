@@ -8,6 +8,7 @@ import {config} from "@fortawesome/fontawesome-svg-core";
 import {Analytics} from '@vercel/analytics/react';
 import Credits from "@/components/credits";
 import {SessionProvider} from "next-auth/react";
+import { AxiomWebVitals } from 'next-axiom';
 
 // Tell Font Awesome to skip adding the CSS automatically
 // since it's already imported above
@@ -32,6 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
               {/* Credits and analytics should be on every page*/}
               <Credits/>
               <Analytics />
+              <AxiomWebVitals />
            </SessionProvider>
         </main>
       </>
