@@ -36,3 +36,41 @@
     color: var(--text-dark);
     text-align: center;
 }
+
+
+.tableContainer{
+    width: 100%;
+    overflow-x:auto;
+}
+
+.dataTable{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dataTable td, .dataTable th{
+    padding: 8px;
+}
+
+.dataTable .divider{
+    opacity: 0;
+}
+
+.dataTable thead{
+    background-color: var(--darker-secondary-gray);
+    color: var(--text-light);
+    text-align: left;
+    letter-spacing: 0.05em;
+}
+
+.dataTable button{
+    border-radius: 15px;
+    color: var(--text-light);
+    cursor: pointer;
+    background-color: var(--main-green);
+    padding: 5px 10px 5px 10px;
+}
+
+.dataTable button:hover{
+    background-color: var(--darker-main-green);
+}

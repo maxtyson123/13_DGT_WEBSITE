@@ -4,7 +4,7 @@ import Section from "@/components/section";
 import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/admin.module.css";
 import Link from "next/link";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Footer from "@/components/footer";
 import {loginSection} from "@/pages/account";
 import {useSession} from "next-auth/react";
@@ -13,8 +13,17 @@ import {Error} from "@/components/error";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {makeCachedRequest} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
+import { useLogger } from 'next-axiom';
+import { Client } from "@axiomhq/axiom-node";
+import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
+
 export default function Admin(){
     const pageName = "Admin";
+    const log = useLogger();
+    const client = new Client({
+        token: "xapt-0427919d-cc04-4c4c-a532-25a1be980c92",
+        orgId: "rongoa-mv7u",
+    });
 
     const { data: session } = useSession()
 
@@ -22,6 +31,7 @@ export default function Admin(){
     const [numberOfPlants, setNumberOfPlants] = useState(0)
     const [numberOfUsers, setNumberOfUsers] = useState(0)
     const [numberOfSettings, setNumberOfSettings] = useState(0)
+    const [logs, setLogs] = useState([] as any[])
 
     // Load the data
     const [loading, setLoading] = useState(true)
@@ -48,6 +58,7 @@ export default function Admin(){
         dataFetch.current = true
         fetchData()
     }, [session])
+
 
     const fetchData = async () => {
 
@@ -85,8 +96,27 @@ export default function Admin(){
         // Fetch the settings count
         setLoadingMessage("Fetching settings count...")
 
+        // Fetch the logs
+        setLoadingMessage("Fetching logs...")
+
+
+        const aplQuery = "['vercel'] | limit 100"
+
+        const res = await client.query(aplQuery);
+        if (!res.matches || res.matches.length === 0) {
+            console.warn('no matches found');
+            return;
+        }
+
+        // Revserse the logs
+        res.matches.reverse()
+
+        console.log(res.matches);
+        setLogs(res.matches)
+
         // Finish loading
         setLoading(false)
+        log.debug('Admin page loaded');
     }
 
     const adminPage = () => {
@@ -133,13 +163,46 @@ export default function Admin(){
                             <p>There are currently <strong>{numberOfSettings}</strong> settings in the database.</p>
                         </div>
                     </div>
+
+
+                    <div className={globalStyles.gridCentre}>
+                        <div className={globalStyles.container}>
+                            <h2>Logs</h2>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.dataTable}>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Last Modified</th>
+                                        <th className={styles.divider}>Divider</th>
+                                        <th>View</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {logs.map((log, index) => {
+                                        return (
+                                            <tr key={index} className={styles.adminLog}>
+                                                <td>Time: {new Date(log._time).toLocaleString()}</td>
+                                                <td>Message: {log.data.message}</td>
+                                                <td>Level: {log.data.level}</td>
+                                                <td>Url: {log.data.fields.path}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </Section>
 
             </>
         )
     }
 
-    return(
+    return (
         <>
 
             {/* Set up the page header and navbar */}
@@ -167,15 +230,13 @@ export default function Admin(){
 
                 :
                 <>
-                    {!session?
+                    {!session ?
                         loginSection()
                         :
                         adminPage()
                     }
                 </>
             }
-
-
 
 
             {/* Footer */}
