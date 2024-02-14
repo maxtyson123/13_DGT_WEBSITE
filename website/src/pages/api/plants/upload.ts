@@ -4,15 +4,15 @@ import {USE_POSTGRES} from "@/lib/constants";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
-
+import { Logger } from 'next-axiom';
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    
+    // Get the logger
+    const logger = new Logger()
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -290,8 +290,14 @@ export default async function handler(
         }
 
         if(edit_id){
+            // Log the edit
+            logger.info(`Plant ${id} edited by ${session?.user?.email}`);
+
             return response.status(200).json({ message: "Upload Successful", id: edit_id });
         }
+
+        // Log the upload
+        logger.info(`Plant ${id} uploaded by ${session?.user?.email}`);
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {

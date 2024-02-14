@@ -4,7 +4,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {RongoaUser} from "@/lib/users";
-
+import { Logger } from 'next-axiom';
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -12,6 +12,9 @@ export default async function handler(
 
     // Get the client
     const client = await getClient()
+
+    // Get the logger
+    const logger = new Logger()
 
     // Get the tables
     const tables = getTables();
@@ -66,6 +69,9 @@ export default async function handler(
                 query = `INSERT INTO api_key (${tables.user_id}, ${tables.api_key_name}, ${tables.api_key_value}, ${tables.api_key_permissions}, ${tables.api_key_logs}, ${tables.api_key_last_used} ) VALUES ('${userId}', '${keyName}', '${key}', '${permissions}', '${JSON.stringify(logs)}', NOW())`;
                 const inserted = await makeQuery(query, client);
 
+                // Log the creation
+                logger.info(`User ${userId} created a new API key with name ${keyName} and permissions ${permissions}`);
+
                 // Return the key
                 return response.status(200).json({ data: { key: key }});
 
@@ -79,6 +85,9 @@ export default async function handler(
                 // Delete the key
                 query = `DELETE FROM api_key WHERE id = '${id}' AND ${tables.user_id} = '${userId}'`;
                 await makeQuery(query, client)
+
+                // Log the deletion
+                logger.info(`User ${userId} deleted API key with id ${id}`);
 
                 return response.status(200).json({ data: { key: id }});
 

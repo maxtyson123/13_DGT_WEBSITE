@@ -3,6 +3,7 @@ import GitHubProvider from "next-auth/providers/github";
 import NextAuth, {NextAuthOptions} from "next-auth";
 import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {MEMBER_USER_TYPE} from "@/lib/users";
+import { Logger } from 'next-axiom';
 
 /**
  * The config options that NextAuth uses when authenticating users
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
 
             // Get the client
             const client = await getClient()
+            const logger = new Logger();
 
             // Get the tables
             const tables = getTables();
@@ -77,6 +79,9 @@ export const authOptions: NextAuthOptions = {
                 console.log(query);
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
+
+                    logger.info(`User logged in with email ${user_email}`);
+
                     // Update the users login time and image
                     query = `UPDATE users SET ${tables.user_last_login} = NOW() WHERE ${tables.user_email} = '${user_email}'`;
                     console.log(query);
@@ -86,6 +91,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // Insert the user into the database
+                logger.info(`User created with email ${user_email}`);
                 query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}, ${tables.user_image}, ${tables.user_restricted_access}) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW(), '${user_image}', 0)`;
                 const new_user = await makeQuery(query, client)
 

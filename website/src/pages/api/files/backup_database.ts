@@ -3,7 +3,7 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
-
+import { Logger } from 'next-axiom';
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -13,6 +13,8 @@ export default async function handler(
     // Get the client
     const client = await getClient()
 
+    // Get the logger
+    const logger = new Logger()
 
     // Try uploading the data to the database
     try {
@@ -57,6 +59,9 @@ export default async function handler(
         console.log("=====================================")
         console.log(query);
         console.log("=====================================")
+
+        // Log the backup request
+        logger.info(`Backup request by ${session?.user?.email}`);
 
         // Get the data
         const data  = await makeQuery(query, client)

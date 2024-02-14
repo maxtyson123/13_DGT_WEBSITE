@@ -7,13 +7,15 @@ import Client from "ftp";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
-
+import { Logger } from 'next-axiom';
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
+    // Get the logger
+    const logger = new Logger()
 
     // If the request is not a POST request, return an error
     if(request.method !== 'POST') {
@@ -123,6 +125,9 @@ export default async function handler(
 
                         // Delete the file locally
                         fs.unlinkSync(file[0].path);
+
+                        // Log the upload
+                        console.log(`File uploaded to ${remotePath} by ${session?.user?.email}`);
 
                         // Return that the file was uploaded
                         return response.status(200).json({ message: 'File uploaded successfully.', path: remotePath });

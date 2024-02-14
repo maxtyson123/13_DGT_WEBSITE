@@ -108,7 +108,7 @@ export default function Admin(){
             return;
         }
 
-        // Revserse the logs
+        // Reverse the logs
         res.matches.reverse()
 
         console.log(res.matches);
@@ -116,7 +116,9 @@ export default function Admin(){
 
         // Finish loading
         setLoading(false)
-        log.debug('Admin page loaded');
+
+        // Log that the user has logged in
+        log.info("User access admin database:", {user: session?.user?.name, email: session?.user?.email})
     }
 
     const adminPage = () => {
@@ -166,34 +168,31 @@ export default function Admin(){
 
 
                     <div className={globalStyles.gridCentre}>
-                        <div className={globalStyles.container}>
-                            <h2>Logs</h2>
                             <div className={styles.tableContainer}>
                                 <table className={styles.dataTable}>
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Last Modified</th>
-                                        <th className={styles.divider}>Divider</th>
-                                        <th>View</th>
+                                        <th>Time</th>
+                                        <th>Message</th>
+                                        <th>Environment</th>
+                                        <th>Level</th>
+                                        <th>Url</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {logs.map((log, index) => {
                                         return (
-                                            <tr key={index} className={styles.adminLog}>
-                                                <td>Time: {new Date(log._time).toLocaleString()}</td>
-                                                <td>Message: {log.data.message}</td>
-                                                <td>Level: {log.data.level}</td>
-                                                <td>Url: {log.data.fields.path}</td>
+                                            <tr key={index}>
+                                                <td>{new Date(log._time).toLocaleString()}</td>
+                                                <td>{log.data.message}</td>
+                                                <td>{log.data.vercel.environment}</td>
+                                                <td>{log.data.level}</td>
+                                                <td>{log.data.fields.path}</td>
                                             </tr>
                                         )
                                     })}
                                     </tbody>
                                 </table>
-                            </div>
                         </div>
                     </div>
                 </Section>

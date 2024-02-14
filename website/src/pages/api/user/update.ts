@@ -3,14 +3,15 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
+import { Logger } from 'next-axiom';
 
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    
+    // Get the logger
+    const logger = new Logger()
 
     // Get the client
     const client = await getClient()
@@ -48,6 +49,9 @@ export default async function handler(
         if(user.length == 0) {
             return response.status(400).json({ error: 'User doesnt exists'});
         }
+
+        // Log the update
+        logger.info(`User ${id} updated`);
 
         // Return the user
         return response.status(200).json({ user: user[0] });

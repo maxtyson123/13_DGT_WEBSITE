@@ -80,6 +80,9 @@ export default async function handler(
         console.log(query);
         console.log("=====================================")
 
+        // Log the deletion
+        console.log(`Plant ${id} removed by ${session?.user?.email}`);
+
         // Remove the plant
         const data  = await makeQuery(query, client)
         return response.status(200).json({ message: "Remove sent", id: id });

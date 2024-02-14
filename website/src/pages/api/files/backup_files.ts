@@ -8,7 +8,7 @@ import path from 'path';
 import Client from "ftp";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
-
+import { Logger } from 'next-axiom';
 async function fetchFileUrlsFromFTP() {
     // FTP config
     const ftpConfig = {
@@ -135,6 +135,10 @@ export default async function handler(
 
         // Finalise the archive
         await archive.finalize();
+
+        // Log the backup request
+        const logger = new Logger()
+        logger.info(`Backup request by ${session?.user?.email}`);
 
         // Send the zip file
         response.setHeader('Content-Disposition', `attachment; data.zip`);

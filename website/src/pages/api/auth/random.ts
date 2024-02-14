@@ -10,6 +10,8 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
+
+
     // If the request is not a GET request, return an error
     if(request.method !== 'GET') {
         return response.status(405).json({ error: 'Method not allowed, please use GET' });
