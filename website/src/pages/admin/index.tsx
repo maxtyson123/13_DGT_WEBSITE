@@ -21,7 +21,7 @@ export default function Admin(){
     const pageName = "Admin";
     const log = useLogger();
     const client = new Client({
-        token: "xapt-0427919d-cc04-4c4c-a532-25a1be980c92",
+        token: process.env.NEXT_PUBLIC_AXIOM_TOKEN,
         orgId: "rongoa-mv7u",
     });
 
