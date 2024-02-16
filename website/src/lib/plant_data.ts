@@ -880,6 +880,7 @@ export function macronsForDisplay(plant: PlantData) {
     plant.small_description = macronCodeToChar(plant.small_description)
 
     // Loop through the sections
+    if(plant.sections !== undefined)
     for (let i = 0; i < plant.sections.length; i++) {
 
         switch (plant.sections[i].type) {

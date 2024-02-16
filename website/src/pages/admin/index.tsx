@@ -46,7 +46,7 @@ export default function Admin(){
         // Check the user permissions
         if(session?.user)
         if(!checkUserPermissions(session?.user as RongoaUser, "pages:admin:publicAccess")){
-            setError("You do not have permission toasdasd access this page.")
+            setError("You do not have permission to access this page.")
             setLoading(false)
             return
         }
@@ -73,6 +73,7 @@ export default function Admin(){
             setLoading(false)
             return
         }
+        setError("")
 
         // Store the number of users
         setNumberOfUsers(users.length)

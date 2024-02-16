@@ -68,6 +68,7 @@ export function AccountPage({dataID}: AccountPageProps){
     const [editor, setEditor] = React.useState<boolean>(false)
     const [myAccount, setMyAccount] = React.useState<boolean>(false)
     const [hidePrivate, setHidePrivate] = React.useState<boolean>(true)
+    const [isAdmin, setIsAdmin] = React.useState<boolean>(false)
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef("-1")
@@ -174,6 +175,8 @@ export function AccountPage({dataID}: AccountPageProps){
 
         setUserLastLogin(new Date(user.user_last_login).toLocaleString())
         setUserPosts("0")
+        setIsAdmin(user.user_type == ADMIN_USER_TYPE)
+
     }
 
 
@@ -477,14 +480,17 @@ export function AccountPage({dataID}: AccountPageProps){
                 {myAccount &&
                     <Section autoPadding>
                         <div className={globalStyles.gridCentre}>
-
+                            {isAdmin &&
+                                <div className={styles.actionItem}>
+                                    <Link href={"/admin"}><button className={styles.createButton}>Admin Pannel</button></Link>
+                                </div>
+                            }
                             <div className={styles.actionItem}>
                                 <button onClick={signOutUser} className={styles.signOutButton}>Sign Out</button>
                             </div>
 
                             <div className={styles.actionItem}>
-                                <button onClick={deleteAccount} className={styles.deleteAccountButton}>Delete Account
-                                </button>
+                                <button onClick={deleteAccount} className={styles.deleteAccountButton}>Delete Account</button>
                             </div>
                         </div>
                     </Section>
@@ -494,7 +500,7 @@ export function AccountPage({dataID}: AccountPageProps){
     }
 
 
-    return(
+    return (
         <>
 
             {/* Set up the page header and navbar */}

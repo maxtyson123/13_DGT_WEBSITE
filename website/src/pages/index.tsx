@@ -1,4 +1,6 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v21.6.1-win-x64
+// TODO: Fix Mushrooms page (and search potentially)
+// TODO: Manage Users page
 
 import React, {useEffect, useRef} from "react";
 

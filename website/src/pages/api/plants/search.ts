@@ -29,6 +29,7 @@ export default async function handler(
         getNames,
         mushrooms,
         page,
+        getExtras
     } = request.query;
 
     // Try querying the database
@@ -47,8 +48,14 @@ export default async function handler(
             shouldGetNames = `, english_name, maori_name, latin_name, preferred_name`;
         }
 
+        // If the user specified to get extra
+        let shouldGetExtras = ``;
+        if (getExtras) {
+            shouldGetExtras = `, ${tables.plant_type}, ${tables.last_modified}`;
+        }
+
         // Get the plant id from the plants database
-        query += ` SELECT id ${shouldGetNames} FROM plants`;
+        query += ` SELECT id ${shouldGetNames} ${shouldGetExtras} FROM plants`;
 
         // Select what the user entered
         if (name) {

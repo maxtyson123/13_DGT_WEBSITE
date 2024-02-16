@@ -82,3 +82,36 @@
 .dataTable tr:hover{
     background-color: var(--darker-secondary-gray);
 }
+
+.plantTable{
+    width: 100%;
+}
+
+.plantTable table{
+
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 8px 8px var(--shadow-min);
+}
+
+.plantTable td, .plantTable th {
+    border: 1px solid var(--darker-secondary-gray);
+    text-align: left;
+    padding: 8px;
+}
+.plantTable tr:nth-child(even) {
+    background-color: var(--secondary-gray);
+}
+
+.plantTable button{
+    background-color: var(--main-background);
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+    color: #ABAFB1;
+}
+
+.plantTable button:hover{
+    background-color: var(--darker-secondary-gray);
+    color: var(--secondary-gray)
+}

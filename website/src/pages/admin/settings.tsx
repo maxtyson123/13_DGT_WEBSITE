@@ -53,41 +53,50 @@ export default function Admin(){
     }, [session])
 
 
+    const handleFilesDownload = async () => {
+        try {
+            setLoading(true)
+            setLoadingMessage("Downloading files... (this may take a while)");
+            const response = await fetch('/api/files/backup_files');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "backup-files-" + new Date().toISOString().slice(0, 10) + ".zip";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        }
+        setLoading(false)
+    };
+
+    const handleDatabaseDownload = async () => {
+        try {
+            setLoading(true)
+            setLoadingMessage("Downloading database...")
+            const response = await fetch('/api/files/backup_database');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "backup-database-" + new Date().toISOString().slice(0, 10) + ".json";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        }
+        setLoading(false)
+    };
+
     const fetchData = async () => {
 
         // Set the loading message
         setLoading(true)
 
-        // Download the plants from the database
-        const plants = await makeCachedRequest("plant_admin_data", "/api/plants/search?getNames=true&getExtras=true&mushrooms=include")
-        if(!plants){
-            setError("Failed to fetch the plant data.")
-            setLoading(false)
-            return
-        }
-
-        // Convert the data to the PlantData type
-        const plantData = plants as PlantData[]
-        for(let i = 0; i < plantData.length; i++)
-            plantData[i] = macronsForDisplay(plantData[i])
-
-        // Set the plant data
-        setPlants(plantData)
-
         setLoading(false)
     }
 
-    const deletePlant = async (id: number) => {
-
-        // Send the remove request
-        const response = await makeRequestWithToken("get", "/api/plants/remove?id=" + id)
-
-        // Clear the cache
-        localStorage.removeItem("plant_admin_data")
-
-        // Reload the page
-        window.location.reload()
-    }
 
     const adminPage = () => {
         return (
@@ -104,7 +113,7 @@ export default function Admin(){
                                 <p>Current Time: {new Date().toLocaleString()}</p>
 
                                 <br/>
-                                <p> You are currently managing the plants in the database. You can add, edit, and delete plants from the database.</p>
+                                <p> You are currently managing the settings in the database. You can download a back up of files or the database.</p>
 
                                 <Link href={"/admin/"}><button>Return</button></Link>
                             </div>
@@ -115,31 +124,18 @@ export default function Admin(){
 
 
                 <Section autoPadding>
-                    <div className={styles.plantTable}>
-                        <div className={globalStyles.gridCentre}>
-                            <table>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Last Modified</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
+                    <div className={globalStyles.gridCentre}>
+                        <div className={globalStyles.container}>
+                            <div className={styles.adminHeaderContainer}>
+                                <h1>Settings</h1>
+                                <p> None yet </p>
 
-                                {pla.map((plant, index) => (
-                                    <tr key={index}>
-                                        <td> {plant.id} </td>
-                                        <td> {getNamesInPreference(plant)[0]} </td>
-                                        <td> {plant.plant_type} </td>
-                                        <td> {new Date(plant.last_modified).toLocaleString()} </td>
-                                        <td><Link href={"/plants/create?id=" + plant.id}>
-                                            <button>Edit</button>
-                                        </Link></td>
-                                        <td><button onClick={() => {deletePlant(plant.id)}}>Delete</button></td>
-                                    </tr>
-                                ))}
-                            </table>
+                                <br/>
+
+                                <h1> Backup </h1>
+                                <button onClick={handleFilesDownload}>Download Files</button>
+                                <button onClick={handleDatabaseDownload}>Download Database</button>
+                            </div>
                         </div>
                     </div>
                 </Section>

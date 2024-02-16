@@ -11,8 +11,6 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-    // Get the origin of the request
-    
 
     // Get the client
     const client = await getClient()
