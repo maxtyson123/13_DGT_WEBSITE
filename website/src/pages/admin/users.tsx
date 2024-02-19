@@ -83,66 +83,6 @@ export default function Admin(){
         setLoading(false)
     }
 
-    const deletePlant = async (id: number) => {
-
-
-        // Set loading message
-        setLoading(true)
-        setLoadingMessage("Deleting plant...")
-
-        // Send the remove request
-        const response = await makeRequestWithToken("get", "/api/plants/remove?id=" + id)
-
-        // Clear the cache
-        localStorage.removeItem("plant_admin_data")
-
-        // Reload the page
-        window.location.reload()
-        setLoading(false)
-    }
-
-    const getPlantExcel = async () => {
-
-
-        // Check if the input is valid
-        if(excelInput === ""){
-            setExcelError("Please enter a table name.")
-            setExcelState("error")
-            return
-        }
-
-        // Set the state to valid
-        setExcelState("success")
-
-        // Set the loading message
-        setLoading(true)
-        setLoadingMessage("Downloading plant data...")
-
-        // Download the plant data
-        const response = await makeRequestWithToken("get", "/api/plants/json?operation=convert&tableName=" + excelInput)
-
-        // Check if there was an error
-        if(!response){
-            setError("Failed to fetch the plant data.")
-            setLoading(false)
-            return
-        }
-
-        // Get the data
-        const data = response.data.data as PlantData;
-
-        // Download the data
-        const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = excelInput + ".json";
-        a.click();
-
-        // Clean up
-        window.URL.revokeObjectURL(url);
-        setLoading(false)
-    }
 
     const adminPage = () => {
         return (
@@ -159,7 +99,7 @@ export default function Admin(){
                                 <p>Current Time: {new Date().toLocaleString()}</p>
 
                                 <br/>
-                                <p> You are currently managing the plants in the database. You can add, edit, and delete plants from the database.</p>
+                                <p> You are currently managing the users in the database. You can add, edit permissions, and delete users from the database.</p>
 
                                 <Link href={"/admin/"}><button>Return</button></Link>
                             </div>
@@ -177,7 +117,7 @@ export default function Admin(){
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Type</th>
-                                    <th>Last Modified</th>
+                                    <th>Last Logged In</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
@@ -188,31 +128,11 @@ export default function Admin(){
                                         <td> {getNamesInPreference(plant)[0]} </td>
                                         <td> {plant.plant_type} </td>
                                         <td> {new Date(plant.last_modified).toLocaleString()} </td>
-                                        <td><Link href={"/plants/create?id=" + plant.id}>
-                                            <button>Edit</button>
-                                        </Link></td>
-                                        <td><button onClick={() => {deletePlant(plant.id)}}>Delete</button></td>
+                                        <td><Link href={"/plants/create?id=" + plant.id}>Edit</Link></td>
+                                        <td><Link href={"/plants/create?id=" + plant.id}>Delete</Link></td>
                                     </tr>
                                 ))}
                             </table>
-                        </div>
-                    </div>
-                </Section>
-
-
-                <Section autoPadding>
-
-                    <div className={globalStyles.gridCentre}>
-                        <div className={globalStyles.container}>
-                            <div className={styles.adminHeaderContainer}>
-                                <h1>Convert Plant Data</h1>
-                                <p> Download the plant data in JSON format from the excel file. </p>
-
-                                <br/>
-
-                                <SmallInput placeHolder={"Table Name"} required={true} state={excelState} changeEventHandler={setExcelInput} errorText={excelError}/>
-                                <button onClick={getPlantExcel}>Download Plant Data</button>
-                            </div>
                         </div>
                     </div>
                 </Section>
