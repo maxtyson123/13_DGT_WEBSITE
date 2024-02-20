@@ -101,7 +101,7 @@ export default function Admin(){
         setLoadingMessage("Fetching logs...")
 
 
-        const aplQuery = "['vercel'] | limit 100"
+        const aplQuery = "['vercel'] | where message contains "" | limit 100"
 
         const res = await client.query(aplQuery);
         if (!res.matches || res.matches.length === 0) {
