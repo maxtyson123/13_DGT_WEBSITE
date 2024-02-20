@@ -119,6 +119,7 @@ export interface UserPermissions {
             update: {
                 publicAccess: boolean;
                 internalAccess: boolean;
+                admin: boolean;
             };
         };
     };
@@ -264,6 +265,7 @@ export const getDefaultPermissions = () : UserPermissions => {
                 update: {
                     publicAccess: false,
                     internalAccess: true,
+                    admin: false,
                 },
             },
 

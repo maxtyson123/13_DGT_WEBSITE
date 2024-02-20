@@ -115,3 +115,13 @@
     background-color: var(--darker-secondary-gray);
     color: var(--secondary-gray)
 }
+
+.reloadButton{
+    margin-top: 50px;
+    background-color: var(--main-green);
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+    color: var(--text-light);
+    cursor: pointer;
+}

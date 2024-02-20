@@ -32,13 +32,17 @@ export default async function handler(
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:auth:random:access")
+    const canGetAll = await checkApiPermissions(request, response, session, client, makeQuery, "data:account:viewPrivateDetails")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // Try querying the database
     try {
 
+
+        const selector = canGetAll ? "*" : "id";
+
         // Get x random plant ids from the database
-        const plantIds = await makeQuery(`SELECT id FROM users ORDER BY ${USE_POSTGRES ? "RANDOM" : "RAND"}() LIMIT ${amount}`, client);
+        const plantIds = await makeQuery(`SELECT ${selector} FROM users ORDER BY ${USE_POSTGRES ? "RANDOM" : "RAND"}() LIMIT ${amount}`, client);
 
         // If there are no plants, return an error
         if (!plantIds) {

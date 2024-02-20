@@ -10,7 +10,7 @@ import {loginSection} from "@/pages/account";
 import {useSession} from "next-auth/react";
 import {Loading} from "@/components/loading";
 import {Error} from "@/components/error";
-import {checkUserPermissions, RongoaUser} from "@/lib/users";
+import {ADMIN_USER_TYPE, checkUserPermissions, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
@@ -25,7 +25,7 @@ export default function Admin(){
     const { data: session } = useSession()
 
     // Stats
-    const [pla, setPlants] = useState([] as PlantData[])
+    const [users, setUsers] = useState([] as RongoaUser[])
 
     // Load the data
     const [loading, setLoading] = useState(true)
@@ -64,25 +64,84 @@ export default function Admin(){
         setLoading(true)
 
         // Download the plants from the database
-        const plants = await makeCachedRequest("plant_admin_data", "/api/plants/search?getNames=true&getExtras=true&mushrooms=include")
-        if(!plants){
-            setError("Failed to fetch the plant data.")
+        const users = await makeCachedRequest("user_admin_data", "/api/auth/random?amount=9999999&extraData=true")
+        if(!users){
+            setError("Failed to fetch the user data.")
             setLoading(false)
             return
         }
 
-        // Convert the data to the PlantData type
-        const plantData = plants as PlantData[]
-        for(let i = 0; i < plantData.length; i++)
-            plantData[i] = macronsForDisplay(plantData[i])
+        // Set the users
+        let userData = users as RongoaUser[]
+        for(let i = 0; i < userData.length; i++){
+            userData[i].database = userData[i] as any;
+        }
 
-        console.log(plantData)
-
-        // Set the plant data
-        setPlants(plantData)
+        setUsers(userData)
         setLoading(false)
     }
 
+
+    const updateUser = async (id: number) => {
+        setLoading(true)
+        setLoadingMessage("Updating user...")
+
+        // Get the input values
+        const name = (document.getElementById(`name_${id}`) as HTMLInputElement).value
+        const email = (document.getElementById(`email_${id}`) as HTMLInputElement).value
+        const type = (document.getElementById(`type_${id}`) as HTMLInputElement).value
+        let permValue = 0
+
+        // Check the if correct type
+        switch (type){
+            case "Admin":
+                permValue = ADMIN_USER_TYPE
+                break
+            case "Editor":
+                permValue = EDITOR_USER_TYPE
+                break
+            case "Member":
+                permValue = MEMBER_USER_TYPE
+                break
+            default:
+                setError("Invalid user type")
+                setLoading(false)
+                return
+        }
+
+        // Check if name is not empty
+        if(name == ""){
+            setError("Name cannot be empty")
+            setLoading(false)
+            return
+        }
+
+        // Check if email is not empty
+        if(email == ""){
+            setError("Email cannot be empty")
+            setLoading(false)
+            return
+        }
+
+        const adminData = {
+            id: id,
+            name: name,
+            email: email,
+            type: permValue
+        }
+
+        const response = await makeRequestWithToken("get", "/api/user/update?adminData=" + JSON.stringify(adminData))
+
+        // Remove the item in the local storage
+        localStorage.removeItem("user_admin_data")
+
+        setLoading(false)
+    }
+
+
+    const reload = () => {
+        window.location.reload()
+    }
 
     const adminPage = () => {
         return (
@@ -112,24 +171,27 @@ export default function Admin(){
                 <Section autoPadding>
                     <div className={styles.plantTable}>
                         <div className={globalStyles.gridCentre}>
+                            <p> Type can be Admin, Member or Editor </p>
                             <table>
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Email</th>
                                     <th>Type</th>
+                                    <th>View Restricted</th>
                                     <th>Last Logged In</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th>Update</th>
                                 </tr>
 
-                                {pla.map((plant, index) => (
+                                {users.map((user, index) => (
                                     <tr key={index}>
-                                        <td> {plant.id} </td>
-                                        <td> {getNamesInPreference(plant)[0]} </td>
-                                        <td> {plant.plant_type} </td>
-                                        <td> {new Date(plant.last_modified).toLocaleString()} </td>
-                                        <td><Link href={"/plants/create?id=" + plant.id}>Edit</Link></td>
-                                        <td><Link href={"/plants/create?id=" + plant.id}>Delete</Link></td>
+                                        <td> {user.id} </td>
+                                        <td><input id={`name_${user.id}`} defaultValue={user.database.user_name}/></td>
+                                        <td><input id={`email_${user.id}`} defaultValue={user.database.user_email}/></td>
+                                        <td><input id={`type_${user.id}`} defaultValue={user.database.user_type == 2 ? "Admin" : user.database.user_type == 1 ? "Editor" : "Member"}/></td>
+                                        <td> {user.database.user_restricted_access ? "Yes" : "No"} </td>
+                                        <td> {new Date(user.database.user_last_login).toLocaleString()} </td>
+                                        <td><button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
                                     </tr>
                                 ))}
                             </table>
@@ -164,6 +226,9 @@ export default function Admin(){
 
                 <Section autoPadding>
                     <Error error={error}/>
+                    <div className={globalStyles.gridCentre}>
+                        <button className={styles.reloadButton} onClick={reload}>Retry</button>
+                    </div>
                 </Section>
 
                 :
