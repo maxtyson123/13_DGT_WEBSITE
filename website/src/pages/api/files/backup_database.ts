@@ -18,8 +18,9 @@ export default async function handler(
 
     // Try uploading the data to the database
     try {
-        let { api_key} = request.query;
-        
+
+        // Get all the data from the form in request.body
+
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables();
 

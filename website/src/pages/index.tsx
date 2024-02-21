@@ -25,6 +25,7 @@ import {ModalImage} from "@/components/modal";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
+import {any} from "prop-types";
 
 export default function Home() {
     const pageName = "Home"
@@ -44,10 +45,10 @@ export default function Home() {
     })
     const [featuredImageShown, setFeaturedImageShown] = React.useState(false)
 
-
-
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
+
+    const [backUpdata, setBackUpData] = React.useState({})
 
     const queryClient = new QueryClient()
 
@@ -198,6 +199,8 @@ export default function Home() {
     const toggleFeaturedImage = () => {
         setFeaturedImageShown(!featuredImageShown)
     }
+
+
 
     return (
         <>
