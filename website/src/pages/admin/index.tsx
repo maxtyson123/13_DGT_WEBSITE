@@ -109,9 +109,6 @@ export default function Admin(){
             return;
         }
 
-        // Reverse the logs
-        res.matches.reverse()
-
         console.log(res.matches);
         setLogs(res.matches)
 
