@@ -259,9 +259,9 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         `;
 
         // Log the query
-        console.log("=====================================")
-        console.log(query);
-        console.log("=====================================")
+        
+        console.log("DATABASE: "+ query);
+        
 
         // Make the query
         const data = await makeQuery(query, client)

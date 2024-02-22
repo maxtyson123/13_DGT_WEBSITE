@@ -74,9 +74,9 @@ export default async function handler(
         query += `DELETE FROM plants WHERE id = ${id};`;
 
         // Log the query
-        console.log("=====================================")
-        console.log(query);
-        console.log("=====================================")
+        
+        console.log("DATABASE: "+ query);
+        
 
         // Log the deletion
         console.log(`Plant ${id} removed by ${session?.user?.email}`);

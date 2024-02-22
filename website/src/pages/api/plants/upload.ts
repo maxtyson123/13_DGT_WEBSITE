@@ -251,9 +251,9 @@ export default async function handler(
         }
 
         // Log the query
-        console.log("=====================================")
-        console.log(query);
-        console.log("=====================================")
+        
+        console.log("DATABASE: "+ query);
+        
 
         // Run the query
         const data = await makeQuery(query, client, true)

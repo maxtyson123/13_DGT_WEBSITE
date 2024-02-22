@@ -1,9 +1,13 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, getTables, makeQuery} from "@/lib/databse";
+import {getClient, getTables, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import { Logger } from 'next-axiom';
+import {Form} from "multiparty";
+import {USE_POSTGRES} from "@/lib/constants";
+import Client from "ftp";
+import fs from "fs";
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -19,8 +23,6 @@ export default async function handler(
     // Try uploading the data to the database
     try {
 
-        // Get all the data from the form in request.body
-
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables();
 
@@ -28,6 +30,7 @@ export default async function handler(
         const session = await getServerSession(request, response, authOptions)
         const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:files:backup_database:access")
         if(!permission) return response.status(401).json({error: "Not Authorized"})
+
 
         // Create the query
         let query = ``;
@@ -57,16 +60,16 @@ export default async function handler(
         query += `SELECT * FROM plants;`;
 
         // Log the query
-        console.log("=====================================")
-        console.log(query);
-        console.log("=====================================")
+        console.log("DATABASE: "+ query);
 
         // Log the backup request
         logger.info(`Backup request by ${session?.user?.email}`);
 
         // Get the data
-        const data  = await makeQuery(query, client)
+        let data  = await makeQuery(query, client)
         return response.status(200).json({ data: data });
+
+
 
     } catch (error) {
         console.log("Error");

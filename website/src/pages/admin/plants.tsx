@@ -95,6 +95,7 @@ export default function Admin(){
 
         // Clear the cache
         localStorage.removeItem("plant_admin_data")
+        localStorage.removeItem("plant_stats")
 
         // Reload the page
         window.location.reload()

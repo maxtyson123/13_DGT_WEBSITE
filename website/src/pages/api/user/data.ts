@@ -48,7 +48,7 @@ export default async function handler(
             query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
 
         }
-        console.log(query);
+        console.log("DATABASE: "+ query);
         const user = await makeQuery(query, client)
 
         if(user.length == 0) {

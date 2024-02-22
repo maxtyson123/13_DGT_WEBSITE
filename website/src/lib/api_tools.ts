@@ -71,7 +71,6 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
 
     // Get the permissions of the user
     const isAllowed = checkPermissions(permissions, permissionToCheck)
-    console.log(permissionToCheck + ": " + isAllowed)
 
     // If the api key was used then store the action in the log
     if(api_key && api_key_data) {

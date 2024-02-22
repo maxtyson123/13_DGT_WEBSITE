@@ -41,7 +41,7 @@ export default async function handler(
 
         // Remove the user
         let query = `DELETE FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
-        console.log(query);
+        console.log("DATABASE: "+ query);
         const removed = makeQuery(query, client)
 
         // Return the user

@@ -17,12 +17,12 @@ import { useLogger } from 'next-axiom';
 import { Client } from "@axiomhq/axiom-node";
 import {getNamesInPreference, macronCodeToChar, macronsForDisplay, numberDictionary, PlantData} from "@/lib/plant_data";
 import {FileInput, ValidationState} from "@/components/input_sections";
-import {forEach} from "remeda";
+import {useRouter} from "next/router";
 
 export default function Admin(){
     const pageName = "Admin";
     const log = useLogger();
-
+    const router = useRouter()
     const { data: session } = useSession()
 
     // Back up file
@@ -101,112 +101,8 @@ export default function Admin(){
     }
 
 
-    const loadJSON = async (json: any) => {
 
-        // Check if there is data
-        if(!json || !json.data){
-            setFileError("No data in file")
-            setFileState("error")
-            return
-        }
-
-        let plantTable: PlantData[] = []
-        let attachmentTable: any[] = []
-        let craftTable: any[] = []
-        let customTable: any[] = []
-        let edibleTable: any[] = []
-        let medicinalTable: any[] = []
-        let monthsTable: any[] = []
-        let sourceTable: any[] = []
-
-        // Loop through the data
-        for(let i = 0; i < json.data.length; i++){
-
-            // Get the data
-            const data = json.data[i][0]
-
-            // Check if there is the id
-            if(!data.id){
-                setFileError("No vaild data")
-                setFileState("error")
-                return
-            }
-
-            // Get the table names
-            let tableNames = Object.keys(data)
-
-            // Check if it is attachment data
-            if(tableNames.includes("attachments_path")){
-                attachmentTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is craft data
-            if(tableNames.includes("craft_part_of_plant")){
-                craftTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is custom data
-            if(tableNames.includes("custom_title")){
-                customTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is edible data
-            if(tableNames.includes("edible_part_of_plant")){
-                edibleTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is medicinal data
-            if(tableNames.includes("medical_use")){
-                medicinalTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is months data
-            if(tableNames.includes("months_event")){
-                monthsTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is source data
-            if(tableNames.includes("source")){
-                sourceTable = json.data[i];
-                continue;
-            }
-
-            // Check if it is plant data
-            if(tableNames.includes("preferred_name"))
-                plantTable = json.data[i];
-        }
-
-        // Set the data
-        setFileState("success")
-        setFileError("")
-
-        // Send the data to the server
-        setLoading(true)
-        setLoadingMessage("Uploading data...")
-
-        // Use the api
-        const data = {
-            plantTable: plantTable,
-            attachmentTable: attachmentTable,
-            craftTable: craftTable,
-            customTable: customTable,
-            edibleTable: edibleTable,
-            medicinalTable: medicinalTable,
-            monthsTable: monthsTable,
-            sourceTable: sourceTable
-        }
-
-        await makeRequestWithToken("post", "/api/files/backup_database", data)
-
-    }
-
-    const setFile = (file: File | null) => {
+    const setFile = async (file: File | null) => {
 
 
         // Check if a file has been selected
@@ -223,23 +119,46 @@ export default function Admin(){
             return
         }
 
-        // Clear the error
+        // Set the data
+        setFileState("success")
         setFileError("")
 
-        // Get the contents of the file as a json object
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const contents = e.target?.result as string
-            try {
-                loadJSON(JSON.parse(contents))
+        // Send the data to the server
+        setLoading(true)
+        setLoadingMessage("Uploading data...")
 
-            } catch (error) {
-                setFileError("Error reading file")
-                setFileState("error")
-                return
+        // Create a new form data object and append the file to it
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('backup', "true");
+
+        try {
+            // Send the form data to the server
+            const response = await makeRequestWithToken('post', '/api/files/upload', formData);
+
+            // Check if the file was uploaded successfully
+            if (!response.data.error) {
+                console.log("File uploaded successfully")
+                setLoading(false)
             }
+
+            // Clear the cache
+            clearCache()
+
+            // Go back to the admin page
+            router.push("/admin")
+
+        } catch (error) {
+            setLoading(false)
+            console.error(error)
+            setError("An error occurred while uploading the file")
         }
-        reader.readAsText(file)
+    }
+
+
+    const clearCache = async () => {
+        localStorage.clear()
+        window.location.reload()
     }
 
     const adminPage = () => {
@@ -272,7 +191,7 @@ export default function Admin(){
                         <div className={globalStyles.container}>
                             <div className={styles.adminHeaderContainer}>
                                 <h1>Settings</h1>
-                                <p> None yet </p>
+                                <button onClick={clearCache}>Clear Cache</button>
 
                                 <br/>
 

@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
 
                 // Make the query
                 let query = `SELECT * FROM users WHERE ${tables.user_email} = '${token.email}'`;
-                console.log(query);
+                console.log("DATABASE: "+ query);
                 const user = await makeQuery(query, client)
 
                 if(user.length != 0) {
@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
 
                 // Check if there already is a user
                 let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}'`;
-                console.log(query);
+                console.log("DATABASE: "+ query);
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
 
@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
 
                     // Update the users login time and image
                     query = `UPDATE users SET ${tables.user_last_login} = NOW() WHERE ${tables.user_email} = '${user_email}'`;
-                    console.log(query);
+                    console.log("DATABASE: "+ query);
                     await makeQuery(query, client)
 
                     return true

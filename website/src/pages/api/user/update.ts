@@ -61,9 +61,8 @@ export default async function handler(
             query = `UPDATE users SET ${tables.user_name} = '${data.name}', ${tables.user_email} = '${data.email}', ${tables.user_type} = '${data.user_type}' WHERE id = ${data.id}`;
         }
 
-        console.log("====================================");
-        console.log(query);
-        console.log("====================================");
+        
+        console.log("DATABASE: "+ query);
         const user = await makeQuery(query, client)
 
         if(user.length == 0) {

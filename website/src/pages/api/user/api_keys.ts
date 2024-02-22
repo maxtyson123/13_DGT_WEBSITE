@@ -106,7 +106,7 @@ export default async function handler(
                     query = `SELECT * FROM api_key WHERE ${tables.user_id} = '${userId}'`;
                 }
 
-                console.log(query);
+                console.log("DATABASE: "+ query);
                 const keys = await makeQuery(query, client)
 
                 // Check if the user has any keys

@@ -27,6 +27,9 @@ import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
 import {any} from "prop-types";
 
+//TODO:
+// 1. Mushroom Check
+// 2. Index DB for cache
 export default function Home() {
     const pageName = "Home"
 
