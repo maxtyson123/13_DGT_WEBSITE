@@ -4,6 +4,7 @@ import {getClient, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
+import {Logger} from "next-axiom";
 
 
 export default async function handler(
@@ -49,45 +50,27 @@ export default async function handler(
         // Create the query
         let query = ``;
 
-        // Remove the information for attachment data
-        query += `DELETE FROM attachments WHERE plant_id = ${id};`;
+        // Define the tables to delete from
+        const tablesToDeleteFrom = [ "attachments", "craft", "custom", "edible", "medical", "months_ready_for_use", "source" ];
 
-        // Remove the information for the craft data
-        query += `DELETE FROM craft WHERE plant_id = ${id};`;
-
-        // Remove the information for the custom data
-        query += `DELETE FROM custom WHERE plant_id = ${id};`;
-
-        // Remove the information for the edible data
-        query += `DELETE FROM edible WHERE plant_id = ${id};`;
-
-        // Remove the information for the medical data
-        query += `DELETE FROM medical WHERE plant_id = ${id};`;
-
-        // Remove the information for the months ready for use data
-        query += `DELETE FROM months_ready_for_use WHERE plant_id = ${id};`;
-
-        // Remove the information for the source data
-        query += `DELETE FROM source WHERE plant_id = ${id};`;
+        // Remove the information
+        for (let table of tablesToDeleteFrom) {
+            query += `DELETE FROM ${table} WHERE plant_id = ${id};`;
+        }
 
         // Finally Remove the information for the plant data
         query += `DELETE FROM plants WHERE id = ${id};`;
 
-        // Log the query
-        
-        console.log("DATABASE: "+ query);
-        
-
-        // Log the deletion
-        console.log(`Plant ${id} removed by ${session?.user?.email}`);
-
         // Remove the plant
         const data  = await makeQuery(query, client)
+
+        // Get the logger
+        const logger = new Logger()
+        logger.warn(`Plant removed by ${session?.user?.email} with id ${id}`)
+
         return response.status(200).json({ message: "Remove sent", id: id });
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
 
         // If there is an error, return the error
         return response.status(500).json({ error: error });

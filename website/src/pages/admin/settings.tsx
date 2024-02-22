@@ -142,11 +142,14 @@ export default function Admin(){
                 setLoading(false)
             }
 
+            // Log that the admin imported a back up
+            log.info(`Admin ${session?.user?.email} imported back up`)
+
             // Clear the cache
             clearCache()
 
             // Go back to the admin page
-            router.push("/admin")
+            await router.push("/admin")
 
         } catch (error) {
             setLoading(false)
@@ -156,7 +159,7 @@ export default function Admin(){
     }
 
 
-    const clearCache = async () => {
+    const clearCache =  () => {
         localStorage.clear()
         window.location.reload()
     }

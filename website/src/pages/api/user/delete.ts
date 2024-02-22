@@ -4,6 +4,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {RongoaUser} from "@/lib/users";
 import {checkApiPermissions} from "@/lib/api_tools";
+import {Logger} from "next-axiom";
 
 export default async function handler(
     request: NextApiRequest,
@@ -41,17 +42,17 @@ export default async function handler(
 
         // Remove the user
         let query = `DELETE FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
-        console.log("DATABASE: "+ query);
         const removed = makeQuery(query, client)
+
+        // Get the logger
+        const logger = new Logger()
+        logger.warn(`User ${user_name} deleted their account`)
 
         // Return the user
         return response.status(200).json({data : removed});
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
-
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }

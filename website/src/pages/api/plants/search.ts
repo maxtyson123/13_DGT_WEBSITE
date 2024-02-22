@@ -108,10 +108,6 @@ export default async function handler(
             query += ` LIMIT ${amountPerPage} OFFSET ${(currentPage - 1) * amountPerPage}`
         }
 
-        console.log("=================================")
-        console.log(query)
-        console.log("=================================")
-
         // Return the plants that match the query
         const plantIds = await makeQuery(query, client)
 

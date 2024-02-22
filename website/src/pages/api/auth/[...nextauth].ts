@@ -26,14 +26,12 @@ export const authOptions: NextAuthOptions = {
             // If there isnt the user data in the token the fetch it
             if(!token.user) {
 
-                console.log("Refresh");
                 // Get the tables and client
                 const tables = getTables();
                 const client = await getClient()
 
                 // Make the query
                 let query = `SELECT * FROM users WHERE ${tables.user_email} = '${token.email}'`;
-                console.log("DATABASE: "+ query);
                 const user = await makeQuery(query, client)
 
                 if(user.length != 0) {
@@ -47,11 +45,9 @@ export const authOptions: NextAuthOptions = {
 
             if (trigger === "update" && session?.database) {
 
-                console.log("Update");
                 token.user = session.database;
                 // @ts-ignore
                 token.user.user_last_login = new Date().toISOString();
-                console.log(token.user);
             }
 
             return token
@@ -76,7 +72,6 @@ export const authOptions: NextAuthOptions = {
 
                 // Check if there already is a user
                 let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}'`;
-                console.log("DATABASE: "+ query);
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
 
@@ -84,7 +79,6 @@ export const authOptions: NextAuthOptions = {
 
                     // Update the users login time and image
                     query = `UPDATE users SET ${tables.user_last_login} = NOW() WHERE ${tables.user_email} = '${user_email}'`;
-                    console.log("DATABASE: "+ query);
                     await makeQuery(query, client)
 
                     return true
@@ -99,8 +93,6 @@ export const authOptions: NextAuthOptions = {
                 return true
 
             } catch (error) {
-                console.log("Error");
-                console.log(error);
 
                 // If there is an error, return the error
                 return false

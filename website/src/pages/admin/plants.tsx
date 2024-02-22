@@ -93,6 +93,9 @@ export default function Admin(){
         // Send the remove request
         const response = await makeRequestWithToken("get", "/api/plants/remove?id=" + id)
 
+        // Log that the admin has deleted the plant
+        log.info(`Admin ${session?.user?.email} has deleted the plant with id ${id}`)
+
         // Clear the cache
         localStorage.removeItem("plant_admin_data")
         localStorage.removeItem("plant_stats")

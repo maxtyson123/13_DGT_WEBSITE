@@ -56,11 +56,15 @@ export default async function handler(
         // Get the information for the source data
         query += `SELECT * FROM source;`;
 
+        // Get the information for the user data
+        query += `SELECT * FROM users;`;
+
+        // Get the information for the api key data
+        query += `SELECT * FROM api_key;`;
+
         // Finally Get the information for the plant data
         query += `SELECT * FROM plants;`;
 
-        // Log the query
-        console.log("DATABASE: "+ query);
 
         // Log the backup request
         logger.info(`Backup request by ${session?.user?.email}`);
@@ -72,9 +76,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
-
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }

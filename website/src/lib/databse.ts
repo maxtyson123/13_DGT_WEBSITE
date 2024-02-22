@@ -313,7 +313,7 @@ export async function makeQuery(query: string, client: any, rawData : boolean = 
         return data
 
     } catch (e) {
-        console.log("ERROR")
+        console.log("DATABASE ERROR: ")
         console.log(e)
         return null
     }

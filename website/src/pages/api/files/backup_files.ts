@@ -101,7 +101,6 @@ export default async function handler(
     // Get the client
     const client = await getClient()
 
-
     // Check if the user has the correct permissions
     const session = await getServerSession(request, response, authOptions)
     const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:files:backup_files:access")

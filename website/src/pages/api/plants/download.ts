@@ -258,18 +258,8 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
             ${joiner};
         `;
 
-        // Log the query
-        
-        console.log("DATABASE: "+ query);
-        
-
         // Make the query
         const data = await makeQuery(query, client)
-
-        // Debug
-        console.log("DATA")
-        console.log(data)
-        console.log("DONE")
 
         // If the data is empty, return an error
         if(!data)
@@ -279,8 +269,6 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         return ["success", data];
 
     } catch (error) {
-        console.log(error)
-
         // If there is an error, return the error
         return ["error", error];
     }

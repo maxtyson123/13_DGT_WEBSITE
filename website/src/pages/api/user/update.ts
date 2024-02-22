@@ -61,8 +61,6 @@ export default async function handler(
             query = `UPDATE users SET ${tables.user_name} = '${data.name}', ${tables.user_email} = '${data.email}', ${tables.user_type} = '${data.user_type}' WHERE id = ${data.id}`;
         }
 
-        
-        console.log("DATABASE: "+ query);
         const user = await makeQuery(query, client)
 
         if(user.length == 0) {
@@ -77,8 +75,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
 
         // If there is an error, return the error
         return response.status(500).json({ error: error });

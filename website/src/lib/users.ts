@@ -309,7 +309,6 @@ export function getUserPermissions(user: RongoaUser | null) {
     // If there is no user logged in it must be a guest
     if(user == null)
     {
-        console.log("User is guest");
         return permissions;
     }
 

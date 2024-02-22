@@ -43,13 +43,8 @@ export default async function handler(
             JOIN plants ON plants.id = months_ready_for_use.plant_id;
         `;
 
-        
-        console.log("DATABASE: "+ query);
-        
-
         // Get the data from the database
         const data = await makeQuery(query, client);
-        console.log(data);
 
         // If the data is empty, return an error
         if(!data) {

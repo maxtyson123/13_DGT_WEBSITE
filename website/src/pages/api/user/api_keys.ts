@@ -106,7 +106,6 @@ export default async function handler(
                     query = `SELECT * FROM api_key WHERE ${tables.user_id} = '${userId}'`;
                 }
 
-                console.log("DATABASE: "+ query);
                 const keys = await makeQuery(query, client)
 
                 // Check if the user has any keys
@@ -120,9 +119,6 @@ export default async function handler(
             case "clearLogs":
                 permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:clearLogs")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
-
-                // Check if the key id is set
-                console.log(id);
                 if(!id) return response.status(400).json({ error: 'Missing parameters'});
 
                 // Get the previous logs
@@ -154,9 +150,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
-
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }

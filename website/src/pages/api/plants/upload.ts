@@ -73,9 +73,6 @@ export default async function handler(
 
         } = request.body;
 
-        console.log("API/Upload")
-        console.log(request.body);
-
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
 
@@ -250,17 +247,8 @@ export default async function handler(
             
         }
 
-        // Log the query
-        
-        console.log("DATABASE: "+ query);
-        
-
         // Run the query
         const data = await makeQuery(query, client, true)
-
-        // Log the data
-        console.log("DATA")
-        console.log(data)
 
         if(!data)
             return response.status(500).json({ error: "No data returned" });
@@ -297,13 +285,10 @@ export default async function handler(
         }
 
         // Log the upload
-        logger.info(`Plant ${id} uploaded by ${session?.user?.email}`);
+        logger.info(`Plant ${id} created by ${session?.user?.email}`);
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {
-        // If there is an error, return the error
-        console.log("ERROR")
-        console.log(error)
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
     } finally {
 

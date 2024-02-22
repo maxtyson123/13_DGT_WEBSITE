@@ -46,8 +46,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
 
         // If there is an error, return the error
         return response.status(500).json({ error: error });

@@ -48,7 +48,6 @@ export default async function handler(
             query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
 
         }
-        console.log("DATABASE: "+ query);
         const user = await makeQuery(query, client)
 
         if(user.length == 0) {
@@ -60,8 +59,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
 
         // If there is an error, return the error
         return response.status(500).json({ error: error });

@@ -132,12 +132,16 @@ export default function Admin(){
 
         const response = await makeRequestWithToken("get", "/api/user/update?adminData=" + JSON.stringify(adminData))
 
+        // Log that the admin has updated the user
+        log.info(`Admin ${session?.user?.email} has updated the user with id ${id}`)
+
         // Remove the item in the local storage
         localStorage.removeItem("user_admin_data")
 
         setLoading(false)
     }
 
+    // TODO: Delete user . ban
 
     const reload = () => {
         window.location.reload()

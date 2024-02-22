@@ -119,7 +119,7 @@ export default function Admin(){
         setLoading(false)
 
         // Log that the user has logged in
-        log.info("User access admin database:", {user: session?.user?.name, email: session?.user?.email})
+        log.info("User access admin database: " + session?.user?.email)
     }
 
     const adminPage = () => {

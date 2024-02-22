@@ -294,13 +294,10 @@ export default async function handler(
                     // Get the path to upload to
                     const folder = `/${path}/${id}`
                     const remotePath = `${folder}/${file[0].originalFilename}`
-                    console.log(remotePath)
-
 
                     const directories = folder.split('/').filter(Boolean);
                     let currentDir = '';
 
-                    console.log("Creating directories")
                     directories.forEach((directory) => {
                         currentDir += `/${directory}`;
                         ftp.mkdir(currentDir, (ftpErr) => {
@@ -320,7 +317,6 @@ export default async function handler(
 
                         // If there is an error return it
                         if (ftpErr) {
-                            console.log(ftpErr)
                             return response.status(500).json({ error: 'Error uploading file.', data: ftpErr });
                         }
 
@@ -328,7 +324,8 @@ export default async function handler(
                         fs.unlinkSync(file[0].path);
 
                         // Log the upload
-                        console.log(`File uploaded to ${remotePath} by ${session?.user?.email}`);
+                        const logger = new Logger()
+                        logger.info(`File uploaded to ${remotePath} by ${session?.user?.email}`);
 
                         // Return that the file was uploaded
                         return response.status(200).json({ message: 'File uploaded successfully.', path: remotePath });
@@ -345,13 +342,10 @@ export default async function handler(
             });
         }
         catch(err) {
-            console.log(err)
             return response.status(500).json({message: "ERROR IN SERVER", error: err });
         }
     } catch (error) {
         // If there is an error, return the error
-        console.log("ERROR")
-        console.log(error)
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
     }
 }

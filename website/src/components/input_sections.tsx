@@ -629,7 +629,6 @@ export function FileInput({placeHolder, defaultValue,  required, state, errorTex
 
         // If there is no file selected then return
         if (!selectedFile) {
-            console.log('Please select a file.');
             return;
         }
 

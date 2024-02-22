@@ -30,7 +30,6 @@ export default async function handler(
     const handleGet = async (userID: string) => {
         // Fetch the plants
         let query = `SELECT id, ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.last_modified}, ${tables.plant_type} FROM plants WHERE ${tables.author} LIKE '%,${userID},%' OR ${tables.author} LIKE '${userID},%' OR ${tables.author} LIKE '%,${userID}' OR ${tables.author} LIKE '${userID}'`;
-        console.log("DATABASE: "+ query);
         const plants = await makeQuery(query, client)
 
         if (plants.length == 0) {
@@ -65,9 +64,6 @@ export default async function handler(
 
 
     } catch (error) {
-        console.log("Error");
-        console.log(error);
-
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }
