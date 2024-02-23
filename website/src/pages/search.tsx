@@ -51,8 +51,6 @@ export default function Search(){
         const query = urlParams.get('query');
 
         const includeMushrooms = urlParams.get('include_mushrooms');
-        console.log(includeMushrooms)
-        console.log(includeMushrooms == "true")
         setIncludeMushrooms(includeMushrooms == "true")
 
         // Check if the query is null

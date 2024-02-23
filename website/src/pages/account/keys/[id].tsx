@@ -43,12 +43,13 @@ export default function KeyViewer(){
         let user = urlData[1]
 
         // Try to parse the id
-        let localId = parseInt(id[0])
+        let localId = parseInt(urlData[0])
         if(isNaN(localId)){
             setError("Invalid Key ID")
             setLoading(false)
             return
         }
+
 
         try {
             // Create the url
@@ -69,6 +70,7 @@ export default function KeyViewer(){
 
             // Get the data
             let apikeys = await makeCachedRequest("userApiKeysData_"+user, apiUrl)
+            console.log(apikeys)
             if (!apikeys){
                 setError("Failed to fetch API key data")
                 setLoading(false)

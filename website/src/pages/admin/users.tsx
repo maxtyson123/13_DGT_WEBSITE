@@ -24,6 +24,8 @@ export default function Admin(){
 
     const { data: session } = useSession()
 
+    const permissionOptions = ["Member", "Editor", "Admin"]
+
     // Stats
     const [users, setUsers] = useState([] as RongoaUser[])
 
@@ -77,6 +79,9 @@ export default function Admin(){
             userData[i].database = userData[i] as any;
         }
 
+        // Sort the users by id
+        userData.sort((a, b) => a.database.id - b.database.id)
+
         setUsers(userData)
         setLoading(false)
     }
@@ -90,23 +95,13 @@ export default function Admin(){
         const name = (document.getElementById(`name_${id}`) as HTMLInputElement).value
         const email = (document.getElementById(`email_${id}`) as HTMLInputElement).value
         const type = (document.getElementById(`type_${id}`) as HTMLInputElement).value
-        let permValue = 0
+        let permValue = permissionOptions.indexOf(type)
 
         // Check the if correct type
-        switch (type){
-            case "Admin":
-                permValue = ADMIN_USER_TYPE
-                break
-            case "Editor":
-                permValue = EDITOR_USER_TYPE
-                break
-            case "Member":
-                permValue = MEMBER_USER_TYPE
-                break
-            default:
-                setError("Invalid user type")
-                setLoading(false)
-                return
+        if(permValue === -1){
+            setError("Invalid type")
+            setLoading(false)
+            return
         }
 
         // Check if name is not empty
@@ -138,10 +133,24 @@ export default function Admin(){
         // Remove the item in the local storage
         localStorage.removeItem("user_admin_data")
 
-        setLoading(false)
+        // Reload the page
+        window.location.reload()
     }
 
-    // TODO: Delete user . ban
+    const deleteUser = async (id: number) => {
+
+        // Set the loading message
+        setLoading(true)
+        setLoadingMessage("Deleting user...")
+
+        // Remove the user
+
+        // Remove the item in the local storage
+        localStorage.removeItem("user_admin_data")
+
+        // Reload the page
+        window.location.reload()
+    }
 
     const reload = () => {
         window.location.reload()
@@ -175,7 +184,6 @@ export default function Admin(){
                 <Section autoPadding>
                     <div className={styles.plantTable}>
                         <div className={globalStyles.gridCentre}>
-                            <p> Type can be Admin, Member or Editor </p>
                             <table>
                                 <tr>
                                     <th>ID</th>
@@ -192,10 +200,18 @@ export default function Admin(){
                                         <td> {user.id} </td>
                                         <td><input id={`name_${user.id}`} defaultValue={user.database.user_name}/></td>
                                         <td><input id={`email_${user.id}`} defaultValue={user.database.user_email}/></td>
-                                        <td><input id={`type_${user.id}`} defaultValue={user.database.user_type == 2 ? "Admin" : user.database.user_type == 1 ? "Editor" : "Member"}/></td>
+                                        <td>
+                                            <select id={`type_${user.id}`}
+                                                    defaultValue={permissionOptions[user.database.user_type]}>
+                                                <option value="Admin">Admin</option>
+                                                <option value="Editor">Editor</option>
+                                                <option value="Member">Member</option>
+                                            </select>
+                                        </td>
                                         <td> {user.database.user_restricted_access ? "Yes" : "No"} </td>
                                         <td> {new Date(user.database.user_last_login).toLocaleString()} </td>
-                                        <td><button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
+                                        <td>
+                                            <button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
                                     </tr>
                                 ))}
                             </table>

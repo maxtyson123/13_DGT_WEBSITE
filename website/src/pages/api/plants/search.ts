@@ -60,6 +60,8 @@ export default async function handler(
         // Select what the user entered
         if (name) {
 
+
+            //TODO: Find a better way to include these characters
             let replaceChars = ["ā", "ē", "ī", "ō", "ū", "Ā", "Ē", "Ī", "Ō", "Ū", "a", "e", "i", "o", "u", "A", "E", "I", "O", "U"]
 
             // Replace macrons with wildcard
@@ -79,6 +81,7 @@ export default async function handler(
 
         switch (mushrooms) {
                 case "include":
+                    console.log("include")
                     break;
 
                 case "exclude":
@@ -109,6 +112,7 @@ export default async function handler(
         }
 
         // Return the plants that match the query
+        console.log(query)
         const plantIds = await makeQuery(query, client)
 
         // If there are no plants, return an error
