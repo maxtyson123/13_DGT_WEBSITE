@@ -144,6 +144,7 @@ export default function Admin(){
         setLoadingMessage("Deleting user...")
 
         // Remove the user
+        const response = await makeRequestWithToken("get", "/api/user/delete?id=" + id)
 
         // Remove the item in the local storage
         localStorage.removeItem("user_admin_data")
@@ -193,6 +194,7 @@ export default function Admin(){
                                     <th>View Restricted</th>
                                     <th>Last Logged In</th>
                                     <th>Update</th>
+                                    <th>Remove</th>
                                 </tr>
 
                                 {users.map((user, index) => (
@@ -210,8 +212,8 @@ export default function Admin(){
                                         </td>
                                         <td> {user.database.user_restricted_access ? "Yes" : "No"} </td>
                                         <td> {new Date(user.database.user_last_login).toLocaleString()} </td>
-                                        <td>
-                                            <button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
+                                        <td><button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
+                                        <td><button onClick={() => {deleteUser(user.database.id)}}>Remove</button></td>
                                     </tr>
                                 ))}
                             </table>

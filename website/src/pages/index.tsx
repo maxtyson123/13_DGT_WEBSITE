@@ -1,5 +1,4 @@
 //set PATH=%PATH%;C:\Users\max.tyson\Downloads\node-v21.6.1-win-x64
-// TODO: Manage Users page
 
 import React, {useEffect, useRef} from "react";
 
@@ -24,11 +23,8 @@ import {ModalImage} from "@/components/modal";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
-import {any} from "prop-types";
+import {any} from "prop-types"
 
-//TODO:
-// 1. Mushroom Check
-// 2. Index DB for cache
 export default function Home() {
     const pageName = "Home"
 

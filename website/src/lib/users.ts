@@ -107,6 +107,7 @@ export interface UserPermissions {
             delete: {
                 publicAccess: boolean;
                 internalAccess: boolean;
+                others: boolean;
             };
             email: {
                 publicAccess: boolean;
@@ -250,6 +251,7 @@ export const getDefaultPermissions = () : UserPermissions => {
                 delete: {
                     publicAccess: false,
                     internalAccess: true,
+                    others: false,
                 },
 
                 email: {

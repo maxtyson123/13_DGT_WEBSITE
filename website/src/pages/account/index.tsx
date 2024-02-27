@@ -246,15 +246,14 @@ export function AccountPage({dataID}: AccountPageProps){
         // Get the users api keys
         try {
 
-            setLoadingMessage("Fetching API keys...")
-
-
             // Create the url
             let apiUrl = "/api/user/api_keys?operation=fetch"
             if(localId != 0 && checkUserPermissions(session?.user as RongoaUser, "data:account:viewPrivateDetails")) {
                 console.log("Can view private details")
                 apiUrl += "&publicUserID=" + localId
             }
+
+            setLoadingMessage("Fetching API keys...")
 
             // Get the data
             let apikeys = await makeCachedRequest("userApiKeysData_" + localId, apiUrl)
@@ -276,6 +275,9 @@ export function AccountPage({dataID}: AccountPageProps){
     }
 
     const signOutUser = async () => {
+
+        // Clear the cache
+        localStorage.clear()
         await signOut({callbackUrl: "/"})
     }
 
@@ -469,7 +471,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                     </tbody>
                                 </table>
 
-                                {editor && <button className={styles.createButton} onClick={() => router.push("/account/keys/create")}>Create Key</button> }
+                                {myAccount && <button className={styles.createButton} onClick={() => router.push("/account/keys/create")}>Create Key</button> }
 
                             </div>
                         </DropdownSection>
@@ -555,7 +557,7 @@ export const loginSection = () => {
     return (
         <>
             <div className={globalStyles.gridCentre}>
-                <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
+                <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in / Sign Up</button>
             </div>
         </>
     )

@@ -20,6 +20,7 @@ export default async function handler(
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:delete:access")
+    const adminDelete = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:delete:others")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     try {
@@ -36,9 +37,15 @@ export default async function handler(
         const user = session.user as RongoaUser;
         const user_email = user.database.user_email;
         const user_name = user.database.user_name;
+        const { id } = request.query;
 
         // Remove the user
         let query = `DELETE FROM users WHERE ${tables.user_email} = '${user_email}' AND ${tables.user_name} = '${user_name}'`;
+
+        // Check if we delete another user
+        if(id && adminDelete){
+            query = `DELETE FROM users WHERE id = ${id}`;
+        }
         const removed = makeQuery(query, client)
 
         // Get the logger
