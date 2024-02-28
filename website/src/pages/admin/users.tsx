@@ -28,6 +28,7 @@ export default function Admin(){
 
     // Stats
     const [users, setUsers] = useState([] as RongoaUser[])
+    const [sortedField, setSortedField] = useState("id")
 
     // Load the data
     const [loading, setLoading] = useState(true)
@@ -157,6 +158,33 @@ export default function Admin(){
         window.location.reload()
     }
 
+    useEffect(() => {
+
+        // Sort the array based on the field
+        switch (sortedField) {
+            case "id":
+                users.sort((a, b) => a.database.id - b.database.id)
+                break
+
+            case "name":
+                users.sort((a, b) => a.database.user_name.localeCompare(b.database.user_name))
+                break
+
+            case "email":
+                users.sort((a, b) => a.database.user_email.localeCompare(b.database.user_email))
+                break
+
+            case "type":
+                users.sort((a, b) => a.database.user_type - b.database.user_type)
+                break
+
+            case "last_login":
+                users.sort((a, b) => new Date(a.database.user_last_login).getTime() - new Date(b.database.user_last_login).getTime())
+                break
+        }
+    }, [sortedField]);
+
+
     const adminPage = () => {
         return (
             <>
@@ -187,12 +215,12 @@ export default function Admin(){
                         <div className={globalStyles.gridCentre}>
                             <table>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Type</th>
-                                    <th>View Restricted</th>
-                                    <th>Last Logged In</th>
+                                    <th onClick={() => {setSortedField("id")}}>ID</th>
+                                    <th onClick={() => {setSortedField("name")}}>Name</th>
+                                    <th onClick={() => {setSortedField("email")}}>Email</th>
+                                    <th onClick={() => {setSortedField("type")}}>Type</th>
+                                    <th onClick={() => {setSortedField("restricted")}}>Restricted Access</th>
+                                    <th onClick={() => {setSortedField("last_login")}}>Last Login</th>
                                     <th>Update</th>
                                     <th>Remove</th>
                                 </tr>

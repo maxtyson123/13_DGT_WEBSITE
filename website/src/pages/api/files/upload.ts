@@ -242,6 +242,7 @@ export default async function handler(
                 const { file } = files;
 
                 // If the backup is true, import the backup
+                if(backup)
                 if(backup[0] === "true"){
 
                     // Read the file from the file system into a JSON object

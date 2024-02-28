@@ -24,6 +24,24 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+          protocol: 'https',
+          hostname: 'raw.githubusercontent.com',
+          port: '',
+          pathname: '/**',
+          },
+          {
+          protocol: 'https',
+          hostname: 'github.com',
+          port: '',
+          pathname: '/**',
+          },
+          {
+          protocol: 'https',
+          hostname: 'avatars.githubusercontent.com',
+          port: '',
+          pathname: '/**',
+          },
     ],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) =>

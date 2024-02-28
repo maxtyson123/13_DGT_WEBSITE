@@ -158,9 +158,11 @@ export async function makeRequestWithToken (
     } catch (error : any) {
         // Handle errors
         console.error('Request failed:', error.message);
-        throw error;
+
+        let data = {data: {error: error.message}}
+        return data as any;
     }
-};
+}
 
 
 export async function makeCachedRequest(key: string, url: string){

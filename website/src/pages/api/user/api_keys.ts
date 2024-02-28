@@ -61,8 +61,11 @@ export default async function handler(
                 // Check if the key name and permissions are set
                 if(!keyName || !permissions) return response.status(400).json({ error: 'Missing parameters'});
 
-                // Generate the missing parameters
-                let key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                // Generate the key
+                let key = "";
+                for (let i = 0; i < 20; i++)
+                    key += Math.random().toString(36).substring(2, 4);
+
                 let logs = [{time: Date.now(), action: "Created"}]
 
                 // Insert the key
@@ -70,7 +73,7 @@ export default async function handler(
                 const inserted = await makeQuery(query, client);
 
                 // Log the creation
-                logger.info(`User ${userId} created a new API key with name ${keyName} and permissions ${permissions}`);
+                logger.info(`User ${userId} created a new API key ${key}`);
 
                 // Return the key
                 return response.status(200).json({ data: { key: key }});

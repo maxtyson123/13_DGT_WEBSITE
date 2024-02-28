@@ -81,7 +81,6 @@ export default async function handler(
 
         switch (mushrooms) {
                 case "include":
-                    console.log("include")
                     break;
 
                 case "exclude":
@@ -112,7 +111,6 @@ export default async function handler(
         }
 
         // Return the plants that match the query
-        console.log(query)
         const plantIds = await makeQuery(query, client)
 
         // If there are no plants, return an error

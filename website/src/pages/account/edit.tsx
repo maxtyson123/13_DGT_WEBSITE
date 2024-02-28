@@ -179,6 +179,7 @@ export default function EditAccount() {
 
             try {
                 // Send the form data to the server
+                console.log("Uploading file")
                 const response = await makeRequestWithToken('post', '/api/files/upload', formData);
 
                 // Check if the file was uploaded successfully
@@ -237,7 +238,7 @@ export default function EditAccount() {
 
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre}>
-                        <div className={styles.accountContainer}>
+                        <div className={globalStyles.container}>
 
                             <div className={styles.lastLogin}>
                                 <p>  Last Login: {userLastLogin} </p>
