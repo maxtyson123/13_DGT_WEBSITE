@@ -1,8 +1,5 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/plants/create.module.css";
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import {
     AdvancedTextArea,
     DropdownInput,
@@ -45,6 +42,7 @@ import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Loading} from "@/components/loading";
 import {createToken, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
+import {Layout} from "@/components/layout";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -2665,304 +2663,261 @@ export default function CreatePlant() {
 
     }, [imageInfoRef.current])
 
-    // Check if the user is allowed to edit plants
-    useEffect(() => {
-
-        // Check if there is a session
-        if(!session || !session.user)
-            return
-
-        // Check if the user can edit
-        if(!checkUserPermissions(session.user as RongoaUser, "pages:plants:edit"))
-            router.push(router.query.id ? "/plants/" + router.query.id : "/")
-
-    }, [session])
-
     return (
         <>
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
+            <Layout pageName={"Create Plant"} loginRequired header={"Creating plant: " + plantName} error={error} loadingMessage={progressMessage} permissionRequired={"pages:plants:edit"}>
+                <div className={"row"}>
 
-            {/* Set up the page header */}
-            <PageHeader size={"medium"}>
-                <h1 className={styles.title}>Creating plant: {plantName}</h1>
-            </PageHeader>
+                    {/* If there is an error then show it */}
+                    <div id={"errorSection"}>
+                        {error === "" ? null : <Error error={error}/>}
+                    </div>
 
-            <Section autoPadding>
+                    {/* Divide the page into a left and right column*/}
+                    <div className={"column"}>
 
-                {/* If something is set to be loading on the page then show the loading screen */}
-                { isLoading ?
-                    <Loading progressMessage={progressMessage}/>
-                    : null}
+                        {/* Basic plant information */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
 
-                {/* If the user is not signed in then show the sign-in button */}
-                { !session ?
-                    <>
-                        <div className={styles.userDetails}>
-                            <p> Please sign in to edit plants  </p>
-                            <button onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in</button>
-                        </div>
-                    </>
-                    :
-                    <>
-                        <div className={"row"}>
+                            {/* Section title */}
+                            <h1 className={styles.sectionTitle}>Basic Info</h1>
 
-                            {/* If there is an error then show it */}
-                            <div id={"errorSection"}>
-                                { error === "" ? null : <Error error={error}/>}
+                            {/* Plant name */}
+                            <div className={styles.formItem} id={"english-name"}>
+                                <SmallInput
+                                    placeHolder={"English Name"}
+                                    defaultValue={importedJSON.english_name}
+                                    required={false}
+                                    state={englishNameValidationState[0]}
+                                    errorText={englishNameValidationState[1]}
+                                    changeEventHandler={handleEnglishNameChange}
+                                />
+                            </div>
+                            <div className={styles.formItem} id={"maori-name"}>
+                                <SmallInput
+                                    placeHolder={"Maori Name"}
+                                    defaultValue={importedJSON.maori_name}
+                                    required={false}
+                                    state={maoriNameValidationState[0]}
+                                    errorText={maoriNameValidationState[1]}
+                                    changeEventHandler={handleMaoriNameChange}
+                                />
+                            </div>
+                            <div className={styles.formItem} id={"latin-name"}>
+                                <SmallInput
+                                    placeHolder={"Latin Name"}
+                                    defaultValue={importedJSON.latin_name}
+                                    required={false}
+                                    state={latinNameValidationState[0]}
+                                    errorText={latinNameValidationState[1]}
+                                    changeEventHandler={handleLatinNameChange}
+                                />
                             </div>
 
-                            {/* Divide the page into a left and right column*/}
-                            <div className={"column"}>
-
-                                {/* Basic plant information */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-
-                                    {/* Section title */}
-                                    <h1 className={styles.sectionTitle}>Basic Info</h1>
-
-                                    {/* Plant name */}
-                                    <div className={styles.formItem} id={"english-name"} >
-                                        <SmallInput
-                                            placeHolder={"English Name"}
-                                            defaultValue={importedJSON.english_name}
-                                            required={false}
-                                            state={englishNameValidationState[0]}
-                                            errorText={englishNameValidationState[1]}
-                                            changeEventHandler={handleEnglishNameChange}
-                                        />
-                                    </div>
-                                    <div className={styles.formItem} id={"maori-name"}>
-                                        <SmallInput
-                                            placeHolder={"Maori Name"}
-                                            defaultValue={importedJSON.maori_name}
-                                            required={false}
-                                            state={maoriNameValidationState[0]}
-                                            errorText={maoriNameValidationState[1]}
-                                            changeEventHandler={handleMaoriNameChange}
-                                        />
-                                    </div>
-                                    <div className={styles.formItem} id={"latin-name"}>
-                                        <SmallInput
-                                            placeHolder={"Latin Name"}
-                                            defaultValue={importedJSON.latin_name}
-                                            required={false}
-                                            state={latinNameValidationState[0]}
-                                            errorText={latinNameValidationState[1]}
-                                            changeEventHandler={handleLatinNameChange}
-                                        />
-                                    </div>
-
-                                    {/* Preferred plant name */}
-                                    <div className={styles.formItem} id={"preferred-name"}>
-                                        <DropdownInput
-                                            placeHolder={"Preferred Name"}
-                                            defaultValue={importedJSON.preferred_name}
-                                            required={true}
-                                            state={preferredNameValidationState[0]}
-                                            errorText={preferredNameValidationState[1]}
-                                            options={["English", 'Maori', "Latin"]}
-                                            changeEventHandler={handleDropDownChange}
-                                        />
-                                    </div>
-
-                                    {/* Plant Small Description */}
-                                    <div className={styles.formItem} id={"small-description"}>
-                                        <SimpleTextArea
-                                            placeHolder={"Small Description"}
-                                            defaultValue={importedJSON.small_description}
-                                            required={true}
-                                            state={smallDescriptionValidationState[0]}
-                                            errorText={smallDescriptionValidationState[1]}
-                                            changeEventHandler={handleSmallDescriptionChange}
-                                        />
-                                    </div>
-
-                                    {/* Plant Large Description */}
-                                    <div className={styles.formItem} id={"large-description"}>
-                                        <AdvancedTextArea
-                                            placeHolder={"Long Description"}
-                                            defaultValue={importedJSON.long_description}
-                                            required={true}
-                                            state={largeDescriptionValidationState[0]}
-                                            errorText={largeDescriptionValidationState[1]}
-                                            changeEventHandler={handleLargeDescriptionChange}
-                                        />
-                                    </div>
-
-                                    {/* Plant Location */}
-                                    <div className={styles.formItem} id={"location"}>
-                                        <DropdownInput
-                                            placeHolder={"Location"}
-                                            defaultValue={importedJSON.location_found}
-                                            required={true}
-                                            state={locationValidationState[0]}
-                                            errorText={locationValidationState[1]}
-                                            options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
-                                            changeEventHandler={handleLocationChange}
-                                        />
-                                    </div>
-
-                                    {/* Plant Display Image */}
-                                    <div className={styles.formItem} id={"display-image"} >
-                                        <DropdownInput
-                                            key={renderKeyDisplayImage}
-                                            placeHolder={"Display Image"}
-                                            defaultValue={importedJSON.display_image}
-                                            required={true}
-                                            state={displayImageValidationState[0]}
-                                            errorText={displayImageValidationState[1]}
-                                            options={displayImageRef.current}
-                                            changeEventHandler={handleDisplayImageChange}
-                                        />
-                                    </div>
-
-                                    {/* Plant Type */}
-                                    <div className={styles.formItem} id={"plant-type"}>
-                                        <DropdownInput
-                                            placeHolder={"Plant Type"}
-                                            defaultValue={importedJSON.plant_type}
-                                            required={true}
-                                            state={plantTypeValidationState[0]}
-                                            errorText={plantTypeValidationState[1]}
-                                            options={["Plant", "Mushroom"]}
-                                            changeEventHandler={handlePlantTypeChange}
-                                        />
-                                    </div>
-
-                                </div>
-
-                                {/* Months ready for use */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Date"}
-                                        infoRef={dateInfoRef}
-                                        newInfo={newDateInfo}
-                                        key={renderKeyDate}
-                                        setRenderKey={setRenderKeyDate}
-                                    />
-                                </div>
-
-                                {/* Edible use */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Edible Use"}
-                                        infoRef={edibleInfoRef}
-                                        newInfo={newEdibleInfo}
-                                        key={renderKeyEdible}
-                                        setRenderKey={setRenderKeyEdible}
-                                        imageRef={imageInfoRef}
-                                    />
-                                </div>
-
-                                {/* Medical use */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Medical Use"}
-                                        infoRef={medicalInfoRef}
-                                        newInfo={newMedicalInfo}
-                                        key={renderKeyMedical}
-                                        setRenderKey={setRenderKeyMedical}
-                                        imageRef={imageInfoRef}
-                                    />
-                                </div>
-
-                                {/* Craft use */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Craft Use"}
-                                        infoRef={craftInfoRef}
-                                        newInfo={newCraftInfo}
-                                        key={renderKeyCraft}
-                                        setRenderKey={setRenderKeyCraft}
-                                        imageRef={imageInfoRef}
-                                    />
-                                </div>
-
-                                {/* Source */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Source"}
-                                        infoRef={sourceInfoRef}
-                                        newInfo={newSourceInfo}
-                                        key={renderKeySource}
-                                        setRenderKey={setRenderKeySource}
-                                    />
-                                </div>
-
-                                {/* Custom Section */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Custom Section"}
-                                        infoRef={customInfoRef}
-                                        newInfo={newCustomInfo}
-                                        key={renderKeyCustom}
-                                        setRenderKey={setRenderKeyCustom}
-                                    />
-                                </div>
+                            {/* Preferred plant name */}
+                            <div className={styles.formItem} id={"preferred-name"}>
+                                <DropdownInput
+                                    placeHolder={"Preferred Name"}
+                                    defaultValue={importedJSON.preferred_name}
+                                    required={true}
+                                    state={preferredNameValidationState[0]}
+                                    errorText={preferredNameValidationState[1]}
+                                    options={["English", 'Maori', "Latin"]}
+                                    changeEventHandler={handleDropDownChange}
+                                />
                             </div>
 
-                            {/* Right Hand Column */}
-                            <div className={"column"}>
-
-                                {/* Images */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"Image"}
-                                        infoRef={imageInfoRef}
-                                        newInfo={newImage}
-                                        key={renderKeyImage}
-                                        setRenderKey={setRenderKeyImage}
-                                    />
-                                </div>
-
-                                {/* File */}
-                                <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                                    <InfoDisplayed
-                                        name={"File"}
-                                        infoRef={fileInfoRef}
-                                        newInfo={newFileInfo}
-                                        key={renderKeyFile}
-                                        setRenderKey={setRenderKeyFile}
-                                    />
-                                </div>
+                            {/* Plant Small Description */}
+                            <div className={styles.formItem} id={"small-description"}>
+                                <SimpleTextArea
+                                    placeHolder={"Small Description"}
+                                    defaultValue={importedJSON.small_description}
+                                    required={true}
+                                    state={smallDescriptionValidationState[0]}
+                                    errorText={smallDescriptionValidationState[1]}
+                                    changeEventHandler={handleSmallDescriptionChange}
+                                />
                             </div>
+
+                            {/* Plant Large Description */}
+                            <div className={styles.formItem} id={"large-description"}>
+                                <AdvancedTextArea
+                                    placeHolder={"Long Description"}
+                                    defaultValue={importedJSON.long_description}
+                                    required={true}
+                                    state={largeDescriptionValidationState[0]}
+                                    errorText={largeDescriptionValidationState[1]}
+                                    changeEventHandler={handleLargeDescriptionChange}
+                                />
+                            </div>
+
+                            {/* Plant Location */}
+                            <div className={styles.formItem} id={"location"}>
+                                <DropdownInput
+                                    placeHolder={"Location"}
+                                    defaultValue={importedJSON.location_found}
+                                    required={true}
+                                    state={locationValidationState[0]}
+                                    errorText={locationValidationState[1]}
+                                    options={["Coastal", "Inland", "Forest", "Ground", "Canopy", "Everywhere", "Marsh"]}
+                                    changeEventHandler={handleLocationChange}
+                                />
+                            </div>
+
+                            {/* Plant Display Image */}
+                            <div className={styles.formItem} id={"display-image"}>
+                                <DropdownInput
+                                    key={renderKeyDisplayImage}
+                                    placeHolder={"Display Image"}
+                                    defaultValue={importedJSON.display_image}
+                                    required={true}
+                                    state={displayImageValidationState[0]}
+                                    errorText={displayImageValidationState[1]}
+                                    options={displayImageRef.current}
+                                    changeEventHandler={handleDisplayImageChange}
+                                />
+                            </div>
+
+                            {/* Plant Type */}
+                            <div className={styles.formItem} id={"plant-type"}>
+                                <DropdownInput
+                                    placeHolder={"Plant Type"}
+                                    defaultValue={importedJSON.plant_type}
+                                    required={true}
+                                    state={plantTypeValidationState[0]}
+                                    errorText={plantTypeValidationState[1]}
+                                    options={["Plant", "Mushroom"]}
+                                    changeEventHandler={handlePlantTypeChange}
+                                />
+                            </div>
+
                         </div>
 
-                        <div className={"row"}>
-
-                            <div className={globalStyles.gridCentre}>
-
-                                {/* Upload to DB */}
-                                <div className={styles.formItem}>
-                                    <button onClick={importPlant} className={styles.submitDataButton}> Import JSON File </button>
-                                </div>
-
-                                {/* Generate JSON Button */}
-                                <div className={styles.formItem}>
-                                    <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON File </button>
-                                </div>
-
-                                {/* Upload to DB */}
-                                <div className={styles.formItem}>
-                                    <button onClick={uploadPlant} className={styles.submitDataButton}> Upload to database </button>
-                                </div>
-
-                            </div>
+                        {/* Months ready for use */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Date"}
+                                infoRef={dateInfoRef}
+                                newInfo={newDateInfo}
+                                key={renderKeyDate}
+                                setRenderKey={setRenderKeyDate}
+                            />
                         </div>
-                    </>
-                }
-            </Section>
 
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
+                        {/* Edible use */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Edible Use"}
+                                infoRef={edibleInfoRef}
+                                newInfo={newEdibleInfo}
+                                key={renderKeyEdible}
+                                setRenderKey={setRenderKeyEdible}
+                                imageRef={imageInfoRef}
+                            />
+                        </div>
 
-            <ScrollToTop/>
+                        {/* Medical use */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Medical Use"}
+                                infoRef={medicalInfoRef}
+                                newInfo={newMedicalInfo}
+                                key={renderKeyMedical}
+                                setRenderKey={setRenderKeyMedical}
+                                imageRef={imageInfoRef}
+                            />
+                        </div>
 
+                        {/* Craft use */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Craft Use"}
+                                infoRef={craftInfoRef}
+                                newInfo={newCraftInfo}
+                                key={renderKeyCraft}
+                                setRenderKey={setRenderKeyCraft}
+                                imageRef={imageInfoRef}
+                            />
+                        </div>
 
+                        {/* Source */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Source"}
+                                infoRef={sourceInfoRef}
+                                newInfo={newSourceInfo}
+                                key={renderKeySource}
+                                setRenderKey={setRenderKeySource}
+                            />
+                        </div>
+
+                        {/* Custom Section */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Custom Section"}
+                                infoRef={customInfoRef}
+                                newInfo={newCustomInfo}
+                                key={renderKeyCustom}
+                                setRenderKey={setRenderKeyCustom}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right Hand Column */}
+                    <div className={"column"}>
+
+                        {/* Images */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"Image"}
+                                infoRef={imageInfoRef}
+                                newInfo={newImage}
+                                key={renderKeyImage}
+                                setRenderKey={setRenderKeyImage}
+                            />
+                        </div>
+
+                        {/* File */}
+                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
+                            <InfoDisplayed
+                                name={"File"}
+                                infoRef={fileInfoRef}
+                                newInfo={newFileInfo}
+                                key={renderKeyFile}
+                                setRenderKey={setRenderKeyFile}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className={"row"}>
+
+                    <div className={globalStyles.gridCentre}>
+
+                        {/* Upload to DB */}
+                        <div className={styles.formItem}>
+                            <button onClick={importPlant} className={styles.submitDataButton}> Import JSON
+                                File
+                            </button>
+                        </div>
+
+                        {/* Generate JSON Button */}
+                        <div className={styles.formItem}>
+                            <button onClick={downloadPlant} className={styles.submitDataButton}> Generate JSON
+                                File
+                            </button>
+                        </div>
+
+                        {/* Upload to DB */}
+                        <div className={styles.formItem}>
+                            <button onClick={uploadPlant} className={styles.submitDataButton}> Upload to
+                                database
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </Layout>
         </>
     )
 

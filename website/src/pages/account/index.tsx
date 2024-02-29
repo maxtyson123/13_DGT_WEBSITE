@@ -27,6 +27,7 @@ import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} fro
 import {Error} from "@/components/error";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {Loading} from "@/components/loading";
+import {Layout} from "@/components/layout";
 
 export default function Account() {
 
@@ -62,7 +63,6 @@ export function AccountPage({dataID}: AccountPageProps){
     const [userID, setUserID] = React.useState<number>(0)
 
     // States
-    const [loading, setLoading] = React.useState<boolean>(false)
     const [loadingMessage, setLoadingMessage] = React.useState<string>("Loading...")
     const[error, setError] = useState<string>("")
     const [editor, setEditor] = React.useState<boolean>(false)
@@ -81,12 +81,6 @@ export function AccountPage({dataID}: AccountPageProps){
             // Check if it is to be used
             if(dataID != "0"){
 
-                if(!checkUserPermissions(session?.user as RongoaUser, "pages:account:publicAccess")){
-                    setError("You must be logged in to view other users")
-                    setLoading(false)
-                    return
-                }
-
                 // Try converting the id to a number
                 let localId = parseInt(dataID as string)
 
@@ -94,7 +88,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 if(isNaN(localId)){
                     console.log("Not a number")
                     setError("User not found")
-                    setLoading(false)
+                    setLoadingMessage("")
                     return
                 }
 
@@ -127,7 +121,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
             let user = session.user as RongoaUser
             if(!user){
-                setLoading(false)
+                setLoadingMessage("")
                 return
             }
 
@@ -182,9 +176,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
     const fetchData = async (localId: number = 0) => {
 
-        setLoading(true)
-
-        console.log("Fetching data")
+        setLoadingMessage("")
 
         // If we are viewing a user then we need to get their data
         if(localId != 0) {
@@ -195,7 +187,7 @@ export function AccountPage({dataID}: AccountPageProps){
                 const user = await makeCachedRequest("userData_" + localId, "/api/user/data?id=" + localId)
                 if(!user){
                     setError("User not found")
-                    setLoading(false)
+                    setLoadingMessage("")
                     return
                 }
                 loadUserData(user)
@@ -205,7 +197,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
             } catch (e) {
                 console.log(e)
-                setLoading(false)
+                setLoadingMessage("")
                 setError("User not found")
                 return
             }
@@ -271,7 +263,7 @@ export function AccountPage({dataID}: AccountPageProps){
         }
 
         console.log("Finished fetching data")
-        setLoading(false)
+        setLoadingMessage("")
     }
 
     const signOutUser = async () => {
@@ -302,9 +294,11 @@ export function AccountPage({dataID}: AccountPageProps){
         fetchData(userID)
     }
 
-    const accountSection = () => {
-        return (
-            <>
+
+    return (
+        <>
+            <Layout pageName={pageName} loginRequired error={error} loadingMessage={loadingMessage} header={userName + "'s Account"} permissionRequired={"pages:account:publicAccess"}>
+
                 {/* Users Information */}
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre} key={dataID as string}>
@@ -497,68 +491,7 @@ export function AccountPage({dataID}: AccountPageProps){
                         </div>
                     </Section>
                 }
-            </>
-        )
-    }
-
-
-    return (
-        <>
-
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
-
-
-            {/* Header for the page */}
-            <Section>
-                <PageHeader size={"small"}>
-                    <div className={styles.welcomeContainer}>
-                        <h1>{userName ? userName + "'s Account" : "Your Account"}</h1>
-                    </div>
-                </PageHeader>
-            </Section>
-
-
-            {/* Loading Message */}
-            {loading && <Loading progressMessage={loadingMessage}/>}
-
-
-            {/* Error Message */}
-            {error ?
-
-                <Section autoPadding>
-                    <Error error={error}/>
-                </Section>
-
-                :
-                <>
-                    {!userID && !session?
-                        loginSection()
-                        :
-                        accountSection()
-                    }
-                </>
-            }
-
-
-
-
-            {/* Footer */}
-            <Section>
-                <Footer/>
-            </Section>
-        </>
-
-    )
-}
-
-export const loginSection = () => {
-    return (
-        <>
-            <div className={globalStyles.gridCentre}>
-                <button className={styles.signInButton} onClick={() => signIn()}><FontAwesomeIcon icon={faPerson}/> Sign in / Sign Up</button>
-            </div>
+            </Layout>
         </>
     )
 }

@@ -13,6 +13,7 @@ import {getFromCache, saveToCache} from "@/lib/cache";
 import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import Link from "next/link";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {Layout} from "@/components/layout";
 
 interface MonthEntry {
     id: number,
@@ -134,58 +135,40 @@ export default function Calendar(){
 
     return(
         <>
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
+            <Layout pageName={pageName} header={pageName}>
+                {/* Calendar */}
+                <Section autoPadding>
 
+                    {/* Calendar header */}
+                    <div className={styles.calendarContainer}>
 
-            {/* Page header */}
-            <Section>
-               <PageHeader size={"small"}>
-                     <h1 className={styles.title}>Calendar</h1>
-               </PageHeader>
-            </Section>
+                        {/* The current month and the buttons to change the month */}
+                        <div className={styles.month}>
+                            <button onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft}/></button>
+                            <h1>{monthName}</h1>
+                            <button onClick={nextMonth}><FontAwesomeIcon icon={faArrowRight}/></button>
+                        </div>
 
-            {/* Calendar */}
-            <Section autoPadding>
+                        <div className={styles.plants}>
 
-                {/* Calendar header */}
-                <div className={styles.calendarContainer}>
+                            {/* Map the entry's for this month */}
+                            {monthEntries
+                                .map((entry, index) => {
+                                    return <EventEntryDisplayed key={entry.plant + index} entry={entry} month={month}
+                                                                prevMonth={prevMonth} nextMonth={nextMonth}/>;
 
-                    {/* The current month and the buttons to change the month */}
-                    <div className={styles.month}>
-                        <button onClick={prevMonth}><FontAwesomeIcon icon={faArrowLeft} /></button>
-                        <h1>{monthName}</h1>
-                        <button onClick={nextMonth}> <FontAwesomeIcon icon={faArrowRight}/> </button>
+                                })}
+                        </div>
                     </div>
 
-                    <div className={styles.plants}>
 
-                        {/* Map the entry's for this month */}
-                        {monthEntries
-                            .map((entry, index) => {
-                               return <EventEntryDisplayed key={entry.plant + index} entry={entry} month={month} prevMonth={prevMonth} nextMonth={nextMonth}/>;
-
-                        })}
-                    </div>
-                </div>
-
-
-            </Section>
-
-
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
-            <ScrollToTop/>
-
-           
+                </Section>
+            </Layout>
         </>
     )
 }
 
-interface EventEntryDisplayedProps{
+interface EventEntryDisplayedProps {
     entry: MonthEntry,
     month: number
     prevMonth: () => void,

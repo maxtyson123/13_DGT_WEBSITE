@@ -82,38 +82,43 @@
 .dataTable tr:hover{
     background-color: var(--darker-secondary-gray);
 }
-
-.plantTable{
+.dataTable{
     width: 100%;
-}
-
-.plantTable table{
-
     border-collapse: collapse;
-    width: 100%;
-    box-shadow: 0 8px 8px var(--shadow-min);
 }
 
-.plantTable td, .plantTable th {
-    border: 1px solid var(--darker-secondary-gray);
+.dataTable td, .dataTable th{
+    padding: 8px;
     text-align: left;
-    padding: 8px;
-}
-.plantTable tr:nth-child(even) {
-    background-color: var(--secondary-gray);
 }
 
-.plantTable button{
-    background-color: var(--main-background);
-    padding: 8px;
-    border-radius: 8px;
-    width: 100%;
-    color: #ABAFB1;
+/* Change the font to monospace */
+.dataTable td{
+    font-family: 'Courier New', Courier, monospace;
 }
 
-.plantTable button:hover{
+.dataTable thead{
+    background-color: var(--main-green);
+    color: var(--text-light);
+
+    letter-spacing: 0.05em;
+}
+
+.dataTable button{
+    border-radius: 15px;
+    color: var(--text-light);
+    cursor: pointer;
+    background-color: var(--main-green);
+    padding: 5px 10px 5px 10px;
+}
+
+.dataTable button:hover{
+    background-color: var(--darker-main-green);
+}
+
+/* On hover highlight the row */
+.dataTable tr:hover{
     background-color: var(--darker-secondary-gray);
-    color: var(--secondary-gray)
 }
 
 .reloadButton{

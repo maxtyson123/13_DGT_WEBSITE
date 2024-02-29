@@ -11,6 +11,7 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
 import {Error} from "@/components/error";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {Layout} from "@/components/layout";
 
 export default function Search(){
     const pageName = "Search"
@@ -138,100 +139,91 @@ export default function Search(){
 
     }
 
-    return(
+    const header = () => {
+        return (
+            <div className={styles.searchHeaderContainer}>
+
+                {/* Search Title */}
+                <h1>Search</h1>
+
+                {/* Search Stats */}
+                <div className={styles.statsContainer}>
+
+                    {/* What the user searched for */}
+                    <div className={styles.statContainer}>
+                        <p> Query: </p>
+                        <p>{query ? query : "None"}</p>
+                    </div>
+
+                    {/* How long the search took */}
+                    <div className={styles.statContainer}>
+                        <p> Duration: </p>
+                        <p>{duration}ms</p>
+                    </div>
+
+                    {/* How many results were found */}
+                    <div className={styles.statContainer}>
+                        <p> Amount: </p>
+                        <p>{amount}</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
         <>
-            {/* Page header */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
 
-            <Section>
-                <PageHeader size={"medium"}>
-                    <div className={styles.searchHeaderContainer}>
+           <Layout pageName={pageName} header={header()}>
 
-                        {/* Search Title */}
-                        <h1>Search</h1>
+                {/* Search box */}
+                <Section autoPadding>
+                    <div className={styles.searchBoxContainer}>
 
-                        {/* Search Stats */}
-                        <div className={styles.statsContainer}>
+                        {/* Search box */}
+                        <input
+                            type={"text"}
+                            id={"searchBox"}
+                            placeholder={"Search for a plant..."}
+                            value={query ? query : ""}
+                            className={styles.searchBox}
+                            onChange={(e) => {
+                                setQuery(e.target.value)
+                            }}
+                        />
 
-                            {/* What the user searched for */}
-                            <div className={styles.statContainer}>
-                                <p> Query:  </p>
-                                <p>{ query ? query : "None"}</p>
-                            </div>
+                        {/* Search button */}
+                        <button
+                            className={styles.searchButton}
+                            onClick={() => {
+                                const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
+                                const includeMushrooms = (document.getElementById("plant_type") as HTMLInputElement).checked
+                                window.location.href = `/search?query=${userInput}&include_mushrooms=${includeMushrooms}`
+                            }}>
+                            <FontAwesomeIcon icon={faSearch}/>
+                        </button>
+                    </div>
+                    <div className={styles.searchBoxContainer}>
+                        <div className={styles.searchFilterContainer}>
+                            <h3>Filter by:</h3>
 
-                            {/* How long the search took */}
-                            <div className={styles.statContainer}>
-                                <p> Duration: </p>
-                                <p>{duration}ms</p>
-                            </div>
-
-                            {/* How many results were found */}
-                            <div className={styles.statContainer}>
-                                <p> Amount: </p>
-                                <p>{amount}</p>
+                            <div className={styles.searchFilter}>
+                                <input type="checkbox" id="plant_type" name="plant_type" defaultChecked={includeMushrooms}/>
+                                <label htmlFor="plant_type"> Include Mushrooms in search? </label>
                             </div>
                         </div>
                     </div>
-                </PageHeader>
-            </Section>
 
-            {/* Search box */}
-            <Section autoPadding>
-                <div className={styles.searchBoxContainer}>
+                </Section>
 
-                    {/* Search box */}
-                    <input
-                        type={"text"}
-                        id={"searchBox"}
-                        placeholder={"Search for a plant..."}
-                        value={query ? query : "" }
-                        className={styles.searchBox}
-                        onChange={(e) => {
-                            setQuery(e.target.value)
-                        }}
-                    />
+                {/* Search results */}
+                <Section autoPadding>
+                    <div className={styles.searchResultsContainer}>
+                        {results}
 
-                    {/* Search button */}
-                    <button
-                        className={styles.searchButton}
-                        onClick={() => {
-                            const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
-                            const includeMushrooms = (document.getElementById("plant_type") as HTMLInputElement).checked
-                            window.location.href = `/search?query=${userInput}&include_mushrooms=${includeMushrooms}`
-                        }}>
-                        <FontAwesomeIcon icon={faSearch}/>
-                    </button>
-                </div>
-                <div className={styles.searchBoxContainer}>
-                    <div className={styles.searchFilterContainer}>
-                        <h3>Filter by:</h3>
-
-                        <div className={styles.searchFilter}>
-                            <input type="checkbox" id="plant_type" name="plant_type" defaultChecked={includeMushrooms}/>
-                            <label htmlFor="plant_type"> Include Mushrooms in search? </label>
-                        </div>
                     </div>
-                </div>
-
-            </Section>
-
-            {/* Search results */}
-            <Section autoPadding>
-                <div className={styles.searchResultsContainer}>
-                    {results}
-
-                </div>
-            </Section>
-
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
-            <ScrollToTop/>
-
-           
+                </Section>
+           </Layout>
         </>
     )
 }

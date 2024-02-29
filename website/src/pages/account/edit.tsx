@@ -13,7 +13,7 @@ import {Error} from "@/components/error";
 import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
 import {Loading} from "@/components/loading";
 import {makeRequestWithToken} from "@/lib/api_tools";
-import {loginSection} from "@/pages/account/index";
+import {Layout} from "@/components/layout";
 
 export default function EditAccount() {
     const pageName = "Account";
@@ -34,8 +34,7 @@ export default function EditAccount() {
     const [validUserName, setValidUserName] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserEmail, setValidUserEmail] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserImage, setValidUserImage] = React.useState<[ValidationState, string]>(["normal", "no error"])
-    const [loading, setLoading] = React.useState<boolean>(false)
-    const [loadingMessage, setLoadingMessage] = React.useState<string>("")
+     const [loadingMessage, setLoadingMessage] = React.useState<string>("")
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
@@ -162,8 +161,6 @@ export default function EditAccount() {
         if(!await validateUserDetails())
             return
 
-        setLoading(true)
-
         const userID = (session?.user as RongoaUser).database.id.toString()
 
         // Upload the user image if there is one
@@ -232,103 +229,52 @@ export default function EditAccount() {
         await router.push("/account")
     }
 
-    const editSection = () => {
-        return (
-            <>
-
-                <Section autoPadding>
-                    <div className={globalStyles.gridCentre}>
-                        <div className={globalStyles.container}>
-
-                            <div className={styles.lastLogin}>
-                                <p>  Last Login: {userLastLogin} </p>
-                                <div>
-                                    <button className={styles.updateButton} onClick={() => updateUserData()}>Update</button>
-                                    <button className={styles.updateButton} onClick={() => router.push("/account")}>Cancel</button>
-                                </div>
-                            </div>
-
-                            <div className={styles.mainInfo}>
-                                <div className={styles.accountImageInput}>
-                                    <FileInput
-                                        placeHolder={"Enter your profile picture"}
-                                        required={false}
-                                        state={validUserImage[0]}
-                                        errorText={validUserImage[1]}
-                                        defaultValue={[userImage, "image"]}
-                                        changeEventHandler={setUserLocalImage}
-                                        size={[250,250]}
-                                        styleClass={styles.accountImage}
-                                    />
-                                </div>
-                                <SmallInput
-                                    placeHolder={"Enter your nickname"}
-                                    required={false}
-                                    state={validUserName[0]}
-                                    errorText={validUserName[1]}
-                                    defaultValue={userName}
-                                    changeEventHandler={setUserName}
-                                />
-                                <p className={styles.toolTip}> Click to Change</p>
-
-                                <h2> {userEmail}</h2>
-                                <h2> {userRole}</h2>
-                            </div>
-                        </div>
-                    </div>
-
-                </Section>
-
-            </>
-        )
-    }
-
 
     return(
         <>
+           <Layout pageName={pageName} header={"Edit Account"} loginRequired loadingMessage={loadingMessage} error={error}>
+               <Section autoPadding>
+                   <div className={globalStyles.gridCentre}>
+                       <div className={globalStyles.container}>
 
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
+                           <div className={styles.lastLogin}>
+                               <p>  Last Login: {userLastLogin} </p>
+                               <div>
+                                   <button className={styles.updateButton} onClick={() => updateUserData()}>Update</button>
+                                   <button className={styles.updateButton} onClick={() => router.push("/account")}>Cancel</button>
+                               </div>
+                           </div>
 
+                           <div className={styles.mainInfo}>
+                               <div className={styles.accountImageInput}>
+                                   <FileInput
+                                       placeHolder={"Enter your profile picture"}
+                                       required={false}
+                                       state={validUserImage[0]}
+                                       errorText={validUserImage[1]}
+                                       defaultValue={[userImage, "image"]}
+                                       changeEventHandler={setUserLocalImage}
+                                       size={[250,250]}
+                                       styleClass={styles.accountImage}
+                                   />
+                               </div>
+                               <SmallInput
+                                   placeHolder={"Enter your nickname"}
+                                   required={false}
+                                   state={validUserName[0]}
+                                   errorText={validUserName[1]}
+                                   defaultValue={userName}
+                                   changeEventHandler={setUserName}
+                               />
+                               <p className={styles.toolTip}> Click to Change</p>
 
-            {/* Header for the page */}
-            <Section>
-                <PageHeader size={"small"}>
-                    <div className={styles.welcomeContainer}>
-                        <h1>Your Account</h1>
-                    </div>
-                </PageHeader>
-            </Section>
-
-
-
-            {/* Error Message */}
-            {error && <>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <Error error={error}/>
-            </>
-            }
-
-            {/* Loading Message */}
-            {loading && <Loading progressMessage={loadingMessage}/>}
-
-            {/* Account Editor */}
-            {!session?
-                loginSection()
-                :
-                editSection()
-            }
-
-
-            {/* Footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
+                               <h2> {userEmail}</h2>
+                               <h2> {userRole}</h2>
+                           </div>
+                       </div>
+                   </div>
+               </Section>
+          </Layout>
         </>
 
     )

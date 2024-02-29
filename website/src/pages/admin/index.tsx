@@ -1,21 +1,13 @@
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import Section from "@/components/section";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/admin.module.css";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
-import Footer from "@/components/footer";
-import {loginSection} from "@/pages/account";
 import {useSession} from "next-auth/react";
-import {Loading} from "@/components/loading";
-import {Error} from "@/components/error";
-import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {makeCachedRequest} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
 import { Client } from "@axiomhq/axiom-node";
-import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
+import {Layout} from "@/components/layout";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -34,22 +26,13 @@ export default function Admin(){
     const [logs, setLogs] = useState([] as any[])
 
     // Load the data
-    const [loading, setLoading] = useState(true)
-    const [loadingMessage, setLoadingMessage] = useState("Loading...")
+    const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
 
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
     useEffect(() => {
-
-        // Check the user permissions
-        if(session?.user)
-        if(!checkUserPermissions(session?.user as RongoaUser, "pages:admin:publicAccess")){
-            setError("You do not have permission to access this page.")
-            setLoading(false)
-            return
-        }
 
         // Fetch the data
         if (dataFetch.current)
@@ -61,16 +44,14 @@ export default function Admin(){
 
 
     const fetchData = async () => {
-
-        // Set the loading message
-        setLoading(true)
+        
 
         // Fetch the user count
         setLoadingMessage("Fetching user count...")
         const users = await makeCachedRequest("user_stats", "/api/auth/random?amount=9999999")
         if(!users){
             setError("User data not found")
-            setLoading(false)
+            setLoadingMessage("")
             return
         }
         setError("")
@@ -83,7 +64,7 @@ export default function Admin(){
         const plants = await makeCachedRequest("plant_stats", "/api/plants/uses")
         if(!plants){
             setError("Plant data not found")
-            setLoading(false)
+            setLoadingMessage("")
             return
         }
 
@@ -113,17 +94,17 @@ export default function Admin(){
         setLogs(res.matches)
 
         // Finish loading
-        setLoading(false)
+        setLoadingMessage("")
 
         // Log that the user has logged in
         log.info("User access admin database: " + session?.user?.email)
     }
 
-    const adminPage = () => {
-        return (
-            <>
 
-                {/* Section for the welcome message and search box */}
+    return (
+        <>
+
+            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired header={"Admin"} permissionRequired={"pages:admin:publicAccess"}>
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre}>
                         <div className={globalStyles.container}>
@@ -166,80 +147,35 @@ export default function Admin(){
 
 
                     <div className={globalStyles.gridCentre}>
-                            <div className={styles.tableContainer}>
-                                <table className={styles.dataTable}>
-                                    <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Message</th>
-                                        <th>Environment</th>
-                                        <th>Level</th>
-                                        <th>Url</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {logs.map((log, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{new Date(log._time).toLocaleString()}</td>
-                                                <td>{log.data.message}</td>
-                                                <td>{log.data.vercel.environment}</td>
-                                                <td>{log.data.level}</td>
-                                                <td>{log.data.fields.path}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                    </tbody>
-                                </table>
+                        <div className={styles.tableContainer}>
+                            <table className={styles.dataTable}>
+                                <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Message</th>
+                                    <th>Environment</th>
+                                    <th>Level</th>
+                                    <th>Url</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {logs.map((log, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{new Date(log._time).toLocaleString()}</td>
+                                            <td>{log.data.message}</td>
+                                            <td>{log.data.vercel.environment}</td>
+                                            <td>{log.data.level}</td>
+                                            <td>{log.data.fields.path}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </Section>
-
-            </>
-        )
-    }
-
-    return (
-        <>
-
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
-
-
-            {/* Header for the page */}
-            <Section>
-                <PageHeader size={"medium"}>
-                    <h1>Admin</h1>
-                </PageHeader>
-            </Section>
-
-            {/* Loading Message */}
-            {loading && <Loading progressMessage={loadingMessage}/>}
-
-
-            {/* Error Message */}
-            {error ?
-
-                <Section autoPadding>
-                    <Error error={error}/>
-                </Section>
-
-                :
-                <>
-                    {!session ?
-                        loginSection()
-                        :
-                        adminPage()
-                    }
-                </>
-            }
-
-
-            {/* Footer */}
-            <Section>
-                <Footer/>
-            </Section>
+            </Layout>
         </>
     )
 }

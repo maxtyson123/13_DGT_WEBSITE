@@ -8,6 +8,7 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/plants/mushrooms.module.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {InfiniteLoading} from "@/components/infinteLoading";
+import {Layout} from "@/components/layout";
 
 export default function Mushrooms(){
     const pageName = "Mushrooms"
@@ -16,40 +17,15 @@ export default function Mushrooms(){
 
     return(
         <>
-            {/* The header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
+            <Layout pageName={pageName} header={"Plants"}>
+                {/* Section title */}
+                <h1 className={styles.title}>All Mushrooms</h1>
+                <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>
 
-            {/* The main page header is just the plant index title */}
-            <PageHeader size={"small"}>
-                <div className={styles.header}>
-                    <h1>Mushrooms</h1>
-                </div>
-            </PageHeader>
-
-            {/* Section for infinite scroll */}
-            <Section autoPadding>
-
-                <div>
-
-                    {/* Section title */}
-                    <h1 className={styles.title}>All Mushrooms</h1>
-                    <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>
-                    <QueryClientProvider client={queryClient}>
-                        <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"}/>
-                    </QueryClientProvider>
-                </div>
-
-            </Section>
-
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
-            <ScrollToTop/>
-
-           
+                <QueryClientProvider client={queryClient}>
+                    <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"}/>
+                </QueryClientProvider>
+            </Layout>
         </>
     )
 }

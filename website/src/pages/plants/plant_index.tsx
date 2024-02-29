@@ -10,6 +10,7 @@ import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {Layout} from "@/components/layout";
 
 interface plantEntry {
     id: number,
@@ -266,11 +267,11 @@ export default function PlantIndex(){
         items = items.filter((item) => {return !item.name.includes("Not Set")})
 
         // Order the items alphabetically
-items.sort((a, b) => {
-            if(a.name < b.name) { return -1; }
-            if(a.name > b.name) { return 1; }
-            return 0;
-        })
+        items.sort((a, b) => {
+                    if(a.name < b.name) { return -1; }
+                    if(a.name > b.name) { return 1; }
+                    return 0;
+                })
 
 
         // Update the index items
@@ -285,75 +286,60 @@ items.sort((a, b) => {
 
     return(
         <>
-            {/* The header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
+            <Layout pageName={pageName} header={"Plant Index"}>
+                {/* Stats */}
+                <Section autoPadding>
+                    <div className={styles.statsContainer}>
+                        <Stats/>
+                    </div>
+                </Section>
 
-            {/* The main page header is just the plant index title */}
-            <PageHeader size={"small"}>
-                <div className={styles.header}>
-                    <h1>Plant Index</h1>
-                </div>
-            </PageHeader>
+                <Section autoPadding>
+                    <div className={styles.info}>
+                        <p> This page contains a list of all the plants on the website. The plants are sorted
+                            alphabetically. </p>
+                        <p> Click on a plant to view its page. </p>
+                        <p> Use the dropdown below to select what the index should display</p>
+                        <DropdownInput
+                            placeHolder={"Index Filter"}
+                            required={false}
+                            state={"normal"}
+                            options={filterOptions}
+                            defaultValue={currentFilter}
+                            changeEventHandler={setCurrentFilter}
+                        />
+                    </div>
+                </Section>
 
-            {/* Stats */}
-            <Section autoPadding>
-                <div className={styles.statsContainer}>
-                    <Stats/>
-                </div>
-            </Section>
+                {/* Ids */}
+                <Section autoPadding>
+                    <div className={styles.topBar}>
+                        <h1>Contents</h1>
 
-            <Section autoPadding>
-                <div className={styles.info}>
-                    <p> This page contains a list of all the plants on the website. The plants are sorted alphabetically. </p>
-                    <p> Click on a plant to view its page. </p>
-                    <p> Use the dropdown below to select what the index should display</p>
-                    <DropdownInput
-                        placeHolder={"Index Filter"}
-                        required={false}
-                        state={"normal"}
-                        options={filterOptions}
-                        defaultValue={currentFilter}
-                        changeEventHandler={setCurrentFilter}
-                    />
-                </div>
-            </Section>
+                        <div className={styles.contentsLinks}>
+                            {/* Loop through the alphabet and add a link for each letter */}
+                            {
+                                alphabet.map((letter, index) => {
+                                    return <p key={index} onClick={() => {
+                                        scrollID(letter)
+                                    }}>{letter}</p>
+                                })
+                            }
 
-            {/* Ids */}
-            <Section autoPadding>
-                <div className={styles.topBar}>
-                    <h1>Contents</h1>
+                        </div>
+                    </div>
 
-                    <div className={styles.contentsLinks}>
-                        {/* Loop through the alphabet and add a link for each letter */}
+                    {/* Loop through the alphabet and add a section for each letter */}
+                    <div>
                         {
-                            alphabet.map((letter, index) => {
-                                return <p key={index} onClick={() => {scrollID(letter)}}>{letter}</p>
+                            alphabet.map((letter) => {
+                                return <PlantIndexEntry key={letter + renderKey} letter={letter} plants={indexItems}/>
                             })
                         }
-
                     </div>
-                </div>
 
-                {/* Loop through the alphabet and add a section for each letter */}
-                <div>
-                {
-                    alphabet.map((letter) => {
-                        return <PlantIndexEntry key={letter + renderKey} letter={letter} plants={indexItems}/>
-                    })
-                }
-                </div>
-
-            </Section>
-
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
-            <ScrollToTop/>
-
-           
+                </Section>
+            </Layout>
         </>
     )
 }
@@ -387,5 +373,6 @@ function PlantIndexEntry({letter, plants}: PlantIndexEntryProps){
                     }
                 </ul>
             </div>
-        </>)
+        </>
+    )
 }

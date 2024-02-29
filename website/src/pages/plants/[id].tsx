@@ -20,6 +20,7 @@ import {ModalImage} from "@/components/modal";
 import Link from "next/link";
 import {Loading} from "@/components/loading";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
+import {Layout} from "@/components/layout";
 
 export default function PlantPage() {
 
@@ -33,9 +34,10 @@ export default function PlantPage() {
     const [mainImageMetaData, setMainImageMetaData] = React.useState<ImageMetaData | null>(null)
     const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
+    
+    
     // Loading
-    const [loading, setLoading] = React.useState(false)
-    const [loadingMessage, setLoadingMessage] = React.useState("Loading...")
+    const [loadingMessage, setLoadingMessage] = React.useState("")
 
     // Render key to re render stuff on resize
     const [renderKey, setRenderKey] = React.useState(0)
@@ -56,7 +58,6 @@ export default function PlantPage() {
     const getData = async () => {
 
         console.log("Fetching plant data")
-        setLoading(true)
         setLoadingMessage("Checking plant id...")
 
         let { id } = router.query
@@ -67,7 +68,7 @@ export default function PlantPage() {
             console.log("No id")
 
             setError("Invalid plant id")
-            setLoading(false)
+            setLoadingMessage("")
             return;
         }
 
@@ -80,7 +81,7 @@ export default function PlantPage() {
             console.log("Not a number")
 
             setError("Invalid plant id")
-            setLoading(false)
+            setLoadingMessage("")
             return
         }
 
@@ -92,7 +93,7 @@ export default function PlantPage() {
         // If the plant data is null then there is a problem
         if(!plantOBJ){
             setError("Plant not found")
-            setLoading(false)
+            setLoadingMessage("")
             return
         }
 
@@ -100,7 +101,7 @@ export default function PlantPage() {
         setPlantData(plantOBJ)
         setPlantNames(getNamesInPreference(plantOBJ))
 
-        setLoading(false)
+        setLoadingMessage("")
     }
 
     // Fetch the plant data from the api for this plant on load
@@ -244,204 +245,203 @@ export default function PlantPage() {
 
     }, [session])
 
+    const plantHeader = () => {
+        return (
+            <>
+                <div className={styles.plantHeader}>
+
+                    {/* ID of the plant if it exists*/}
+                    <div className={styles.headerItem}>
+                        <p className={styles.plantId}>ID : {plantData ? plantData.id : "0000"}</p>
+                    </div>
+
+
+                    {/* Author and last modified date. Convert the date into the right format */}
+                    <div className={styles.headerItem}>
+                        <p className={styles.smallInline}>Author(s): {plantData?.authors.map(
+                            (author, index) => (
+                                <Link href={"/account/" + author.id}
+                                      key={index}>{author.user_name}{index !== plantData.authors.length - 1 ? ", " : ""}</Link>
+                            )
+                        )}</p>
+                        <p className={styles.smallInline}>Last
+                            Modified: {plantData ? new Date(plantData.last_modified).toLocaleString().split(",")[0] : "00/00/00"}</p>
+
+                    </div>
+
+                    {/* Plant name */}
+                    <div className={styles.headerItem}>
+                        <p className={styles.headerTitle}>{plantNames[0]}</p>
+                    </div>
+
+                    {/* Plant uses, loop through them creating an item for each one but make sure it's in the right format first */}
+                    <div className={styles.headerItem}>
+                        <div className={styles.usesContianer}>
+
+                            {plantData && plantData.use.map((use, index) => (
+                                <p key={index} className={styles.smallInline}>{convertUseTag(use)}</p>
+                            ))}
+
+                        </div>
+                    </div>
+
+                    {/* Plant location found */}
+                    <div className={styles.headerItem}>
+                        <p className={styles.plantId}>{plantData ? plantData.location_found : "Lost :("}</p>
+                    </div>
+
+                </div>
+            </>
+        )
+    }
+
     return (
         <>
+            <Layout pageName={"Plant"} loadingMessage={loadingMessage} error={error} header={plantHeader()}>
+                <Section autoPadding>
+                    {editMode ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button> : <></>}
+                    <div className={styles.plantMainInfo}>
 
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={plantNames[0]}/>
-            <Navbar currentPage={plantNames[0]}/>
+                        {/* If there is an error then display it */}
+                        {error === "" ? null : <Error error={error}/>}
 
-            {loading && <Loading progressMessage={loadingMessage}/>}
+                        <div className={"row"}>
 
-            <Section>
-                <PageHeader size={"small"}>
-                    <div className={styles.plantHeader}>
+                            {/* Show the preferred name as the title and the others as the subtitle */}
+                            <div className={"column"}>
+                                <h1> {plantNames[0]} </h1>
+                                <h2> {plantNames[1]} | {plantNames[2]} </h2>
 
-                        {/* ID of the plant if it exists*/}
-                        <div  className={styles.headerItem}>
-                            <p className={styles.plantId}>ID : {plantData  ? plantData.id : "0000"}</p>
-                        </div>
-
-
-                        {/* Author and last modified date. Convert the date into the right format */}
-                        <div  className={styles.headerItem}>
-                            <p className={styles.smallInline}>Author(s): {plantData?.authors.map(
-                                (author, index) => (
-                                    <Link href={"/account/"+author.id} key={index}>{author.user_name}{index !== plantData.authors.length - 1 ? ", " : ""}</Link>
-                                )
-                            )}</p>
-                            <p className={styles.smallInline}>Last Modified: {plantData ? new Date(plantData.last_modified).toLocaleString().split(",")[0] : "00/00/00"}</p>
-
-                        </div>
-
-                        {/* Plant name */}
-                        <div  className={styles.headerItem}>
-                            <p className={styles.headerTitle}>{plantNames[0]}</p>
-                        </div>
-
-                        {/* Plant uses, loop through them creating an item for each one but make sure it's in the right format first */}
-                        <div  className={styles.headerItem}>
-                            <div className={styles.usesContianer}>
-
-                                {plantData && plantData.use.map((use, index) => (
-                                    <p key={index} className={styles.smallInline}>{convertUseTag(use)}</p>
-                                ))}
-
+                                {/* The contents of this is set by JS as the description is in html format and that won't work as plaintext*/}
+                                <div className={styles.description} id={"large_description"}></div>
                             </div>
-                        </div>
 
-                        {/* Plant location found */}
-                        <div  className={styles.headerItem}>
-                            <p className={styles.plantId}>{plantData  ? plantData.location_found : "Lost :("}</p>
-                        </div>
-
-                    </div>
-                </PageHeader>
-            </Section>
-
-            <Section autoPadding>
-                { editMode ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button>  :  <></> }
-                <div className={styles.plantMainInfo}>
-
-                    {/* If there is an error then display it */}
-                    { error === "" ? null : <Error error={error}/>}
-
-                    <div className={"row"}>
-
-                        {/* Show the preferred name as the title and the others as the subtitle */}
-                        <div className={"column"}>
-                            <h1> {plantNames[0]} </h1>
-                            <h2> {plantNames[1]} | {plantNames[2]} </h2>
-
-                            {/* The contents of this is set by JS as the description is in html format and that won't work as plaintext*/}
-                            <div className={styles.description} id={"large_description"}> </div>
-                        </div>
-
-                        <div className={"column"}>
+                            <div className={"column"}>
 
 
-                            <div className={styles.plantImageContainer}>
+                                <div className={styles.plantImageContainer}>
 
-                                {/* The main image, will be set to the first image until the users scrolls below to another one */}
-                                <div className={styles.mainImage} onClick={toggleMainImage}>
-                                    <ModalImage url={mainImage} description={mainImageMetaData ? mainImageMetaData.description : ""} show={showMainImage} hideCallback={toggleMainImage}/>
-                                    <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`} credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
-                                </div>
-
-                                <p className={styles.plantImageDescription}>{mainImageMetaData?.description ? mainImageMetaData.description : "No Description"}</p>
-
-                                {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
-                                <div className={styles.bottomImages}>
-
-                                    {/* Decrement the current image by 1 */}
-                                    <button onClick={() => { changeImage(currentImage - 1) }}> <FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/> </button>
-
-                                    {/* Loop through 5 creating 5 images */}
-                                    {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
-                                        <>
-                                            {/* On click set the main image to the image clicked */}
-                                            <button key={index} onClick={() =>  {setMainImageFromIndex(currentImage + index)}}>
-
-                                                {/* The image, use the current shown image plus the index to get the correct 5 */}
-                                                <Image
-                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                    alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
-                                                    fill
-                                                    style={{objectFit: "contain"}}
-                                                />
-                                            </button>
-                                        </>
-                                    ))}
-
-                                    {/* Decrement the current image by 1 */}
-                                    <button onClick={() => { changeImage(currentImage + 1) }}> <FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/> </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Section>
-
-            <Section autoPadding>
-                <div className={styles.monthsContainer}>
-
-                    {/* If there are no events then there shouldn't be a title */}
-                    {plantData?.months_ready_for_use && plantData.months_ready_for_use.length > 0 &&
-                        <h1 className={styles.title}> Events </h1>
-                    }
-
-                    {/* Loop through the events and display them */}
-                    {plantData?.months_ready_for_use.map((month, index) => (
-                        <div key={index} className={styles.month}>
-                            <h1>{month.event}</h1>
-                            <p>{month.start_month} - {month.end_month}</p>
-                        </div>
-                    ))}
-                </div>
-            </Section>
-
-            <Section autoPadding>
-                <div key={renderKey}>
-                    <div className={styles.sectionsContainer}>
-
-                        {/* Load all the big sections */}
-                        {plantData?.sections.map((section, index) => (
-                            <AutoSection
-                                section={section}
-                                images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
-                                isLeft={isMobile ? true : index % 2 === 0}
-                                key={index}
-                            />
-                        ))}
-
-                        {/* Attachments section */}
-                        {
-                            plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
-                                <>
-                                    <br/>
-                                    <div className={styles.attachmentsSection}>
-                                        <h1> Attachments </h1>
-                                        <div className={styles.attachmentsContainer}>
-                                            {plantData?.attachments.filter((attachment) => attachment.type !== "image").map((attachment, index) => (
-                                                <AttachmentSection attachment={attachment} key={index}/>
-                                            ))}
-                                        </div>
+                                    {/* The main image, will be set to the first image until the users scrolls below to another one */}
+                                    <div className={styles.mainImage} onClick={toggleMainImage}>
+                                        <ModalImage url={mainImage}
+                                                    description={mainImageMetaData ? mainImageMetaData.description : ""}
+                                                    show={showMainImage} hideCallback={toggleMainImage}/>
+                                        <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`}
+                                                       credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
                                     </div>
-                                </>
-                                :
-                                <>
-                                </>
-                        }
 
-                        {/* Load all the sources sections */}
-                        {
-                            plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
-                                <div className={styles.sourceSection}>
-                                    <br/>
-                                    <br/>
-                                    <h1> Sources </h1>
-                                    {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
-                                        <SourceSection section={source} key={index}/>
-                                    ))}
+                                    <p className={styles.plantImageDescription}>{mainImageMetaData?.description ? mainImageMetaData.description : "No Description"}</p>
 
-                                </div>
-                                :
-                                <></>
-                        }
+                                    {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
+                               <div className={styles.bottomImages}>
+
+                                   {/* Decrement the current image by 1 */}
+                                   <button onClick={() => {
+                                       changeImage(currentImage - 1)
+                                   }}><FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/></button>
+
+                                   {/* Loop through 5 creating 5 images */}
+                                   {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
+                                       <>
+                                           {/* On click set the main image to the image clicked */}
+                                           <button key={index} onClick={() => {
+                                               setMainImageFromIndex(currentImage + index)
+                                           }}>
+
+                                               {/* The image, use the current shown image plus the index to get the correct 5 */}
+                                               <Image
+                                                   src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
+                                                   alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
+                                                   fill
+                                                   style={{objectFit: "contain"}}
+                                               />
+                                           </button>
+                                       </>
+                                   ))}
+
+                                   {/* Decrement the current image by 1 */}
+                                   <button onClick={() => {
+                                       changeImage(currentImage + 1)
+                                   }}><FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/></button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </Section>
+
+               <Section autoPadding>
+                   <div className={styles.monthsContainer}>
+
+                       {/* If there are no events then there shouldn't be a title */}
+                       {plantData?.months_ready_for_use && plantData.months_ready_for_use.length > 0 &&
+                           <h1 className={styles.title}> Events </h1>
+                       }
+
+                       {/* Loop through the events and display them */}
+                       {plantData?.months_ready_for_use.map((month, index) => (
+                           <div key={index} className={styles.month}>
+                               <h1>{month.event}</h1>
+                               <p>{month.start_month} - {month.end_month}</p>
+                           </div>
+                       ))}
+                   </div>
+               </Section>
+
+               <Section autoPadding>
+                   <div key={renderKey}>
+                       <div className={styles.sectionsContainer}>
+
+                           {/* Load all the big sections */}
+                           {plantData?.sections.map((section, index) => (
+                               <AutoSection
+                                   section={section}
+                                   images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
+                                   isLeft={isMobile ? true : index % 2 === 0}
+                                   key={index}
+                               />
+                           ))}
+
+                           {/* Attachments section */}
+                           {
+                               plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
+                                   <>
+                                       <br/>
+                                       <div className={styles.attachmentsSection}>
+                                           <h1> Attachments </h1>
+                                           <div className={styles.attachmentsContainer}>
+                                               {plantData?.attachments.filter((attachment) => attachment.type !== "image").map((attachment, index) => (
+                                                   <AttachmentSection attachment={attachment} key={index}/>
+                                               ))}
+                                           </div>
+                                       </div>
+                                   </>
+                                   :
+                                   <>
+                                   </>
+                           }
+
+                           {/* Load all the sources sections */}
+                           {
+                               plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
+                                   <div className={styles.sourceSection}>
+                                       <br/>
+                                       <br/>
+                                       <h1> Sources </h1>
+                                       {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
+                                           <SourceSection section={source} key={index}/>
+                                       ))}
+
+                                   </div>
+                                   :
+                                   <></>
+                           }
 
 
-                    </div>
-                </div>
-            </Section>
-
-            {/* Page footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
-            <ScrollToTop/>
-
-
+                       </div>
+                   </div>
+               </Section>
+           </Layout>
         </>
     );
 }

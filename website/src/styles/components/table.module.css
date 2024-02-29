@@ -1,0 +1,46 @@
+
+.mainTable{
+    width: 100%;
+}
+
+.searchBar{
+    width: 100%;
+    background: linear-gradient(180deg, var(--main-background) -20%, var(--secondary-gray) 100%);
+    padding: 4px;
+
+}
+
+.mainTable table{
+
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 8px 8px var(--shadow-min);
+}
+
+.mainTable td, .mainTable th {
+    border: 1px solid var(--darker-secondary-gray);
+    text-align: left;
+    padding: 8px;
+}
+.mainTable tr:nth-child(even) {
+    background-color: var(--secondary-gray);
+}
+
+.mainTable button{
+    background-color: var(--main-background);
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+    color: #ABAFB1;
+}
+
+.mainTable button:hover{
+    background-color: var(--darker-secondary-gray);
+    color: var(--secondary-gray)
+}
+
+/* When hovering the table header show a sort icon */
+.mainTable th:hover{
+    background: var(--secondary-gray);
+    cursor: pointer;
+}

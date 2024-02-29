@@ -8,11 +8,11 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css";
 import {Loading} from "@/components/loading";
 import {Error} from "@/components/error";
-import {loginSection} from "@/pages/account";
 import Footer from "@/components/footer";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {checkUserPermissions, getStrings, RongoaUser} from "@/lib/users";
 import {DropdownSection} from "@/components/dropdown_section";
+import {Layout} from "@/components/layout";
 
 export default function KeyViewer(){
     const pageName = "Account";
@@ -24,20 +24,20 @@ export default function KeyViewer(){
     // Data states
     const [userApiKeyData, setUserApiKeyData] = useState<any>(null)
 
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState("")
     const [error, setError] = React.useState("")
 
     // Check if the user is logged in
     useEffect(() => {
         let { id } = router.query
 
-        if (session?.user && id) {
+        if (session?.user && id)
             getKeyData(id as string)
-        }
+
     }, [session, router.query])
 
     const getKeyData = async (id: string) => {
-        setLoading(true)
+        setLoading("Loading...")
 
         const urlData = id.split("_")
         let user = urlData[1]
@@ -46,10 +46,9 @@ export default function KeyViewer(){
         let localId = parseInt(urlData[0])
         if(isNaN(localId)){
             setError("Invalid Key ID")
-            setLoading(false)
+            setLoading("")
             return
         }
-
 
         try {
             // Create the url
@@ -73,7 +72,7 @@ export default function KeyViewer(){
             console.log(apikeys)
             if (!apikeys){
                 setError("Failed to fetch API key data")
-                setLoading(false)
+                setLoading("")
                 return
             }
 
@@ -84,7 +83,7 @@ export default function KeyViewer(){
             // Check if the key exists
             if (key.length === 0){
                 setError("API key not found")
-                setLoading(false)
+                setLoading("")
                 return
             }
 
@@ -115,14 +114,14 @@ export default function KeyViewer(){
 
             // Set the error
             setError("Failed to fetch API key data")
-            setLoading(false)
+            setLoading("")
         }
 
-        setLoading(false)
+        setLoading("")
     }
 
     const clearLogs = async () => {
-        setLoading(true)
+        setLoading("Clearing logs...")
 
         // Clear the logs
         try{
@@ -130,31 +129,32 @@ export default function KeyViewer(){
 
         }catch (e) {
             setError("Failed to clear logs")
-            setLoading(false)
+            setLoading("")
         }
 
         // Refresh the key data
         await refreshKey()
 
-        setLoading(false)
+        setLoading("")
 
     }
 
     const refreshKey = async () => {
-        setLoading(true)
+        setLoading("Refreshing...")
 
         // Clear the local cache
-        localStorage.removeItem("userApiKeysData_0")
+        localStorage.removeItem("userApiKeysData_"+userApiKeyData.user_id)
 
         // Get the key data
         await getKeyData(router.query.id as string)
 
-        setLoading(false)
+        setLoading("")
     }
 
-    const keyViewer = () => {
-        return(
-            <>
+
+    return(
+        <>
+            <Layout pageName={pageName} loadingMessage={loading} error={error} loginRequired header={"Api Key"}>
                 <Section autoPadding>
 
                     <div className={styles.keyViewerContainer}>
@@ -210,47 +210,7 @@ export default function KeyViewer(){
                     </div>
 
                 </Section>
-            </>
-
-        )
-
-
-    }
-
-
-    return(
-        <>
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
-
-
-            {/* Header for the page */}
-            <Section>
-                <PageHeader size={"small"}>
-                    <div className={styles.welcomeContainer}>
-                        <h1>Create New Key</h1>
-                    </div>
-                </PageHeader>
-            </Section>
-
-            {/* Loading Message */}
-            {loading && <Loading progressMessage={"Fetching API key..."}/>}
-
-            {/* Error Message */}
-            {error && <Section autoPadding> <Error error={error}/> </Section> }
-
-            {!session?
-                loginSection()
-                :
-                keyViewer()
-            }
-
-            {/* Footer */}
-            <Section>
-                <Footer/>
-            </Section>
-
+            </Layout>
         </>
     )
 

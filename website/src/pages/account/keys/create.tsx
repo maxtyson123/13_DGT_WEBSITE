@@ -7,12 +7,12 @@ import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css"
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
-import {loginSection} from "@/pages/account";
 import {SmallInput, ValidationState} from "@/components/input_sections";
 import {getDefaultPermissions, getStrings, getUserPermissions, RongoaUser, UserPermissions} from "@/lib/users";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {Loading} from "@/components/loading";
 import {Error} from "@/components/error";
+import {Layout} from "@/components/layout";
 
 export default function Account() {
 
@@ -150,9 +150,10 @@ export function AccountPage({dataID}: AccountPageProps){
 
     }
 
-    const keysCreator = () => {
-        return (
-            <>
+
+    return(
+        <>
+            <Layout pageName={pageName} loadingMessage={loading ? "Uploading Key..." : ""} error={error} header={"Create New Key"} loginRequired>
                 <Section autoPadding>
 
                     <div className={styles.keysCreatorContainer}>
@@ -179,45 +180,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
                     </div>
                 </Section>
-
-            </>
-        )
-    }
-
-
-    return(
-        <>
-
-            {/* Set up the page header and navbar */}
-            <HtmlHeader currentPage={pageName}/>
-            <Navbar currentPage={pageName}/>
-
-
-            {/* Header for the page */}
-            <Section>
-                <PageHeader size={"small"}>
-                    <div className={styles.welcomeContainer}>
-                        <h1>Create New Key</h1>
-                    </div>
-                </PageHeader>
-            </Section>
-
-            {/* Loading Message */}
-            {loading && <Loading progressMessage={"Uploading Key..."}/>}
-
-            {/* Error Message */}
-            {error && <Section autoPadding> <Error error={error}/> </Section> }
-
-            {!session?
-                loginSection()
-                :
-                keysCreator()
-            }
-
-            {/* Footer */}
-            <Section>
-                <Footer/>
-            </Section>
+            </Layout>
         </>
 
     )
