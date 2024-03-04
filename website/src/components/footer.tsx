@@ -25,7 +25,7 @@ function FooterEntry({page, mobile} : footerEntryProps) {
 
     if(hasChildren && !mobile) {
         return (
-            <Link scroll={false} href={String(page.path)} className={styles.link}>
+            <Link  href={String(page.path)} className={styles.link}>
                 <FontAwesomeIcon className={"inline"} icon={page.icon as IconProp}/>
                 <p className={"inline"}>{String(page.name)}</p>
                 {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
@@ -40,7 +40,7 @@ function FooterEntry({page, mobile} : footerEntryProps) {
     else {
         return(
             <>
-                <Link scroll={false} href={String(page.path)} className={styles.link}>
+                <Link  href={String(page.path)} className={styles.link}>
                     <FontAwesomeIcon className={"inline"} icon={page.icon as IconProp}/>
                     <p className={"inline"}>{String(page.name)}</p>
                     {/* A link is created for each page, the link is styled to be active if the page is the current page*/}

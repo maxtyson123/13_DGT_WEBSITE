@@ -76,13 +76,7 @@ export default function Admin(){
         // Log that the admin has deleted the plant
         log.info(`Admin ${session?.user?.email} has deleted the plant with id ${id}`)
 
-        // Clear the cache
-        localStorage.removeItem("plant_admin_data")
-        localStorage.removeItem("plant_stats")
-
-        // Reload the page
-        window.location.reload()
-        setLoadingMessage("")
+        refresh()
     }
 
     const getPlantExcel = async () => {
@@ -127,9 +121,18 @@ export default function Admin(){
         setLoadingMessage("")
     }
 
+    const refresh = () => {
+        // Clear the cache
+        localStorage.removeItem("plant_admin_data")
+        localStorage.removeItem("plant_stats")
+
+        // Reload the page
+        window.location.reload()
+    }
+
     return (
         <>
-            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired permissionRequired={"pages:admin:publicAccess"}>
+            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired permissionRequired={"pages:admin:publicAccess"} header={"Plants"}>
                 {/* Section for the welcome message and search box */}
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre}>
@@ -152,6 +155,7 @@ export default function Admin(){
 
 
                 <Section autoPadding>
+                    <button onClick={refresh}> Refresh </button>
                     <Table>
                         <tr>
                             <th>ID</th>

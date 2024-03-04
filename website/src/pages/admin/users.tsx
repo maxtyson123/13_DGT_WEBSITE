@@ -160,7 +160,7 @@ export default function Admin(){
 
     return (
         <>
-            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired permissionRequired={"pages:admin:publicAccess"}>
+            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired permissionRequired={"pages:admin:publicAccess"} header={"Users"}>
                 {/* Section for the welcome message and search box */}
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre}>

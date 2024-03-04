@@ -2426,7 +2426,7 @@ export default function CreatePlant() {
                     // Set these changes in the state and scroll to the error div so that the user can see that
                     setError(errorText)
                     scrollToElement("errorSection")
-                    setIsLoading(false);
+                    setProgressMessage("");
                     return;
                 }
 
@@ -2466,7 +2466,7 @@ export default function CreatePlant() {
             // Scroll to the section to show the user and update the states
             setError(errorText)
             scrollToElement("errorSection")
-            setIsLoading(false);
+            setProgressMessage("");
             return;
         }
 
@@ -2545,7 +2545,7 @@ export default function CreatePlant() {
             setError("The plant you are trying to edit is not a valid plant (was unable to fetch it's data from the database)")
             console.log("ERROR WRONG ID")
             scrollToElement("errorSection")
-            setIsLoading(false);
+            setProgressMessage("");
             return;
         }
 
@@ -2557,7 +2557,7 @@ export default function CreatePlant() {
 
         // Scroll to the top of the page
         scrollToElement("english-name")
-        setIsLoading(false);
+        setProgressMessage("");
     }
 
     useEffect(() => {

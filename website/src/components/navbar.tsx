@@ -117,7 +117,7 @@ function DesktopNavbar({currentPage} : navbarProps){
 
                 {/* The next.js link component is used to link to other pages using the built-in router functionality*/}
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
-                <Link scroll={false} href="/">
+                <Link  href="/">
                     <Image
                         src={"/media/images/logo.svg"}
                         alt="Rongoā Logo"
@@ -128,7 +128,7 @@ function DesktopNavbar({currentPage} : navbarProps){
 
                 </Link>
 
-                <Link scroll={false} href="/"> <h1 className={styles.title} > Rongoā </h1> </Link>
+                <Link  href="/"> <h1 className={styles.title} > Rongoā </h1> </Link>
 
                 <div className={styles.navBreak}></div>
 
@@ -186,7 +186,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
 
     if(hasChildren && !mobile) {
         return (
-                <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
+                <Link  href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
                     <FontAwesomeIcon icon={page.icon as IconProp}/>
                     <p>{String(page.name)}</p>
                     {/* A link is created for each page, the link is styled to be active if the page is the current page*/}
@@ -205,7 +205,7 @@ export function NavEntry({page, currentPage, mobile, expanded = true} : navEntry
     else {
         return(
             <>
-                <Link scroll={false} href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
+                <Link  href={String(page.path)} className={currentPage === page.name ? styles.activePage : styles.navItem}>
                     {hasImage && session ?
                         <img src={(session.user as RongoaUser).database.user_image} alt={"user account"} className={styles.userImage}/>
                         :
@@ -262,7 +262,7 @@ function MobileNavbar({currentPage} : navbarProps){
 
                 {/* The next.js link component is used to link to other pages using the built-in router functionality*/}
                 {/* Home container is used to group the logo and title together, placing them side by side*/}
-                <Link scroll={false} href="/" className={styles.navItem}>
+                <Link  href="/" className={styles.navItem}>
                     <FontAwesomeIcon icon={faLeaf}/>
                     <p> Rongoā </p>
                 </Link>
