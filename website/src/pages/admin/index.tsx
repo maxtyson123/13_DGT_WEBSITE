@@ -95,9 +95,6 @@ export default function Admin(){
 
         // Finish loading
         setLoadingMessage("")
-
-        // Log that the user has logged in
-        log.info("User access admin database: " + session?.user?.email)
     }
 
 
@@ -112,7 +109,7 @@ export default function Admin(){
                                 <h1>Welcome to the Admin Page</h1>
 
                                 <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
-                                <p>Current Time: {new Date().toLocaleString()}</p>
+                                
 
                                 <br/>
                                 <p>Here you can manage the website content and settings.</p>

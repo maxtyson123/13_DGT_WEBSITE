@@ -116,7 +116,7 @@ export default function Admin(){
     }
 
     const clearCache =  () => {
-        localStorage.clear()
+        sessionStorage.clear()
         window.location.reload()
     }
 
@@ -131,7 +131,7 @@ export default function Admin(){
                                <h1>Welcome to the Admin Page</h1>
 
                                <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
-                               <p>Current Time: {new Date().toLocaleString()}</p>
+                               
 
                                <br/>
                                <p> You are currently managing the settings in the database. You can download a back up of files or the database.</p>

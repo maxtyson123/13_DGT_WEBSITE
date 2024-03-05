@@ -107,7 +107,7 @@ export default function Admin(){
         log.info(`Admin ${session?.user?.email} has updated the user with id ${id}`)
 
         // Remove the item in the local storage
-        localStorage.removeItem("user_admin_data")
+        sessionStorage.removeItem("user_admin_data")
 
         // Reload the page
         window.location.reload()
@@ -122,7 +122,7 @@ export default function Admin(){
         const response = await makeRequestWithToken("get", "/api/user/delete?id=" + id)
 
         // Remove the item in the local storage
-        localStorage.removeItem("user_admin_data")
+        sessionStorage.removeItem("user_admin_data")
 
         // Reload the page
         window.location.reload()
@@ -169,7 +169,7 @@ export default function Admin(){
                                 <h1>Welcome to the Admin Page</h1>
 
                                 <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
-                                <p>Current Time: {new Date().toLocaleString()}</p>
+                                
 
                                 <br/>
                                 <p> You are currently managing the users in the database. You can add, edit permissions, and delete users from the database.</p>

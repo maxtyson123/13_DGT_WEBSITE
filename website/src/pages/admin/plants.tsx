@@ -123,8 +123,8 @@ export default function Admin(){
 
     const refresh = () => {
         // Clear the cache
-        localStorage.removeItem("plant_admin_data")
-        localStorage.removeItem("plant_stats")
+        sessionStorage.removeItem("plant_admin_data")
+        sessionStorage.removeItem("plant_stats")
 
         // Reload the page
         window.location.reload()
@@ -141,7 +141,6 @@ export default function Admin(){
                                 <h1>Welcome to the Admin Page</h1>
 
                                 <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
-                                <p>Current Time: {new Date().toLocaleString()}</p>
 
                                 <br/>
                                 <p> You are currently managing the plants in the database. You can add, edit, and delete plants from the database.</p>

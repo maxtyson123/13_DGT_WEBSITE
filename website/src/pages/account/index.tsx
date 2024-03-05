@@ -478,7 +478,7 @@ export function AccountPage({dataID}: AccountPageProps){
                         <div className={globalStyles.gridCentre}>
                             {isAdmin &&
                                 <div className={styles.actionItem}>
-                                    <Link href={"/admin"}><button className={styles.createButton}>Admin Pannel</button></Link>
+                                    <Link href={"/admin"}><button className={styles.createButton}>Admin Panel</button></Link>
                                 </div>
                             }
                             <div className={styles.actionItem}>
