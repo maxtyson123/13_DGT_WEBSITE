@@ -70,13 +70,6 @@ export function Layout({children, pageName, loadingMessage, header, headerSize, 
             setErrorMessage(error);
     }, [error]);
 
-    // If there is an error, display the error message
-    if(errorMessage)
-        return (
-            <Section autoPadding>
-                <Error error={errorMessage}/>
-            </Section>
-        )
 
     return (
        <>
@@ -105,7 +98,7 @@ export function Layout({children, pageName, loadingMessage, header, headerSize, 
                </div>
               </Section>
            :
-            children
+            errorMessage ? <Error error={errorMessage}/> : children
            }
 
            {/* Page footer */}

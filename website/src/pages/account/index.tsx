@@ -63,7 +63,7 @@ export function AccountPage({dataID}: AccountPageProps){
     const [userID, setUserID] = React.useState<number>(0)
 
     // States
-    const [loadingMessage, setLoadingMessage] = React.useState<string>("Loading...")
+    const [loadingMessage, setLoadingMessage] = React.useState<string>("")
     const[error, setError] = useState<string>("")
     const [editor, setEditor] = React.useState<boolean>(false)
     const [myAccount, setMyAccount] = React.useState<boolean>(false)
