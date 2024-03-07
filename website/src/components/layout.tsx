@@ -105,9 +105,6 @@ export function Layout({children, pageName, loadingMessage, header, headerSize, 
            <Section>
                <Footer/>
            </Section>
-
-           {/* Allow the user to scroll to the top of the page easily*/}
-           <ScrollToTop/>
        </>
    )
 }
