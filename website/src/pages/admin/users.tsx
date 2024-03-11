@@ -9,6 +9,8 @@ import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
 import Table from "@/components/table";
 import {Layout} from "@/components/layout";
+import {useRouter} from "next/router";
+import {getNamesInPreference} from "@/lib/plant_data";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -20,7 +22,7 @@ export default function Admin(){
 
     // Stats
     const [users, setUsers] = useState([] as RongoaUser[])
-    const [sortedField, setSortedField] = useState("id")
+    const router = useRouter()
 
     // Load the data
     const [loadingMessage, setLoadingMessage] = useState("")
@@ -37,7 +39,7 @@ export default function Admin(){
 
         dataFetch.current = true
         fetchData()
-    }, [session])
+    })
 
 
     const fetchData = async () => {
@@ -52,13 +54,10 @@ export default function Admin(){
 
         // Set the users
         let userData = users as RongoaUser[]
-        for(let i = 0; i < userData.length; i++){
+        for(let i = 0; i < userData.length; i++)
             userData[i].database = userData[i] as any;
-        }
 
-        // Sort the users by id
-        userData.sort((a, b) => a.database.id - b.database.id)
-
+        console.log(userData)
         setUsers(userData)
         setLoadingMessage("")
     }
@@ -71,6 +70,7 @@ export default function Admin(){
         const name = (document.getElementById(`name_${id}`) as HTMLElement).innerText
         const email = (document.getElementById(`email_${id}`) as HTMLElement).innerText
         const type = (document.getElementById(`type_${id}`) as HTMLInputElement).value
+        const restricted = (document.getElementById(`restricted_${id}`) as HTMLInputElement).value
         let permValue = permissionOptions.indexOf(type)
 
         // Check the if correct type
@@ -98,7 +98,8 @@ export default function Admin(){
             id: id,
             name: name,
             email: email,
-            type: permValue
+            type: permValue,
+            restricted: restricted === "Yes"
         }
 
         await makeRequestWithToken("get", "/api/user/update?adminData=" + JSON.stringify(adminData))
@@ -110,7 +111,7 @@ export default function Admin(){
         sessionStorage.removeItem("user_admin_data")
 
         // Reload the page
-        window.location.reload()
+        await router.push("/admin/")
     }
 
     const deleteUser = async (id: number) => {
@@ -125,38 +126,12 @@ export default function Admin(){
         sessionStorage.removeItem("user_admin_data")
 
         // Reload the page
-        window.location.reload()
+        await router.push("/admin/")
     }
 
     const reload = () => {
         window.location.reload()
     }
-
-    useEffect(() => {
-
-        // Sort the array based on the field
-        switch (sortedField) {
-            case "id":
-                users.sort((a, b) => a.database.id - b.database.id)
-                break
-
-            case "name":
-                users.sort((a, b) => a.database.user_name.localeCompare(b.database.user_name))
-                break
-
-            case "email":
-                users.sort((a, b) => a.database.user_email.localeCompare(b.database.user_email))
-                break
-
-            case "type":
-                users.sort((a, b) => a.database.user_type - b.database.user_type)
-                break
-
-            case "last_login":
-                users.sort((a, b) => new Date(a.database.user_last_login).getTime() - new Date(b.database.user_last_login).getTime())
-                break
-        }
-    }, [sortedField]);
 
     return (
         <>
@@ -184,37 +159,61 @@ export default function Admin(){
 
                 <Section autoPadding>
                     <Table>
-                        <tr>
-                            <th onClick={() => {setSortedField("id")}}>ID</th>
-                            <th onClick={() => {setSortedField("name")}}>Name</th>
-                            <th onClick={() => {setSortedField("email")}}>Email</th>
-                            <th onClick={() => {setSortedField("type")}}>Type</th>
-                            <th onClick={() => {setSortedField("restricted")}}>Restricted Access</th>
-                            <th onClick={() => {setSortedField("last_login")}}>Last Login</th>
-                            <th>Update</th>
-                            <th>Remove</th>
-                        </tr>
-
-                        {users.map((user, index) => (
-                            <tr key={index}>
-                                <td> {user.id} </td>
-                                <td><p id={`name_${user.id}`} contentEditable>{user.database.user_name}</p></td>
-                                <td><p id={`email_${user.id}`} contentEditable>{user.database.user_email}</p></td>
-                                <td>
-                                    <select id={`type_${user.id}`}
-                                            defaultValue={permissionOptions[user.database.user_type]}>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Editor">Editor</option>
-                                        <option value="Member">Member</option>
-                                    </select>
-                                </td>
-                                <td> {user.database.user_restricted_access ? "Yes" : "No"} </td>
-                                <td> {new Date(user.database.user_last_login).toLocaleString()} </td>
-                                <td><button onClick={() => {updateUser(user.database.id)}}>Update</button></td>
-                                <td><button onClick={() => {deleteUser(user.database.id)}}>Remove</button></td>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Type</th>
+                                <th>Restricted Access</th>
+                                <th>Last Login</th>
+                                <th>Update</th>
+                                <th>Remove</th>
                             </tr>
-                        ))}
+                        </thead>
+
+                        <tbody>
+                            {users.map((user, index) => (
+                                <tr key={index}>
+                                    <td> {user.id} </td>
+                                    <td><p id={`name_${user.id}`} contentEditable>{user.database.user_name}</p></td>
+                                    <td><p id={`email_${user.id}`} contentEditable>{user.database.user_email}</p></td>
+                                    <td>
+                                        <select id={`type_${user.id}`} defaultValue={permissionOptions[user.database.user_type]}>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Editor">Editor</option>
+                                            <option value="Member">Member</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id={`restricted_${user.id}`} defaultValue={user.database.user_restricted_access ? "Yes" : "No"}>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </td>
+                                    <td> {new Date(user.database.user_last_login).toLocaleString()} </td>
+                                    <td> <button onClick={() => {updateUser(user.database.id)}}>Update </button> </td>
+                                    <td> <button onClick={() => {deleteUser(user.database.id)}}>Remove </button></td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </Table>
+                </Section>
+
+
+                {/* New User */}
+                <Section autoPadding>
+                    <div className={globalStyles.gridCentre}>
+                        <div className={globalStyles.container}>
+                            <div className={styles.adminHeaderContainer}>
+                                todo
+                                <h1>New User</h1>
+                                <input placeholder={"Name"} id={"new_name"}/>
+                                <input placeholder={"Email"} id={"new_email"}/>
+                                <button>Create New</button>
+                            </div>
+                        </div>
+                    </div>
                 </Section>
             </Layout>
         </>

@@ -142,7 +142,7 @@ export function AccountPage({dataID}: AccountPageProps){
         }
 
         // Delete the cached user keys
-        localStorage.removeItem("userApiKeysData_0")
+        sessionStorage.removeItem("userApiKeysData_0")
 
         setLoading(false)
         // Go to the account page

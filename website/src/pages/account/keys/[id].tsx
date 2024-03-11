@@ -143,7 +143,7 @@ export default function KeyViewer(){
         setLoading("Refreshing...")
 
         // Clear the local cache
-        localStorage.removeItem("userApiKeysData_"+userApiKeyData.user_id)
+        sessionStorage.removeItem("userApiKeysData_"+userApiKeyData.user_id)
 
         // Get the key data
         await getKeyData(router.query.id as string)

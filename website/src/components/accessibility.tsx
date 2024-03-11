@@ -24,7 +24,7 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
      * @returns {boolean} - The accessibility setting
      */
     const loader = () => {
-        let loadedMode = localStorage.getItem(setting)
+        let loadedMode = sessionStorage.getItem(setting)
         let mode = false
 
         // If the mode is loaded as true, otherwise it must be false or incorrect
@@ -50,7 +50,7 @@ export function ToggleAccessibilitySetting({setting, setter}: ToggleAccessibilit
         toggleRef.current!.checked = newMode
 
         // Save the mode
-        localStorage.setItem(setting, newMode.toString())
+        sessionStorage.setItem(setting, newMode.toString())
 
         // Update the state
         setter(newMode)

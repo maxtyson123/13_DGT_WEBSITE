@@ -269,7 +269,7 @@ export function AccountPage({dataID}: AccountPageProps){
     const signOutUser = async () => {
 
         // Clear the cache
-        localStorage.clear()
+        sessionStorage.clear()
         await signOut({callbackUrl: "/"})
     }
 
@@ -486,6 +486,12 @@ export function AccountPage({dataID}: AccountPageProps){
                             </div>
 
                             <div className={styles.actionItem}>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
                                 <button onClick={deleteAccount} className={styles.deleteAccountButton}>Delete Account</button>
                             </div>
                         </div>

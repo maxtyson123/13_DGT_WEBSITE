@@ -58,7 +58,7 @@ export default async function handler(
             }
 
             let data = JSON.parse(adminData as any);
-            query = `UPDATE users SET ${tables.user_name} = '${data.name}', ${tables.user_email} = '${data.email}', ${tables.user_type} = '${data.type}' WHERE id = ${data.id}`;
+            query = `UPDATE users SET ${tables.user_name} = '${data.name}', ${tables.user_email} = '${data.email}', ${tables.user_type} = '${data.type}', ${tables.user_restricted_access} = ${data.restricted} WHERE id = ${data.id}`;
             console.log(query);
         }
 

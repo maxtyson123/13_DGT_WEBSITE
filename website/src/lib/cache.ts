@@ -4,7 +4,7 @@ interface CacheItem {
 }
 
 /**
- *  Will try to get an item from the localstorage, if the item is expired, it will be removed from the local storage
+ *  Will try to get an item from the sessionStorage, if the item is expired, it will be removed from the local storage
  *
  * @param {string} id - The key used to store the item in the local storage
  *
@@ -15,7 +15,7 @@ interface CacheItem {
 export function getFromCache(id: string){
 
     let item = null;
-    item = localStorage.getItem(id);
+    item = sessionStorage.getItem(id);
 
     // Check if the item exists in the local storage
     if(item){
@@ -29,7 +29,7 @@ export function getFromCache(id: string){
             console.log("Cache item [" + id + "] has expired");
 
             // If it has expired, remove it from the local storage
-            localStorage.removeItem(id);
+            sessionStorage.removeItem(id);
 
             // Return null
             return null;
@@ -60,6 +60,6 @@ export function saveToCache(id: string, data: any){
     }
 
     // Save the cache item to the local storage
-    localStorage.setItem(id, JSON.stringify(cacheItem));
+    sessionStorage.setItem(id, JSON.stringify(cacheItem));
 
 }

@@ -104,6 +104,7 @@
 
 .deleteAccountButton{
     background-color: red;
+    scale: 75%;
 }
 
 .signInButton{

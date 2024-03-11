@@ -2431,7 +2431,7 @@ export default function CreatePlant() {
                 }
 
                 // Remove the plant from the local storage
-                localStorage.removeItem("plant_" + idNum)
+                sessionStorage.removeItem("plant_" + idNum)
 
                 // Add the id to the upload data
                 console.log("SETTING ID")
