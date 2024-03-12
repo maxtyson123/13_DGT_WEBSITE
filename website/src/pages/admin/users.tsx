@@ -144,7 +144,6 @@ export default function Admin(){
 
                                 <p>Logged in as {session?.user?.name} ({session?.user?.email})</p>
                                 
-
                                 <br/>
                                 <p> You are currently managing the users in the database. You can add, edit permissions, and delete users from the database.</p>
 

@@ -189,7 +189,7 @@ export default function PlantPage() {
 
         }
 
-    }, [plantData, setMainImageFromIndex]);
+    }, [plantData]);
 
     const changeImage = (index: number) => {
 

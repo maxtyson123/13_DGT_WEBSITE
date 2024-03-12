@@ -1829,6 +1829,7 @@ export default function CreatePlant() {
         plantOBJ.plant_type = cleanInput(plantType);
         plantOBJ.authorIDs = [];
 
+
         // Get the plant author
         if(session && session.user){
             
@@ -2024,6 +2025,7 @@ export default function CreatePlant() {
         }
 
         // Loop through the sections to double-check that the images they use are in the attachments
+        let imageFailed = false
         for(let i = 0; i < plantOBJ.sections.length; i++) {
 
             // Only Edible, Medical and Craft sections have images
@@ -2058,14 +2060,36 @@ export default function CreatePlant() {
 
                 // Show an error
                 setError(`One or more images in the sections are not in the attachments, they have been set to default, you may want to fix this: ${image}`)
-
-                // Load the new json with the default image
-                loadJson(plantOBJ);
-
-                // Return null to stop the rest of the function
-                return null;
+                imageFailed = true
             }
         }
+
+        // Check if the display image is in the attachments
+        if(plantOBJ.display_image !== "Default"){
+            let validImage = false;
+            for (let j = 0; j < plantOBJ.attachments.length; j++) {
+                if ((plantOBJ.attachments[j].meta as ImageMetaData).name === plantOBJ.display_image) {
+                    // If it is then this section is valid
+                    validImage = true;
+                }
+            }
+
+            // If the image isn't valid then set it to default
+            if (!validImage) {
+                plantOBJ.display_image = "Default";
+                setError(`The display image is not in the attachments, it has been set to default, you may want to fix this: ${plantOBJ.display_image}`)
+                imageFailed = true
+            }
+        }
+
+        // If the image failed then return null
+        if(imageFailed){
+            loadJson(plantOBJ)
+            scrollToElement("errorSection")
+            return null
+        }
+
+
 
         return plantOBJ;
     }
@@ -2661,7 +2685,7 @@ export default function CreatePlant() {
 
     return (
         <>
-            <Layout pageName={"Create Plant"} loginRequired header={"Creating plant: " + plantName} error={error} loadingMessage={progressMessage} permissionRequired={"pages:plants:edit"}>
+            <Layout pageName={"Create Plant"} loginRequired header={"Creating plant: " + plantName} loadingMessage={progressMessage} permissionRequired={"pages:plants:edit"}>
                 <div className={"row"}>
 
                     {/* If there is an error then show it */}
