@@ -1,10 +1,5 @@
-import Navbar from "@/components/navbar";
-import HtmlHeader from "@/components/html_header";
 import React, {useEffect, useRef} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import ScrollToTop from "@/components/scroll_to_top";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/plant_index.module.css";
 import Stats from "@/components/stats";
 import {DropdownInput} from "@/components/input_sections";
@@ -20,6 +15,7 @@ interface plantEntry {
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
+// noinspection SpellCheckingInspection
 export default function PlantIndex(){
     const pageName = "Plant Index"
     const [plantData, setPlantData] = React.useState<any>(null)
@@ -255,7 +251,7 @@ export default function PlantIndex(){
                     // If the  ID  is the same then add the plant name to the use
                     if(items[i].id === plantData[j].id) {
 
-                        // Get the preffered name
+                        // Get the preferred name
                         items[i].name += (" - " + macronCodeToChar(getNamesInPreference(plantData[j])[0], numberDictionary))
                         break
                     }
@@ -278,7 +274,7 @@ export default function PlantIndex(){
         console.log(items)
         setIndexItems(items)
 
-        // Re render the components
+        // Re-render the components
         setRenderKey(prevState => prevState + 1)
 
 
@@ -298,7 +294,7 @@ export default function PlantIndex(){
                     <div className={styles.info}>
                         <p> This page contains a list of all the plants on the website. The plants are sorted
                             alphabetically. </p>
-                        <p> Click on a plant to view its page. </p>
+                        <p> Click on a plant to view it's page. </p>
                         <p> Use the dropdown below to select what the index should display</p>
                         <DropdownInput
                             placeHolder={"Index Filter"}

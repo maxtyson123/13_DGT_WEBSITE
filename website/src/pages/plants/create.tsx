@@ -27,19 +27,15 @@ import {
     SourceSectionData,
     ValidPlantData
 } from "@/lib/plant_data";
-import Section from "@/components/section";
-import Footer from "@/components/footer";
-import ScrollToTop from "@/components/scroll_to_top";
 
 import {MONTHS, PLANT_PARTS} from "@/lib/constants"
 import {useRouter} from "next/router";
 import {Error} from "@/components/error";
-import {signIn, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCloudArrowUp, faFile, faPerson} from "@fortawesome/free-solid-svg-icons";
+import {faCloudArrowUp, faFile} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
-import {checkUserPermissions, RongoaUser} from "@/lib/users";
-import {Loading} from "@/components/loading";
+import {RongoaUser} from "@/lib/users";
 import {createToken, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
 import {Layout} from "@/components/layout";
@@ -48,7 +44,7 @@ import {Layout} from "@/components/layout";
 /// _______________ SECTIONS _______________ ///
 class SourceInfo {
 
-    // Store the data for the section at its current state
+    // Store the data for the section at it's current state
     state = {
         type: "",
         data: "",
@@ -169,7 +165,7 @@ export function SourceSection({typeHandler, dataHandler, valid, state}: SourceSe
 
 class CustomInfo {
 
-    // Store the data for the section at its current state
+    // Store the data for the section at it's current state
     state = {
         title:  "",
         text:   "",
@@ -286,7 +282,7 @@ export function CustomSection({titleHandler, textHandler, valid, state}: CustomS
 
 class CraftInfo {
 
-    // Store the data for the section at its current state
+    // Store the data for the section at it's current state
     state = {
         partOfPlant:    "",
         useIdentifier: "",
@@ -466,7 +462,7 @@ export function CraftSection({useIdentifierHandler, useValueHandler, additionalI
 }
 
 class MedicalInfo {
-    // Store the data for the section at its current state
+    // Store the data for the section at it's current state
     state = {
         type:           "",
         useIdentifier: "",
@@ -667,7 +663,7 @@ export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandl
 
 class EdibleInfo {
 
-    // Store the data for the section at its current state
+    // Store the data for the section at it's current state
     state = {
         partOfPlant:        "",
         useIdentifier:     "",
@@ -1639,7 +1635,7 @@ export default function CreatePlant() {
                 setEnglishNameValidationState(["error", "Required if preferred name is English"])
                 isValid = false;
 
-                // Dont need to check if null here as there is nothing before it 
+                // Don't need to check if null here as there is nothing before it
                 elementThatNeedsFocus = "english-name";
             }
         } else { setEnglishNameValidationState(["success", "No Error"] as [ValidationState, string]);  }
@@ -1806,7 +1802,7 @@ export default function CreatePlant() {
         if(!input)
             return input;
 
-        let clean = input;
+        let clean: string;
 
         // Replace ' with slanted '
         clean = input.replaceAll("'", "’");
@@ -2027,7 +2023,7 @@ export default function CreatePlant() {
             plantOBJ.sections.push(customInfoOBJ);
         }
 
-        // Loop through the sections to double check that the images they use are in the attachments
+        // Loop through the sections to double-check that the images they use are in the attachments
         for(let i = 0; i < plantOBJ.sections.length; i++) {
 
             // Only Edible, Medical and Craft sections have images
@@ -2481,7 +2477,7 @@ export default function CreatePlant() {
         for(let i = 0; i < imageInfoRef.current.length; i++){
 
             setProgressMessage(`Uploading image ${i + 1} of ${imageInfoRef.current.length}`)
-            // If the image url is already set to have a url, skip it
+            // If the image url is already set to have an url, skip it
             if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
                 continue;
             }
@@ -2604,7 +2600,7 @@ export default function CreatePlant() {
             return;
         }
 
-        // Get its position on the page
+        // Get it's position on the page
         let dims = element.getBoundingClientRect();
 
         // Scroll to it, add 150px spacing so that the nav bar has space, ensure that it is smooth and doesn't just jump

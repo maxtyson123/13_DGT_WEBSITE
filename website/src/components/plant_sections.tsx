@@ -345,10 +345,7 @@ interface SourceSectionProps{
  * @returns {JSX.Element} The rendered section component.
  */
 export function SourceSection({section} : SourceSectionProps){
-    let sourceItem = (
-        <>
-        </>
-    )
+    let sourceItem: JSX.Element
 
     switch (section.source_type){
         case "Internet":

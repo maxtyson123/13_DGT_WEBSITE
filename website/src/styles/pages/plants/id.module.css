@@ -206,7 +206,7 @@
 
 .plantImageDescription{
     background-color: var(--secondary-gray);
-    border-radius: 0px 0px 20px 20px;
+    border-radius: 0 0 20px 20px;
     margin-top: -20px;
     padding: 30px 10px 10px;
 }

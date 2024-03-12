@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <br/>
 <p align="center">
   <a href="https://github.com/maxtyson123/13_DGT_WEBSITE">
@@ -41,7 +42,7 @@
 
 ![Screen Shot](doc/screenshots/about.png)
 
-This project is built on top of next js and a SQL database to create a website that informs users about various New Zealand plants and their uses. The website aims to display this information in a interesting, entertaining and interactive way with the site being accessible to a wide range of users on mobile or PC. The plants are stored in a SQL database which the website uses to dynamically generate the contents for the pages from, with it heavily relying on the ID of the plant to do most things. Additonally,  a API is provided to interact with the database connected to the site allowing for the user to search for a plant or download a plant's information. Parts of the API that modify data are restricted behind user authentication, either in the form of an API key or a whitelisted email in the auth table of the database.
+This project is built on top of Next.js and a SQL database to create a website that informs users about various New Zealand plants and their uses. The website aims to display this information in an interesting, entertaining and interactive way with the site being accessible to a wide range of users on mobile or PC. The plants are stored in a SQL database which the website uses to dynamically generate the contents for the pages from, with it heavily relying on the ID of the plant to do most things. Additionally,  an API is provided to interact with the database connected to the site allowing for the user to search for a plant or download a plant's information. Parts of the API that modify data are restricted behind user authentication, either in the form of an API key or a whitelisted email in the auth table of the database.
 
 ## Built With
 
@@ -58,7 +59,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-The website requires npm and node js
+The website requires npm and Node.js
 
 * [node.js](https://nodejs.org/en)
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -75,24 +76,24 @@ git clone https://github.com/maxtyson123/13_DGT_WEBSITE.git
 npm install
 ```
 * Copy the '.env.example' into a new file '.env.local'
-2. Database Setup (Pick one and edit constants.ts to select which one is being used)
+1. Database Setup (Pick one and edit constants.ts to select which one is being used)
 
 2. A) Postgres:
 * Setup a Postgres server [PostgreSQL](https://www.postgresql.org/)
 * Copy the config into .env.local
 * Run the SQL file [create_tables](server/postgres_sql/create_tables.sql)
 
-2. B) MySQL:
+1. B) MySQL:
 * Setup a MySQL server [MySQL](https://www.mysql.com/)
 * Copy the config into .env.local
 * Run the SQL file [create_tables](server/my_sql/create_tables.sql)
 
-3. FTP Setup:
+1. FTP Setup:
 * Download [FileZilla](https://filezilla-project.org/download.php) or any other FTP provider
 * Copy the config into .env.local
 
-4. Github Setup:
-* Go to [Github Apps](https://github.com/settings/apps) and press 'New App'
+1. GitHub Setup:
+* Go to [GitHub Apps](https://github.com/settings/apps) and press 'New App'
 * Set the GitHub App name to Rongoā
 * Set the homepage and callback URLs to your site, e.g.
 ```sh
@@ -101,9 +102,9 @@ http://localhost:3000/api/auth/callback/github
 * Under account permissions set Email addresses to read only
 * Once completed creation, create a new client secret
 * Copy the config into .env.local
-5. Other OAuth Setup:
-* Follow NextAuth.js's [documentation](https://next-auth.js.org/configuration/providers/oauth) to setup other OAuth providers
-6. Run the site
+1. Other OAuth Setup:
+* Follow NextAuth.js's [documentation](https://next-auth.js.org/configuration/providers/oauth) to set up other OAuth providers
+1. Run the site
 ```sh
  cd website
  npm run dev
@@ -126,7 +127,7 @@ To add an api key, go to the user profile page and press the generate api key bu
 Go to the [/plants/create](https://13-dgt-website.vercel.app/plants/create) page and enter the information for the plant. Once you are finished, press the upload button, or if you wish to continue creating the plant later, press generate JSON (note: images and attachments will have to be selected again).
 
 ##### Edit Plants
-Go to the [/plants/create?id={id_of_plant}](https://13-dgt-website.vercel.app/plants/create) page and edit the information for the plant. Once you are finished, press the upload button and it will modify that plant.
+Go to the [/plants/create?id={id_of_plant}](https://13-dgt-website.vercel.app/plants/create) page and edit the information for the plant. Once you are finished, press the upload button, and it will modify that plant.
 
 
 _For more examples, please refer to the [Documentation](https://maxtyson123.github.io/13_DGT_WEBSITE)_
@@ -137,7 +138,7 @@ See the [open issues](https://github.com/maxtyson123/13_DGT_WEBSITE/issues) for 
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to be learned, inspire, and create. Any contributions you make are **greatly appreciated**.
 * If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/maxtyson123/13_DGT_WEBSITE/issues/new) to discuss it, or directly create a pull request after you edit the *README.md* file with necessary changes.
 * Please make sure you check your spelling and grammar.
 * Create individual PR for each suggestion.

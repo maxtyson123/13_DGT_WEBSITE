@@ -1,11 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import {useRouter} from 'next/router'
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
-import PageHeader from "@/components/page_header";
-import ScrollToTop from "@/components/scroll_to_top";
 import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
 import styles from "@/styles/pages/plants/id.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -117,7 +112,7 @@ export default function PlantPage() {
 
     }, []);
 
-    // Handle screensize changes
+    // Handle screen size changes
     useEffect(() => {
 
         // If the screen is mobile sized, set the isMobile state to true
@@ -194,7 +189,7 @@ export default function PlantPage() {
 
         }
 
-    }, [plantData]);
+    }, [plantData, setMainImageFromIndex]);
 
     const changeImage = (index: number) => {
 

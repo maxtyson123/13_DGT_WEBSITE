@@ -10,7 +10,6 @@ import { useLogger } from 'next-axiom';
 import Table from "@/components/table";
 import {Layout} from "@/components/layout";
 import {useRouter} from "next/router";
-import {getNamesInPreference} from "@/lib/plant_data";
 
 export default function Admin(){
     const pageName = "Admin";

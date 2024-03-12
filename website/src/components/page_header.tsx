@@ -62,7 +62,7 @@ export default function PageHeader({ children, size = "medium" }: PageHeaderProp
                     />
                 </div>
 
-                {/* This is the container for the header, it uses css to centre its contents*/}
+                {/* This is the container for the header, it uses css to centre it's contents*/}
                 <div className={styles.headerContainer + " gridCentre"}>
 
                     {/* This is the blurred background for what ever is made to be displayed in the header */}

@@ -90,12 +90,12 @@
  Account Image Shouldn't Have a Border
  */
 .navItem:has(img), .activePage:has(img){
-    border-bottom: 0px
+    border-bottom: 0
 }
 
 .activePage:hover:has(img), .navItem:hover:has(img){
     opacity: 0.75;
-    border-bottom: 0px
+    border-bottom: 0
 }
 
 .dropdownContent {

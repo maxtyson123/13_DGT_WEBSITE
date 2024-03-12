@@ -14,7 +14,7 @@ interface CacheItem {
  */
 export function getFromCache(id: string){
 
-    let item = null;
+    let item: null;
     item = sessionStorage.getItem(id);
 
     // Check if the item exists in the local storage

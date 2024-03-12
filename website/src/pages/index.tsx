@@ -3,27 +3,20 @@
 import React, {useEffect, useRef} from "react";
 
 import styles from "@/styles/pages/index.module.css"
-import Navbar from "@/components/navbar";
-import HtmlHeader from "@/components/html_header";
 import Section from "@/components/section";
-import PageHeader from "@/components/page_header";
 import SearchBox from "@/components/search_box";
 import {PlantCardApi, PlantCardLoading} from "@/components/plant_card";
 import Stats from "@/components/stats";
-import Footer from "@/components/footer";
-import ScrollToTop from "@/components/scroll_to_top";
 import {getFromCache, saveToCache} from "@/lib/cache";
 import {globalStyles} from "@/lib/global_css";
 import Image from "next/image";
 import Slider from "@/components/slider";
 import {AttachmentData, fetchPlant, ImageMetaData} from "@/lib/plant_data";
 import {CreditedImage} from "@/components/credits";
-import {QueryClient} from "@tanstack/react-query";
 import {ModalImage} from "@/components/modal";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
-import {any} from "prop-types"
 import {Layout} from "@/components/layout";
 
 export default function Home() {
@@ -78,7 +71,7 @@ export default function Home() {
 
             const user = userData.data.data as UserDatabaseDetails
 
-            update({database: user})
+            await update({database: user})
             saveToCache("user_data_refreshed", true)
         }
     }
@@ -163,7 +156,7 @@ export default function Home() {
         })
     }, [plantIds])
 
-    // Handle screensize changes
+    // Handle screen size changes
     useEffect(() => {
 
         // If the screen is mobile sized, set the isMobile state to true

@@ -53,7 +53,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
     // Try downloading the data from the database
     try {
 
-        // Convert the table to an array if its just one table
+        // Convert the table to an array if it's just one table
         let tableArray = table;
         if(typeof table === 'string'){
             tableArray = [table];

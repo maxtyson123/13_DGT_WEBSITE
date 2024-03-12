@@ -8,7 +8,6 @@ import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import { Logger } from 'next-axiom';
-import {AttachmentData} from "@/lib/plant_data";
 
 function createUpSertQuery(table: string, columns: string[], data: any[])
 {
@@ -267,15 +266,6 @@ export default async function handler(
                 // Check if path is null
                 if(!path){
                     path = "plants";
-                }
-
-
-                // Check if the data is being downloaded from the Postgres database
-                let tables = new SQLDatabase();
-
-                // Set the tables to use
-                if(USE_POSTGRES) {
-                    tables = new PostgresSQL();
                 }
 
                 // Check if there is an error

@@ -1,9 +1,8 @@
 import Section from "@/components/section";
 import styles from "@/styles/pages/admin.module.css";
 import Link from "next/link";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import {useSession} from "next-auth/react";
-import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
@@ -99,7 +98,7 @@ export default function Admin(){
                 setLoadingMessage("")
             }
 
-            // Log that the admin imported a back up
+            // Log that the admin imported a back-up
             log.info(`Admin ${session?.user?.email} imported back up`)
 
             // Clear the cache

@@ -1,10 +1,5 @@
-import Navbar from "@/components/navbar";
-import HtmlHeader from "@/components/html_header";
 import React, {useEffect, useRef} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import ScrollToTop from "@/components/scroll_to_top";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/calendar.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
@@ -71,7 +66,7 @@ export default function Calendar(){
     async function fetchData() {
         try {
 
-            let res = null;
+            let res: null;
 
             const storedData = getFromCache("plant_months");
 
@@ -209,7 +204,7 @@ function EventEntryDisplayed({entry, month, prevMonth, nextMonth}: EventEntryDis
         type = "OnGoing"
         style = styles.onGoing
     }else{
-        // If this is reached then the month is not between the start and end month, but it still could be looped around (e.g dec - march)
+        // If this is reached then the month is not between the start and end month, but it still could be looped around (e.g. dec - march)
         // If the end month is less than the start month then the event is ongoing
         if(entry.endMonth < entry.startMonth){
             if ((month >= entry.startMonth && month <= 12) || (month >= 1 && month < entry.endMonth)) {

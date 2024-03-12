@@ -89,7 +89,7 @@
 }
 
 /*
- The search box takes up the width of the page header but its set to only take up 60% of this.
+ The search box takes up the width of the page header but it's set to only take up 60% of this.
  */
 .searchBox{
     grid-column-start: 1;

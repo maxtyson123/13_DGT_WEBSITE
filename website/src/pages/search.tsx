@@ -1,10 +1,5 @@
-import Navbar from "@/components/navbar";
-import HtmlHeader from "@/components/html_header";
 import React, {useEffect, useRef, useState} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import ScrollToTop from "@/components/scroll_to_top";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/components/search.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
@@ -84,7 +79,7 @@ export default function Search(){
 
     }, [])
 
-    const getSearchResults = async (name: string, mushroons: boolean) => {
+    const getSearchResults = async (name: string, mushrooms: boolean) => {
 
         const startTime = Date.now()
 
@@ -92,9 +87,9 @@ export default function Search(){
             console.log("Getting search results")
 
             // Get the search results
-            const response = await makeRequestWithToken("get",`/api/plants/search?name=${name}&mushrooms=${mushroons ? "include" : "exclude"}`)
-            console.log(mushroons ? "include" : "exclude")
-            console.log(mushroons)
+            const response = await makeRequestWithToken("get",`/api/plants/search?name=${name}&mushrooms=${mushrooms ? "include" : "exclude"}`)
+            console.log(mushrooms ? "include" : "exclude")
+            console.log(mushrooms)
             // Get the data from the response
             const data = response.data.data
 

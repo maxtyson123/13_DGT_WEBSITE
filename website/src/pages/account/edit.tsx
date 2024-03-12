@@ -1,17 +1,11 @@
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import React, {useEffect, useRef, useState} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css"
 import {useSession} from "next-auth/react";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {globalStyles} from "@/lib/global_css";
 import {useRouter} from "next/router";
-import {Error} from "@/components/error";
 import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
-import {Loading} from "@/components/loading";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {Layout} from "@/components/layout";
 
@@ -133,7 +127,7 @@ export default function EditAccount() {
         // Email is valid
         setValidUserEmail(["success", "no error"])
 
-        // Check that there is a image being uploaded
+        // Check that there is an image being uploaded
         if(userLocalImage !== null) {
 
             console.log(userLocalImage)

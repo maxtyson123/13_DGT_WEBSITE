@@ -326,7 +326,7 @@ export function getUserPermissions(user: RongoaUser | null) {
         permissions.api.plants.months.publicAccess = true;
         permissions.api.plants.random.publicAccess = true;
         permissions.api.plants.search.publicAccess = true;
-        permissions.api.plants.uses.publicAccess = true;;
+        permissions.api.plants.uses.publicAccess = true;
         permissions.api.user.data.publicAccess = true;
         permissions.api.user.plants.publicAccess = true;
 

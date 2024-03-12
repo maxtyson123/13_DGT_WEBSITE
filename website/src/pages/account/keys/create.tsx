@@ -1,16 +1,11 @@
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import React, {useEffect} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css"
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import {SmallInput, ValidationState} from "@/components/input_sections";
 import {getDefaultPermissions, getStrings, getUserPermissions, RongoaUser, UserPermissions} from "@/lib/users";
 import {makeRequestWithToken} from "@/lib/api_tools";
-import {Loading} from "@/components/loading";
 import {Error} from "@/components/error";
 import {Layout} from "@/components/layout";
 
@@ -146,7 +141,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
         setLoading(false)
         // Go to the account page
-        router.push("/account/")
+        await router.push("/account/")
 
     }
 

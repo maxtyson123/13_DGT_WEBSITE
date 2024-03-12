@@ -118,7 +118,7 @@
     border-radius: 8px;
     box-sizing: border-box;
     width: 100%;
-    color: #ABAFB1; /* Input can have its own gray the works with most themes */
+    color: #ABAFB1; /* Input can have it's own gray the works with most themes */
     font-size: 16px;
     line-height: 19px;
     background: var(--main-background);

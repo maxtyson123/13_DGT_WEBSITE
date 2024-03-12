@@ -84,7 +84,7 @@ export interface ImageMetaData {
 }
 
 /**
- * Meta data for a file, (attachment.meta)
+ * Metadata for a file, (attachment.meta)
  *
  * @see {@link AttachmentSectionData}
  */
@@ -818,7 +818,7 @@ export async function fetchPlant (id: number) {
 }
 
 /**
- * Will fix the paths of the attachments to be the proper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing its ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
+ * Will fix the paths of the attachments to be the proper path, this is because when uploading the attachments the path is set to the local path on the server, this will change it to the public path. The local path is used as the plant has no way of knowing it's ID until it is saved to the database, it will ignore any attachments that start with http as they are already using the public path.
  *
  * @param {PlantData} plant - The plant data to fix the paths of
  *

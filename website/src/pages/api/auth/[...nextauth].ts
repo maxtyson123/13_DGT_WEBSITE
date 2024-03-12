@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, trigger, session}) {
 
 
-            // If there isnt the user data in the token the fetch it
+            // If there isn't the user data in the token the fetch it
             if(!token.user) {
 
                 // Get the tables and client

@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import Section from "@/components/section";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/plants/mushrooms.module.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {InfiniteLoading} from "@/components/infinteLoading";

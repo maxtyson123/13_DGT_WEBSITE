@@ -47,7 +47,7 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
     }else{
 
         token = token.data
-        let requestURL = request.url
+        let requestURL: string | undefined
 
         // Remove any query parameters
         token = token.split("?")[0]
@@ -78,14 +78,14 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
         // Parse the log
         let log = JSON.parse(api_key_data.api_key_logs)
 
-        // Check if the log is at its limit
+        // Check if the log is at it's limit
         if(log.length >= 100 && !checkPermissions(permissions, "data:logs:unlimitedApiLogEntries")){
 
-            // Remove the item at 1 because don't want to remove the first item as its the creation data
+            // Remove the item at 1 because don't want to remove the first item as it's the creation data
             log.splice(1, 1)
 
-            // Overwrite the new item to state that the log is at its limit
-            log[1] = {time: new Date().toISOString(), action: "Previous log entries have been removed as the log is at its limit of 100 entries"}
+            // Overwrite the new item to state that the log is at it's limit
+            log[1] = {time: new Date().toISOString(), action: "Previous log entries have been removed as the log is at it's limit of 100 entries"}
 
         }
 
@@ -153,8 +153,7 @@ export async function makeRequestWithToken (
 
     try {
         // Make the request
-        const response = await axios(axiosConfig);
-        return response;
+        return await axios(axiosConfig);
     } catch (error : any) {
         // Handle errors
         console.error('Request failed:', error.message);

@@ -1,14 +1,10 @@
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import React, {useEffect, useRef, useState} from "react";
 import Section from "@/components/section";
-import Footer from "@/components/footer";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css"
 import statsStyles from "@/styles/components/stats.module.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCamera, faPerson, faSeedling} from "@fortawesome/free-solid-svg-icons";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {faCamera, faSeedling} from "@fortawesome/free-solid-svg-icons";
+import {signOut, useSession} from "next-auth/react";
 import {
     ADMIN_USER_TYPE,
     checkUserPermissions,
@@ -24,9 +20,7 @@ import {DropdownSection} from "@/components/dropdown_section";
 import {useRouter} from "next/router";
 import Link from "next/link";
 import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
-import {Error} from "@/components/error";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
-import {Loading} from "@/components/loading";
 import {Layout} from "@/components/layout";
 
 export default function Account() {
@@ -113,7 +107,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
         if(session?.user) {
 
-            // Not viewing a user so we are viewing our own account
+            // Not viewing a user, so we are viewing our own account
 
             // This is our account
             setMyAccount(true)
@@ -291,7 +285,7 @@ export function AccountPage({dataID}: AccountPageProps){
         localStorage.removeItem("userApiKeysData_" + userID)
 
         // Reload the data
-        fetchData(userID)
+        await fetchData(userID)
     }
 
 

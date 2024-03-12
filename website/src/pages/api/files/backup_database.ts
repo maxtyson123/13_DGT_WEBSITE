@@ -1,13 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getClient, getTables, makeQuery, PostgresSQL, SQLDatabase} from "@/lib/databse";
+import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {checkApiPermissions} from "@/lib/api_tools";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import { Logger } from 'next-axiom';
-import {Form} from "multiparty";
-import {USE_POSTGRES} from "@/lib/constants";
-import Client from "ftp";
-import fs from "fs";
+
 export default async function handler(
     request: NextApiRequest,
     response: NextApiResponse,

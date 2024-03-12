@@ -1,14 +1,8 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
-import HtmlHeader from "@/components/html_header";
-import Navbar from "@/components/navbar";
 import Section from "@/components/section";
-import PageHeader from "@/components/page_header";
 import styles from "@/styles/pages/account/index.module.css";
-import {Loading} from "@/components/loading";
-import {Error} from "@/components/error";
-import Footer from "@/components/footer";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {checkUserPermissions, getStrings, RongoaUser} from "@/lib/users";
 import {DropdownSection} from "@/components/dropdown_section";
@@ -62,7 +56,7 @@ export default function KeyViewer(){
                     apiUrl += "&publicUserID=" + user
                 }else{
                     // Send them to their account page
-                    router.push("/account")
+                    await router.push("/account")
                 }
 
             }

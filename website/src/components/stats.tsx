@@ -3,7 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBookMedical, faBowlFood, faSeedling, faTools} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect, useRef, useState} from "react";
 import {getFromCache, saveToCache} from "@/lib/cache";
-import axios from "axios";
 import {useRouter} from "next/router";
 import {makeRequestWithToken} from "@/lib/api_tools";
 
@@ -34,7 +33,7 @@ export default function Stats(){
     async function fetchData() {
         try {
 
-            let res = null;
+            let res: null;
 
             const storedData = getFromCache("plant_stats");
 
