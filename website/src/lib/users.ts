@@ -113,6 +113,10 @@ export interface UserPermissions {
                 publicAccess: boolean;
                 internalAccess: boolean;
             };
+            new: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            };
             plants: {
                 publicAccess: boolean;
                 internalAccess: boolean;
@@ -257,6 +261,11 @@ export const getDefaultPermissions = () : UserPermissions => {
                 email: {
                     publicAccess: false,
                     internalAccess: true,
+                },
+
+                new: {
+                    publicAccess: false,
+                    internalAccess: false,
                 },
 
                 plants: {

@@ -10,6 +10,7 @@ import { useLogger } from 'next-axiom';
 import Table from "@/components/table";
 import {Layout} from "@/components/layout";
 import {useRouter} from "next/router";
+import {SmallInput, ValidationState} from "@/components/input_sections";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -26,7 +27,14 @@ export default function Admin(){
     // Load the data
     const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
-    
+
+    const [newUserName, setNewUserName] = useState("")
+    const [nameState, setNameState] = useState<ValidationState>("normal")
+    const [nameError, setNameError] = useState("")
+
+    const [newUserEmail, setNewUserEmail] = useState("")
+    const [emailState, setEmailState] = useState<ValidationState>("normal")
+    const [emailError, setEmailError] = useState("")
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)
@@ -106,11 +114,8 @@ export default function Admin(){
         // Log that the admin has updated the user
         log.info(`Admin ${session?.user?.email} has updated the user with id ${id}`)
 
-        // Remove the item in the local storage
-        sessionStorage.removeItem("user_admin_data")
-
         // Reload the page
-        await router.push("/admin/")
+        reload()
     }
 
     const deleteUser = async (id: number) => {
@@ -121,16 +126,49 @@ export default function Admin(){
         // Remove the user
         const response = await makeRequestWithToken("get", "/api/user/delete?id=" + id)
 
+        // Reload the page
+        reload()
+    }
+
+    const reload = () => {
         // Remove the item in the local storage
         sessionStorage.removeItem("user_admin_data")
 
         // Reload the page
-        await router.push("/admin/")
-    }
-
-    const reload = () => {
         window.location.reload()
     }
+
+    const newUser = async () => {
+
+        // Validate the data
+        if(newUserName == ""){
+            setNameState("error")
+            setNameError("Name cannot be empty")
+            return
+        }
+
+        if(newUserEmail == ""){
+            setEmailState("error")
+            setEmailError("Email cannot be empty")
+            return
+        }
+
+        // Check if the email is valid
+        if(!newUserEmail.includes("@") || !newUserEmail.includes(".")){
+            setEmailState("error")
+            setEmailError("Invalid email")
+            return
+        }
+
+        setLoadingMessage("Adding user...")
+
+        // Create the user
+        await makeRequestWithToken("get", "/api/user/new?name=" + newUserName + "&email=" + newUserEmail)
+
+        // Reload the page
+        reload()
+    }
+
 
     return (
         <>
@@ -204,11 +242,10 @@ export default function Admin(){
                     <div className={globalStyles.gridCentre}>
                         <div className={globalStyles.container}>
                             <div className={styles.adminHeaderContainer}>
-                                todo
                                 <h1>New User</h1>
-                                <input placeholder={"Name"} id={"new_name"}/>
-                                <input placeholder={"Email"} id={"new_email"}/>
-                                <button>Create New</button>
+                                <SmallInput placeHolder={"New User Name"} required={true} state={nameState} changeEventHandler={setNewUserName} errorText={nameError}/>
+                                <SmallInput placeHolder={"New User Email"} required={true} state={emailState} changeEventHandler={setNewUserEmail} errorText={emailError}/>
+                                <button onClick={newUser}>Add User</button>
                             </div>
                         </div>
                     </div>
