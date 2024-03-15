@@ -318,14 +318,11 @@ export default function PlantPage() {
 
                                     {/* The main image, will be set to the first image until the users scrolls below to another one */}
                                     <div className={styles.mainImage} onClick={toggleMainImage}>
-                                        <ModalImage url={mainImage}
-                                                    description={mainImageMetaData ? mainImageMetaData.description : ""}
-                                                    show={showMainImage} hideCallback={toggleMainImage}/>
-                                        <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`}
-                                                       credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
+                                        <ModalImage url={mainImage} description={mainImageMetaData ? mainImageMetaData.description : ""} show={showMainImage} hideCallbackOveride={toggleMainImage}/>
+                                        <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`} credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
                                     </div>
 
-                                    <p className={styles.plantImageDescription}>{mainImageMetaData?.description ? mainImageMetaData.description : "No Description"}</p>
+
 
                                     {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
                                <div className={styles.bottomImages}>

@@ -29,6 +29,7 @@ import {
 } from "@/lib/plant_data";
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {CreditedImage} from "@/components/credits";
+import {ModalImage} from "@/components/modal";
 
 interface AutoSectionProps{
     section: any
@@ -115,7 +116,9 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageState} description={altState}>
+                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                </ModalImage>
             </div>
         </>
     )
@@ -203,7 +206,9 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageState} description={altState}>
+                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                </ModalImage>
             </div>
         </>
     )
@@ -293,7 +298,9 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageState} description={altState}>
+                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                </ModalImage>
             </div>
         </>
     )

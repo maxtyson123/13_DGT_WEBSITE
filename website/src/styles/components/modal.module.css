@@ -9,6 +9,8 @@
     width: 100%;
     height: 100%;
     background-color: var(--shadow-less);
+    overflow-y: auto;
+    max-height: calc(100vh - 1px);
 }
 
 .modalContent {
