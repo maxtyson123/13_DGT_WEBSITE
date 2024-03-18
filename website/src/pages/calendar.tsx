@@ -66,7 +66,7 @@ export default function Calendar(){
     async function fetchData() {
         try {
 
-            let res: null;
+            let res: null | any;
 
             const storedData = getFromCache("plant_months");
 

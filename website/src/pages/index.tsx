@@ -233,7 +233,7 @@ export default function Home() {
 
                         {/* Image */}
                         <div className={styles.aboutImage} onClick={toggleFeaturedImage}>
-                            <ModalImage url={featuredImage.path} description={(featuredImage.meta as ImageMetaData).description} show={featuredImageShown} hideCallback={toggleFeaturedImage}/>
+                            <ModalImage url={featuredImage.path} description={(featuredImage.meta as ImageMetaData).description} show={featuredImageShown} hideCallbackOveride={toggleFeaturedImage}/>
                             <CreditedImage url={featuredImage.path} alt={(featuredImage.meta as ImageMetaData).description} credits={(featuredImage.meta as ImageMetaData).credits} colour={"white"}/>
 
                         </div>

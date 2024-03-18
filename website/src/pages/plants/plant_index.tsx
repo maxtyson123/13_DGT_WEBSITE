@@ -294,7 +294,7 @@ export default function PlantIndex(){
                     <div className={styles.info}>
                         <p> This page contains a list of all the plants on the website. The plants are sorted
                             alphabetically. </p>
-                        <p> Click on a plant to view it's page. </p>
+                        <p> Click on a plant to view its page. </p>
                         <p> Use the dropdown below to select what the index should display</p>
                         <DropdownInput
                             placeHolder={"Index Filter"}
