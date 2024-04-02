@@ -2057,10 +2057,6 @@ export default function CreatePlant() {
                 } else {
                     (plantOBJ.sections[i] as MedicalSectionData).image = "Default";
                 }
-
-                // Show an error
-                setError(`One or more images in the sections are not in the attachments, they have been set to default, you may want to fix this: ${image}`)
-                imageFailed = true
             }
         }
 
@@ -2077,8 +2073,6 @@ export default function CreatePlant() {
             // If the image isn't valid then set it to default
             if (!validImage) {
                 plantOBJ.display_image = "Default";
-                setError(`The display image is not in the attachments, it has been set to default, you may want to fix this: ${plantOBJ.display_image}`)
-                imageFailed = true
             }
         }
 
