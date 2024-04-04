@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: ./website/.env.local
+    environment:
+      DB_TYPE: mysql
+      MYSQL_HOST: "db"
+      MYSQL_PORT: "3306"
+      MYSQL_DATABASE: "rongoa8jwons3_rongoadb"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "example"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "example"
+      NEXT_PUBLIC_JWT_SECRET_KEY: "example"
+      FTP_HOST: "ftpserver"
+      FTP_USER: "user"
+      FTP_PASSWORD: "123"
+      NEXT_PUBLIC_FTP_PUBLIC_URL: "https://localhost"
+  db:
+    image: "mariadb"
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      # Mount the schema file into the container for initalisation
+      - ./server/my_sql/create_tables.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MARIADB_DATABASE: rongoa8jwons3_rongoadb
+  ftp-server:
+    container_name: ftpserver
+    environment:
+      - FTP_PASS=123
+      - FTP_USER=user
+    image: garethflowers/ftp-server
+    ports:
+      - '20-21:20-21/tcp'
+      - '40000-40009:40000-40009/tcp'
+    volumes:
+      - './ftp-data:/home/user'

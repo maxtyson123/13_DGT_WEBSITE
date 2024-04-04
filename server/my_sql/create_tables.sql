@@ -1,5 +1,5 @@
 -- Plants Primary Table
-CREATE TABLE plants (
+CREATE TABLE IF NOT EXISTS plants (
     id INT NOT NULL AUTO_INCREMENT,
     preferred_name TEXT,
     english_name TEXT,
@@ -16,7 +16,7 @@ CREATE TABLE plants (
 );
 
 -- Months For Use
-CREATE TABLE months_ready_for_use (
+CREATE TABLE IF NOT EXISTS months_ready_for_use (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     months_event TEXT,
@@ -28,7 +28,7 @@ CREATE TABLE months_ready_for_use (
 
 
 -- Attachments
-CREATE TABLE attachments (
+CREATE TABLE IF NOT EXISTS attachments (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     attachments_path TEXT,
@@ -40,7 +40,7 @@ CREATE TABLE attachments (
 );
 
 -- Medical Section
-CREATE TABLE medical (
+CREATE TABLE IF NOT EXISTS medical (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     medical_type TEXT,
@@ -55,7 +55,7 @@ CREATE TABLE medical (
 
 
 -- Craft Section
-CREATE TABLE craft (
+CREATE TABLE IF NOT EXISTS craft (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     craft_part_of_plant TEXT,
@@ -69,7 +69,7 @@ CREATE TABLE craft (
 
 
 -- Sources Section
-CREATE TABLE source (
+CREATE TABLE IF NOT EXISTS source (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     source_type TEXT,
@@ -80,7 +80,7 @@ CREATE TABLE source (
 
 
 -- Custom Sections
-CREATE TABLE custom (
+CREATE TABLE IF NOT EXISTS custom (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     custom_title TEXT,
@@ -91,7 +91,7 @@ CREATE TABLE custom (
 
 
 -- Edible Section
-CREATE TABLE edible (
+CREATE TABLE IF NOT EXISTS edible (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
     edible_part_of_plant TEXT,
@@ -105,19 +105,19 @@ CREATE TABLE edible (
 );
 
 -- Users
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT,
     user_name TEXT,
     user_email TEXT,
     user_type INT,
     user_last_login DATETIME,
-    user_image: TEXT,
+    user_image TEXT,
     user_restricted_access BOOLEAN,
     PRIMARY KEY (id)
 );
 
 -- Api Keys
-CREATE TABLE api_key (
+CREATE TABLE IF NOT EXISTS api_key (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT,
     api_key_name TEXT,

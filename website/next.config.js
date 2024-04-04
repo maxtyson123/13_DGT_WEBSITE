@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const { withAxiom } = require('next-axiom');
 const nextConfig = {
   reactStrictMode: true,
+  output: "standalone",
   images: {
     domains: ['i.ibb.co', 'rongoa.stream'],
     remotePatterns: [
