@@ -280,6 +280,7 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     const [creditsState, setCreditsState] = useState<string>("Loading")
 
     useEffect(() => {
+
         // Get the image of the part of the plant
         if(section.image == "Default"){
             setImageState("/media/images/default_noImage.png")
@@ -320,6 +321,8 @@ export function CraftSection({section, images, isLeft} : CraftSectionProps){
     useEffect(() => {
 
         if (craft_useRef.current != null){
+            console.log("CRAFT:")
+            console.log(section.use_identifier)
             craft_useRef.current.innerHTML = "<h3> Use: </h3> " + section.use
         }
 

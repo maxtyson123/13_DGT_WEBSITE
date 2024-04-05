@@ -83,6 +83,7 @@ export default function PlantPage() {
         // Fetch the plant data
         setLoadingMessage("Fetching plant data...")
         const plantOBJ = await fetchPlant(localId)
+        console.log("Plant OBJ:")
         console.log(plantOBJ)
 
         // If the plant data is null then there is a problem
