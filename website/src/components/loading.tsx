@@ -10,7 +10,7 @@ interface LoadingProps {
 export function Loading({loadingMessage = "Loading...", progressMessage}: LoadingProps){
     return(
         <div className={styles.loadingContainer}>
-            <Image src={"/media/images/old_loading.gif"} alt={"Loading.."} width={100} height={100}/>
+            <Image src={"/media/images/small_loading.gif"} alt={"Loading.."} width={100} height={100}/>
             <h1>{loadingMessage}</h1>
             <h2>{progressMessage}...</h2>
         </div>

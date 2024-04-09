@@ -92,7 +92,7 @@ export default function Home() {
 
             // Use the api to get the plant ids
             try{
-                const amountToGet = 3
+                const amountToGet = 5
 
                 // Make the api call
                 const response = await makeRequestWithToken("get",`/api/plants/random?amount=${amountToGet}`)

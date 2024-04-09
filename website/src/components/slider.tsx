@@ -50,7 +50,7 @@ export default function Slider({children} :   SliderProps) {
                 autoplayTimeout={5000}
                 autoplayHoverPause={true}
                 rewind={true}
-                autoplaySpeed={1000}
+                autoplaySpeed={4000}
             >
                 {children}
             </OwlCarousel>
