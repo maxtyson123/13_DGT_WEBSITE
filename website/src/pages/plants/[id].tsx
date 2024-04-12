@@ -16,6 +16,7 @@ import Link from "next/link";
 import {Loading} from "@/components/loading";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Layout} from "@/components/layout";
+import {loader_data} from "@/lib/loader_data";
 
 export default function PlantPage() {
 
@@ -343,9 +344,11 @@ export default function PlantPage() {
 
                                                {/* The image, use the current shown image plus the index to get the correct 5 */}
                                                <Image
+                                                   key={plantData?.attachments[currentImage + index].path}
                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
                                                    alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
                                                    fill
+                                                   placeholder={loader_data()}
                                                    style={{objectFit: "contain"}}
                                                />
                                            </button>

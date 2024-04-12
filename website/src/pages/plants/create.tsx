@@ -2505,6 +2505,7 @@ export default function CreatePlant() {
 
             // Check if there is a file
             if(!file){
+                console.log("NO FILE", i)
                 continue;
             }
 
