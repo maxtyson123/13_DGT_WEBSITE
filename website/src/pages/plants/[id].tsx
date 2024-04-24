@@ -348,7 +348,7 @@ export default function PlantPage() {
                                                    src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
                                                    alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
                                                    fill
-                                                   placeholder={loader_data()}
+                                                   placeholder={loader_data() as any}
                                                    style={{objectFit: "contain"}}
                                                />
                                            </button>
