@@ -130,7 +130,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
         // Upload the key
         try{
-            const response = await makeRequestWithToken("post", "/api/user/api_keys?operation=new&keyName=" + keyName + "&permissions=" + JSON.stringify(permissions))
+            const response = await makeRequestWithToken("post", "/api/user/keys?operation=new&keyName=" + keyName + "&permissions=" + JSON.stringify(permissions))
         } catch (e) {
             console.log(e)
             setError((e as Error).message)

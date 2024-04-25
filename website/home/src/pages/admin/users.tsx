@@ -114,7 +114,7 @@ export default function Admin(){
         // Log that the admin has updated the user
         log.info(`Admin ${session?.user?.email} has updated the user with id ${id}`)
 
-        // Reload the page
+        // Reload the data
         reload()
     }
 
@@ -126,16 +126,16 @@ export default function Admin(){
         // Remove the user
         const response = await makeRequestWithToken("get", "/api/user/delete?id=" + id)
 
-        // Reload the page
-        reload()
+        // Reload the data
+        await fetchData()
     }
 
-    const reload = () => {
+    const reload = async () => {
         // Remove the item in the local storage
         sessionStorage.removeItem("user_admin_data")
 
-        // Reload the page
-        window.location.reload()
+        // Reload the data
+        await fetchData()
     }
 
     const newUser = async () => {
@@ -165,7 +165,7 @@ export default function Admin(){
         // Create the user
         await makeRequestWithToken("get", "/api/user/new?name=" + newUserName + "&email=" + newUserEmail)
 
-        // Reload the page
+        // Reload the data
         reload()
     }
 

@@ -46,7 +46,7 @@ export default function KeyViewer(){
 
         try {
             // Create the url
-            let apiUrl = "/api/user/api_keys?operation=fetch"
+            let apiUrl = "/api/user/keys?operation=fetch"
 
             // Check if the user is the current user
             if (user !== "0") {
@@ -119,7 +119,7 @@ export default function KeyViewer(){
 
         // Clear the logs
         try{
-            const result = await makeRequestWithToken('get', '/api/user/api_keys', {operation: "clear_logs", id: userApiKeyData.id})
+            const result = await makeRequestWithToken('get', '/api/user/keys', {operation: "clear_logs", id: userApiKeyData.id})
 
         }catch (e) {
             setError("Failed to clear logs")

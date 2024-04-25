@@ -3,7 +3,7 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
-import {RongoaUser} from "@/lib/users";
+import {getStrings, RongoaUser} from "@/lib/users";
 import { Logger } from 'next-axiom';
 export default async function handler(
     request: NextApiRequest,
@@ -21,7 +21,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:access")
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     let query = ''
@@ -55,11 +55,15 @@ export default async function handler(
             case "new":
 
                 // Check if the user has permission to add a key
-                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:add")
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:add")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if the key name and permissions are set
                 if(!keyName || !permissions) return response.status(400).json({ error: 'Missing parameters'});
+
+                // Check if a reserved name is being used
+                const reserved_keys = ["Rongoa Media"]
+                if(reserved_keys.includes(id as string)) return response.status(400).json({ error: 'Reserved key name'});
 
                 // Generate the key
                 let key = "";
@@ -67,6 +71,15 @@ export default async function handler(
                     key += Math.random().toString(36).substring(2, 4);
 
                 let logs = [{time: Date.now(), action: "Created"}]
+
+                // Check if the permissions are valid
+                const json_permissions = JSON.parse(permissions as string)
+                for (let permission of json_permissions) {
+                    if(!checkApiPermissions(request, response, session, client, makeQuery, permission)){
+                        return response.status(400).json({ error: 'Invalid permissions' });
+                    }
+                }
+
 
                 // Insert the key
                 query = `INSERT INTO api_key (${tables.user_id}, ${tables.api_key_name}, ${tables.api_key_value}, ${tables.api_key_permissions}, ${tables.api_key_logs}, ${tables.api_key_last_used} ) VALUES ('${userId}', '${keyName}', '${key}', '${permissions}', '${JSON.stringify(logs)}', NOW())`;
@@ -79,7 +92,7 @@ export default async function handler(
                 return response.status(200).json({ data: { key: key }});
 
             case "remove":
-                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:remove")
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:remove")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 // Check if the key id is set
@@ -95,12 +108,12 @@ export default async function handler(
                 return response.status(200).json({ data: { key: id }});
 
             case "edit":
-                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:edit")
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:edit")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
                 break
 
             case "fetch":
-                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:fetch")
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:fetch")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 if(publicUserID && privateData){
@@ -120,7 +133,7 @@ export default async function handler(
                 return response.status(200).json({ data: keys });
 
             case "clearLogs":
-                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:api_keys:clearLogs")
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:clearLogs")
                 if(!permission) return response.status(401).json({error: "Not Authorized"})
                 if(!id) return response.status(400).json({ error: 'Missing parameters'});
 

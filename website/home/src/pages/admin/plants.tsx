@@ -126,8 +126,8 @@ export default function Admin(){
         sessionStorage.removeItem("plant_admin_data")
         sessionStorage.removeItem("plant_stats")
 
-        // Reload the page
-        window.location.reload()
+        // Reload the data
+        fetchData()
     }
 
     return (

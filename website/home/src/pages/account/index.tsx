@@ -233,7 +233,7 @@ export function AccountPage({dataID}: AccountPageProps){
         try {
 
             // Create the url
-            let apiUrl = "/api/user/api_keys?operation=fetch"
+            let apiUrl = "/api/user/keys?operation=fetch"
             if(localId != 0 && checkUserPermissions(session?.user as RongoaUser, "data:account:viewPrivateDetails")) {
                 console.log("Can view private details")
                 apiUrl += "&publicUserID=" + localId
@@ -276,13 +276,13 @@ export function AccountPage({dataID}: AccountPageProps){
 
         // Delete the key
         try{
-            await makeRequestWithToken("get","/api/user/api_keys?operation=remove&id=" + keyID)
+            await makeRequestWithToken("get","/api/user/keys?operation=remove&id=" + keyID)
         } catch (e) {
             console.log(e)
         }
 
         // Clear the key data
-        localStorage.removeItem("userApiKeysData_" + userID)
+        sessionStorage.removeItem("userApiKeysData_" + userID)
 
         // Reload the data
         await fetchData(userID)

@@ -91,7 +91,7 @@ export interface UserPermissions {
             };
         };
         user: {
-            api_keys: {
+            keys: {
                 publicAccess: boolean;
                 internalAccess: boolean;
                 add: boolean;
@@ -237,7 +237,7 @@ export const getDefaultPermissions = () : UserPermissions => {
             },
 
             user: {
-                api_keys: {
+                keys: {
                     publicAccess: false,
                     internalAccess: true,
                     add: true,
