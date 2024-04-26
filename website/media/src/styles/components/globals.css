@@ -51,7 +51,9 @@
   --shadow-less: var(--LIGHT-shadow-less);
   --shadow-min: var(--LIGHT-shadow-min);
 
-  --site-font: 'Archivo'
+  --site-font: 'Archivo';
+
+  --roate-time: 30s;
 
 }
 
@@ -83,6 +85,7 @@ body{
   height: 100%;
   margin: 0 auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 20%);
+  overflow-x: hidden;
 }
 
 .content{
