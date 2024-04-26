@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
       <>
         <main>
-            {/* The session provider must wrap the entire app to keep the user logged in */}
+          {/* The session provider must wrap the entire app to keep the user logged in */}
           <SessionProvider session={pageProps.session}>
 
               {/* Show the page */}
