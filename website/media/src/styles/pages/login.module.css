@@ -18,8 +18,8 @@
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='200' ry='200' stroke='%23333' stroke-width='2' stroke-dasharray='11' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
     border-radius: 200px;
     margin: auto;
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
     animation: rotateCircle var(--roate-time) linear infinite;
     display: grid;
 }
@@ -31,6 +31,37 @@
     width: 200px;
     height: 200px;
     animation: rotateCircle calc(var(--roate-time) / 2) linear infinite reverse;
+
+}
+
+/* Circle */
+.dot{
+    background: #0A670A;
+    border-radius: 50%;
+    width: 7%;
+    height: 7%;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+}
+
+.dot1{
+    bottom: 50%;
+    left: -3%;
+}
+
+.dot2{
+    bottom: 50%;
+    right: -3%;
+}
+.dot3{
+    right: 50%;
+    bottom: -3%;
+}
+
+.dot4{
+    left: 50%;
+    top: -3%;
 }
 
 .container button{

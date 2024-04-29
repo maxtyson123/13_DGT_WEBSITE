@@ -73,7 +73,7 @@ export default async function handler(
                 let logs = [{time: Date.now(), action: "Created"}]
 
                 // Check if the permissions are valid
-                const json_permissions = JSON.parse(permissions as string)
+                const json_permissions = getStrings(JSON.parse(permissions as string))
                 for (let permission of json_permissions) {
                     if(!checkApiPermissions(request, response, session, client, makeQuery, permission)){
                         return response.status(400).json({ error: 'Invalid permissions' });
@@ -166,6 +166,9 @@ export default async function handler(
 
 
     } catch (error) {
+
+        console.log("ERROR", error)
+
         // If there is an error, return the error
         return response.status(500).json({ error: error });
     }
