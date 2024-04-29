@@ -29,7 +29,20 @@ export default async function handler(
 
     try {
 
-        let query = `SELECT ${privateData ? "*" : "id, user_name, user_type, user_image"} FROM users WHERE id = ${id}`;
+
+        let query = `SELECT ${privateData ? "*" : "id, user_name, user_type, user_image"} FROM users WHERE id =`;
+
+        // Check if id is an array
+        if(Array.isArray(id)) {
+            for (let i = 0; i < id.length; i++) {
+                query += ` ${id[i]}`;
+                if(i != id.length - 1)
+                    query += " OR id =";
+            }
+        }else{
+            query += ` ${id}`;
+        }
+
 
         // If there is no id then must be using the user session
         if(!id) {
@@ -55,7 +68,7 @@ export default async function handler(
         }
 
         // Return the user
-        return response.status(200).json({ data: user[0] });
+        return response.status(200).json({ data: user[0], raw: user });
 
 
     } catch (error) {
