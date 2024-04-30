@@ -99,8 +99,10 @@ export default function Post(){
 
         // Loading
         setLoading("Uploading Infomation...")
-        const title = postTitle;
-        const plantID = plant;
+        const post_title = postTitle;
+        const post_plant_id = plant;
+        const plant_image = image.name;
+        const response = await makeRequestWithToken('post', '/api/posts/new', {post_title, post_plant_id, plant_image});
 
 
         // Upload the image

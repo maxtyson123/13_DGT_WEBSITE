@@ -32,12 +32,18 @@ export default function App({ Component, pageProps }: AppProps) {
               {/* Show the page */}
               <Component  key={pageKey} {...pageProps} />
 
-              {/* Credits and analytics should be on every page*/}
-              <Credits/>
 
-              {/* Allow the user to scroll to the top of the page easily*/}
-              <ScrollToTop/>
+              {/* Dont show the credits or scroll to top on the media page */}
+              {router.pathname.includes("/media") ? null :
 
+                    <>
+                        {/* Credits and analytics should be on every page*/}
+                        <Credits/>
+
+                        {/* Allow the user to scroll to the top of the page easily*/}
+                        <ScrollToTop/>
+                    </>
+              }
               <Analytics />
               <AxiomWebVitals />
            </SessionProvider>
