@@ -1,0 +1,172 @@
+.page{
+    display: grid;
+    grid-template-rows: 0.1fr 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    margin-top: 4vh;
+    height: 96vh;
+}
+
+.topBar{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.topBar img{
+    width: 35%;
+    height: 35%;
+}
+
+.topBar h1{
+    font-size: 1.7em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.backButton{
+    justify-self: start;
+    margin-left: 15%;
+}
+
+
+.editButton{
+    justify-self: end;
+}
+
+.profileContainer{
+    display: grid;
+    grid-template-rows: 1fr 0.6fr 0.25fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.profileImage{
+    border-radius: 50%;
+    width: 30%;
+    margin-top: 10%;
+    overflow: hidden;
+}
+
+.profileImage img{
+   aspect-ratio: 1/1;
+}
+
+.profileInfo{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.profileInfo h1{
+    font-size: 1.5em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.profileInfo p{
+    font-size: 1.2em;
+    color: var(--darker-secondary-gray);
+    font-weight: bolder;
+}
+
+.profileStats{
+    margin-top: 6%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+}
+
+.profileStats p{
+    font-size: 1.5em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.profileStats h1{
+    font-size: 1em;
+    color: var(--darker-secondary-gray);
+    font-weight: bolder;
+}
+
+.postsContainer{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 0.2fr 1fr;
+    gap: 4%;
+}
+
+.postsHeader{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    margin-top: 8%;
+    margin-bottom: 5%;
+}
+
+.postsHeader button{
+    font-size: 1.2em;
+    color: var(--darker-secondary-gray);
+    font-weight: bolder;
+    padding: 3% 15% 3% 15%;
+    border-radius: 15px;
+}
+
+.postsHeader .active{
+    background-color: var(--main-green);
+    color: var(--text-light);
+}
+
+.posts{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    gap: 4%;
+    width: 100%;
+    height: 100%;
+}
+
+.post{
+    background: var(--darker-secondary-gray);
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    padding: 4%;
+}
+
+.main{
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+
+.followButton{
+    font-size: 1.2em;
+    color: var(--text-light);
+    font-weight: bolder;
+    padding: 1% 10% 1% 10%;
+    border-radius: 15px;
+    background-color: var(--main-green);
+}
+
+.followContainer{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+}

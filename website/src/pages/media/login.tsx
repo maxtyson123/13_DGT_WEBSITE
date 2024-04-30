@@ -2,7 +2,7 @@ import styles from '@/styles/media/login.module.css'
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Wrapper from "@/pages/media/components/wrapper";
-import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
+import {signIn, useSession} from "next-auth/react";
 
 export default function Login(){
 
@@ -10,6 +10,8 @@ export default function Login(){
 
     const dataFetch = useRef(false);
     const [icons, setIcons] = useState<any[]>([])
+
+    const { data: session } = useSession();
 
     useEffect(() => {
 
@@ -22,6 +24,14 @@ export default function Login(){
         fetchData();
 
     }, []);
+
+
+    // Check if the user already logged in
+    useEffect(() => {
+        if(session?.user){
+            window.location.href = "/media"
+        }
+    }, [session])
 
     const fetchData = async () => {
 
@@ -59,7 +69,7 @@ export default function Login(){
 
     return(
         <>
-            <Wrapper>
+            <Wrapper login>
                 <div className={styles.container}>
                     {/* Log In Circle Icon */}
                     <div className={styles.cicrcles}>
@@ -80,9 +90,10 @@ export default function Login(){
                     <h1> Together</h1>
 
                     {/* Buttons */}
-                    <button> Log In</button>
-                    <button className={styles.signup}> Sign Up</button>
-
+                    <div className={styles.buttons}>
+                        <button onClick={() => signIn()}> Log In</button>
+                        <button className={styles.signup} onClick={() => signIn()}> Sign Up</button>
+                    </div>
                 </div>
             </Wrapper>
         </>

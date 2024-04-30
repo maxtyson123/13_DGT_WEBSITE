@@ -86,6 +86,10 @@ export class SQLDatabase {
     api_key_permissions: string;
     api_key_logs: string;
 
+    // Follows Table
+    follower_id: string;
+    following_id: string;
+
     constructor() {
         this.database = "rongoa8jwons3_rongoadb"
 
@@ -162,7 +166,11 @@ export class SQLDatabase {
         this.api_key_value              = "api_key_value";
         this.api_key_last_used          = "api_key_last_used";
         this.api_key_permissions        = "api_key_permissions";
-        this.api_key_logs              = "api_key_logs";
+        this.api_key_logs               = "api_key_logs";
+
+        // Follows Table
+        this.follower_id                = "follower_id";
+        this.following_id               = "following_id";
     }
 }
 

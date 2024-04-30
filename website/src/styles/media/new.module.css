@@ -1,0 +1,96 @@
+.page{
+    display: grid;
+    grid-template-rows: 0.1fr 1fr 0.1fr;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    margin-top: 4vh;
+    height: 96vh;
+}
+
+
+.topBar{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.topBar img{
+    width: 35%;
+    height: 35%;
+}
+
+.topBar h1{
+    font-size: 1.7em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.backButton{
+    justify-self: start;
+    margin-left: 15%;
+}
+
+
+.editButton{
+    justify-self: end;
+}
+
+.createPost{
+    display: grid;
+    grid-template-rows: 1fr 0.2fr 0.5fr;
+    gap: 4%;
+    width: 85%;
+    height: 95%;
+    align-items: center;
+    justify-items: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.5);
+}
+
+.postImage{
+    width: 90%;
+    height: 100%;
+    margin-top: 10%;
+    border-radius: 10px;
+    border: var(--darker-secondary-gray) 1px solid;
+    text-align: center;
+}
+
+.postTitle{
+    width: 90%;
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+
+}
+
+.plantLink{
+    width: 90%;
+    height: 100%;
+    display: grid;
+    justify-items: start;
+    align-items: start;
+}
+
+.postButton{
+    display: grid;
+    justify-items: center;
+    width: 100%;
+}
+
+.postButton button{
+    width: 85%;
+    height: 100%;
+    background-color: var(--main-green);
+    color: var(--text-light);
+    font-size: 2em;
+    font-weight: bolder;
+    border: none;
+    border-radius: 10px;
+    padding: 1% 5% 1% 5%;
+
+}

@@ -129,3 +129,11 @@ CREATE TABLE IF NOT EXISTS api_key (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS follows (
+    id INT NOT NULL AUTO_INCREMENT,
+    follower_id INT,
+    following_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (following_id) REFERENCES users(id)
+);
