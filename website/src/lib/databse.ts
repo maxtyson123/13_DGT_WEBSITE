@@ -90,6 +90,14 @@ export class SQLDatabase {
     follower_id: string;
     following_id: string;
 
+    // Posts Table
+    post_title: string;
+    post_plant_id: string;
+    post_user_id: string;
+    post_date: string;
+    post_image: string;
+
+
     constructor() {
         this.database = "rongoa8jwons3_rongoadb"
 
@@ -171,6 +179,14 @@ export class SQLDatabase {
         // Follows Table
         this.follower_id                = "follower_id";
         this.following_id               = "following_id";
+
+        // Posts Table
+        this.post_title                 = "post_title";
+        this.post_plant_id              = "post_plant_id";
+        this.post_user_id               = "post_user_id";
+        this.post_date                  = "post_date";
+        this.post_image                 = "post_image";
+
     }
 }
 

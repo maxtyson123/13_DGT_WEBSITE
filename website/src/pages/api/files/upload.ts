@@ -192,6 +192,30 @@ function createBackUpQuery(json: any) {
                 )
             continue;
         }
+
+        // Check if it is follows data
+        if(tableNames.includes("follower_id")) {
+            let followsTable = json.data[i];
+            for (let j = 0; j < followsTable.length; j++)
+                query += createUpSertQuery("follows",
+                    [tables.id, tables.follower_id, tables.following_id],
+                    [followsTable[j].id, followsTable[j].follower_id, followsTable[j].following_id]
+                )
+            continue;
+        }
+
+        // Check if it is posts data
+        if(tableNames.includes("post_title")) {
+            let postsTable = json.data[i];
+            for (let j = 0; j < postsTable.length; j++)
+                query += createUpSertQuery("posts",
+                    [tables.id, tables.post_title, tables.post_plant_id, tables.post_user_id, tables.post_date, tables.post_image],
+                    [postsTable[j].id, postsTable[j].post_title, postsTable[j].post_plant_id, postsTable[j].post_user_id, postsTable[j].post_date, postsTable[j].post_image]
+
+                )
+            continue;
+        }
+
     }
 
     return query;

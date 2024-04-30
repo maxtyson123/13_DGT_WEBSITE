@@ -129,6 +129,7 @@ CREATE TABLE IF NOT EXISTS api_key (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Follows
 CREATE TABLE IF NOT EXISTS follows (
     id INT NOT NULL AUTO_INCREMENT,
     follower_id INT,
@@ -136,4 +137,17 @@ CREATE TABLE IF NOT EXISTS follows (
     PRIMARY KEY (id),
     FOREIGN KEY (follower_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
+);
+
+-- Posts
+CREATE TABLE IF NOT EXISTS posts (
+    id INT NOT NULL AUTO_INCREMENT,
+    post_title TEXT,
+    post_plant_id INT,
+    post_user_id INT,
+    post_date DATETIME,
+    post_image TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (post_plant_id) REFERENCES plants(id),
+    FOREIGN KEY (post_user_id) REFERENCES users(id)
 );

@@ -126,6 +126,15 @@ export interface UserPermissions {
                 internalAccess: boolean;
                 admin: boolean;
             };
+            follow: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+                followingCount: boolean;
+                followersCount: boolean;
+                follow: boolean;
+                unfollow: boolean;
+                checkFollowing: boolean;
+            };
         };
     };
 
@@ -278,6 +287,16 @@ export const getDefaultPermissions = () : UserPermissions => {
                     internalAccess: true,
                     admin: false,
                 },
+
+                follow: {
+                    publicAccess: false,
+                    internalAccess: true,
+                    followingCount: true,
+                    followersCount: true,
+                    follow: true,
+                    unfollow: true,
+                    checkFollowing: true,
+                }
             },
 
         },

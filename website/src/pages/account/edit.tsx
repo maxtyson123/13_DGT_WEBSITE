@@ -28,7 +28,7 @@ export default function EditAccount() {
     const [validUserName, setValidUserName] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserEmail, setValidUserEmail] = React.useState<[ValidationState, string]>(["normal", "no error"])
     const [validUserImage, setValidUserImage] = React.useState<[ValidationState, string]>(["normal", "no error"])
-     const [loadingMessage, setLoadingMessage] = React.useState<string>("")
+    const [loadingMessage, setLoadingMessage] = React.useState<string>("")
 
     // Don't fetch the data again if it has already been fetched
     const dataFetch = useRef(false)

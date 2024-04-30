@@ -21,7 +21,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:keys:access")
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:access")
     if (!permission) return response.status(401).json({error: "Not Authorized"})
 
     let query = ''
@@ -52,14 +52,19 @@ export default async function handler(
 
             case "followingCount":
 
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:followingCount")) return response.status(401).json({error: "Not Authorized"})
                 query = `SELECT COUNT(*) FROM follows WHERE ${tables.follower_id} = ${id ? id : userId}`
                 break;
 
             case "followersCount":
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:followersCount")) return response.status(401).json({error: "Not Authorized"})
                 query = `SELECT COUNT(*) FROM follows WHERE ${tables.following_id} = ${id ? id : userId}`
                 break;
 
             case "follow":
+
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:follow")) return response.status(401).json({error: "Not Authorized"})
+
                 // If there is no id then return an error
                 if (!id) {
                     return response.status(400).json({error: 'No id specified'});
@@ -69,6 +74,8 @@ export default async function handler(
                 break;
 
             case "unfollow":
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:unfollow")) return response.status(401).json({error: "Not Authorized"})
+
                 // If there is no id then return an error
                 if (!id) {
                     return response.status(400).json({error: 'No id specified'});
@@ -78,6 +85,9 @@ export default async function handler(
                 break;
 
             case "checkFollowing":
+
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:checkFollowing")) return response.status(401).json({error: "Not Authorized"})
+
                 // If there is no id then return an error
                 if (!id) {
                     return response.status(400).json({error: 'No id specified'});

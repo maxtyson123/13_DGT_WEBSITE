@@ -59,6 +59,12 @@ export default async function handler(
         // Get the information for the api key data
         query += `SELECT * FROM api_key;`;
 
+        // Get the information for the follows data
+        query += `SELECT * FROM follows;`;
+
+        // Get the information for the post data
+        query += `SELECT * FROM post;`;
+
         // Finally Get the information for the plant data
         query += `SELECT * FROM plants;`;
 
