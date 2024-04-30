@@ -36,7 +36,7 @@ export default function Post(){
         const plants = response.data.data;
 
         // Get the plant names
-        const plantNames = plants.map(plant => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
+        const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
         setPlantNames(plantNames);
 
     }

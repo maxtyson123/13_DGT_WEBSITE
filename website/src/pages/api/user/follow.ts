@@ -98,7 +98,7 @@ export default async function handler(
         // Execute the query
 
 
-    } catch (e) {
+    } catch (e : any) {
         logger.error(e)
         return response.status(500).json({error: 'Internal Server Error'})
     }
