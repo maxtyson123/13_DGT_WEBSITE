@@ -85,7 +85,7 @@ export async function checkApiPermissions(request: NextApiRequest, response: Nex
             log.splice(1, 1)
 
             // Overwrite the new item to state that the log is at it's limit
-            log[1] = {time: new Date().toISOString(), action: "Previous log entries have been removed as the log is at it's limit of 100 entries"}
+            log[1] = {time: new Date().toISOString(), action: "Previous log entries have been removed as the log is at its limit of 100 entries"}
 
         }
 

@@ -39,6 +39,7 @@ import {RongoaUser} from "@/lib/users";
 import {createToken, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
 import {Layout} from "@/components/layout";
+import { cleanInput } from "@/lib/data";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -1797,19 +1798,7 @@ export default function CreatePlant() {
     }
 
 
-    const cleanInput = (input: string) => {
 
-        if(!input)
-            return input;
-
-        let clean: string;
-
-        // Replace ' with slanted '
-        clean = input.replaceAll("'", "’");
-
-        return clean;
-
-    }
 
     const generateJSON = () => {
 

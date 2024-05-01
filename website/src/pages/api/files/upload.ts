@@ -307,7 +307,12 @@ export default async function handler(
                 ftp.on('ready', () => {
 
                     // Get the path to upload to
-                    const folder = `/${path}/${id}`
+                    let folder = `/${path}/`
+
+                    // If adding id
+                    if(id != "ignore")
+                        folder += `${id}/`
+
                     const remotePath = `${folder}/${file[0].originalFilename}`
 
                     const directories = folder.split('/').filter(Boolean);

@@ -43,11 +43,12 @@ export default async function handler(
     // Try uploading the data to the database
     try {
         let {
-            post_title,
-            post_plant_id,
-            plant_image,
+            title,
+            plant,
+            image,
 
-        } = request.body;
+        } = request.query;
+
 
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
@@ -55,9 +56,11 @@ export default async function handler(
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
         // Run the query
-        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id} ${tables.post_image} ${tables.post_date}) VALUES ('${post_title}', ${post_plant_id}, ${user_id}, '${plant_image}', ${timeFunction}(${Date.now()} / 1000.0) RETURNING id;`;
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0) ) RETURNING id;`;
         const data = await makeQuery(query, client, true)
 
+        console.log("DATA")
+        console.log(data)
         if(!data)
             return response.status(500).json({ error: "No data returned" });
 
@@ -73,11 +76,12 @@ export default async function handler(
             data.forEach((item: any) => {
 
                 // If there is an id, set it
-                if (item[0] && item[0].id) {
-                    id = item[0].id;
+                if (item && item.id) {
+                    id = item.id;
                 }
             });
         }
+
 
 
         // If there is no id, return an error

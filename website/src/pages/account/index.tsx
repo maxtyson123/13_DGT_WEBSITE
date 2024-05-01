@@ -137,6 +137,9 @@ export function AccountPage({dataID}: AccountPageProps){
 
     const loadUserData = (user: UserDatabaseDetails) => {
 
+        console.log("Loading user data")
+        console.log(user)
+
         setUserName(user.user_name)
         setUserEmail(user.user_email)
         switch (user.user_type){

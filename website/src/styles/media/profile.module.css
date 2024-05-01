@@ -1,6 +1,6 @@
 .page{
     display: grid;
-    grid-template-rows: 0.1fr 1fr 1fr;
+    grid-template-rows: 0.1fr 0.8fr 1.5fr;
     align-items: center;
     justify-items: center;
     width: 100%;
@@ -39,7 +39,7 @@
 
 .profileContainer{
     display: grid;
-    grid-template-rows: 1fr 0.6fr 0.25fr;
+    grid-template-rows: 1fr 0.5fr 0.25fr;
     justify-items: center;
     align-items: center;
     width: 100%;
@@ -104,8 +104,17 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: 0.2fr 1fr;
+    grid-template-rows: 0.2fr;
     gap: 4%;
+    overflow-y: scroll;
+}
+
+#container{
+    --height: 100px;
+}
+
+.postsContainer::-webkit-scrollbar {
+    display: none;
 }
 
 .postsHeader{
@@ -132,15 +141,54 @@
     color: var(--text-light);
 }
 
+.loader{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    animation: fade 1s infinite;
+}
+
+.loader h1{
+    font-size: 1.5em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.loader img{
+    width: 35%;;
+}
+
 .posts{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, 100px);
     justify-items: center;
     align-items: center;
-    gap: 4%;
     width: 100%;
-    height: 100%;
+    gap: 20px;
+    text-align: center;
+}
+
+.posts p{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    width: 100%;
+}
+
+.posts:has(> :nth-child(3):last-child) .post{
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.posts:has(> :nth-child(4):last-child) .post{
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.posts:has(> :nth-child(4):last-child) .main{
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
 .post{
@@ -149,7 +197,17 @@
     height: 100%;
     border-radius: 15px;
     padding: 4%;
+    display: block;
+    position: relative;
 }
+
+.post img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
 
 .main{
     grid-row-start: 1;
@@ -169,4 +227,17 @@
     width: 100%;
     display: grid;
     justify-items: center;
+}
+
+/* Loading Animation */
+@keyframes fade{
+    0% {
+        opacity: 1
+    }
+    50% {
+        opacity: 0.5
+    }
+    100% {
+        opacity: 1
+    }
 }

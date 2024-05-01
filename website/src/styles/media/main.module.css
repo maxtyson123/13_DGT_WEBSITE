@@ -1,0 +1,270 @@
+.page{
+    display: grid;
+    grid-template-rows: 0.2fr 3.5fr 0.3fr;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    margin-top: 4vh;
+    height: 96vh;
+    gap: 2%;
+}
+
+.topBar{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+}
+
+.logo{
+    justify-self: start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10%;
+    margin-left: 6%;
+}
+
+.logo h1{
+    font-size: 0.9em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.logo h2{
+    font-size: 0.7em;
+    color: var(--darker-secondary-gray);
+    font-weight: bold;
+}
+
+.message{
+    justify-self: end;
+}
+
+.message img{
+    width: 40%;
+    position: relative;
+    top: 15px;
+}
+
+.message p{
+    position: relative;
+    z-index: 2;
+    top: -20px;
+    right: -20px;
+    font-size: 0.8em;
+    font-weight: bold;
+    background-color: var(--darker-secondary-gray);
+    border-radius: 50%;
+    width: 24%;
+    text-align: center;
+}
+
+.stories{
+    display: flex;
+    width: 100%;
+    gap: 5%;
+    overflow-x: scroll;
+}
+
+.stories::-webkit-scrollbar{
+    display: none;
+}
+
+
+.story{
+    text-align: center;
+    color: var(--darker-secondary-gray);
+    min-width: 75px;
+    cursor: pointer;
+}
+
+.story img{
+    width: 100%;
+    border-radius: 50%;
+    border: var(--secondary-gray) 2px solid;
+    opacity: 80%;
+}
+
+.active{
+    color: var(--text-dark);
+}
+
+.active img{
+    border: var(--main-green) 3px solid;
+}
+
+
+.story > div{
+    position: relative;
+    top: -75%;
+    margin-bottom: -100%;
+    background-color: rgba(128, 128, 128, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.story > div img{
+    scale: 0.4;
+    border-radius: 0;
+    border: 0 !important;
+}
+
+.posts{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5%;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    justify-content: center;
+    padding-bottom: 4%;
+}
+
+.posts::-webkit-scrollbar{
+    display: none;
+}
+
+.post{
+    display: grid;
+    grid-template-rows: 0.2fr 0.8fr 0.3fr;
+    width: 90%;
+    height: 550px;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 4%;
+    gap: 3%;
+}
+
+.mainImage{
+    width: 100%;
+    height: 360px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.mainImage img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.postHeader{
+    display: grid;
+    grid-template-columns: 0.2fr 0.75fr 0.25fr;
+    align-items: center;
+    justify-items: center;
+    gap: 5%;
+}
+
+.postHeader img{
+    width: 95%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: var(--main-green) 3px solid;
+    padding: 2%;
+}
+
+.userInfo{
+    justify-self: start;
+}
+
+.userInfo h1{
+    font-size: 1.2em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.userInfo h2{
+    font-size: 0.9em;
+    color: var(--darker-secondary-gray);
+    font-weight: bold;
+}
+
+.postHeader p{
+    justify-self: end;
+    font-size: 3em;
+    color: var(--darker-secondary-gray);
+    font-weight: bold;
+}
+
+.dots{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20%;
+    justify-self: end;
+    margin-right: 45%;
+    cursor: pointer;
+}
+
+.dot{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--darker-secondary-gray);
+    cursor: pointer;
+}
+
+.postFooter{
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr 1.4fr 0.6fr 1fr;
+    gap: 5%;
+    justify-items: center;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.postFooter img{
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    cursor: pointer;
+}
+
+.postFooter button{
+    display: grid;
+    grid-template-columns: 0.5fr 1.5fr;
+    align-items: center;
+    justify-items: start;
+    gap: 10px;
+    font-weight: bolder;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.time{
+    justify-self: start;
+    color: var(--darker-secondary-gray);
+    font-weight: bold;
+}
+
+.title{
+    justify-self: start;
+    font-size: 1.4em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.bottomBar{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 90%;
+    gap: 5%;
+    margin-bottom: 6%;
+    background-color: var(--main-green);
+    border-radius: 15px;
+    padding: 3% 8% 3% 8%;
+}
+
+.bottomBar img{
+    width: 40px;
+    height: 40px;
+    padding: 10%;
+    cursor: pointer;
+    fill: var(--text-dark);
+}

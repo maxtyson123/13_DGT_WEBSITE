@@ -7,6 +7,7 @@ import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/pl
 import {Loading} from "@/components/loading";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
+import {cleanInput} from "@/lib/data";
 
 
 export default function Post(){
@@ -29,7 +30,7 @@ export default function Post(){
     const [loading, setLoading] = useState("");
 
     const {data: session} = useSession();
-    const [userID, setUserID] = useState<string>("");
+    const [userID, setUserID] = useState<number>(0);
 
     const dataFetch = useRef(false);
     useEffect(() => {
@@ -45,7 +46,7 @@ export default function Post(){
 
     useEffect(() => {
         if(session?.user == null) return;
-        setUserID((session.user as RongoaUser).id);
+        setUserID((session.user as RongoaUser).database.id);
     }, [session]);
 
     const fetchData = async () => {
@@ -57,7 +58,9 @@ export default function Post(){
         // Get the plant names
         const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
         const plantIDs = plants.map((plant : any) => plant.id);
+
         setPlantNames(plantNames);
+        setPlantIDs(plantIDs);
 
     }
 
@@ -100,12 +103,18 @@ export default function Post(){
         // Loading
         setLoading("Uploading Infomation...")
         const post_title = postTitle;
-        const post_plant_id = plant;
-        const plant_image = image.name;
+        const post_plant_id = plantIDs[plantNames.indexOf(plant)];
+        const plant_image = cleanInput(image.name)
+
+        console.log(post_plant_id)
+        console.log(plantIDs)
 
 
         // Send the post data to the server
-        const response = await makeRequestWithToken('post', '/api/posts/new', {post_title, post_plant_id, plant_image});
+        const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image);
+
+        console.log(response)
+        console.log(userID)
 
         // Get the post id
         const newId = response.data.id
@@ -135,6 +144,9 @@ export default function Post(){
 
 
         setLoading("")
+
+        // Redirect to the post
+        window.location.href = '/media/post/' + newId;
     }
 
     return(

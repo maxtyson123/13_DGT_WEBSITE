@@ -5,10 +5,13 @@ import {useSession} from "next-auth/react";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useRouter} from "next/router";
-import {addMeasureSuffix} from "@/lib/data";
+import {addMeasureSuffix, getFilePath} from "@/lib/data";
+import Image from "next/image";
 export default function Profile() {
 
 
+
+    // User Info
     const [name, setName] = useState('');
     const [image, setImage] = useState('/media/images/logo.svg');
     const [role, setRole] = useState('');
@@ -18,6 +21,7 @@ export default function Profile() {
     const [iFollow, setIFollow] = useState(false);
     const [myProfile, setMyProfile] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [postsData, setPostsData] = useState<any>([]);
 
     const dataFetch = useRef(false);
     const router = useRouter();
@@ -96,6 +100,8 @@ export default function Profile() {
             setIFollow(following.data.data.length > 0);
         }
 
+
+        // Get the stats
         const following = await makeRequestWithToken('get', `/api/user/follow?operation=followingCount${id ? `&id=${id}` : ''}`);
         const followers = await makeRequestWithToken('get', `/api/user/follow?operation=followersCount${id ? `&id=${id}` : ''}`);
 
@@ -105,6 +111,16 @@ export default function Profile() {
         setFollowers(followersCount);
         setFollowing(followingCount);
 
+
+        // Get the posts
+        const posts = await makeRequestWithToken('get', `/api/posts/fetch?operation=list&id=${(id ? id : (session?.user as RongoaUser).database.id)}`);
+        console.log(posts);
+        if(posts.data.raw){
+            setPostsData(posts.data.raw);
+            setPosts(posts.data.raw.length);
+        }
+
+        // Let the user be able to update the stats with follow/unfollow
         setLoading(false);
     }
 
@@ -176,19 +192,34 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div className={styles.postsContainer}>
+                <div className={styles.postsContainer} id={"container"}>
                     <div className={styles.postsHeader}>
                         <button className={styles.postsButton + " " + styles.active}>Posts</button>
                         <button className={styles.postsButton}>Likes</button>
                         <button className={styles.postsButton}>More ...</button>
                     </div>
 
-                    <div className={styles.posts}>
-                        <div className={styles.post + " " + styles.main}>1</div>
-                        <div className={styles.post}>2</div>
-                        <div className={styles.post}>3</div>
-                        <div className={styles.post}>4</div>
-                    </div>
+                    {
+                        loading ?
+                            <div className={styles.loader}>
+                                <h1>Loading Posts...</h1>
+                                <img src={"/media/images/small_loading.gif"} alt={"loading"}/>
+                            </div>
+                            :
+                            <div className={styles.posts}>
+                                {postsData.map((post: any, index: number) => {
+                                        return(
+                                            <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
+                                                <Image fill src={getFilePath((session?.user as RongoaUser).database.id, post.id, post.post_image)} alt="Post"/>
+                                            </div>
+                                        )
+                                    })
+                                }
+                                <p>User Has No More Posts</p>
+                            </div>
+
+                    }
+
                 </div>
 
             </div>

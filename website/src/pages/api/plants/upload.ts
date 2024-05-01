@@ -249,6 +249,8 @@ export default async function handler(
             
         }
 
+        console.log(query);
+
         // Run the query
         const data = await makeQuery(query, client, true)
 

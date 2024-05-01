@@ -165,8 +165,8 @@ export default function EditAccount() {
             // Create a new form data object and append the file to it
             const formData = new FormData();
             formData.append('file', userLocalImage);
-            formData.append('id', userID);
-            formData.append('path', 'users');
+            formData.append('id', "ignore");
+            formData.append('path', 'users/' + userID  +  '/profile');
 
             try {
                 // Send the form data to the server
@@ -192,7 +192,7 @@ export default function EditAccount() {
                 + "&email=" + userEmail
                 + "&id=" + userID
 
-            if(userLocalImage !== null) url += "&image=" + process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name
+            if(userLocalImage !== null) url += "&image=" + process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/profile/" + userLocalImage?.name
 
             const userData = await makeRequestWithToken("put", url)
             console.log(userData)
@@ -211,7 +211,7 @@ export default function EditAccount() {
                 id: (session?.user as RongoaUser).database.id,
                 user_name: userName,
                 user_email: userEmail,
-                user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image,
+                user_image: userLocalImage ? process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/" + userID + "/profile/" + userLocalImage?.name : (session?.user as RongoaUser).database.user_image,
                 user_type: (session?.user as RongoaUser).database.user_type,
                 user_last_login: (session?.user as RongoaUser).database.user_last_login,
                 user_restricted_access: (session?.user as RongoaUser).database.user_restricted_access
