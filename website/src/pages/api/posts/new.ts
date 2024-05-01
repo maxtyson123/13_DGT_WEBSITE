@@ -5,6 +5,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
 import { Logger } from 'next-axiom';
+import {RongoaUser} from "@/lib/users";
 
 export default async function handler(
     request: NextApiRequest,
@@ -22,10 +23,22 @@ export default async function handler(
     // Get the client
     const client =  await getClient()
 
+
+    // Get te
+
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:upload:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
+
+    // If there is no session then return an error
+    if(!session || !session.user) {
+        return response.status(401).json({ error: 'User not logged in'});
+    }
+
+    // Get the user details
+    const user = session.user as RongoaUser;
+    const user_id = user.database.id;
 
     // Try uploading the data to the database
     try {
@@ -39,15 +52,10 @@ export default async function handler(
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
 
-        let insertQuery = "";
-        let insetQueryValues = "";
-        let getIDQuery = "(SELECT id FROM new_plant)";
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
-
-
         // Run the query
-        const query = ''
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id} ${tables.post_image} ${tables.post_date}) VALUES ('${post_title}', ${post_plant_id}, ${user_id}, '${plant_image}', ${timeFunction}(${Date.now()} / 1000.0) RETURNING id;`;
         const data = await makeQuery(query, client, true)
 
         if(!data)
@@ -79,7 +87,7 @@ export default async function handler(
 
 
         // Log the upload
-        logger.info(`Plant ${id} created by ${session?.user?.email}`);
+        logger.info(`New post ${id} by ${session?.user?.email}`);
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {

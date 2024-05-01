@@ -102,8 +102,13 @@ export default function Post(){
         const post_title = postTitle;
         const post_plant_id = plant;
         const plant_image = image.name;
+
+
+        // Send the post data to the server
         const response = await makeRequestWithToken('post', '/api/posts/new', {post_title, post_plant_id, plant_image});
 
+        // Get the post id
+        const newId = response.data.id
 
         // Upload the image
         setLoading("Uploading Image...")
@@ -111,7 +116,7 @@ export default function Post(){
         // Create a new form data object and append the file to it
         const formData = new FormData();
         formData.append('file', image);
-        formData.append('id', userID);
+        formData.append('id', newId);
         formData.append('path', 'users/' + userID + '/posts');
 
         try {
@@ -128,6 +133,8 @@ export default function Post(){
             console.log('An error occurred.');
         }
 
+
+        setLoading("")
     }
 
     return(
