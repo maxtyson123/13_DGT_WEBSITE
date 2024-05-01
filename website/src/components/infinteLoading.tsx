@@ -6,12 +6,14 @@ import {PlantCardApi} from "@/components/plant_card";
 import React, {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import {Post, PostCard} from "@/pages/media";
 
 interface InfiniteLoadingProps {
     searchQuery: string
+    display?: string    // The display type of the plant card  TODO: find a better way to  not hard  code this
 }
 
-export function InfiniteLoading({searchQuery} : InfiniteLoadingProps) {
+export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
     const [allLoaded, setAllLoaded] = useState(false)
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
        ['plants'],
@@ -58,20 +60,25 @@ export function InfiniteLoading({searchQuery} : InfiniteLoadingProps) {
             <div className={styles.plantCardContainer}>
                 {plants?.map((plant: any, index) => (
                     <div key={plant.id} ref={index === plants.length - 1 ? ref : null}>
-                        <PlantCardApi id={plant.id} />
+
+                        {display === "PlantCardApi" && <PlantCardApi id={plant.id}/>}
+                        {display === "PostCard" && <PostCard id={plant.id}/>}
+
                     </div>
                 ))}
 
             </div>
             <div className={"gridCentre"}>
-                <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage || allLoaded} className={styles.loadMore}>
-                    {isFetchingNextPage
-                        ? 'Loading more...'
-                        : allLoaded
+                {isFetchingNextPage ?
+                    <img src={"/media/images/loading_small.svg"} alt={"loading"}/>
+                    :
+                    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage || allLoaded} className={styles.loadMore}>
+                        {allLoaded
                             ? 'No more results'
                             : 'Load More'
-                    }
-                </button>
+                        }
+                    </button>
+                }
             </div>
         </>
     )

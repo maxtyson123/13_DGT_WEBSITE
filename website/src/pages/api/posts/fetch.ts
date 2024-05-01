@@ -18,7 +18,7 @@ export default async function handler(
     const tables = getTables();
 
     // Get the id
-    const { id, operation, min } = request.query;
+    const { id, operation, min, following,  page } = request.query;
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
@@ -27,12 +27,6 @@ export default async function handler(
 
     try {
 
-
-        // Check if there is no user id
-        if(!id) {
-            return response.status(400).json({ error: 'No id provided'});
-        }
-
         // Check if there is a operation
         if(!operation) {
             return response.status(400).json({ error: 'No operation provided'});
@@ -40,9 +34,16 @@ export default async function handler(
 
         let query = '';
 
+        const amountPerPage = 3
+
         switch (operation) {
 
             case "list":
+                // Check if there is no user id
+                if(!id) {
+                    return response.status(400).json({ error: 'No id provided'});
+                }
+
                 if (min) {
                     query = `SELECT id, ${tables.post_image} FROM posts WHERE ${tables.post_user_id} =`;
                 } else {
@@ -54,12 +55,41 @@ export default async function handler(
                 break;
 
             case "data":
+                // Check if there is no user id
+                if(!id) {
+                    return response.status(400).json({ error: 'No id provided'});
+                }
+
                 query = `SELECT * FROM users WHERE id = ${id}`;
+                break;
+
+            case "followingFeed":
+
+                // Make sure following is an array
+                if(!following &&  !Array.isArray(following)) {
+                    return response.status(400).json({ error: 'No following provided'});
+                }
+
+                const users = following as string[];
+
+                // Get the latest posts from the users the user is following (sorted by date)
+                query = `SELECT * FROM posts WHERE ${tables.post_user_id} IN (${users.join(',')}) ORDER BY ${tables.post_date} DESC`;
+                break;
+
+            case "generalFeed":
+                query = `SELECT * FROM posts ORDER BY ${tables.post_date} DESC`;
                 break;
 
             default:
                 return response.status(400).json({error: 'Invalid operation'});
 
+        }
+
+        // If the user specified a page, get the correct page
+        if (page) {
+
+            let currentPage = parseInt(page as string)
+            query += ` LIMIT ${amountPerPage} OFFSET ${(currentPage - 1) * amountPerPage}`
         }
 
         const user = await makeQuery(query, client)

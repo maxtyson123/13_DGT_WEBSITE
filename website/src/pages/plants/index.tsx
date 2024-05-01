@@ -5,7 +5,7 @@ import {InfiniteLoading} from "@/components/infinteLoading";
 import {Layout} from "@/components/layout";
 
 
-export default function Mushrooms(){
+export default function Plants(){
     const pageName = "Plants"
     const queryClient = new QueryClient()
     const [show,setShow] = useState(false);
@@ -19,7 +19,7 @@ export default function Mushrooms(){
                   index page. </p>
 
               <QueryClientProvider client={queryClient}>
-                  <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=exclude"}/>
+                  <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=exclude"} display={"PlantCardApi"}/>
               </QueryClientProvider>
           </Layout>
         </>

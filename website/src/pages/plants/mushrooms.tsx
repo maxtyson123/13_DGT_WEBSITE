@@ -3,6 +3,7 @@ import styles from "@/styles/pages/plants/mushrooms.module.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {InfiniteLoading} from "@/components/infinteLoading";
 import {Layout} from "@/components/layout";
+import {PlantCardApi} from "@/components/plant_card";
 
 export default function Mushrooms(){
     const pageName = "Mushrooms"
@@ -17,7 +18,7 @@ export default function Mushrooms(){
                 <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>
 
                 <QueryClientProvider client={queryClient}>
-                    <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"}/>
+                    <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"} display={"PlantCardApi"}/>
                 </QueryClientProvider>
             </Layout>
         </>

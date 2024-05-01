@@ -134,6 +134,7 @@ export interface UserPermissions {
                 follow: boolean;
                 unfollow: boolean;
                 checkFollowing: boolean;
+                list: boolean;
             };
         };
     };
@@ -296,6 +297,7 @@ export const getDefaultPermissions = () : UserPermissions => {
                     follow: true,
                     unfollow: true,
                     checkFollowing: true,
+                    list: true,
                 }
             },
 

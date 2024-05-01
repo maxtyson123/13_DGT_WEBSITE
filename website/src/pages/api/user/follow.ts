@@ -96,6 +96,13 @@ export default async function handler(
                 query = `SELECT * FROM follows WHERE ${tables.follower_id} = ${userId} AND ${tables.following_id} = ${id}`
                 break;
 
+            case "list":
+
+                if(!await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:list")) return response.status(401).json({error: "Not Authorized"})
+
+                query = `SELECT ${tables.following_id} FROM follows WHERE ${tables.follower_id} = ${userId}`
+                break;
+
             default:
                 return response.status(400).json({error: 'Invalid operation'});
 
