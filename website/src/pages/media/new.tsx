@@ -52,6 +52,7 @@ export default function Post(){
     const fetchData = async () => {
 
         // Get the plants
+        //todo change to cahced data
         const response = await makeRequestWithToken('get', '/api/plants/search?getNames=true');
         const plants = response.data.data;
 

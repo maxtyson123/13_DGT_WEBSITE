@@ -5,16 +5,112 @@ import {useEffect, useRef, useState} from "react";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {InfiniteLoading} from "@/components/infinteLoading";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {fetchData} from "next-auth/client/_utils";
+import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE} from "@/lib/users";
 
-export function PostCard(id : any){
+
+interface PostCardProps {
+    post_title: string,
+    post_image: string,
+    post_user_id: number,
+    post_plant_id: number,
+    post_date: string,
+    id: number
+}
+
+export function PostCard(props: PostCardProps) {
+
+
+    const [timeAgo, setTimeAgo] = useState("")
+    const [username, setUsername] = useState("Loading..")
+    const [userImage, setUserImage] = useState("/media/images/small_loading.gif")
+    const [userType, setUserType] = useState("")
+    const [likes, setLikes] = useState(0)
+    const [plantName, setPlantName] = useState("Loading...")
+
+
+    const dataFetch = useRef(false);
+
+    useEffect(() => {
+
+        // Get the time
+        const date = new Date(props.post_date);
+
+        // Get the current time
+        const currentTime = new Date();
+
+        // Get the difference
+        const difference = currentTime.getTime() - date.getTime();
+
+        // Get the time ago
+        const seconds = difference / 1000;
+        const minutes = seconds / 60;
+        const hours = minutes / 60;
+        const days = hours / 24;
+        const weeks = days / 7;
+
+        // Convert into time ago
+        if(weeks > 1) {
+            setTimeAgo(Math.floor(weeks) + "w ago");
+        } else if(days > 1) {
+            setTimeAgo(Math.floor(days) + "days ago");
+        } else if(hours > 1) {
+            setTimeAgo(Math.floor(hours) + "hrs ago");
+        } else if(minutes > 1) {
+            setTimeAgo(Math.floor(minutes) + "min ago");
+        } else {
+            setTimeAgo(Math.floor(seconds) + "s ago");
+        }
+
+    }, [props.post_date]);
+
+    useEffect(() => {
+
+        // Check if data has been fetched
+        if(dataFetch.current) return;
+        dataFetch.current = true;
+
+        // Fetch the user information
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+
+        // Get the user information
+        const user = await makeRequestWithToken("get", `/api/user/data?id=${props.post_user_id}`);
+        setUsername(user.data.data.user_name);
+        setUserImage(user.data.data.user_image);
+        switch (user.data.data.user_type) {
+            case ADMIN_USER_TYPE:
+                setUserType("Admin");
+                break;
+            case MEMBER_USER_TYPE:
+                setUserType("Member");
+                break;
+            case EDITOR_USER_TYPE:
+                setUserType("Editor");
+                break;
+            default:
+                setUserType("Unknown");
+        }
+
+
+        // Get the plant information
+        //todo
+
+        // Get the likes
+        //todo
+
+    }
+
     return(
         <>
             <div className={stlyes.post}>
                 <div className={stlyes.postHeader}>
-                    <img src="/media/images/logo.svg" alt="Profile"/>
+                    <img src={userImage} alt="Profile"/>
                     <div className={stlyes.userInfo}>
-                        <h1>Username</h1>
-                        <h2>Admin</h2>
+                        <h1>{username}</h1>
+                        <h2>{userType}</h2>
                     </div>
                     <div className={stlyes.dots}>
                         <span className={stlyes.dot}/>
@@ -23,21 +119,21 @@ export function PostCard(id : any){
                     </div>
                 </div>
                 <div className={stlyes.mainImage}>
-                    <img src="https://rongoa.stream/plants/2/Kanuka%20-%20Old%20Mature%20Tree.jpg" alt="Post"/>
+                    <img src={props.post_image} alt="Post"/>
                 </div>
                 <div className={stlyes.postFooter}>
                     <img src="/media/images/Share.svg" alt="Share"/>
                     <button>
                         <img src="/media/images/Like.svg" alt="Comment"/>
-                        <p>0</p>
+                        <p>{likes}</p>
                     </button>
                     <button>
                         <img src="/media/images/Coment.svg" alt="Comment"/>
-                        <p>Plant Name</p>
+                        <p>{plantName}</p>
                     </button>
                     <div /> {/* Gap */}
-                    <p className={stlyes.time}>35 Min Ago</p>
-                    <p className={stlyes.title}>Title</p>
+                    <p className={stlyes.time}>{timeAgo}</p>
+                    <p className={stlyes.title}>{props.post_title}</p>
                 </div>
             </div>
         </>
@@ -153,9 +249,6 @@ export default function Home(){
                         }
 
                     </div>
-
-                    <PostCard id={1}/>
-                    <PostCard id={2}/>
 
                     <QueryClientProvider client={queryClient}>
                         <InfiniteLoading searchQuery={"/api/posts/fetch?operation=generalFeed"} display={"PostCard"}/>
