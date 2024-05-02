@@ -15,6 +15,7 @@ interface InfiniteLoadingProps {
 
 export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
     const [allLoaded, setAllLoaded] = useState(false)
+    const [plants, setPlants] = useState<any[] | undefined>([])
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
        ['plants'],
         async ({pageParam = 1}) => {
@@ -38,6 +39,12 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
         if(data?.pages[data?.pages.length - 1].data.length === 0)
             setAllLoaded(true)
 
+        // Set the plants
+        setPlants(data?.pages.flatMap(page => page.data))
+
+        console.log(data)
+
+
     }, [data])
 
 
@@ -53,33 +60,31 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
         }
     }, [entry])
 
-    const plants = data?.pages.flatMap(page => page.data)
+
+    // Log the plants
 
     return (
         <>
-            <div className={styles.plantCardContainer}>
-                {plants?.map((plant: any, index) => (
-                    <div key={plant.id} ref={index === plants.length - 1 ? ref : null}>
 
-                        {display === "PlantCardApi" && <PlantCardApi id={plant.id}/>}
-                        {display === "PostCard" && <PostCard id={plant.id}/>}
+            {plants?.map((plant: any, index) => (
+                <div key={plant.id} ref={index === plants.length - 1 ? ref : null}>
 
-                    </div>
-                ))}
+                    {display === "PlantCardApi" && <PlantCardApi id={plant.id}/>}
+                    {display === "PostCard" && <PostCard {...plant}/>}
 
-            </div>
-            <div className={"gridCentre"}>
-                {isFetchingNextPage ?
-                    <img src={"/media/images/loading_small.svg"} alt={"loading"}/>
-                    :
-                    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage || allLoaded} className={styles.loadMore}>
-                        {allLoaded
-                            ? 'No more results'
-                            : 'Load More'
-                        }
-                    </button>
-                }
-            </div>
+                </div>
+            ))}
+
+            {isFetchingNextPage ?
+                <img src={"/media/images/small_loading.gif"} alt={"loading"}/>
+                :
+                <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage || allLoaded} className={styles.loadMore}>
+                    {allLoaded
+                        ? 'No more results'
+                        : 'Load More'
+                    }
+                </button>
+            }
         </>
     )
 }

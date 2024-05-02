@@ -26,7 +26,7 @@ export function cleanInput (input: string){
 
 }
 
-export function getFilePath(userId: number, postId: number, fileName: number): string {
+export function getFilePath(userId: number, postId: number, fileName: string): string {
 
     // Base
     let path = process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/"

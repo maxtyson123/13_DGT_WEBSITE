@@ -7,6 +7,8 @@ import {InfiniteLoading} from "@/components/infinteLoading";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {fetchData} from "next-auth/client/_utils";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE} from "@/lib/users";
+import {getFilePath} from "@/lib/data";
+import {useRouter} from "next/router";
 
 
 interface PostCardProps {
@@ -27,8 +29,9 @@ export function PostCard(props: PostCardProps) {
     const [userType, setUserType] = useState("")
     const [likes, setLikes] = useState(0)
     const [plantName, setPlantName] = useState("Loading...")
+    const [width, setWidth] = useState(0)
 
-
+    const router = useRouter();
     const dataFetch = useRef(false);
 
     useEffect(() => {
@@ -53,9 +56,9 @@ export function PostCard(props: PostCardProps) {
         if(weeks > 1) {
             setTimeAgo(Math.floor(weeks) + "w ago");
         } else if(days > 1) {
-            setTimeAgo(Math.floor(days) + "days ago");
+            setTimeAgo(Math.floor(days) + "d ago");
         } else if(hours > 1) {
-            setTimeAgo(Math.floor(hours) + "hrs ago");
+            setTimeAgo(Math.floor(hours) + "hr ago");
         } else if(minutes > 1) {
             setTimeAgo(Math.floor(minutes) + "min ago");
         } else {
@@ -65,6 +68,11 @@ export function PostCard(props: PostCardProps) {
     }, [props.post_date]);
 
     useEffect(() => {
+
+        // Get the width of the bottom bar
+        const bottom = document.getElementById("bottom");
+        if(bottom == null) return;
+        setWidth(bottom.offsetWidth);
 
         // Check if data has been fetched
         if(dataFetch.current) return;
@@ -103,12 +111,18 @@ export function PostCard(props: PostCardProps) {
 
     }
 
+    const goToProfile = () => {
+
+        // Go to the users profile
+        router.push("/media/profile?id="+props.post_user_id)
+    }
+
     return(
         <>
-            <div className={stlyes.post}>
+            <div className={stlyes.post} style={{width: width}}>
                 <div className={stlyes.postHeader}>
-                    <img src={userImage} alt="Profile"/>
-                    <div className={stlyes.userInfo}>
+                    <img src={userImage} alt="Profile" onClick={goToProfile}/>
+                    <div className={stlyes.userInfo} onClick={goToProfile}>
                         <h1>{username}</h1>
                         <h2>{userType}</h2>
                     </div>
@@ -119,7 +133,7 @@ export function PostCard(props: PostCardProps) {
                     </div>
                 </div>
                 <div className={stlyes.mainImage}>
-                    <img src={props.post_image} alt="Post"/>
+                    <img src={getFilePath(props.post_user_id, props.id, props.post_image)} alt="Post"/>
                 </div>
                 <div className={stlyes.postFooter}>
                     <img src="/media/images/Share.svg" alt="Share"/>
@@ -250,15 +264,16 @@ export default function Home(){
 
                     </div>
 
+                    <PostCard post_title={"A"} post_image={"b"} post_user_id={1} post_plant_id={1} post_date={1} id={1}/>
+                    <PostCard post_title={"A"} post_image={"b"} post_user_id={1} post_plant_id={1} post_date={1} id={1}/>
                     <QueryClientProvider client={queryClient}>
                         <InfiniteLoading searchQuery={"/api/posts/fetch?operation=generalFeed"} display={"PostCard"}/>
                     </QueryClientProvider>
 
-
                 </div>
 
                 {/* Bottom Bar */}
-                <div className={stlyes.bottomBar}>
+                <div className={stlyes.bottomBar} id={"bottom"}>
                     <Link href={"/media"}>
                         <img src="/media/images/Home.svg" alt="Home"/>
                     </Link>

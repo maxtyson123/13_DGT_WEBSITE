@@ -127,10 +127,14 @@
     display: none;
 }
 
+.posts img{
+    width: 75px;
+    height: 75px;
+}
+
 .post{
     display: grid;
     grid-template-rows: 0.2fr 0.8fr 0.3fr;
-    width: 90%;
     height: 550px;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.25);
     border-radius: 20px;
@@ -248,8 +252,9 @@
     font-size: 1.4em;
     color: var(--text-dark);
     font-weight: bolder;
+    grid-column-start: 1;
+    grid-column-end: 6;
 }
-
 .bottomBar{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;

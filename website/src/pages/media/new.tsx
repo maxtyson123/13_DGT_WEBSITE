@@ -147,7 +147,7 @@ export default function Post(){
         setLoading("")
 
         // Redirect to the post
-        window.location.href = '/media/post/' + newId;
+        window.location.href = '/media/';
     }
 
     return(
