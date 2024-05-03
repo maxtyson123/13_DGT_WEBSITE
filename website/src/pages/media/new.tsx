@@ -67,10 +67,19 @@ export default function Post(){
 
 
     const fileChnage = (event: any) => {
-        const file = event.target.files[0];
+        let file = event.target.files[0];
         if (file == null) return;
 
-        setImage(file);
+
+        // Add the date & time to the file name
+        let date = new Date();
+        let dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+
+        // New file with the data
+        const blob = file.files[0]
+        const newFile = new File([blob], dateString + "-" + file.name, {type: file.type});
+
+        setImage(newFile);
         setImageURL(URL.createObjectURL(file));
     }
 

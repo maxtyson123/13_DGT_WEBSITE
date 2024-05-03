@@ -94,12 +94,12 @@ export default async function handler(
 
         const user = await makeQuery(query, client)
 
-        if(user.length == 0) {
+        if(!user) {
             return response.status(400).json({ error: 'No Data Found'});
         }
 
         // Return the user
-        return response.status(200).json({ data: user[0], raw: user });
+        return response.status(200).json({ data: user});
 
 
     } catch (error) {

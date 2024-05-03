@@ -32,6 +32,9 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
 
     useEffect(() => {
 
+        console.log(data)
+
+
         // Check if there is no data for this page this means the end of the results has been reached
         if (data?.pages.length === 0)
             return
@@ -41,9 +44,6 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
 
         // Set the plants
         setPlants(data?.pages.flatMap(page => page.data))
-
-        console.log(data)
-
 
     }, [data])
 

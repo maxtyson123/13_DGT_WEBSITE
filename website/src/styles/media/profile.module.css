@@ -181,11 +181,6 @@
     grid-row-end: 3;
 }
 
-.posts:has(> :nth-child(4):last-child) .post{
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-
 .posts:has(> :nth-child(4):last-child) .main{
     grid-row-start: 1;
     grid-row-end: 3;

@@ -116,9 +116,9 @@ export default function Profile() {
         // Get the posts
         const posts = await makeRequestWithToken('get', `/api/posts/fetch?operation=list&id=${(id ? id : (session?.user as RongoaUser).database.id)}`);
         console.log(posts);
-        if(posts.data.raw){
-            setPostsData(posts.data.raw);
-            setPosts(posts.data.raw.length);
+        if(posts.data.data){
+            setPostsData(posts.data.data);
+            setPosts(posts.data.data.length);
         }
 
         // Let the user be able to update the stats with follow/unfollow
