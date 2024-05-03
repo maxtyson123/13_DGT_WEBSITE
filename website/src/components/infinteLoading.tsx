@@ -6,7 +6,7 @@ import {PlantCardApi} from "@/components/plant_card";
 import React, {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
 import {makeRequestWithToken} from "@/lib/api_tools";
-import {Post, PostCard} from "@/pages/media";
+import {PostCard} from "@/pages/media";
 
 interface InfiniteLoadingProps {
     searchQuery: string

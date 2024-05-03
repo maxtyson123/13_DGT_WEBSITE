@@ -158,7 +158,7 @@ export default function Home(){
 
     const dataFetch = useRef(false);
     const queryClient = new QueryClient()
-
+    const router = useRouter()
     // Loading
     const [storiesLoading, setStorysLoading] = useState(true);
 
@@ -213,9 +213,9 @@ export default function Home(){
 
                     </div>
 
-                    <button className={stlyes.message}>
+                    <button className={stlyes.message} onClick={() => {router.push("/media/messages")}}>
                         <img src="/media/images/message.svg" alt="Messages"/>
-                        <p>2</p>
+                        <p>0</p>
                     </button>
 
                 </div>
@@ -264,8 +264,6 @@ export default function Home(){
 
                     </div>
 
-                    <PostCard post_title={"A"} post_image={"b"} post_user_id={1} post_plant_id={1} post_date={1} id={1}/>
-                    <PostCard post_title={"A"} post_image={"b"} post_user_id={1} post_plant_id={1} post_date={1} id={1}/>
                     <QueryClientProvider client={queryClient}>
                         <InfiniteLoading searchQuery={"/api/posts/fetch?operation=generalFeed"} display={"PostCard"}/>
                     </QueryClientProvider>
