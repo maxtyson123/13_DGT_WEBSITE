@@ -79,6 +79,7 @@ export default async function handler(
                     return response.status(400).json({ error: 'No following provided'});
                 }
 
+                let following_array = following as string[];
 
                 // Make sure we know the user id
                 if(!id) {
@@ -86,10 +87,10 @@ export default async function handler(
                 }
 
                 // Select the latest posts from followers, but make sure the user's posts are not shown
-                query = `SELECT * FROM posts WHERE ${tables.post_user_id} IN (${following.join(",")}) AND ${tables.post_user_id} != ${id}`;
+                query = `SELECT * FROM posts WHERE ${tables.post_user_id} IN (${following_array.join(",")}) AND ${tables.post_user_id} != ${id}`;
 
                 // Now select everything else (but still not the user's posts)
-                query += ` UNION SELECT * FROM posts WHERE ${tables.post_user_id} NOT IN (${following.join(",")}) AND ${tables.post_user_id} != ${id} ORDER BY ${tables.post_date} DESC`;
+                query += ` UNION SELECT * FROM posts WHERE ${tables.post_user_id} NOT IN (${following_array.join(",")}) AND ${tables.post_user_id} != ${id} ORDER BY ${tables.post_date} DESC`;
 
                 break;
 

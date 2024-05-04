@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Page(){
 
     const [searchHistory, setSearchHistory] = useState<any[]>(["test"]);
-    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchResults, setSearchResults] = useState<any>([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -59,7 +59,7 @@ export default function Page(){
                 <div className={stlyes.searchResults}>
                     <h1> Search Results </h1>
                     <p>Users</p>
-                    {searchResults.users.map((user, index) => {
+                    {searchResults.users.map((user: any, index: number) => {
                         return (
                             <button key={index} className={stlyes.searchResult}>
                                 <p>{user.id}</p>
@@ -68,19 +68,19 @@ export default function Page(){
                     })}
 
                     <p>Plants</p>
-                    {searchResults.plants.map((plant, index) => {
+                    {searchResults.plants.map((plant: any, index: number) => {
                         return (
                             <button key={index} className={stlyes.searchResult}>
-                                <p>{plant.name}</p>
+                                <p>{plant.id}</p>
                             </button>
                         )
                     })}
 
                     <p>Posts</p>
-                    {searchResults.posts.map((post, index) => {
+                    {searchResults.posts.map((post: any, index: number) => {
                         return (
                             <button key={index} className={stlyes.searchResult}>
-                                <PostCard id={post.id}/>
+                                <p>{post.id}</p>
                             </button>
                         )
                     })}
