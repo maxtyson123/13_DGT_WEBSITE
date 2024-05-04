@@ -63,7 +63,7 @@ export default async function handler(
         query += `SELECT * FROM follows;`;
 
         // Get the information for the post data
-        query += `SELECT * FROM post;`;
+        query += `SELECT * FROM posts;`;
 
         // Finally Get the information for the plant data
         query += `SELECT * FROM plants;`;
