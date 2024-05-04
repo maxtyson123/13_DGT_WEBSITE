@@ -141,9 +141,9 @@ export default async function handler(
 
 
             // Get the info
-            query = `SELECT id FROM posts WHERE ${tables.post_title} LIKE '${name}%'`
+            query = `SELECT id FROM posts WHERE ${tables.post_title} LIKE '${name}%' ORDER BY ${tables.post_date} DESC`
             if(getExtras){
-                query = `SELECT id, ${tables.post_title}, ${tables.post_date}, ${tables.post_user_id} FROM posts WHERE ${tables.post_title} LIKE '${name}%'`
+                query = `SELECT id, ${tables.post_title}, ${tables.post_date}, ${tables.post_user_id} FROM posts WHERE ${tables.post_title} LIKE '${name}%' ORDER BY ${tables.post_date} DESC`
             }
 
 

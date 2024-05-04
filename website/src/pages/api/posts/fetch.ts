@@ -60,10 +60,8 @@ export default async function handler(
                     return response.status(400).json({ error: 'No id provided'});
                 }
 
-                query = `SELECT * FROM users WHERE id = ${id}`;
+                query = `SELECT * FROM posts WHERE id = ${id}`;
                 break;
-
-            case "followingFeed":
 
             case "generalFeed":
 

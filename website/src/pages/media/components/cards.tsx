@@ -2,11 +2,12 @@ import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE} from "@/lib/users";
-import stlyes from "@/styles/media/main.module.css";
+import stlyes from "@/styles/media/cards.module.css";
 import {getFilePath} from "@/lib/data";
 import Image from "next/image";
 import {loader_data} from "@/lib/loader_data";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
+import {fetchData} from "next-auth/client/_utils";
 
 interface PostCardProps {
     post_title: string,
@@ -32,7 +33,6 @@ export function PostCard(props: PostCardProps) {
     const dataFetch = useRef(false);
 
     useEffect(() => {
-
         // Get the time
         const date = new Date(props.post_date);
 
@@ -67,7 +67,7 @@ export function PostCard(props: PostCardProps) {
     useEffect(() => {
 
         // Get the width of the bottom bar
-        const bottom = document.getElementById("bottom");
+        const bottom = document.getElementById("widthReference");
         if(bottom == null) return;
         setWidth(bottom.offsetWidth);
 
@@ -82,10 +82,15 @@ export function PostCard(props: PostCardProps) {
     const fetchData = async () => {
 
         // Get the user information
-        const user = await makeRequestWithToken("get", `/api/user/data?id=${props.post_user_id}`);
-        setUsername(user.data.data.user_name);
-        setUserImage(user.data.data.user_image);
-        switch (user.data.data.user_type) {
+        const data = await makeRequestWithToken("get", `/api/user/data?id=${props.post_user_id}`);
+        const user = data.data.data;
+        if(user.user_image && user.user_image != "undefined"){
+            setUserImage(user.user_image);
+        } else {
+            setUserImage("/media/images/logo.svg");
+        }
+        setUsername(user.user_name);
+        switch (user.user_type) {
             case ADMIN_USER_TYPE:
                 setUserType("Admin");
                 break;
@@ -158,4 +163,96 @@ export function PostCard(props: PostCardProps) {
             </div>
         </>
     )
+}
+
+interface PostCardApiProps {
+    id: number
+}
+
+export function  PostCardApi(props: PostCardApiProps){
+
+    const [data, setData] = useState<any>()
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        const response = await makeRequestWithToken("get", `/api/posts/fetch?id=${props.id}&operation=data`);
+        setData(response.data.data[0]);
+    }
+
+    return(<>
+        {data != null ? <PostCard
+            post_title={data.post_title}
+            post_image={data.post_image}
+            post_user_id={data.post_user_id}
+            post_plant_id={data.post_plant_id}
+            post_date={data.post_date}
+            id={data.id}
+        /> : <></>}
+    </>)
+}
+
+
+interface UserCardProps {
+    id: number
+}
+export function UserCard(props: UserCardProps) {
+
+    const [username, setUsername] = useState("Loading..")
+    const [userImage, setUserImage] = useState("/media/images/small_loading.gif")
+    const [userType, setUserType] = useState("")
+    const [followers, setFollowers] = useState(0)
+    const dataFetch = useRef(false);
+
+    useEffect(() => {
+        if(dataFetch.current) return;
+        dataFetch.current = true;
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+
+        // Get the user information
+        const data = await makeRequestWithToken("get", `/api/user/data?id=${props.id}`);
+        const user = data.data.data;
+        if(user.user_image && user.user_image != "undefined"){
+            setUserImage(user.user_image);
+        } else {
+            setUserImage("/media/images/logo.svg");
+        }
+        setUsername(user.user_name);
+        switch (user.user_type) {
+            case ADMIN_USER_TYPE:
+                setUserType("Admin");
+                break;
+            case MEMBER_USER_TYPE:
+                setUserType("Member");
+                break;
+            case EDITOR_USER_TYPE:
+                setUserType("Editor");
+                break;
+            default:
+                setUserType("Unknown");
+        }
+
+        // Get the followers
+        const followers = await makeRequestWithToken("get", `/api/user/follow?operation=followingCount&id=${props.id}`);
+        setFollowers(followers.data.data[0]["COUNT(*)"]);
+    }
+
+    return(
+        <>
+            <div className={stlyes.user}>
+                <img src={userImage} alt="Profile"/>
+                <div className={stlyes.userInfo}>
+                    <h1>{username}</h1>
+                    <h2>{userType}</h2>
+                </div>
+                <h3>{followers}</h3>
+            </div>
+        </>
+    )
+
 }

@@ -107,7 +107,6 @@ export default async function handler(
                 return response.status(400).json({error: 'Invalid operation'});
 
         }
-        ;
 
         const follow = await makeQuery(query, client)
         return response.status(200).json({data: follow});

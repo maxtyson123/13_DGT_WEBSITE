@@ -154,7 +154,7 @@ export default function Home(){
                 </div>
 
                 {/* Bottom Bar */}
-                <div className={stlyes.bottomBar} id={"bottom"}>
+                <div className={stlyes.bottomBar} id={"widthReference"}>
                     <Link href={"/media"}>
                         <img src="/media/images/Home.svg" alt="Home"/>
                     </Link>

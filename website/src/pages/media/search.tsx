@@ -2,7 +2,7 @@ import Wrapper from "@/pages/media/components/wrapper";
 import stlyes from '@/styles/media/search.module.css'
 import {useEffect, useState} from "react";
 import {makeRequestWithToken} from "@/lib/api_tools";
-import {PostCard} from "@/pages/media/components/cards";
+import {PostCard, PostCardApi, UserCard} from "@/pages/media/components/cards";
 import Link from "next/link";
 
 export default function Page(){
@@ -38,11 +38,13 @@ export default function Page(){
         setHasSearched(true);
         setLoading(false);
 
-        // Save to search history if it is not already there
-        if(searchHistory.indexOf(searchQuery) === -1) {
-            setSearchHistory([...searchHistory, searchQuery]);
+        // Update the search history
+        if(searchQuery && !searchHistory.includes(searchQuery)) {
+            let history = [...searchHistory];
+            history.push(searchQuery);
+            setSearchHistory(history);
+            localStorage.setItem("searchHistory", JSON.stringify(history));
         }
-        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
     }
 
     const loadingDisplay = () => {
@@ -61,27 +63,27 @@ export default function Page(){
                     <p>Users</p>
                     {searchResults.users.map((user: any, index: number) => {
                         return (
-                            <button key={index} className={stlyes.searchResult}>
-                                <p>{user.id}</p>
-                            </button>
+                            <Link href={"/media/profile?id=" + user.id} key={index} className={stlyes.searchResult}>
+                                  <UserCard id={user.id}/>
+                            </Link>
                         )
                     })}
 
                     <p>Plants</p>
                     {searchResults.plants.map((plant: any, index: number) => {
                         return (
-                            <button key={index} className={stlyes.searchResult}>
+                            <Link href={"/plants/" + plant.id} key={index} className={stlyes.searchResult}>
                                 <p>{plant.id}</p>
-                            </button>
+                            </Link>
                         )
                     })}
 
                     <p>Posts</p>
                     {searchResults.posts.map((post: any, index: number) => {
                         return (
-                            <button key={index} className={stlyes.searchResult}>
-                                <p>{post.id}</p>
-                            </button>
+                            <Link href={"/media/posts/" + post.id} key={index} className={stlyes.searchResult}>
+                                <PostCardApi id={post.id}/>
+                            </Link>
                         )
                     })}
 
@@ -114,7 +116,7 @@ export default function Page(){
                 <div className={stlyes.page}>
                     <div className={stlyes.topBar}>
                         <Link href={"/media"}><img src={"/media/images/Back.svg"}/></Link>
-                        <div className={stlyes.searchBar}>
+                        <div className={stlyes.searchBar} id={"widthReference"}>
                             <input type="text" placeholder={"Enter your search..."}/>
                             <button onClick={() => {
                                 search(undefined)

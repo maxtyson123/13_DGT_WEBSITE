@@ -60,3 +60,23 @@
     width: 20px;
     height: 20px;
 }
+
+.searchResults{
+    width: 90%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    gap: 1%;
+}
+
+.searchResults > p{
+    color: var(--darker-secondary-gray);
+    font-size: 1.6rem;
+
+}
+
+.searchResults a{
+    width: 100%;
+    display: grid;
+    justify-items: center;
+}
