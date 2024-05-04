@@ -2,7 +2,7 @@ import Wrapper from "@/pages/media/components/wrapper";
 import styles from '@/styles/media/new.module.css'
 import {useEffect, useRef, useState} from "react";
 import {DropdownInput, SmallInput, ValidationState} from "@/components/input_sections";
-import {makeRequestWithToken} from "@/lib/api_tools";
+import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
 import {useSession} from "next-auth/react";
@@ -53,8 +53,7 @@ export default function Post(){
 
         // Get the plants
         //todo change to cahced data
-        const response = await makeRequestWithToken('get', '/api/plants/search?getNames=true');
-        const plants = response.data.data;
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
 
         // Get the plant names
         const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
@@ -70,16 +69,7 @@ export default function Post(){
         let file = event.target.files[0];
         if (file == null) return;
 
-
-        // Add the date & time to the file name
-        let date = new Date();
-        let dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-
-        // New file with the data
-        const blob = file.files[0]
-        const newFile = new File([blob], dateString + "-" + file.name, {type: file.type});
-
-        setImage(newFile);
+        setImage(file);
         setImageURL(URL.createObjectURL(file));
     }
 

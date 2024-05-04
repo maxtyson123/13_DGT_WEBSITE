@@ -65,19 +65,32 @@ export default async function handler(
 
             case "followingFeed":
 
+            case "generalFeed":
+
+                // If not following anyone select the latest posts from everyone
+                if(following == "none") {
+                    query = `SELECT * FROM posts WHERE ${tables.post_user_id} != ${id} ORDER BY ${tables.post_date} DESC`;
+                    break;
+                }
+
                 // Make sure following is an array
                 if(!following &&  !Array.isArray(following)) {
+                    console.log(following)
                     return response.status(400).json({ error: 'No following provided'});
                 }
 
-                const users = following as string[];
 
-                // Get the latest posts from the users the user is following (sorted by date)
-                query = `SELECT * FROM posts WHERE ${tables.post_user_id} IN (${users.join(',')}) ORDER BY ${tables.post_date} DESC`;
-                break;
+                // Make sure we know the user id
+                if(!id) {
+                    return response.status(400).json({ error: 'No id provided'});
+                }
 
-            case "generalFeed":
-                query = `SELECT * FROM posts ORDER BY ${tables.post_date} DESC`;
+                // Select the latest posts from followers, but make sure the user's posts are not shown
+                query = `SELECT * FROM posts WHERE ${tables.post_user_id} IN (${following.join(",")}) AND ${tables.post_user_id} != ${id}`;
+
+                // Now select everything else (but still not the user's posts)
+                query += ` UNION SELECT * FROM posts WHERE ${tables.post_user_id} NOT IN (${following.join(",")}) AND ${tables.post_user_id} != ${id} ORDER BY ${tables.post_date} DESC`;
+
                 break;
 
             default:

@@ -8,6 +8,7 @@ import {useRouter} from "next/router";
 import {addMeasureSuffix, getFilePath} from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
+import {loader_data} from "@/lib/loader_data";
 export default function Profile() {
 
 
@@ -23,6 +24,7 @@ export default function Profile() {
     const [myProfile, setMyProfile] = useState(true);
     const [loading, setLoading] = useState(true);
     const [postsData, setPostsData] = useState<any>([]);
+    const [currentId, setCurrentId] = useState(0)
 
     const dataFetch = useRef(false);
     const router = useRouter();
@@ -43,7 +45,10 @@ export default function Profile() {
                 router.push('/media');
             }
 
-            setMyProfile(false);
+            setCurrentId(parseInt(id as string));
+
+            if(id != (session.user as RongoaUser).database.id.toString())
+                setMyProfile(false);
 
         }else {
             const user = session.user as RongoaUser;
@@ -63,6 +68,7 @@ export default function Profile() {
                     setRole('Unknown');
             }
             if(user.database.user_image && user.database.user_image != "undefined") setImage(user.database.user_image);
+            setCurrentId(user.database.id);
         }
 
         if(dataFetch.current) return;
@@ -211,7 +217,7 @@ export default function Profile() {
                                 {postsData.map((post: any, index: number) => {
                                         return(
                                             <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
-                                                <Image fill src={getFilePath((session?.user as RongoaUser).database.id, post.id, post.post_image)} alt="Post"/>
+                                                <Image fill placeholder={loader_data() as any}  src={getFilePath(currentId, post.id, post.post_image)} alt="Post"/>
                                             </div>
                                         )
                                     })

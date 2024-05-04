@@ -29,7 +29,9 @@ export default async function handler(
         getNames,
         mushrooms,
         page,
-        getExtras
+        getExtras,
+        getUsers,
+        getPosts,
     } = request.query;
 
     // Try querying the database
@@ -112,14 +114,54 @@ export default async function handler(
 
         // Return the plants that match the query
         const plantIds = await makeQuery(query, client)
+        let userIds = [] as any
+        let postIds = [] as any
 
         // If there are no plants, return an error
         if (!plantIds) {
             return response.status(404).json({ error: 'No plants found' });
         }
 
-        // Return the plant ids
-        return response.status(200).json({ data: plantIds });
+        if(getUsers){
+
+            query = `SELECT id FROM users WHERE ${tables.user_name} LIKE '${name}%'`
+            const users = await makeQuery(query, client)
+
+            // If there are no users, return an error
+            if (!users) {
+                return response.status(404).json({ error: 'No users found' });
+            }
+
+            // Set the user ids
+            userIds = users
+
+        }
+
+        if(getPosts){
+
+
+            // Get the info
+            query = `SELECT id FROM posts WHERE ${tables.post_title} LIKE '${name}%'`
+            if(getExtras){
+                query = `SELECT id, ${tables.post_title}, ${tables.post_date}, ${tables.post_user_id} FROM posts WHERE ${tables.post_title} LIKE '${name}%'`
+            }
+
+
+
+            const posts = await makeQuery(query, client)
+
+            // If there are no posts, return an error
+            if (!posts) {
+                return response.status(404).json({ error: 'No posts found' });
+            }
+
+            // Set the post ids
+            postIds = posts
+        }
+
+
+        // Return the plant ids // TODO: deprecate the data part
+        return response.status(200).json( { data: plantIds, plants: plantIds, users: userIds, posts: postIds});
 
     } catch (error) {
         // If there is an error, return the error
