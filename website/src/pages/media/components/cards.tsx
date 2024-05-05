@@ -9,6 +9,10 @@ import {loader_data} from "@/lib/loader_data";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {fetchData} from "next-auth/client/_utils";
 
+export default function Page(){
+    return <></>
+}
+
 interface PostCardProps {
     post_title: string,
     post_image: string,
@@ -82,8 +86,7 @@ export function PostCard(props: PostCardProps) {
     const fetchData = async () => {
 
         // Get the user information
-        const data = await makeRequestWithToken("get", `/api/user/data?id=${props.post_user_id}`);
-        const user = data.data.data;
+        const user = await makeCachedRequest('user_data_'+props.post_user_id, '/api/user/data?id='+props.post_user_id);
         if(user.user_image && user.user_image != "undefined"){
             setUserImage(user.user_image);
         } else {
@@ -215,8 +218,7 @@ export function UserCard(props: UserCardProps) {
     const fetchData = async () => {
 
         // Get the user information
-        const data = await makeRequestWithToken("get", `/api/user/data?id=${props.id}`);
-        const user = data.data.data;
+        const user = await makeCachedRequest('user_data_'+props.id, '/api/user/data?id='+props.id);
         if(user.user_image && user.user_image != "undefined"){
             setUserImage(user.user_image);
         } else {
@@ -238,7 +240,7 @@ export function UserCard(props: UserCardProps) {
         }
 
         // Get the followers
-        const followers = await makeRequestWithToken("get", `/api/user/follow?operation=followingCount&id=${props.id}`);
+        const followers = await makeRequestWithToken("get", `/api/user/follow?operation=followersCount&id=${props.id}`);
         setFollowers(followers.data.data[0]["COUNT(*)"]);
     }
 

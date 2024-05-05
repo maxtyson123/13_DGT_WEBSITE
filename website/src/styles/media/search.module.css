@@ -75,7 +75,7 @@
 
 }
 
-.searchResults a{
+.searchResults a, .searchResults div{
     width: 100%;
     display: grid;
     justify-items: center;

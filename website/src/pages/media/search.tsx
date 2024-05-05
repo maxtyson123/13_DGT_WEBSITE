@@ -69,21 +69,12 @@ export default function Page(){
                         )
                     })}
 
-                    <p>Plants</p>
-                    {searchResults.plants.map((plant: any, index: number) => {
-                        return (
-                            <Link href={"/plants/" + plant.id} key={index} className={stlyes.searchResult}>
-                                <p>{plant.id}</p>
-                            </Link>
-                        )
-                    })}
-
                     <p>Posts</p>
                     {searchResults.posts.map((post: any, index: number) => {
                         return (
-                            <Link href={"/media/posts/" + post.id} key={index} className={stlyes.searchResult}>
+                            <div>
                                 <PostCardApi id={post.id}/>
-                            </Link>
+                            </div>
                         )
                     })}
 
