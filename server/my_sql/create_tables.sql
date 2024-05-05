@@ -151,3 +151,13 @@ CREATE TABLE IF NOT EXISTS posts (
     FOREIGN KEY (post_plant_id) REFERENCES plants(id),
     FOREIGN KEY (post_user_id) REFERENCES users(id)
 );
+
+-- Likes
+CREATE TABLE IF NOT EXISTS likes (
+    id INT NOT NULL AUTO_INCREMENT,
+    like_post_id INT,
+    like_user_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (like_post_id) REFERENCES posts(id),
+    FOREIGN KEY (like_user_id) REFERENCES users(id)
+);

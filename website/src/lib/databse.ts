@@ -97,6 +97,10 @@ export class SQLDatabase {
     post_date: string;
     post_image: string;
 
+    // Likes Table
+    like_post_id: string;
+    like_user_id: string;
+
 
     constructor() {
         this.database = "rongoa8jwons3_rongoadb"
@@ -187,6 +191,10 @@ export class SQLDatabase {
         this.post_date                  = "post_date";
         this.post_image                 = "post_image";
 
+
+        // Likes Table
+        this.like_post_id              = "like_post_id";
+        this.like_user_id               = "like_user_id";
     }
 }
 

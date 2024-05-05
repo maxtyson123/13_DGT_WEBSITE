@@ -6,19 +6,21 @@ import {useSession} from "next-auth/react";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
-import {FileInput, ValidationState} from "@/components/input_sections";
+import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
 import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
+import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 
 export default function Admin(){
     const pageName = "Admin";
     const log = useLogger();
     const router = useRouter()
-    const { data: session } = useSession()
+    const { data: session, update } = useSession()
 
     // Back up file
     const [fileError, setFileError] = useState<string>("");
     const [fileState, setFileState] = useState<ValidationState>("normal");
+    const [userId, setUserId] = useState<string>("");
 
     // Load the data
     const [loadingMessage, setLoadingMessage] = useState("")
@@ -119,6 +121,31 @@ export default function Admin(){
         window.location.reload()
     }
 
+    const submitSudo = async () => {
+
+        // Get the user data
+        const user = await makeRequestWithToken('get', `/api/user/data?id=${userId}`)
+        const userData = user.data.data as UserDatabaseDetails
+
+        // Set the session
+        await update({
+            database: {
+                id: userData.id,
+                user_name: userData.user_name,
+                user_email: userData.user_email,
+                user_image: userData.user_image,
+                user_type: userData.user_type,
+                user_last_login: userData.user_last_login,
+                user_restricted_access: userData.user_restricted_access
+
+            }
+        }).then(r => console.log(r))
+
+        // Redirect to the account page
+        await router.push("/account")
+
+    }
+
     return (
         <>
            <Layout pageName={pageName} loadingMessage={loadingMessage} error={error} loginRequired header={"Settings"} permissionRequired={"pages:admin:publicAccess"}>
@@ -158,6 +185,10 @@ export default function Admin(){
 
                                <h3> Import Back Up </h3>
                                <FileInput required={false} state={fileState} errorText={fileError} changeEventHandler={setFile}  placeHolder={"Back Up File"}/>
+
+                               <h1> Sudo Mode</h1>
+                               <SmallInput placeHolder={"User ID"} required={true} state={"normal"} changeEventHandler={setUserId}/>
+                               <button onClick={submitSudo}>Submit</button>
                            </div>
                        </div>
                    </div>

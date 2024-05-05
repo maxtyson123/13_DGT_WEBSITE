@@ -32,6 +32,7 @@ export function PostCard(props: PostCardProps) {
     const [likes, setLikes] = useState(0)
     const [plantName, setPlantName] = useState("Loading...")
     const [width, setWidth] = useState(0)
+    const [liked, setLiked] = useState(false)
 
     const router = useRouter();
     const dataFetch = useRef(false);
@@ -116,7 +117,14 @@ export function PostCard(props: PostCardProps) {
         }
 
         // Get the likes
-        //todo
+        const likes = await makeRequestWithToken("get", `/api/posts/likes?operation=likes&id=${props.id}`);
+        setLikes(likes.data.data[0]["COUNT(*)"]);
+
+        // Check if the user has liked the post
+        const liked = await makeRequestWithToken("get", `/api/posts/likes?operation=check&id=${props.id}`);
+        if(liked.data.data[0]["COUNT(*)"] > 0) {
+            setLiked(true);
+        }
 
     }
 
@@ -124,6 +132,26 @@ export function PostCard(props: PostCardProps) {
 
         // Go to the users profile
         router.push("/media/profile?id="+props.post_user_id)
+    }
+
+    const likePost = async () => {
+        await makeRequestWithToken("post", `/api/posts/likes?operation=like&id=${props.id}`);
+    }
+
+    const unlikePost = async () => {
+        await makeRequestWithToken("post", `/api/posts/likes?operation=unlike&id=${props.id}`);
+    }
+
+    const toggleLike = async () => {
+        if(liked) {
+            setLiked(false);
+            await unlikePost();
+            setLikes(likes - 1);
+        } else {
+            setLiked(true);
+            await likePost();
+            setLikes(likes + 1);
+        }
     }
 
     return(
@@ -151,8 +179,8 @@ export function PostCard(props: PostCardProps) {
                 </div>
                 <div className={stlyes.postFooter}>
                     <img src="/media/images/Share.svg" alt="Share"/>
-                    <button>
-                        <img src="/media/images/Like.svg" alt="Comment"/>
+                    <button onClick={toggleLike}>
+                        <img src={liked ? "/media/images/Liked.svg" : "/media/images/Like.svg"} alt="Comment"/>
                         <p>{likes}</p>
                     </button>
                     <button onClick={() => {router.push("/plants/"+props.post_plant_id)}}>

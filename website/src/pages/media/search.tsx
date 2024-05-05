@@ -72,7 +72,7 @@ export default function Page(){
                     <p>Posts</p>
                     {searchResults.posts.map((post: any, index: number) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 <PostCardApi id={post.id}/>
                             </div>
                         )
