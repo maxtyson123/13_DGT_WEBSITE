@@ -144,7 +144,7 @@ export default function Home(){
 
                     </div>
 
-                    { following &&
+                    { following && session?.user &&
                         <QueryClientProvider client={queryClient}>
                             <InfiniteLoading searchQuery={`/api/posts/fetch?operation=generalFeed&following=${following}&id=${id}`} display={"PostCard"}/>
                         </QueryClientProvider>

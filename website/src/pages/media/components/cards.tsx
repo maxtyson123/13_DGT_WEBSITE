@@ -33,6 +33,7 @@ export function PostCard(props: PostCardProps) {
     const [plantName, setPlantName] = useState("Loading...")
     const [width, setWidth] = useState(0)
     const [liked, setLiked] = useState(false)
+    const [lastTap, setLastTap] = useState(0)
 
     const router = useRouter();
     const dataFetch = useRef(false);
@@ -153,6 +154,20 @@ export function PostCard(props: PostCardProps) {
             setLikes(likes + 1);
         }
     }
+    
+    const detectDoubleTap = (e: any) => {
+
+        // Get the time
+        const time = new Date().getTime();
+
+        // Check if the time is less than 300ms
+        if(time - lastTap < 300) {
+            toggleLike();
+        }
+
+        // Set the last tap
+        setLastTap(time);
+    }
 
     return(
         <>
@@ -175,6 +190,7 @@ export function PostCard(props: PostCardProps) {
                         placeholder={loader_data() as any}
                         src={getFilePath(props.post_user_id, props.id, props.post_image)}
                         alt={props.post_title}
+                        onClick={detectDoubleTap}
                     />
                 </div>
                 <div className={stlyes.postFooter}>

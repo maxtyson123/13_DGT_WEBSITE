@@ -60,7 +60,14 @@ export default async function handler(
                     return response.status(400).json({ error: 'No id provided'});
                 }
 
-                query = `SELECT * FROM posts WHERE id = ${id}`;
+                // Check if id is a array
+                if(!Array.isArray(id)) {
+                    query = `SELECT * FROM posts WHERE id = ${id}`;
+                }else{
+                    query = `SELECT * FROM posts WHERE id IN (${id.join(",")})`;
+                }
+
+
                 break;
 
             case "generalFeed":

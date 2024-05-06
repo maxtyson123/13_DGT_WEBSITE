@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function Page(){
 
-    const [searchHistory, setSearchHistory] = useState<any[]>(["test"]);
+    const [searchHistory, setSearchHistory] = useState<any[]>([]);
     const [searchResults, setSearchResults] = useState<any>([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -106,7 +106,7 @@ export default function Page(){
             <Wrapper>
                 <div className={stlyes.page}>
                     <div className={stlyes.topBar}>
-                        <Link href={"/media"}><img src={"/media/images/Back.svg"}/></Link>
+                        <Link href={"/media"}><img src={"/media/images/back.svg"}/></Link>
                         <div className={stlyes.searchBar} id={"widthReference"}>
                             <input type="text" placeholder={"Enter your search..."}/>
                             <button onClick={() => {

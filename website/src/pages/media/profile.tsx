@@ -24,7 +24,9 @@ export default function Profile() {
     const [myProfile, setMyProfile] = useState(true);
     const [loading, setLoading] = useState(true);
     const [postsData, setPostsData] = useState<any>([]);
+    const [likesData, setLikesData] = useState<any>([])
     const [currentId, setCurrentId] = useState(0)
+    const [showPosts, setShowPosts] = useState(true);
 
     const dataFetch = useRef(false);
     const router = useRouter();
@@ -107,7 +109,6 @@ export default function Profile() {
             setIFollow(following.data.data.length > 0);
         }
 
-
         // Get the stats
         const following = await makeRequestWithToken('get', `/api/user/follow?operation=followingCount${id ? `&id=${id}` : ''}`);
         const followers = await makeRequestWithToken('get', `/api/user/follow?operation=followersCount${id ? `&id=${id}` : ''}`);
@@ -123,12 +124,25 @@ export default function Profile() {
         const posts = await makeRequestWithToken('get', `/api/posts/fetch?operation=list&id=${(id ? id : (session?.user as RongoaUser).database.id)}`);
         console.log(posts);
         if(posts.data.data){
+            // Reverse the posts
+            posts.data.data.reverse();
             setPostsData(posts.data.data);
             setPosts(posts.data.data.length);
         }
 
         // Let the user be able to update the stats with follow/unfollow
         setLoading(false);
+
+        // Get the likes
+        const likes = await makeRequestWithToken('get', `/api/posts/likes?operation=list${id ? `&id=${id}` : ''}`);
+        const likesIds = likes.data.data;
+        if (likesIds.length === 0) return;
+
+        const likesImage = await makeRequestWithToken('get', `/api/posts/fetch?operation=list&id=${likesIds.map((item: any) => item.like_post_id).join("&id=")}`);
+        const likesImageData = likesImage.data.data;
+        if (likesImageData.length === 0) return;
+
+        setLikesData(likesImageData);
     }
 
     const handleFollowChange = async () => {
@@ -201,8 +215,8 @@ export default function Profile() {
 
                 <div className={styles.postsContainer} id={"container"}>
                     <div className={styles.postsHeader}>
-                        <button className={styles.postsButton + " " + styles.active}>Posts</button>
-                        <button className={styles.postsButton}>Likes</button>
+                        <button className={styles.postsButton + " " + (showPosts ? styles.active : "")} onClick={() => setShowPosts(true)}>Posts</button>
+                        <button className={styles.postsButton + " " + (!showPosts ? styles.active : "")} onClick={() => setShowPosts(false)}>Likes</button>
                         <button className={styles.postsButton}>More ...</button>
                     </div>
 
@@ -214,13 +228,30 @@ export default function Profile() {
                             </div>
                             :
                             <div className={styles.posts}>
-                                {postsData.map((post: any, index: number) => {
-                                        return(
-                                            <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
-                                                <Image fill placeholder={loader_data() as any}  src={getFilePath(currentId, post.id, post.post_image)} alt="Post"/>
-                                            </div>
-                                        )
-                                    })
+                                {showPosts ?
+                                    <>
+                                    {
+                                        postsData.map((post: any, index: number) => {
+                                            return(
+                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
+                                                    <Image fill placeholder={loader_data() as any}  src={getFilePath(currentId, post.id, post.post_image)} alt="Post"/>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    </>
+                                    :
+                                    <>
+                                    {
+                                        likesData.map((post: any, index: number) => {
+                                            return(
+                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
+                                                    <Image fill placeholder={loader_data() as any}  src={getFilePath(post.post_user_id, post.id, post.post_image)} alt="Post"/>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    </>
                                 }
                                 <p>User Has No More Posts</p>
                             </div>

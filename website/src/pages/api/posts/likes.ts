@@ -67,7 +67,7 @@ export default async function handler(
                 break;
 
             case "list":
-                query = `SELECT * FROM likes WHERE ${tables.like_user_id} = ${userId}`;
+                query = `SELECT * FROM likes WHERE ${tables.like_user_id} = ${id ? id : userId}`;
                 break;
 
             default:
