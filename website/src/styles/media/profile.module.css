@@ -136,6 +136,33 @@
     border-radius: 15px;
 }
 
+.moreDropdown{
+    width: 100%;
+}
+
+.moreDropdown > div{
+    display: none;
+}
+
+/* Show the dive if the button is active */
+.moreDropdown > div.active{
+    display: block;
+    position: relative;
+    top: 10px;
+    border-radius: 15px;
+    background-color: var(--text-light);
+    margin-bottom: -145px;
+    z-index: 2;
+}
+
+.moreDropdown > div > button{
+    font-size: 1.2em;
+    width: 100%;
+    border-bottom: 1px solid var(--darker-secondary-gray);
+    border-radius: 0;
+}
+
+
 .postsHeader .active{
     background-color: var(--main-green);
     color: var(--text-light);

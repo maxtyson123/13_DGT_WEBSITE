@@ -3,7 +3,7 @@ import Section from "@/components/section";
 import styles from "@/styles/components/search.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
-import {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
+import PlantCardData, {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/components/plant_card";
 import {Error} from "@/components/error";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {Layout} from "@/components/layout";
@@ -82,6 +82,47 @@ export default function Search(){
     const getSearchResults = async (name: string, mushrooms: boolean) => {
 
         const startTime = Date.now()
+        let apiResults: JSX.Element[] = []
+
+        const seedSweeperVariants = ["seedsweeper", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper"]
+        if (seedSweeperVariants.includes(name.toLowerCase())){
+
+
+            // Add the result to the results
+            apiResults.push(
+                <div className={styles.searchResult}>
+                    <PlantCardData data={
+                        {   id: "seedsweeper" as any,
+                            preferred_name: "English",
+                            english_name: "Seed Sweeper",
+                            latin_name: "Max Tyson",
+                            maori_name: "Easter Egg",
+                            small_description: "A fun game made by Max Tyson",
+                            display_image: "main",
+                            authorIDs: [2],
+                            use: [],
+                            sections: [],
+                            months_ready_for_use: [],
+                            last_modified: new Date().toISOString(),
+                            attachments: [{type: "image", path: "/media/images/sw.png", meta: {name: "main", credits: "Max Tyson", description: "Yes"}, downloadable: false}],
+                            location_found: "NPM",
+                            plant_type: "Game",
+                            long_description: "click me",
+                            authors: [],
+                        }}/>
+                </div>
+            )
+
+            // Set the results
+            setResults(apiResults)
+
+            // Set the time and amount
+            setDuration(Date.now() - startTime)
+            setAmount(1)
+            console.log("SeedSweeper")
+
+        }
+
 
         try{
             console.log("Getting search results")
@@ -95,9 +136,6 @@ export default function Search(){
 
             // Log the response
             console.log(data)
-
-            // Create the results
-            let apiResults: JSX.Element[] = []
 
             // Loop through the results
             for (let i = 0; i < data.length; i++){

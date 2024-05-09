@@ -84,7 +84,16 @@ export default async function handler(
                     return response.status(400).json({ error: 'No following provided'});
                 }
 
-                let following_array = following as string[];
+
+                let following_array = [];
+
+                // Check if it is a array
+                if(Array.isArray(following)) {
+                    following_array = following as string[];
+                } else {
+                    following_array = [following];
+                }
+
 
                 // Make sure we know the user id
                 if(!id) {
@@ -124,6 +133,7 @@ export default async function handler(
     } catch (error) {
 
         // If there is an error, return the error
+        console.log(error)
         return response.status(500).json({ error: error });
     }
 }

@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "cross-env": "^7.0.3",
+    "custom-sweeper": "^0.1.0",
     "eslint": "8.37.0",
     "eslint-config-next": "^14.2.3",
     "ftp": "^0.3.10",

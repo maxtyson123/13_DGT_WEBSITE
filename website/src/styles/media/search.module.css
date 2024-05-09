@@ -64,9 +64,10 @@
 .searchResults{
     width: 90%;
     display: grid;
-    align-items: center;
     justify-items: center;
-    gap: 1%;
+    align-self: start;
+    align-items: center;
+    gap: 15px;
 }
 
 .searchResults > p{

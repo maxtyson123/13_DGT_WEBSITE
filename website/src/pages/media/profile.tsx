@@ -20,13 +20,18 @@ export default function Profile() {
     const [posts, setPosts] = useState(0);
     const [followers, setFollowers] = useState(0);
     const [following, setFollowing] = useState(0);
-    const [iFollow, setIFollow] = useState(false);
-    const [myProfile, setMyProfile] = useState(true);
-    const [loading, setLoading] = useState(true);
+
+    // Data
     const [postsData, setPostsData] = useState<any>([]);
     const [likesData, setLikesData] = useState<any>([])
     const [currentId, setCurrentId] = useState(0)
+
+    // States
     const [showPosts, setShowPosts] = useState(true);
+    const [moreActive, setMoreActive] = useState(false);
+    const [iFollow, setIFollow] = useState(false);
+    const [myProfile, setMyProfile] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const dataFetch = useRef(false);
     const router = useRouter();
@@ -82,7 +87,7 @@ export default function Profile() {
 
 
     const fetchData = async (id: string) => {
-
+        setLoading(true);
         if(id) {
 
             // Update the profile info
@@ -138,10 +143,12 @@ export default function Profile() {
         const likesIds = likes.data.data;
         if (likesIds.length === 0) return;
 
-        const likesImage = await makeRequestWithToken('get', `/api/posts/fetch?operation=list&id=${likesIds.map((item: any) => item.like_post_id).join("&id=")}`);
+        const likesImage = await makeRequestWithToken('get', `/api/posts/fetch?operation=data&id=${likesIds.map((item: any) => item.like_post_id).join("&id=")}`);
         const likesImageData = likesImage.data.data;
         if (likesImageData.length === 0) return;
 
+        // Reverse the likes and set the data
+        likesImageData.reverse();
         setLikesData(likesImageData);
     }
 
@@ -217,7 +224,14 @@ export default function Profile() {
                     <div className={styles.postsHeader}>
                         <button className={styles.postsButton + " " + (showPosts ? styles.active : "")} onClick={() => setShowPosts(true)}>Posts</button>
                         <button className={styles.postsButton + " " + (!showPosts ? styles.active : "")} onClick={() => setShowPosts(false)}>Likes</button>
-                        <button className={styles.postsButton}>More ...</button>
+                        <div className={styles.moreDropdown}>
+                            <button className={styles.postsButton + " " + (moreActive ? styles.active : "")} onClick={() => setMoreActive(!moreActive)}>More ...</button>
+                            <div className={moreActive ? styles.active : ""}>
+                                <button>Share Profile</button>
+                                <button onClick={() => {router.push("/account/"+currentId.toString())}}>View On Rongoa</button>
+                                <button onClick={() => {fetchData(currentId.toString())}}>Refresh</button>
+                            </div>
+                        </div>
                     </div>
 
                     {
