@@ -4,12 +4,17 @@ import NextAuth, {NextAuthOptions} from "next-auth";
 import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {MEMBER_USER_TYPE} from "@/lib/users";
 import { Logger } from 'next-axiom';
+import MaxID from "@/components/maxid_provider";
 
 /**
  * The config options that NextAuth uses when authenticating users
  */
 export const authOptions: NextAuthOptions = {
     providers: [
+        MaxID({
+            clientId: process.env.MAXID_ID ? process.env.MAXID_ID : '',
+            clientSecret: process.env.MAXID_SECRET ? process.env.MAXID_SECRET : '',
+        }),
         GoogleProvider({
             clientId: process.env.GOOGLE_ID ? process.env.GOOGLE_ID : '',
             clientSecret: process.env.GOOGLE_SECRET ? process.env.GOOGLE_SECRET : '',
@@ -17,7 +22,8 @@ export const authOptions: NextAuthOptions = {
         GitHubProvider({
             clientId: process.env.GITHUB_ID ? process.env.GITHUB_ID : '',
             clientSecret: process.env.GITHUB_SECRET ? process.env.GITHUB_SECRET : '',
-        })
+        }),
+
     ],
     callbacks: {
         async jwt({ token, trigger, session}) {
