@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS plants (
     last_modified DATE,
     display_image TEXT,
     plant_type TEXT,
+    published BOOLEAN,
 	PRIMARY KEY (id)
 );
 

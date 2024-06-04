@@ -8,6 +8,7 @@ import {UserDatabaseDetails} from "@/lib/users";
  */
 export interface PlantData {
     id:                 number;
+    published:          boolean;
     preferred_name:     string;
     english_name:       string;
     maori_name:         string;
@@ -41,6 +42,7 @@ export interface PlantDataApi {
     last_modified:              string;
     display_image:              string;
     plant_type:                 string;
+    published:                  boolean;
     months_ready_events:        string[];
     months_ready_start_months:  string[];
     months_ready_end_months:    string[];
@@ -330,6 +332,7 @@ export function ValidPlantDataApi(apiData : PlantDataApi) : boolean {
     // Check that the data is valid
     return !(apiData.preferred_name             == null
         || apiData.english_name                 == null
+        || apiData.published                    == null
         || apiData.maori_name                   == null
         || apiData.latin_name                   == null
         || apiData.location_found               == null
@@ -381,12 +384,13 @@ export function ValidPlantData(plantData : PlantData) : boolean {
 
     return !(plantData.preferred_name       == null
         || plantData.english_name           == null
+        || plantData.published              == null
         || plantData.maori_name             == null
         || plantData.latin_name             == null
         || plantData.location_found         == null
         || plantData.small_description      == null
         || plantData.long_description       == null
-        || plantData.authorIDs               == null
+        || plantData.authorIDs              == null
         || plantData.last_modified          == null
         || plantData.display_image          == null
         || plantData.plant_type             == null
@@ -426,6 +430,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
     plantData.last_modified     = apiData.last_modified;
     plantData.display_image     = apiData.display_image;
     plantData.plant_type        = apiData.plant_type;
+    plantData.published         = apiData.published;
 
     // Convert the author into array of ints
     plantData.authorIDs = [];
@@ -585,6 +590,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
     apiData.display_image     = plantData.display_image;
     apiData.plant_type        = plantData.plant_type;
     apiData.author            = plantData.authorIDs.toString()
+    apiData.published         = plantData.published;
 
     // Date info
     for(let i = 0; i < plantData.months_ready_for_use.length; i++) {
@@ -673,6 +679,7 @@ export function emptyPlantData(){
         plant_type:             "",
         attachments:            [],
         sections:               [],
+        published:              false,
     };
 
     return plantData;
@@ -723,6 +730,7 @@ export function emptyPlantApiData(){
         attachment_types:           [],
         attachment_metas:           [],
         attachment_downloadable:    [],
+        published:                  false,
     };
 
     return apiData;
