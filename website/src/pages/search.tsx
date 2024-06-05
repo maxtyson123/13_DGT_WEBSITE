@@ -93,6 +93,7 @@ export default function Search(){
                 <div className={styles.searchResult}>
                     <PlantCardData data={
                         {   id: "seedsweeper" as any,
+                            published: true,
                             preferred_name: "English",
                             english_name: "Seed Sweeper",
                             latin_name: "Max Tyson",

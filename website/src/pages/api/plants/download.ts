@@ -92,7 +92,8 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                                     plants.${tables.author}, 
                                     plants.${tables.last_modified}, 
                                     plants.${tables.display_image},
-                                    plants.${tables.plant_type},`;
+                                    plants.${tables.plant_type},
+                                    plants.${tables.published},`;
                     break;
 
                 case 'months_ready_for_use':

@@ -88,9 +88,10 @@ export default async function handler(
                     apiData.medical_restricteds = [];
 
                     // Create empty text for the restricted data
-                    for(let i = 0; i < apiData.medical_types.length; i++){
-                        apiData.medical_restricteds.push("")
-                    }
+                    if(apiData.medical_types)
+                        for(let i = 0; i < apiData.medical_types.length; i++){
+                            apiData.medical_restricteds.push("")
+                        }
                 }
 
                 // Convert the string date into a date object
@@ -106,7 +107,7 @@ export default async function handler(
 
                 // If the data is null then return an error
                 if(!plantOBJ){
-                    return response.status(404).json({ error: 'Plant data count be converted into PlantData'});
+                    return response.status(404).json({ error: 'Plant data count be converted into PlantData', apiData});
                 }
 
                 // Set the id
