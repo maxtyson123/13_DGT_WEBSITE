@@ -17,10 +17,12 @@ export default function Mushrooms(){
                 <h1 className={styles.title}>All Mushrooms</h1>
                 <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>
 
-                <QueryClientProvider client={queryClient}>
-                    <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"} display={"PlantCardApi"}/>
-                </QueryClientProvider>
+                <div className={styles.mushroomContainer}>
+                    <QueryClientProvider client={queryClient}>
+                        <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=only"} display={"PlantCardApi"}/>
+                    </QueryClientProvider>
+                </div>
             </Layout>
         </>
-    )
+)
 }

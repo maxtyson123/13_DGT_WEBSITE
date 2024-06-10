@@ -72,7 +72,7 @@ export default async function handler(
             }
 
 
-            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%')`;
+            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%') AND ${tables.published} = 1`;
             selector = "AND";
         }
 

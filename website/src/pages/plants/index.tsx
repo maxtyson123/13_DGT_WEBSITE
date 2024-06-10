@@ -18,9 +18,11 @@ export default function Plants(){
               <p className={styles.subtitle}> To search for a specific plant, use the search page or the plant
                   index page. </p>
 
-              <QueryClientProvider client={queryClient}>
-                  <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=exclude"} display={"PlantCardApi"}/>
-              </QueryClientProvider>
+              <div className={styles.mushroomContainer}>
+                  <QueryClientProvider client={queryClient}>
+                      <InfiniteLoading searchQuery={"/api/plants/search?mushrooms=exclude"} display={"PlantCardApi"}/>
+                  </QueryClientProvider>
+              </div>
           </Layout>
         </>
     )
