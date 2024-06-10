@@ -32,7 +32,9 @@
 .searchBar img{
     width: 30px;
     height: 30px;
+    filter: invert(0.5);
 }
+
 
 .searchHistory{
     width: 70%;

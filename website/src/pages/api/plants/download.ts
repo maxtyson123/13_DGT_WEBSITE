@@ -255,7 +255,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         const query = `
             SELECT
             ${selector}
-            FROM ${tables.database}.plants
+            FROM ${process.env.MYSQL_DATABASE}.plants
             ${joiner};
         `;
 

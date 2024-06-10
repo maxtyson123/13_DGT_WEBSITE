@@ -144,11 +144,13 @@ export default function Home(){
 
                     </div>
 
+                    <div className={stlyes.postsContianer}>
                     { following && session?.user &&
                         <QueryClientProvider client={queryClient}>
                             <InfiniteLoading searchQuery={`/api/posts/fetch?operation=generalFeed&following=${following}&id=${id}`} display={"PostCard"}/>
                         </QueryClientProvider>
                     }
+                    </div>
 
 
                 </div>

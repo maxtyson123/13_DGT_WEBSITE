@@ -29,7 +29,7 @@ export default async function handler(
 
     const handleGet = async (userID: string) => {
         // Fetch the plants
-        let query = `SELECT id, ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.last_modified}, ${tables.plant_type} FROM plants WHERE ${tables.author} LIKE '%,${userID},%' OR ${tables.author} LIKE '${userID},%' OR ${tables.author} LIKE '%,${userID}' OR ${tables.author} LIKE '${userID}'`;
+        let query = `SELECT id, ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.last_modified}, ${tables.plant_type} FROM plants WHERE (${tables.author} LIKE '%,${userID},%' OR ${tables.author} LIKE '${userID},%' OR ${tables.author} LIKE '%,${userID}' OR ${tables.author} LIKE '${userID}') AND ${tables.published} = 1`;
         const plants = await makeQuery(query, client)
 
         if (plants.length == 0) {

@@ -292,9 +292,9 @@ export default function PlantPage() {
         )
     }
 
-    return (
-        <>
-            <Layout pageName={"Plant"} loadingMessage={loadingMessage} error={error} header={plantHeader()}>
+    const page = () => {
+        return(
+            <>
                 <Section autoPadding>
                     {editMode ? <button className={styles.editButton} onClick={editThisPlant}>Edit</button> : <></>}
                     <div className={styles.plantMainInfo}>
@@ -327,116 +327,132 @@ export default function PlantPage() {
 
 
                                     {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
-                               <div className={styles.bottomImages}>
+                                    <div className={styles.bottomImages}>
 
-                                   {/* Decrement the current image by 1 */}
-                                   <button onClick={() => {
-                                       changeImage(currentImage - 1)
-                                   }}><FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/></button>
+                                        {/* Decrement the current image by 1 */}
+                                        <button onClick={() => {
+                                            changeImage(currentImage - 1)
+                                        }}><FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/></button>
 
-                                   {/* Loop through 5 creating 5 images */}
-                                   {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
-                                       <>
-                                           {/* On click set the main image to the image clicked */}
-                                           <button key={index} onClick={() => {
-                                               setMainImageFromIndex(currentImage + index)
-                                           }}>
+                                        {/* Loop through 5 creating 5 images */}
+                                        {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
+                                            <>
+                                                {/* On click set the main image to the image clicked */}
+                                                <button key={index} onClick={() => {
+                                                    setMainImageFromIndex(currentImage + index)
+                                                }}>
 
-                                               {/* The image, use the current shown image plus the index to get the correct 5 */}
-                                               <Image
-                                                   key={plantData?.attachments[currentImage + index].path}
-                                                   src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                   alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
-                                                   fill
-                                                   placeholder={loader_data() as any}
-                                                   style={{objectFit: "contain"}}
-                                               />
-                                           </button>
-                                       </>
-                                   ))}
+                                                    {/* The image, use the current shown image plus the index to get the correct 5 */}
+                                                    <Image
+                                                        key={plantData?.attachments[currentImage + index].path}
+                                                        src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
+                                                        alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
+                                                        fill
+                                                        placeholder={loader_data() as any}
+                                                        style={{objectFit: "contain"}}
+                                                    />
+                                                </button>
+                                            </>
+                                        ))}
 
-                                   {/* Decrement the current image by 1 */}
-                                   <button onClick={() => {
-                                       changeImage(currentImage + 1)
-                                   }}><FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/></button>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </Section>
+                                        {/* Decrement the current image by 1 */}
+                                        <button onClick={() => {
+                                            changeImage(currentImage + 1)
+                                        }}><FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Section>
 
-               <Section autoPadding>
-                   <div className={styles.monthsContainer}>
+                <Section autoPadding>
+                    <div className={styles.monthsContainer}>
 
-                       {/* If there are no events then there shouldn't be a title */}
-                       {plantData?.months_ready_for_use && plantData.months_ready_for_use.length > 0 &&
-                           <h1 className={styles.title}> Events </h1>
-                       }
+                        {/* If there are no events then there shouldn't be a title */}
+                        {plantData?.months_ready_for_use && plantData.months_ready_for_use.length > 0 &&
+                            <h1 className={styles.title}> Events </h1>
+                        }
 
-                       {/* Loop through the events and display them */}
-                       {plantData?.months_ready_for_use.map((month, index) => (
-                           <div key={index} className={styles.month}>
-                               <h1>{month.event}</h1>
-                               <p>{month.start_month} - {month.end_month}</p>
-                           </div>
-                       ))}
-                   </div>
-               </Section>
+                        {/* Loop through the events and display them */}
+                        {plantData?.months_ready_for_use.map((month, index) => (
+                            <div key={index} className={styles.month}>
+                                <h1>{month.event}</h1>
+                                <p>{month.start_month} - {month.end_month}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
 
-               <Section autoPadding>
-                   <div key={renderKey}>
-                       <div className={styles.sectionsContainer}>
+                <Section autoPadding>
+                    <div key={renderKey}>
+                        <div className={styles.sectionsContainer}>
 
-                           {/* Load all the big sections */}
-                           {plantData?.sections.map((section, index) => (
-                               <AutoSection
-                                   section={section}
-                                   images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
-                                   isLeft={isMobile ? true : index % 2 === 0}
-                                   key={index}
-                               />
-                           ))}
+                            {/* Load all the big sections */}
+                            {plantData?.sections.map((section, index) => (
+                                <AutoSection
+                                    section={section}
+                                    images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
+                                    isLeft={isMobile ? true : index % 2 === 0}
+                                    key={index}
+                                />
+                            ))}
 
-                           {/* Attachments section */}
-                           {
-                               plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
-                                   <>
-                                       <br/>
-                                       <div className={styles.attachmentsSection}>
-                                           <h1> Attachments </h1>
-                                           <div className={styles.attachmentsContainer}>
-                                               {plantData?.attachments.filter((attachment) => attachment.type !== "image").map((attachment, index) => (
-                                                   <AttachmentSection attachment={attachment} key={index}/>
-                                               ))}
-                                           </div>
-                                       </div>
-                                   </>
-                                   :
-                                   <>
-                                   </>
-                           }
+                            {/* Attachments section */}
+                            {
+                                plantData?.attachments && plantData?.attachments.filter((attachment) => attachment.type !== "image").length > 0 ?
+                                    <>
+                                        <br/>
+                                        <div className={styles.attachmentsSection}>
+                                            <h1> Attachments </h1>
+                                            <div className={styles.attachmentsContainer}>
+                                                {plantData?.attachments.filter((attachment) => attachment.type !== "image").map((attachment, index) => (
+                                                    <AttachmentSection attachment={attachment} key={index}/>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                    </>
+                            }
 
-                           {/* Load all the sources sections */}
-                           {
-                               plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
-                                   <div className={styles.sourceSection}>
-                                       <br/>
-                                       <br/>
-                                       <h1> Sources </h1>
-                                       {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
-                                           <SourceSection section={source} key={index}/>
-                                       ))}
+                            {/* Load all the sources sections */}
+                            {
+                                plantData?.sections && plantData?.sections.filter((section) => section.type === "source").length > 0 ?
+                                    <div className={styles.sourceSection}>
+                                        <br/>
+                                        <br/>
+                                        <h1> Sources </h1>
+                                        {plantData?.sections.filter((section) => section.type === "source").map((source, index) => (
+                                            <SourceSection section={source} key={index}/>
+                                        ))}
 
-                                   </div>
-                                   :
-                                   <></>
-                           }
+                                    </div>
+                                    :
+                                    <></>
+                            }
 
 
-                       </div>
-                   </div>
-               </Section>
+                        </div>
+                    </div>
+                </Section>
+            </>
+        )
+    }
+
+    return (
+        <>
+            <Layout pageName={"Plant"} loadingMessage={loadingMessage} error={error} header={plantHeader()}>
+                {
+                    (plantData?.published || editMode) ?
+                        page()
+                        :
+                        <Section autoPadding>
+                            <h1> This plant is not published </h1>
+                        </Section>
+
+                }
            </Layout>
         </>
     );

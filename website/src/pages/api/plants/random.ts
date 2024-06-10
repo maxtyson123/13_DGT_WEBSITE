@@ -38,7 +38,7 @@ export default async function handler(
 
 
         // Get x random plant ids from the database
-        const plantIds = await makeQuery(`SELECT id FROM plants ORDER BY ${USE_POSTGRES ? "RANDOM" : "RAND"}() LIMIT ${amount}`, client);
+        const plantIds = await makeQuery(`SELECT id FROM plants  WHERE published = 1 ORDER BY ${USE_POSTGRES ? "RANDOM" : "RAND"}() LIMIT ${amount}`, client);
 
         // If there are no plants, return an error
         if (!plantIds) {
