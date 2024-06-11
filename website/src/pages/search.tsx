@@ -27,6 +27,14 @@ export default function Search(){
     // Run on page start
     useEffect(() => {
 
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                const userInput = (document.getElementById("searchBox") as HTMLInputElement).value
+                const includeMushrooms = (document.getElementById("plant_type") as HTMLInputElement).checked
+                window.location.href = `/search?query=${userInput}&include_mushrooms=${includeMushrooms}`
+            }
+        })
+
         let initialResults: JSX.Element[] = []
 
         // Set the results to null
@@ -76,6 +84,7 @@ export default function Search(){
 
         // Begin getting the search results
         getSearchResults(query, includeMushrooms == "true").then()
+
 
     }, [])
 

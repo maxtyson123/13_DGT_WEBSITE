@@ -32,6 +32,7 @@ export default async function handler(
         getExtras,
         getUsers,
         getPosts,
+        getUnpublished
     } = request.query;
 
     // Try querying the database
@@ -72,9 +73,17 @@ export default async function handler(
             }
 
 
-            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%') AND ${tables.published} = 1`;
+            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%')`;
             selector = "AND";
         }
+
+        // Check wether to get non-published plants
+        if (!getUnpublished) {
+            query += ` ${selector} ${tables.published} = 1`;
+            selector = "AND";
+        }
+
+        console.log(query)
 
         // Filter mushrooms
         if (!mushrooms){

@@ -79,8 +79,8 @@ function createBackUpQuery(json: any) {
                 let old = query
 
                 query = createUpSertQuery("plants",
-                    [tables.id, tables.preferred_name, tables.english_name, tables.maori_name, tables.latin_name, tables.location_found, tables.small_description, tables.long_description, tables.author, tables.last_modified, tables.display_image, tables.plant_type],
-                    [plantTable[j].id, plantTable[j].preferred_name, plantTable[j].english_name, plantTable[j].maori_name, plantTable[j].latin_name, plantTable[j].location_found, plantTable[j].small_description, plantTable[j].long_description, plantTable[j].author, plantTable[j].last_modified, plantTable[j].display_image, plantTable[j].plant_type]
+                    [tables.id, tables.preferred_name, tables.english_name, tables.maori_name, tables.latin_name, tables.location_found, tables.small_description, tables.long_description, tables.author, tables.last_modified, tables.display_image, tables.plant_type, tables.published],
+                    [plantTable[j].id, plantTable[j].preferred_name, plantTable[j].english_name, plantTable[j].maori_name, plantTable[j].latin_name, plantTable[j].location_found, plantTable[j].small_description, plantTable[j].long_description, plantTable[j].author, plantTable[j].last_modified, plantTable[j].display_image, plantTable[j].plant_type, plantTable[j].published]
                 )
 
                 // Add the old query
@@ -216,6 +216,16 @@ function createBackUpQuery(json: any) {
             continue;
         }
 
+        // Check ifi ts likes data
+        if(tableNames.includes("like_post_id")) {
+            let likesTable = json.data[i];
+            for (let j = 0; j < likesTable.length; j++)
+                query += createUpSertQuery("likes",
+                    [tables.id, tables.like_post_id, tables.like_user_id],
+                    [likesTable[j].id, likesTable[j].like_post_id, likesTable[j].like_user_id]
+                )
+            continue;
+        }
     }
 
     return query;
