@@ -18,6 +18,7 @@ import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
 import {Layout} from "@/components/layout";
+import axios from "axios";
 
 export default function Home() {
     const pageName = "Home"

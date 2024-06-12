@@ -1,5 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {useSession} from "next-auth/react";
+import {RongoaUser} from "@/lib/users";
+import {KnockProvider} from "@knocklabs/react";
 
 interface WrapperProps{
     children: React.ReactNode;
@@ -30,12 +32,17 @@ export default function Wrapper({children, login}: WrapperProps){
 
     return(
         <>
-            {/* Show the page */}
-            <div className={"pageWrapper"}>
-                <div className={"content"}>
-                    {children}
+            <KnockProvider
+                apiKey={process.env.NEXT_PUBLIC_KNOCK_API_KEY ? process.env.NEXT_PUBLIC_KNOCK_API_KEY : ""}
+                userId={(session?.user as RongoaUser)?.database.id.toString()}
+            >
+                {/* Show the page */}
+                <div className={"pageWrapper"}>
+                    <div className={"content"}>
+                        {children}
+                    </div>
                 </div>
-            </div>
+            </KnockProvider>
         </>
     )
 }

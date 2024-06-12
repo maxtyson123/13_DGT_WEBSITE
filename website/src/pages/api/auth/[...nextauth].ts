@@ -5,6 +5,8 @@ import {getClient, getTables, makeQuery} from "@/lib/databse";
 import {MEMBER_USER_TYPE} from "@/lib/users";
 import { Logger } from 'next-axiom';
 import MaxID from "@/components/maxid_provider";
+import Knock from "@knocklabs/client";
+import axios from "axios";
 
 /**
  * The config options that NextAuth uses when authenticating users
@@ -76,10 +78,25 @@ export const authOptions: NextAuthOptions = {
                 const user_image = user?.image;
                 const user_type = MEMBER_USER_TYPE;
 
+
                 // Check if there already is a user
                 let query = `SELECT * FROM users WHERE ${tables.user_email} = '${user_email}'`;
                 const existing_user = await makeQuery(query, client)
                 if(existing_user.length > 0) {
+
+                    // Get the user id
+                    const uid = existing_user[0].id;
+
+                    const a = await axios.put(`https://api.knock.app/v1/users/${uid}`, {
+                        email: user_email,
+                        name: user_name,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${process.env.KNOCK_API_KEY_SECRET}`
+                        }
+                    })
+
+                    logger.info("Identified user with id: " + uid);
 
                     logger.info(`User logged in with email ${user_email}`);
 
@@ -94,6 +111,7 @@ export const authOptions: NextAuthOptions = {
                 logger.info(`User created with email ${user_email}`);
                 query = `INSERT INTO users (${tables.user_email}, ${tables.user_name}, ${tables.user_type}, ${tables.user_last_login}, ${tables.user_image}, ${tables.user_restricted_access}) VALUES ('${user_email}', '${user_name}', '${user_type}', NOW(), '${user_image}', 0)`;
                 const new_user = await makeQuery(query, client)
+
 
                 // Return that it was completed
                 return true

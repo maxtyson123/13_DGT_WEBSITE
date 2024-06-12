@@ -1,5 +1,7 @@
 import Wrapper from "@/pages/media/components/wrapper";
 import styles from "@/styles/media/notifications.module.css";
+import {useEffect, useState} from "react";
+import { Knock } from "@knocklabs/node";
 
 interface NotificationProps {
     title: string,
@@ -9,6 +11,7 @@ interface NotificationProps {
 }
 
 export function Notification({title, body, image, clear}: NotificationProps){
+
     return(
         <div className={styles.notification}>
             <div className={styles.notificationIcon}>
@@ -27,7 +30,26 @@ export function Notification({title, body, image, clear}: NotificationProps){
 
 export default function Page(){
 
-    const clear = () => {
+    const [notifications, setNotifications] = useState([])
+
+
+    useEffect(() => {
+        const knockClient = new Knock("pk_test_eRT1-RtjUl1o9PWIFkKVGm9zj2UnbnApXftbPnAa_LA");
+
+        fetchNotifications(knockClient).then((notifications) => {
+           console.log(notifications)
+            setNotifications(notifications.items as any)
+        })
+
+
+    }, []);
+
+    const fetchNotifications = async (knockClient: Knock) => {
+        const messages = await knockClient.users.getMessages("10");
+        return messages
+    }
+
+    const sendTest = async () => {
 
     }
 
@@ -38,7 +60,9 @@ export default function Page(){
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
-                    <button onClick={() => {window.location.href = '/media'}} className={styles.backButton}>
+                    <button onClick={() => {
+                        window.location.href = '/media'
+                    }} className={styles.backButton}>
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>
 
@@ -46,25 +70,26 @@ export default function Page(){
 
                 </div>
 
+
                 {/* Notifications */}
                 <div className={styles.notifications}>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
-                    <Notification title={"test"} body={"Test2"} clear={() => {}}/>
+                    {notifications.length === 0 && <h1>No notifications</h1>}
+                    {notifications.map((notification, index) => {
+                        return(
+                            <Notification
+                                key={index}
+                                title={notification.title}
+                                body={notification.body}
+                                image={notification.image}
+                                clear={() => {
+                                    setNotifications(notifications.filter((_, i) => i !== index))
+                                }}
+                            />
+                        )
+                    })}
                 </div>
+
+                <button onClick={sendTest} className={styles.testButton}> Send Test Notification </button>
             </div>
         </Wrapper>
     )

@@ -14,6 +14,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@knocklabs/node": "^0.6.11",
+    "@knocklabs/react": "^0.2.23",
     "@mantine/hooks": "^6.0.19",
     "@tanstack/react-query": "^4.33.0",
     "@types/ftp": "^0.3.33",
