@@ -10,6 +10,14 @@ interface NotificationProps {
     clear: () => void
 }
 
+interface NotificationData {
+    data: {
+        title: string,
+        body: string,
+        image: string
+    }
+}
+
 export function Notification({title, body, image, clear}: NotificationProps){
 
     return(
@@ -30,11 +38,12 @@ export function Notification({title, body, image, clear}: NotificationProps){
 
 export default function Page(){
 
-    const [notifications, setNotifications] = useState([])
+    const [notifications, setNotifications] = useState<NotificationData[]>([])
+    const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
 
 
     useEffect(() => {
-        const knockClient = new Knock("pk_test_eRT1-RtjUl1o9PWIFkKVGm9zj2UnbnApXftbPnAa_LA");
+
 
         fetchNotifications(knockClient).then((notifications) => {
            console.log(notifications)
@@ -78,9 +87,9 @@ export default function Page(){
                         return(
                             <Notification
                                 key={index}
-                                title={notification.title}
-                                body={notification.body}
-                                image={notification.image}
+                                title={notification.data.title}
+                                body={notification.data.body}
+                                image={notification.data.image}
                                 clear={() => {
                                     setNotifications(notifications.filter((_, i) => i !== index))
                                 }}
