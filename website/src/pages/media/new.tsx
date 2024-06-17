@@ -7,7 +7,7 @@ import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/pl
 import {Loading} from "@/components/loading";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
-import {cleanInput} from "@/lib/data";
+import {cleanInput, getFilePath} from "@/lib/data";
 
 
 export default function Post(){
@@ -23,6 +23,7 @@ export default function Post(){
 
     const [plantNames, setPlantNames] = useState<string[]>(["Loading..."]);
     const [plantIDs, setPlantIDs] = useState<string[]>([""]);
+    const [userIDs, setUserIDs] = useState<string[]>([]);
 
     const [image, setImage] = useState<File | null>(null);
     const [imageURL, setImageURL] = useState<string>("");
@@ -46,8 +47,28 @@ export default function Post(){
 
     useEffect(() => {
         if(session?.user == null) return;
-        setUserID((session.user as RongoaUser).database.id);
+
+        const id = (session.user as RongoaUser).database.id;
+
+        setUserID(id);
+        followersFetch(id);
+
+
+
+
     }, [session]);
+
+    const followersFetch = async (id: number) => {
+
+        const followers = await makeRequestWithToken('get', '/api/user/follow?operation=listFollowers&id=' + id);
+        const ids = followers.data.data
+
+        let previousIDs = []
+        for (let i = 0; i < ids.length; i++) {
+            previousIDs.push(ids[i].follower_id)
+        }
+        setUserIDs(previousIDs)
+    }
 
     const fetchData = async () => {
 
@@ -142,6 +163,10 @@ export default function Post(){
             console.log('An error occurred.');
         }
 
+
+        // Send the notification to the followers
+        setLoading("Sending Notifications...")
+        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + userIDs + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
 
         setLoading("")
 

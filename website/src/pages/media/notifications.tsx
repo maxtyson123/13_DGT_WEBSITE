@@ -55,6 +55,7 @@ export default function Page(){
 
     const fetchNotifications = async (knockClient: Knock) => {
         const messages = await knockClient.users.getMessages("10");
+        console.log(messages)
         return messages
     }
 
@@ -84,17 +85,20 @@ export default function Page(){
                 <div className={styles.notifications}>
                     {notifications.length === 0 && <h1>No notifications</h1>}
                     {notifications.map((notification, index) => {
-                        return(
-                            <Notification
-                                key={index}
-                                title={notification.data.title}
-                                body={notification.data.body}
-                                image={notification.data.image}
-                                clear={() => {
-                                    setNotifications(notifications.filter((_, i) => i !== index))
-                                }}
-                            />
-                        )
+                        {
+                            return(
+                                <Notification
+                                    key={index}
+                                    title={notification.data.title}
+                                    body={notification.data.body}
+                                    image={notification.data.image}
+                                    clear={() => {
+                                        setNotifications(notifications.filter((_, i) => i !== index))
+                                    }}
+                                />
+                            )
+                        }
+
                     })}
                 </div>
 

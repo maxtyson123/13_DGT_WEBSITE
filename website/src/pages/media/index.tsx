@@ -54,7 +54,7 @@ export default function Home(){
     const fetchData = async () => {
 
         // Fetch who the user is following
-        const following = await makeRequestWithToken("get", "/api/user/follow?operation=list")
+        const following = await makeRequestWithToken("get", "/api/user/follow?operation=listFollowing")
 
         // No stories
         if(following.data.data.length === 0) {
