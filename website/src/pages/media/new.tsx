@@ -68,6 +68,7 @@ export default function Post(){
             previousIDs.push(ids[i].follower_id)
         }
         setUserIDs(previousIDs)
+        console.log(previousIDs)
     }
 
     const fetchData = async () => {
@@ -166,7 +167,13 @@ export default function Post(){
 
         // Send the notification to the followers
         setLoading("Sending Notifications...")
-        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + userIDs + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
+        let uids = ""
+        for (let i = 0; i < userIDs.length; i++) {
+            uids += "&user_ids=" + userIDs[i]
+        }
+        console.log(uids)
+
+        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
 
         setLoading("")
 

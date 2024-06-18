@@ -2,6 +2,7 @@ import Wrapper from "@/pages/media/components/wrapper";
 import styles from "@/styles/media/notifications.module.css";
 import {useEffect, useState} from "react";
 import { Knock } from "@knocklabs/node";
+import {makeRequestWithToken} from "@/lib/api_tools";
 
 interface NotificationProps {
     title: string,
@@ -46,8 +47,20 @@ export default function Page(){
 
 
         fetchNotifications(knockClient).then((notifications) => {
-           console.log(notifications)
-            setNotifications(notifications.items as any)
+
+            const notificationsResponse = notifications.items as any
+            setNotifications(notificationsResponse)
+
+            // Update them all to be seen
+            const message_ids = notificationsResponse.map((notification: any) => notification.id)
+            let urlIds = ""
+            for (let i = 0; i < message_ids.length; i++) {
+                urlIds += "&message_ids=" + message_ids[i]
+            }
+
+            // Send the request to update the status
+            const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds)
+
         })
 
 

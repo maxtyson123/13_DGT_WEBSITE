@@ -74,12 +74,8 @@ export default async function handler(
                 break;
 
             case "update_status":
-                if(!user_ids || !message_ids)
-                    return response.status(400).json({ error: 'Missing variables, must have user_ids and message_ids', user_ids, message_ids });
-
-                // Make user_ids an array if it is not
-                if(!Array.isArray(user_ids))
-                    user_ids = [user_ids];
+                if(!message_ids)
+                    return response.status(400).json({ error: 'Missing variables, must have message_ids', message_ids });
 
                 // Make message_ids an array if it is not
                 if(!Array.isArray(message_ids))
@@ -87,13 +83,11 @@ export default async function handler(
 
                 axiosConfig = {
                     method: 'post',
-                    url: 'https://api.knock.app/v1/workflows/test/trigger',
+                    url: 'https://api.knock.app/v1/messages/batch/seen',
                     data: {
                         recipients: user_ids,
                         data: {
-                            title: title,
-                            body: body,
-                            image: image ? image : "https://rongoa.maxtyson.net/media/images/logo.svg"
+                            message_ids: message_ids,
                         }
                     },
                     headers: {
