@@ -8,12 +8,15 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
+import {Knock} from "@knocklabs/node";
 
 export default function Home(){
 
     const dataFetch = useRef(false);
     const queryClient = new QueryClient()
     const router = useRouter()
+    const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
+
     // Loading
     const [storiesLoading, setStorysLoading] = useState(true);
 
@@ -21,21 +24,10 @@ export default function Home(){
     const [stories, setStories] = useState([]);
     const [following, setFollowing] = useState("");
     const [id, setId] = useState(0);
+    const [notifications, setNotifications] = useState(0);
 
     const {data: session} = useSession();
 
-    useEffect(() => {
-
-        // If the user has  not logged in, return
-
-        if(dataFetch.current) return;
-
-        dataFetch.current = true;
-
-        // Fetch data here
-        fetchData();
-
-    }, []);
 
     // Get the user id
     useEffect(() => {
@@ -48,6 +40,14 @@ export default function Home(){
         // Get the user id
         setId((session.user as RongoaUser).database.id);
 
+        // If the user has  not logged in, return
+
+        if(dataFetch.current) return;
+
+        dataFetch.current = true;
+
+        // Fetch data here
+        fetchData();
 
     }, [session]);
 
@@ -70,10 +70,23 @@ export default function Home(){
         const followingString = followingData.join("&following=");
         setFollowing(followingString);
 
-
-
         // Fetch the  stories
         // todo
+
+        // Get the notifications
+        const messages = await knockClient.users.getMessages((session?.user as RongoaUser)?.database.id.toString())
+        const notificationsResponse = messages.items as any
+        let unseen = 0;
+        for (let i = 0; i < notificationsResponse.length; i++) {
+            if(notificationsResponse[i].seen_at === null)
+                unseen++;
+        }
+
+        // Max of 99 notifications
+        if(unseen > 99)
+            unseen = 99;
+
+        setNotifications(unseen)
 
     };
 
@@ -171,6 +184,12 @@ export default function Home(){
                     </Link>
                     <Link href={"/media/notifications"}>
                         <img src="/media/images/Notification.svg" alt="Notification"/>
+                        {
+                            notifications > 0 &&
+                            <div className={stlyes.notification}>
+                                <p>{notifications}</p>
+                            </div>
+                        }
                     </Link>
                 </div>
             </div>

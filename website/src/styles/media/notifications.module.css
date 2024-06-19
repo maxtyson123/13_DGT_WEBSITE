@@ -52,7 +52,26 @@
     justify-items: center;
     align-items: center;
     margin-bottom: 20px;
+    background-color: var(--main-green);
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 1px 0px var(--text-dark);
+}
+
+.seen{
     background-color: var(--secondary-gray);
+    color: black;
+}
+
+.noNotifications{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: var(--main-green);
+    color: white;
     border-radius: 20px;
     box-shadow: 0px 0px 1px 0px var(--text-dark);
 }
@@ -77,12 +96,10 @@
 
 .notificationText h1{
     font-size: 1.2em;
-    color: var(--text-dark);
     font-weight: bolder;
 }
 
 .clearButton p{
     font-size: 2.5em;
-    color: var(--text-dark);
     font-weight: bolder;
 }

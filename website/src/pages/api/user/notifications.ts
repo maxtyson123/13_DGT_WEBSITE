@@ -83,18 +83,16 @@ export default async function handler(
 
                 axiosConfig = {
                     method: 'post',
-                    url: 'https://api.knock.app/v1/messages/batch/seen',
+                    url: 'https://api.knock.app/v1/messages/batch/' + status,
                     data: {
-                        recipients: user_ids,
-                        data: {
-                            message_ids: message_ids,
-                        }
+                        message_ids: message_ids,
                     },
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${process.env.KNOCK_API_KEY_SECRET}`
                     }
                 };
+
 
                 break;
 
@@ -106,7 +104,7 @@ export default async function handler(
         const d = await axios.request(axiosConfig);
         console.log(d.data);
 
-        return response.status(200).json({ data: d.data });
+        return response.status(200).json({ data: d.data});
 
 
 

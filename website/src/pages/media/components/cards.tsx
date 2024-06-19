@@ -114,7 +114,14 @@ export function PostCard(props: PostCardProps) {
         const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
         const plant = plants.find((plant: any) => plant.id === props.post_plant_id);
         if(plant != null) {
-            setPlantName(macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
+            let name = macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary);
+
+            // Check if the name is too long
+            if(name.length > 15) {
+                name = name.substring(0, 15) + "..";
+            }
+
+            setPlantName(name);
         }
 
         // Get the likes
@@ -128,7 +135,6 @@ export function PostCard(props: PostCardProps) {
         }
 
     }
-
     const goToProfile = () => {
 
         // Go to the users profile

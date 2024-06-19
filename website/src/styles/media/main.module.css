@@ -175,3 +175,16 @@
     margin-top: 50px;
     width: 100%;
 }
+
+.notification{
+    background: red;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    width: 30px;
+    margin-top: -20px;
+    top: -20px;
+    left: 50%;
+    z-index: 2;
+    position: relative;
+}

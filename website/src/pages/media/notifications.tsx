@@ -1,17 +1,23 @@
 import Wrapper from "@/pages/media/components/wrapper";
 import styles from "@/styles/media/notifications.module.css";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { Knock } from "@knocklabs/node";
 import {makeRequestWithToken} from "@/lib/api_tools";
+import { useSession } from "next-auth/react";
+import {RongoaUser} from "@/lib/users";
 
 interface NotificationProps {
     title: string,
     body: string
     image?: string
+    seen?: string
     clear: () => void
 }
 
 interface NotificationData {
+    id: string,
+    seen_at: string,
+    read_at: string,
     data: {
         title: string,
         body: string,
@@ -19,10 +25,10 @@ interface NotificationData {
     }
 }
 
-export function Notification({title, body, image, clear}: NotificationProps){
+export function Notification({title, body, image, clear, seen}: NotificationProps){
 
     return(
-        <div className={styles.notification}>
+        <div className={styles.notification + " " + (seen ? styles.seen : "")}>
             <div className={styles.notificationIcon}>
                 <img src={image ? image : "/media/images/notification.svg"} alt={"notification"}/>
             </div>
@@ -40,13 +46,22 @@ export function Notification({title, body, image, clear}: NotificationProps){
 export default function Page(){
 
     const [notifications, setNotifications] = useState<NotificationData[]>([])
+    const [loading, setLoading] = useState(true)
     const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
+    const {data: session} = useSession();
 
+    const dataFetch = useRef(false);
 
     useEffect(() => {
 
+        if(dataFetch.current)
+            return
 
+        setLoading(true)
+        dataFetch.current = true
         fetchNotifications(knockClient).then((notifications) => {
+
+            setLoading(false)
 
             const notificationsResponse = notifications.items as any
             setNotifications(notificationsResponse)
@@ -59,7 +74,7 @@ export default function Page(){
             }
 
             // Send the request to update the status
-            const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds)
+            const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds + "&status=seen")
 
         })
 
@@ -67,12 +82,16 @@ export default function Page(){
     }, []);
 
     const fetchNotifications = async (knockClient: Knock) => {
-        const messages = await knockClient.users.getMessages("10");
+        const messages = await knockClient.users.getMessages((session?.user as RongoaUser)?.database.id.toString())
         console.log(messages)
         return messages
     }
 
-    const sendTest = async () => {
+    const clear = async (id: string) => {
+
+        // Send the request to update the status
+        const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + "&message_ids=" + id + "&status=read")
+
 
     }
 
@@ -96,26 +115,48 @@ export default function Page(){
 
                 {/* Notifications */}
                 <div className={styles.notifications}>
-                    {notifications.length === 0 && <h1>No notifications</h1>}
+
+
+                    {/*Show that there are no notifications if there are none or if its loading */}
+                    <div className={styles.noNotifications}>
+                    {
+                        loading ?
+
+                            <img src={"/media/images/small_loading.gif"} height={65} width={65} alt={"loading"}/>
+
+                            :
+
+                            <>
+                                {notifications.length === 0 && <h1>No Notifications :(</h1>}
+                            </>
+                    }
+                    </div>
+
+
+                    {/*Show the notifications that havent been read*/}
                     {notifications.map((notification, index) => {
                         {
                             return(
-                                <Notification
-                                    key={index}
-                                    title={notification.data.title}
-                                    body={notification.data.body}
-                                    image={notification.data.image}
-                                    clear={() => {
-                                        setNotifications(notifications.filter((_, i) => i !== index))
-                                    }}
-                                />
+                                <>
+                                    {
+                                        notification.read_at === null && <Notification
+                                            key={index}
+                                            seen={notification.seen_at}
+                                            title={notification.data.title}
+                                            body={notification.data.body}
+                                            image={notification.data.image}
+                                            clear={() => {
+                                                clear(notification.id)
+                                                setNotifications(notifications.filter((value) => value.id !== notification.id))
+                                            }}
+                                        />
+                                    }
+                                </>
                             )
                         }
-
                     })}
                 </div>
 
-                <button onClick={sendTest} className={styles.testButton}> Send Test Notification </button>
             </div>
         </Wrapper>
     )
