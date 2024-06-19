@@ -4,34 +4,43 @@ import {useEffect, useRef, useState} from "react";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
+import {prop} from "remeda";
 
-export function Conversation(){
-    return(
-        <>
-            <div className={styles.message} onClick={() => {window.location.href = '/media/messages/1'}}>
-                <div className={styles.messageIcon}>
-                    <img src={"/media/images/user.svg"} alt={"user"}/>
-                </div>
-                <div className={styles.messageText}>
-                    <h1>User Name</h1>
-                    <div className={styles.messageTextLine}>
-                        <p>User Message.......</p>
-                        <p className={styles.date}> Date </p>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
 
 export interface ConversationData {
-    id: number,
+    conversation_id: number,
     conversation_user_two: number,
     conversation_user_one: number,
     message_id?: number,
     message_user_id?: number,
     message_text?: string,
     message_date?: string
+    user_one_name: string,
+    user_two_name: string,
+    user_one_photo: string,
+    user_two_photo: string,
+    user_name: string,
+    user_photo: string,
+}
+
+
+export function Conversation(props: ConversationData){
+    return(
+        <>
+            <div className={styles.message} onClick={() => {window.location.href = '/media/messages/' + props.conversation_id}}>
+                <div className={styles.messageIcon}>
+                    <img src={props.user_photo} alt={"user"}/>
+                </div>
+                <div className={styles.messageText}>
+                    <h1>{props.user_name}</h1>
+                    <div className={styles.messageTextLine}>
+                        <p>{props.message_text ? props.message_text : "Start the conversation..."}</p>
+                        <p className={styles.date}> {props.message_date && props.message_date} </p>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default function Page(){
@@ -43,32 +52,50 @@ export default function Page(){
 
     useEffect(() => {
 
+        if(!session?.user) return
+
         if(!dataFetch.current){
             fetchMessages()
             dataFetch.current = true
         }
 
-    }, [])
+    }, [session])
 
     const fetchMessages = async () => {
 
         const conversations = await makeRequestWithToken("get", "/api/user/conversations?operation=list")
-        setConversations(conversations.data.data)
+        let data = conversations.data.data
+
+        // Set the user name and photo to not the current user
+        data = data.map((conversation: ConversationData) => {
+            if(conversation.conversation_user_one !== (session?.user as RongoaUser).database.id){
+                conversation.user_name = conversation.user_one_name
+                conversation.user_photo = conversation.user_one_photo
+            }else{
+                conversation.user_name = conversation.user_two_name
+                conversation.user_photo = conversation.user_two_photo
+            }
+            return conversation
+        })
+
+
+        setConversations(data)
+        console.log(conversations.data.data)
 
     }
 
-    const createTestConversation = async () => {
+    const createConverSation = async (id: string) => {
 
-        const newConversation = await makeRequestWithToken("get", "/api/user/conversations?operation=new&recipientID=11")
+        // Check if the user id already has a conversation
+        for(let i = 0; i < conversations.length; i++){
+            if(conversations[i].conversation_user_two === parseInt(id) || conversations[i].conversation_user_one === parseInt(id)){
+                window.location.href = '/media/messages/' + conversations[i].conversation_id
+                return
+            }
+        }
 
-        setConversations([...conversations, {
-            id: newConversation.data.data.id,
-            conversation_user_one: (session?.user as RongoaUser).database.id,
-            conversation_user_two: 11
-
-        }])
-
-
+        const newConversation = await makeRequestWithToken("get", "/api/user/conversations?operation=new&recipientID=" + id)
+        window.location.reload()
     }
 
 
@@ -89,7 +116,7 @@ export default function Page(){
 
                 {/* New Message */}
                 <div className={styles.newMessage}>
-                   <button onClick={createTestConversation}>New Message</button>
+                   <button onClick={() => {createConverSation("11")}}>New Message</button>
                 </div>
 
                 {/* Conversations */}
@@ -97,7 +124,10 @@ export default function Page(){
                     conversations.length === 0 ? <h1>No Messages</h1> :
                     conversations.map((conversation: ConversationData, index) => {
                         return(
-                            <Conversation key={index}/>
+                            <Conversation
+                                key={index}
+                                {...conversation}
+                            />
                         )
                     })
 
