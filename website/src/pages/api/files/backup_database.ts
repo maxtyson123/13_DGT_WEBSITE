@@ -65,6 +65,12 @@ export default async function handler(
         // Get the information for the post data
         query += `SELECT * FROM posts;`;
 
+        // Get the information for the conversations data
+        query += `SELECT * FROM conversations;`;
+
+        // Get the information for the messages data
+        query += `SELECT * FROM messages;`;
+
         // Finally Get the information for the plant data
         query += `SELECT * FROM plants;`;
 

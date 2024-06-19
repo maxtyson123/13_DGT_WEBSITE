@@ -226,6 +226,29 @@ function createBackUpQuery(json: any) {
                 )
             continue;
         }
+
+
+        // Check if it is conversations data
+        if(tableNames.includes("conversation_user_one")) {
+            let conversationsTable = json.data[i];
+            for (let j = 0; j < conversationsTable.length; j++)
+                query += createUpSertQuery("conversations",
+                    [tables.id, tables.conversation_user_one, tables.conversation_user_two],
+                    [conversationsTable[j].id, conversationsTable[j].conversation_user_one, conversationsTable[j].conversation_user_two]
+                )
+            continue;
+        }
+
+        // Check if it is messages data
+        if(tableNames.includes("message_conversation_id")) {
+            let messagesTable = json.data[i];
+            for (let j = 0; j < messagesTable.length; j++)
+                query += createUpSertQuery("messages",
+                    [tables.id, tables.message_conversation_id, tables.message_user_id, tables.message_text, tables.message_date],
+                    [messagesTable[j].id, messagesTable[j].message_conversation_id, messagesTable[j].message_user_id, messagesTable[j].message_text, messagesTable[j].message_date]
+                )
+            continue;
+        }
     }
 
     return query;

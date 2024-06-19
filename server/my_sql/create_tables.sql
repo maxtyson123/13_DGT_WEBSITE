@@ -162,3 +162,25 @@ CREATE TABLE IF NOT EXISTS likes (
     FOREIGN KEY (like_post_id) REFERENCES posts(id),
     FOREIGN KEY (like_user_id) REFERENCES users(id)
 );
+
+-- Conversations
+CREATE TABLE IF NOT EXISTS conversations (
+    id INT NOT NULL AUTO_INCREMENT,
+    conversation_user_one INT,
+    conversation_user_two INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (conversation_user_one) REFERENCES users(id),
+    FOREIGN KEY (conversation_user_two) REFERENCES users(id)
+);
+
+-- Messages
+CREATE TABLE IF NOT EXISTS messages (
+    id INT NOT NULL AUTO_INCREMENT,
+    message_conversation_id INT,
+    message_user_id INT,
+    message_text TEXT,
+    message_date DATETIME,
+    PRIMARY KEY (id),
+    FOREIGN KEY (message_conversation_id) REFERENCES conversations(id),
+    FOREIGN KEY (message_user_id) REFERENCES users(id)
+);
