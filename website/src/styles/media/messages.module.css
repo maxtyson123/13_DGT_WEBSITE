@@ -1,7 +1,7 @@
 .page{
     display: grid;
-    grid-template-rows: 0.1fr 1fr 0.1fr;
-    align-items: center;
+    grid-template-rows: 0.1fr 1.9fr;
+
     justify-items: center;
     width: 100%;
     margin-top: 4vh;
@@ -94,12 +94,10 @@
     color: var(--text-dark);
     font-weight: bolder;
     justify-self: end;
+    width: 100%;
 }
 
 .messages{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5%;
     width: 92%;
     margin-left: 4%;
     margin-right: 4%;
@@ -112,17 +110,21 @@
 }
 
 .messageBubble{
-    width: 100%;
-    padding: 5%;
+    width: 50%;
+    padding: 2% 2% 2% 4%;
     border-radius: 20px;
     background-color: var(--secondary-gray);
     overflow-wrap: anywhere;
     align-self: start;
+    position: relative;
 }
 
 .sent{
     background: linear-gradient(90deg, #51ad51, var(--main-green), var(--darker-main-green));
     filter: brightness(1.2);
+    left: 50%;
+    color: white;
+
 }
 
 .newMessage{
@@ -150,4 +152,115 @@
     width: 100%;
     grid-column-start: 1;
     grid-column-end: 3;
+}
+
+.spacer{
+    height: 25px;
+}
+
+.loading{
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 20px;
+
+    background: linear-gradient(90deg, var(--secondary-gray), var(--darker-secondary-gray), var(--secondary-gray));
+    background-size: 600% 600%;
+
+    animation: load 3s ease infinite;
+}
+
+@keyframes load {
+    0%{
+        background-position:0% 50%;
+        opacity: 0.5;
+    }
+    25%{
+        opacity: 1;
+    }
+    50%{
+        background-position:100% 50%;
+        opacity: 0.5;
+    }
+    75%{
+        opacity: 1;
+    }
+    100%{
+        background-position:0% 50%;
+        opacity: 0.5;
+    }
+}
+
+.newMessagePopup{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.newMessagePopupContent{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 0.1fr 0.1fr 0.1fr 0.1fr 1fr;
+    padding: 20px;
+}
+
+.newMessagePopupContent h1{
+    font-size: 1.7em;
+    color: var(--text-dark);
+    font-weight: bolder;
+    text-align: center;
+}
+
+.newMessagePopupContent p{
+    font-style: italic;
+}
+
+.newMessagePopupContent input{
+    border: none;
+    outline: none;
+    background-color: var(--secondary-gray);
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+.newMessagePopupContent button{
+    border: none;
+    outline: none;
+    background-color: var(--main-green);
+    color: white;
+    font-size: 1.2em;
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Scrollable results - no scrollbar */
+.newMessagePopupResults{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 10px;
+    height: 100%;
+}
+
+.newMessagePopupResults::-webkit-scrollbar{
+    display: none;
+}
+.newMessagePopupResult{
+    margin-top: 20px;
+}
+
+.newMessagePopupResults p{
+    width: 100%;
+    text-align: center;
 }

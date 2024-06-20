@@ -145,6 +145,8 @@
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
+    border-radius: 50%;
+
 }
 
 .user h3{

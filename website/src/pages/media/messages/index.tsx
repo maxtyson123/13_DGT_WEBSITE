@@ -5,6 +5,7 @@ import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {prop} from "remeda";
+import {UserCard} from "@/pages/media/components/cards";
 
 
 export interface ConversationData {
@@ -19,36 +20,71 @@ export interface ConversationData {
     user_two_name: string,
     user_one_photo: string,
     user_two_photo: string,
+
+    // Added by the client
     user_name: string,
     user_photo: string,
+    user_id: number
 }
 
 
 export function Conversation(props: ConversationData){
+
+    const [message, setMessage] = useState<string>("")
+    const [messageDate, setMessageDate] = useState<string>("")
+
+    useEffect(() => {
+
+        let messageString = props.message_text ? props.message_text : "Start the conversation..."
+        let messageDate = props.message_date ? new Date(props.message_date).toLocaleString() : ""
+
+        // Check if the user is the sender
+        if(props.message_user_id !== props.user_id && messageString !== "Start the conversation..."){
+            messageString = "You: " + messageString
+        }
+
+        // Check if the message is too long
+        if(messageString.length > 30){
+            messageString = messageString.substring(0, 30) + "..."
+        }
+
+
+        setMessage(messageString)
+        setMessageDate(messageDate)
+
+
+        setMessageDate(props.message_date ? new Date(props.message_date).toLocaleString() : "")
+    }, [props])
+
     return(
         <>
-            <div className={styles.message} onClick={() => {window.location.href = '/media/messages/' + props.conversation_id}}>
+            <div className={styles.message} onClick={() => {
+                window.location.href = '/media/messages/' + props.conversation_id
+            }}>
                 <div className={styles.messageIcon}>
                     <img src={props.user_photo} alt={"user"}/>
                 </div>
                 <div className={styles.messageText}>
                     <h1>{props.user_name}</h1>
                     <div className={styles.messageTextLine}>
-                        <p>{props.message_text ? props.message_text : "Start the conversation..."}</p>
-                        <p className={styles.date}> {props.message_date && props.message_date} </p>
+                        <p>{message}</p>
                     </div>
                 </div>
+                <p className={styles.date}> {messageDate} </p>
             </div>
         </>
     )
 }
 
-export default function Page(){
+export default function Page() {
 
     const {data: session} = useSession()
 
     const dataFetch = useRef(false)
     const [conversations, setConversations] = useState<ConversationData[]>([])
+    const [newMessagePopup, setNewMessagePopup] = useState<boolean>(false)
+    const [pageWidth, setPageWidth] = useState<number>(0)
+    const [searchResults, setSearchResults] = useState<number[]>([])
 
     useEffect(() => {
 
@@ -61,6 +97,15 @@ export default function Page(){
 
     }, [session])
 
+    useEffect(() => {
+
+        // Get the element with the .page class
+        const page = document.querySelector("." + styles.page)
+
+        // Get the width of the page
+        setPageWidth(page?.clientWidth as number)
+    })
+
     const fetchMessages = async () => {
 
         const conversations = await makeRequestWithToken("get", "/api/user/conversations?operation=list")
@@ -71,13 +116,23 @@ export default function Page(){
             if(conversation.conversation_user_one !== (session?.user as RongoaUser).database.id){
                 conversation.user_name = conversation.user_one_name
                 conversation.user_photo = conversation.user_one_photo
+                conversation.user_id = conversation.conversation_user_one
             }else{
                 conversation.user_name = conversation.user_two_name
                 conversation.user_photo = conversation.user_two_photo
+                conversation.user_id = conversation.conversation_user_two
             }
             return conversation
         })
 
+        // Sort the conversations by the most recent message
+        data.sort((a: ConversationData, b: ConversationData) => {
+            if(a.message_date && b.message_date){
+                return new Date(b.message_date).getTime() - new Date(a.message_date).getTime()
+            }else{
+                return 0
+            }
+        })
 
         setConversations(data)
         console.log(conversations.data.data)
@@ -98,11 +153,78 @@ export default function Page(){
         window.location.reload()
     }
 
+    const searchNewConvo = async () => {
+
+        const search = document.querySelector("." + styles.newMessagePopup + " input") as HTMLInputElement
+        let query = ""
+        if(search != null) {
+            query = search.value
+        }
+
+        const results = await makeRequestWithToken("get", `/api/user/follow?operation=listMutual${query ? `&search=${query}` : ""}`)
+
+        const ids = results.data.data.map((result: any) => {
+            return result.following_id
+        })
+
+        setSearchResults(ids)
+    }
+
+
+    const showNewMessagePopup = () => {
+
+        // Reset the search results
+        setSearchResults([])
+
+        // Show the popup
+        searchNewConvo()
+        setNewMessagePopup(true)
+    }
 
     return(
         <Wrapper>
             <div className={styles.page}>
 
+                {/* New Message Popup */}
+                {
+                    newMessagePopup &&
+                    <div className={styles.newMessagePopup} style={{width: pageWidth + 10}}>
+                        <div className={styles.newMessagePopupContent}>
+
+                            {/* Top Info */}
+                            <h1>Send a new message</h1>
+                            <p>Note: you have to be following each other to send messages.</p>
+
+                            {/*Search Input*/}
+                            <input type={"text"} placeholder={"Search user name"}/>
+                            <button onClick={searchNewConvo}>Search</button>
+
+                            {/*Results*/}
+                            <div className={styles.newMessagePopupResults}>
+                                <h1>Results</h1>
+
+                                {/* No Results */}
+                                {searchResults.length === 0 && <p>No Results</p>}
+
+                                {/* Results */}
+                                {searchResults.map((id, index) => {
+                                    return (
+                                        <div key={index} className={styles.newMessagePopupResult} onClick={() => {createConverSation(id.toString())}}>
+                                            <UserCard id={id}/>
+                                        </div>
+                                )
+                                })}
+
+                            </div>
+
+                            {/*Close*/}
+                            <button onClick={() => {
+                                setNewMessagePopup(false)
+                            }}>Close
+                            </button>
+                        </div>
+                    </div>
+                }
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
@@ -114,10 +236,11 @@ export default function Page(){
 
                 </div>
 
+
+                <div>
                 {/* New Message */}
-                <div className={styles.newMessage}>
-                   <button onClick={() => {createConverSation("11")}}>New Message</button>
-                </div>
+               <button className={styles.newMessage} onClick={showNewMessagePopup}>New Message</button>
+
 
                 {/* Conversations */}
                 {
@@ -132,6 +255,7 @@ export default function Page(){
                     })
 
                 }
+                </div>
             </div>
 
         </Wrapper>

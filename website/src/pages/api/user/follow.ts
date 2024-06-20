@@ -22,11 +22,15 @@ export default async function handler(
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:follow:access")
-    if (!permission) return response.status(401).json({error: "Not Authorized"})
+     // if (!permission) return response.status(401).json({error: "Not Authorized"})
 
     let query = ''
 
-    const {id, publicUserID} = request.query;
+    const {
+        id,
+        publicUserID,
+
+    } = request.query;
 
     try {
 
@@ -43,7 +47,12 @@ export default async function handler(
         const userId = user.database.id;
 
         // Get the operation
-        const {operation, keyName, permissions} = request.query;
+        const {
+            operation,
+            keyName,
+            permissions,
+            search
+        } = request.query;
         if (!operation) {
             return response.status(400).json({error: 'No operation specified'});
         }
@@ -109,6 +118,22 @@ export default async function handler(
 
                     query = `SELECT ${tables.follower_id} FROM follows WHERE ${tables.following_id} = ${userId}`
                     break;
+
+            case "listMutual":
+                console.log(search)
+                query = `
+                        SELECT u.user_name, f.${tables.following_id}
+                        FROM follows f
+                        INNER JOIN users u ON f.${tables.following_id} = u.id
+                        WHERE f.${tables.follower_id} = ${userId}
+                        AND f.${tables.following_id} IN (
+                            SELECT ${tables.follower_id}
+                            FROM follows
+                            WHERE ${tables.following_id} = ${userId}
+                        )
+                        ${search ? `AND u.user_name LIKE '%${search}%'` : ''}
+                    `;
+                break;
 
             default:
                 return response.status(400).json({error: 'Invalid operation'});

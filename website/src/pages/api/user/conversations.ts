@@ -6,6 +6,7 @@ import {checkApiPermissions} from "@/lib/api_tools";
 import { Logger } from 'next-axiom';
 import {MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
 import axios from "axios";
+import {USE_POSTGRES} from "@/lib/constants";
 
 export default async function handler(
     request: NextApiRequest,
@@ -30,6 +31,7 @@ export default async function handler(
 
     } = request.query;
 
+    const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
@@ -99,31 +101,36 @@ export default async function handler(
 
             case "get":
 
+                // Make sure there is a user id and a channel id
+                if(!userID || !channelID) return response.status(400).json({error: "Missing user ID or channel ID"})
+
                 query = `
-                    SELECT 
-                        m.*, 
-                        u1.user_name AS user_one_name, 
-                        u1.user_image AS user_one_image, 
-                        u2.user_name AS user_two_name, 
-                        u2.user_image AS user_two_image 
-                    FROM 
-                        messages m 
-                    INNER JOIN 
-                        conversations c ON m.message_conversation_id = c.id 
-                    INNER JOIN 
-                        users u1 ON c.conversation_user_one = u1.id 
-                    INNER JOIN 
-                        users u2 ON c.conversation_user_two = u2.id 
-                    WHERE 
-                        m.message_conversation_id = ${channelID};
-                        (c.conversation_user_one = ${userID} OR c.conversation_user_two = ${userID});
+                       SELECT
+                            m.*,
+                            u1.user_name AS user_one_name,
+                            u1.user_image AS user_one_image,
+                            u2.user_name AS user_two_name,
+                            u2.user_image AS user_two_image
+                        FROM
+                            conversations c
+                        LEFT JOIN
+                            messages m ON m.message_conversation_id = c.id
+                        INNER JOIN
+                            users u1 ON c.conversation_user_one = u1.id
+                        INNER JOIN
+                            users u2 ON c.conversation_user_two = u2.id
+                        WHERE
+                            c.id = ${channelID} AND (c.conversation_user_one = ${userID} OR c.conversation_user_two = ${userID})
                 `;
 
                 break
 
             case "update":
 
-                query = `INSERT INTO messages (message_conversation_id, message_user_id, message_text, message_date) VALUES (${channelID}, ${userID}, ${message}, NOW());`
+                // Make sure there is a user id and a channel id
+                if(!userID || !channelID || !message) return response.status(400).json({error: "Missing user ID, channel ID, or message"})
+
+                query = `INSERT INTO messages (message_conversation_id, message_user_id, message_text, message_date) VALUES (${channelID}, ${userID}, '${message}', NOW());`
 
                 break
 

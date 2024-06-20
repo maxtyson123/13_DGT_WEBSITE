@@ -208,9 +208,15 @@ export class SQLDatabase {
         this.like_post_id               = "like_post_id";
         this.like_user_id               = "like_user_id";
 
+        // Conversations Table
+        this.conversation_user_one      = "conversation_user_one";
+        this.conversation_user_two      = "conversation_user_two";
+
         // Messages Table
         this.message_conversation_id    = "message_conversation_id";
         this.message_user_id            = "message_user_id";
+        this.message_text               = "message_text";
+        this.message_date               = "message_date";
     }
 }
 
