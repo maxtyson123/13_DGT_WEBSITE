@@ -6,6 +6,8 @@ import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {prop} from "remeda";
 import {UserCard} from "@/pages/media/components/cards";
+import {className} from "postcss-selector-parser";
+import {Knock} from "@knocklabs/node";
 
 
 export interface ConversationData {
@@ -25,6 +27,7 @@ export interface ConversationData {
     user_name: string,
     user_photo: string,
     user_id: number
+    unread: boolean
 }
 
 
@@ -58,7 +61,7 @@ export function Conversation(props: ConversationData){
 
     return(
         <>
-            <div className={styles.message} onClick={() => {
+            <div className={styles.message + ' ' + (props.unread ? styles.unread : "")} onClick={() => {
                 window.location.href = '/media/messages/' + props.conversation_id
             }}>
                 <div className={styles.messageIcon}>
@@ -79,12 +82,14 @@ export function Conversation(props: ConversationData){
 export default function Page() {
 
     const {data: session} = useSession()
+    const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
 
     const dataFetch = useRef(false)
     const [conversations, setConversations] = useState<ConversationData[]>([])
     const [newMessagePopup, setNewMessagePopup] = useState<boolean>(false)
     const [pageWidth, setPageWidth] = useState<number>(0)
     const [searchResults, setSearchResults] = useState<number[]>([])
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
 
@@ -108,11 +113,39 @@ export default function Page() {
 
     const fetchMessages = async () => {
 
+        // Show loading
+        setLoading(true)
+
+
+        // Get the notifications
+        const messages = await knockClient.users.getMessages(
+            (session?.user as RongoaUser)?.database.id.toString(),
+            {
+                source: "messages",
+            }
+        )
+        const messagesResponse = messages.items as any
+
+        // Get the conversations
         const conversations = await makeRequestWithToken("get", "/api/user/conversations?operation=list")
         let data = conversations.data.data
 
-        // Set the user name and photo to not the current user
+
         data = data.map((conversation: ConversationData) => {
+
+            // Check if this is an unread message
+            for(let i = 0; i < messagesResponse.length; i++){
+                if(messagesResponse[i].seen_at === null
+                && messagesResponse[i].channel_id == "2bbd215f-73fc-4d2b-a07a-322749e2d379"
+                && messagesResponse[i].data.message == conversation.message_text
+                && messagesResponse[1].data.conversation_id == conversation.conversation_id)
+                {
+                    conversation.unread = true
+                    break
+                }
+            }
+
+            // Set the user name and photo to not the current user
             if(conversation.conversation_user_one !== (session?.user as RongoaUser).database.id){
                 conversation.user_name = conversation.user_one_name
                 conversation.user_photo = conversation.user_one_photo
@@ -136,6 +169,7 @@ export default function Page() {
 
         setConversations(data)
         console.log(conversations.data.data)
+        setLoading(false)
 
     }
 
@@ -237,14 +271,17 @@ export default function Page() {
                 </div>
 
 
-                <div>
+              <div className={styles.messageContentsContainer}>
+
                 {/* New Message */}
                <button className={styles.newMessage} onClick={showNewMessagePopup}>New Message</button>
 
 
+              { loading && <p className={styles.loading}>Loading...</p> }
+
                 {/* Conversations */}
                 {
-                    conversations.length === 0 ? <h1>No Messages</h1> :
+                    conversations.length === 0 && !loading ? <h1>No Messages</h1> :
                     conversations.map((conversation: ConversationData, index) => {
                         return(
                             <Conversation

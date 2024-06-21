@@ -5,6 +5,7 @@ import {makeRequestWithToken} from "@/lib/api_tools";
 import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
 import {getFilePath} from "@/lib/data";
+import {Knock} from "@knocklabs/node";
 
 interface MessageBubbleProps {
     message: string,
@@ -48,7 +49,9 @@ export default function Page(){
     const [recipientID, setRecipientID] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
 
-    const {data: session} = useSession();
+    const {data: session} = useSession()
+    const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
+
 
     const newMessage = async () => {
 
@@ -63,7 +66,7 @@ export default function Page(){
         (document.getElementById("message") as HTMLInputElement).value = "";
 
         // Send the user a notification
-        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + recipientID  + '&message=' + message + '&workflow_id=messages');
+        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + recipientID  + '&message=' + message + '&workflow_id=messages&conversation_id=' + window.location.pathname.split("/")[3]);
 
         // Update the page
         fetchMessages();
@@ -127,6 +130,34 @@ export default function Page(){
         // Set the messages
         setMessages(apiMessages);
         setLoading(false);
+
+
+        // Get the notifications
+        const notifications = await knockClient.users.getMessages(
+            (session?.user as RongoaUser)?.database.id.toString(),
+            {
+                source: "messages",
+            }
+        )
+
+        // Update the notification status
+        const notificationsResponse = notifications.items as any[];
+
+        // Get the ids of the messages relevant to this conversation id
+        const message_ids = notificationsResponse.map((notification) => {
+            if(notification.data.conversation_id === conversationID){
+                return notification.message_id;
+            }
+        })
+
+        let urlIds = ""
+        for (let i = 0; i < message_ids.length; i++) {
+            urlIds += "&message_ids=" + message_ids[i]
+        }
+
+        // Send the request to update the status
+        const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds + "&status=seen&workflow_id=messages");
+        console.log("Updated notifications")
 
     }
 

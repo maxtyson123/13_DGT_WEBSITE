@@ -93,7 +93,7 @@ export default function Search(){
         const startTime = Date.now()
         let apiResults: JSX.Element[] = []
 
-        const seedSweeperVariants = ["seedsweeper", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper"]
+        const seedSweeperVariants = ["seedsweeper", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper", "sweeper", "seed"]
         if (seedSweeperVariants.includes(name.toLowerCase())){
 
 

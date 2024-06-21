@@ -87,7 +87,7 @@ export default function Page(){
     }, [session]);
 
     const fetchNotifications = async (knockClient: Knock) => {
-        console.log("Fetching notifications ",  (session?.user as RongoaUser)?.database.id.toString())
+
         const messages = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {

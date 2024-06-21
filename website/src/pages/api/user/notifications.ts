@@ -32,6 +32,7 @@ export default async function handler(
         status,
         workflow_id,
         message,
+        conversation_id
     } = request.query;
 
 
@@ -65,11 +66,12 @@ export default async function handler(
                     }
                 }else{
 
-                    if(!message || !user_ids)
+                    if(!message || !user_ids || !conversation_id)
                         return response.status(400).json({ error: 'Missing variables, must have message and user_ids', message, user_ids });
 
                     notificationData = {
-                        message: message
+                        message: message,
+                        conversation_id: conversation_id
                     }
                 }
 
