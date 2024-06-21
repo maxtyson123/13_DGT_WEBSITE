@@ -54,6 +54,11 @@ export default function Page(){
 
     useEffect(() => {
 
+        // Make sure the user is logged in
+        if(!session?.user)
+            return
+
+        // Check if data has been fetched
         if(dataFetch.current)
             return
 
@@ -79,10 +84,17 @@ export default function Page(){
         })
 
 
-    }, []);
+    }, [session]);
 
     const fetchNotifications = async (knockClient: Knock) => {
-        const messages = await knockClient.users.getMessages((session?.user as RongoaUser)?.database.id.toString())
+        console.log("Fetching notifications ",  (session?.user as RongoaUser)?.database.id.toString())
+        const messages = await knockClient.users.getMessages(
+            (session?.user as RongoaUser)?.database.id.toString(),
+            {
+                source: "test",
+            }
+        );
+
         console.log(messages)
         return messages
     }

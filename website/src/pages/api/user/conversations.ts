@@ -105,23 +105,25 @@ export default async function handler(
                 if(!userID || !channelID) return response.status(400).json({error: "Missing user ID or channel ID"})
 
                 query = `
-                       SELECT
-                            m.*,
-                            u1.user_name AS user_one_name,
-                            u1.user_image AS user_one_image,
-                            u2.user_name AS user_two_name,
-                            u2.user_image AS user_two_image
-                        FROM
-                            conversations c
-                        LEFT JOIN
-                            messages m ON m.message_conversation_id = c.id
-                        INNER JOIN
-                            users u1 ON c.conversation_user_one = u1.id
-                        INNER JOIN
-                            users u2 ON c.conversation_user_two = u2.id
-                        WHERE
-                            c.id = ${channelID} AND (c.conversation_user_one = ${userID} OR c.conversation_user_two = ${userID})
-                `;
+                     SELECT
+                        m.*,
+                        u1.id AS user_one_id,
+                        u1.user_name AS user_one_name,
+                        u1.user_image AS user_one_image,
+                        u2.id AS user_two_id,
+                        u2.user_name AS user_two_name,
+                        u2.user_image AS user_two_image 
+                    FROM
+                        conversations c
+                    LEFT JOIN
+                        messages m ON m.message_conversation_id = c.id
+                    INNER JOIN
+                        users u1 ON c.conversation_user_one = u1.id
+                    INNER JOIN
+                        users u2 ON c.conversation_user_two = u2.id
+                    WHERE
+                        c.id = ${channelID} AND (c.conversation_user_one = ${userID} OR c.conversation_user_two = ${userID});
+             `;
 
                 break
 

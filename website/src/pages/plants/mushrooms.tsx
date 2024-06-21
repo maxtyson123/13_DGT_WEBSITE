@@ -9,7 +9,6 @@ export default function Mushrooms(){
     const pageName = "Mushrooms"
     const queryClient = new QueryClient()
 
-
     return(
         <>
             <Layout pageName={pageName} header={"Plants"}>

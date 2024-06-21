@@ -21,24 +21,3 @@
 
 }
 
-@media only screen and (max-width: 1400px) {
-
-    /*
-     Can only fit two cards on the screen at a time with this width.
-     */
-    .plantCardContainer {
-        grid-template-columns: 1fr 1fr;
-    }
-
-}
-
-@media only screen and (max-width: 1000px) {
-
-    /*
-     Can only fit one card on the screen at a time with this width.
-     */
-    .plantCardContainer {
-        grid-template-columns: 1fr;
-    }
-
-}

@@ -25,6 +25,7 @@ export default function Home(){
     const [following, setFollowing] = useState("");
     const [id, setId] = useState(0);
     const [notifications, setNotifications] = useState(0);
+    const [unreads, setUnreads] = useState(0)
 
     const {data: session} = useSession();
 
@@ -74,13 +75,20 @@ export default function Home(){
         // todo
 
         // Get the notifications
-        const messages = await knockClient.users.getMessages((session?.user as RongoaUser)?.database.id.toString())
-        const notificationsResponse = messages.items as any
+        const notifications = await knockClient.users.getMessages(
+            (session?.user as RongoaUser)?.database.id.toString(),
+            {
+                source: "test",
+            }
+        )
+        const notificationsResponse = notifications.items as any
         let unseen = 0;
         for (let i = 0; i < notificationsResponse.length; i++) {
-            if(notificationsResponse[i].seen_at === null)
+            if(notificationsResponse[i].seen_at === null && notificationsResponse[i].channel_id == "2bbd215f-73fc-4d2b-a07a-322749e2d379")
                 unseen++;
         }
+
+        //TODO: channel_id = cpnstants
 
         // Max of 99 notifications
         if(unseen > 99)
@@ -88,6 +96,29 @@ export default function Home(){
 
         setNotifications(unseen)
 
+        // Get the messages
+        const messages = await knockClient.users.getMessages(
+            (session?.user as RongoaUser)?.database.id.toString(),
+            {
+                source: "messages",
+            }
+        )
+        const messagesResponse = messages.items as any
+
+        unseen = 0;
+        console.log(messagesResponse)
+        for (let i = 0; i < messagesResponse.length; i++) {
+
+            if(messagesResponse[i].seen_at === null && messagesResponse[i].channel_id == "2bbd215f-73fc-4d2b-a07a-322749e2d379")
+                unseen++;
+        }
+
+        // Max of 99 messages
+        if(unseen > 99)
+            unseen = 99;
+
+        // Set the unreads
+        setUnreads(unseen)
     };
 
     return(
@@ -108,7 +139,7 @@ export default function Home(){
 
                     <button className={stlyes.message} onClick={() => {router.push("/media/messages")}}>
                         <img src="/media/images/message.svg" alt="Messages"/>
-                        <p>0</p>
+                        <p>{unreads}</p>
                     </button>
 
                 </div>

@@ -8,7 +8,6 @@ import {Layout} from "@/components/layout";
 export default function Plants(){
     const pageName = "Plants"
     const queryClient = new QueryClient()
-    const [show,setShow] = useState(false);
 
     return(
         <>

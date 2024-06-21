@@ -30,6 +30,8 @@ export default async function handler(
         body,
         image,
         status,
+        workflow_id,
+        message,
     } = request.query;
 
 
@@ -40,30 +42,48 @@ export default async function handler(
 
     let axiosConfig;
 
+    // Set the workflow_id to the default if it is not set
+    if(!workflow_id)
+        workflow_id = "test";
+
     try {
 
         switch (operation) {
             case "send_notification":
 
-                if(!user_ids || !title || !body )
-                    return response.status(400).json({ error: 'Missing variables, must have user_ids, title and body', user_ids, title, body });
+                let notificationData = {}
+                if(workflow_id === "test") {
+
+                    if(!user_ids || !title || !body )
+                        return response.status(400).json({ error: 'Missing variables, must have user_ids, title and body', user_ids, title, body });
 
 
+                    notificationData = {
+                        title: title,
+                        body: body,
+                        image: image ? image : "https://rongoa.maxtyson.net/media/images/logo.svg"
+                    }
+                }else{
+
+                    if(!message || !user_ids)
+                        return response.status(400).json({ error: 'Missing variables, must have message and user_ids', message, user_ids });
+
+                    notificationData = {
+                        message: message
+                    }
+                }
 
                 // Make user_ids an array if it is not
                 if(!Array.isArray(user_ids))
                     user_ids = [user_ids];
 
+
                 axiosConfig = {
                     method: 'post',
-                    url: 'https://api.knock.app/v1/workflows/test/trigger',
+                    url: `https://api.knock.app/v1/workflows/${workflow_id}/trigger`,
                     data: {
                         recipients: user_ids,
-                        data: {
-                            title: title,
-                            body: body,
-                            image: image ? image : "https://rongoa.maxtyson.net/media/images/logo.svg"
-                        }
+                        data: notificationData
                     },
                     headers: {
                         'Content-Type': 'application/json',

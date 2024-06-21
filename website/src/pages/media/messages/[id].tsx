@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
+import {getFilePath} from "@/lib/data";
 
 interface MessageBubbleProps {
     message: string,
@@ -31,8 +32,11 @@ interface MessageData {
     message_user_id: number,
     user_one_image: string,
     user_one_name: string,
+    user_one_id: number,
     user_two_image: string,
-    user_two_name: string
+    user_two_name: string,
+    user_two_id: number,
+
 }
 
 export default function Page(){
@@ -41,6 +45,7 @@ export default function Page(){
     const [noMessages, setNoMessages] = useState<boolean>(true)
     const [recpientName, setRecipientName] = useState<string>("")
     const [recipientImage, setRecipientImage] = useState<string>("")
+    const [recipientID, setRecipientID] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
 
     const {data: session} = useSession();
@@ -56,6 +61,9 @@ export default function Page(){
 
         // Reset the message
         (document.getElementById("message") as HTMLInputElement).value = "";
+
+        // Send the user a notification
+        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + recipientID  + '&message=' + message + '&workflow_id=messages');
 
         // Update the page
         fetchMessages();
@@ -106,9 +114,11 @@ export default function Page(){
         {
             setRecipientName(firstMessage.user_one_name);
             setRecipientImage(firstMessage.user_one_image);
+            setRecipientID(firstMessage.user_one_id);
         } else{
             setRecipientName(firstMessage.user_two_name);
             setRecipientImage(firstMessage.user_two_image);
+            setRecipientID(firstMessage.user_two_id);
         }
 
         // Check if the first message is null
