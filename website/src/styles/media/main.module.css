@@ -115,14 +115,9 @@
 }
 
 .posts{
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    gap: 5%;
     height: 100%;
     width: 100%;
     overflow-y: scroll;
-    justify-content: center;
     padding-bottom: 4%;
 }
 
@@ -130,10 +125,6 @@
     display: none;
 }
 
-.posts img{
-    width: 75px;
-    height: 75px;
-}
 
 .posts > button {
     height: 50px;
@@ -166,12 +157,13 @@
     scale: 1.8;
 }
 
-.postsContianer > div{
-    margin-top: 20px;
+.posts > div{
+    margin-top: 50px;
+    margin-left: 5%;
 
 }
 
-.postsContianer > button{
+.posts > button{
     margin-top: 50px;
     width: 100%;
 }
@@ -187,4 +179,11 @@
     left: 50%;
     z-index: 2;
     position: relative;
+}
+
+.posts h1{
+    color: var(--text-dark);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
 }

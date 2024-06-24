@@ -8,6 +8,7 @@ import {prop} from "remeda";
 import {UserCard} from "@/pages/media/components/cards";
 import {className} from "postcss-selector-parser";
 import {Knock} from "@knocklabs/node";
+import {MESSAGES_NOTIFICATIONS} from "@/lib/constants";
 
 
 export interface ConversationData {
@@ -121,10 +122,11 @@ export default function Page() {
         const messages = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {
-                source: "messages",
+                source: MESSAGES_NOTIFICATIONS,
             }
         )
         const messagesResponse = messages.items as any
+        console.log(messagesResponse)
 
         // Get the conversations
         const conversations = await makeRequestWithToken("get", "/api/user/conversations?operation=list")
@@ -136,12 +138,13 @@ export default function Page() {
             // Check if this is an unread message
             for(let i = 0; i < messagesResponse.length; i++){
                 if(messagesResponse[i].seen_at === null
-                && messagesResponse[i].channel_id == "2bbd215f-73fc-4d2b-a07a-322749e2d379"
                 && messagesResponse[i].data.message == conversation.message_text
-                && messagesResponse[1].data.conversation_id == conversation.conversation_id)
+                && messagesResponse[i].data.conversation_id == conversation.conversation_id)
                 {
                     conversation.unread = true
                     break
+                }else{
+                    conversation.unread = false
                 }
             }
 

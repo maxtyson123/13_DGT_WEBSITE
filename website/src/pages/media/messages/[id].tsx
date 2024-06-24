@@ -6,6 +6,7 @@ import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
 import {getFilePath} from "@/lib/data";
 import {Knock} from "@knocklabs/node";
+import {MESSAGES_NOTIFICATIONS} from "@/lib/constants";
 
 interface MessageBubbleProps {
     message: string,
@@ -66,7 +67,7 @@ export default function Page(){
         (document.getElementById("message") as HTMLInputElement).value = "";
 
         // Send the user a notification
-        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + recipientID  + '&message=' + message + '&workflow_id=messages&conversation_id=' + window.location.pathname.split("/")[3]);
+        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification&user_ids=' + recipientID  + '&message=' + message + '&workflow_id='+ MESSAGES_NOTIFICATIONS +'&conversation_id=' + window.location.pathname.split("/")[3]);
 
         // Update the page
         fetchMessages();
@@ -136,19 +137,21 @@ export default function Page(){
         const notifications = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {
-                source: "messages",
+                source: MESSAGES_NOTIFICATIONS,
             }
         )
 
         // Update the notification status
         const notificationsResponse = notifications.items as any[];
 
+
+
         // Get the ids of the messages relevant to this conversation id
-        const message_ids = notificationsResponse.map((notification) => {
-            if(notification.data.conversation_id === conversationID){
-                return notification.message_id;
-            }
-        })
+        const message_ids = notificationsResponse.filter((item) => item.data.conversation_id === conversationID).map((item) => item.id);
+        console.log(message_ids)
+
+        // Check if there are any notifications
+        if(message_ids.length === 0) return;
 
         let urlIds = ""
         for (let i = 0; i < message_ids.length; i++) {
@@ -188,7 +191,7 @@ export default function Page(){
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>
 
-                    <h1>{recpientName}</h1>
+                    <h1>{recpientName} + {recipientID}</h1>
 
                 </div>
 

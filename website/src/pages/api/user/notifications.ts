@@ -6,6 +6,7 @@ import {checkApiPermissions} from "@/lib/api_tools";
 import { Logger } from 'next-axiom';
 import {MEMBER_USER_TYPE} from "@/lib/users";
 import axios from "axios";
+import {MESSAGES_NOTIFICATIONS, NOTIFICATIONS} from "@/lib/constants";
 
 export default async function handler(
     request: NextApiRequest,
@@ -45,7 +46,7 @@ export default async function handler(
 
     // Set the workflow_id to the default if it is not set
     if(!workflow_id)
-        workflow_id = "test";
+        workflow_id = NOTIFICATIONS;
 
     try {
 
@@ -53,7 +54,7 @@ export default async function handler(
             case "send_notification":
 
                 let notificationData = {}
-                if(workflow_id === "test") {
+                if(workflow_id === NOTIFICATIONS) {
 
                     if(!user_ids || !title || !body )
                         return response.status(400).json({ error: 'Missing variables, must have user_ids, title and body', user_ids, title, body });
@@ -64,6 +65,7 @@ export default async function handler(
                         body: body,
                         image: image ? image : "https://rongoa.maxtyson.net/media/images/logo.svg"
                     }
+
                 }else{
 
                     if(!message || !user_ids || !conversation_id)
@@ -78,6 +80,7 @@ export default async function handler(
                 // Make user_ids an array if it is not
                 if(!Array.isArray(user_ids))
                     user_ids = [user_ids];
+
 
 
                 axiosConfig = {

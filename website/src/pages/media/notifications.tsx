@@ -5,6 +5,7 @@ import { Knock } from "@knocklabs/node";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import { useSession } from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
+import {NOTIFICATIONS} from "@/lib/constants";
 
 interface NotificationProps {
     title: string,
@@ -91,7 +92,7 @@ export default function Page(){
         const messages = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {
-                source: "test",
+                source: NOTIFICATIONS,
             }
         );
 

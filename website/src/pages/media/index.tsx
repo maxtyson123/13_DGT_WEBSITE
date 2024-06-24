@@ -9,6 +9,7 @@ import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {Knock} from "@knocklabs/node";
+import {MESSAGES_NOTIFICATIONS, NOTIFICATIONS} from "@/lib/constants";
 
 export default function Home(){
 
@@ -71,14 +72,12 @@ export default function Home(){
         const followingString = followingData.join("&following=");
         setFollowing(followingString);
 
-        // Fetch the  stories
-        // todo
 
         // Get the notifications
         const notifications = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {
-                source: "test",
+                source: NOTIFICATIONS,
             }
         )
         const notificationsResponse = notifications.items as any
@@ -100,7 +99,7 @@ export default function Home(){
         const messages = await knockClient.users.getMessages(
             (session?.user as RongoaUser)?.database.id.toString(),
             {
-                source: "messages",
+                source: MESSAGES_NOTIFICATIONS,
             }
         )
         const messagesResponse = messages.items as any
@@ -148,53 +147,13 @@ export default function Home(){
 
                 {/* Posts */}
                 <div className={stlyes.posts}>
+                    <h1> Feed </h1>
 
-                    {/* Stories */}
-                    <div className={stlyes.stories}>
-                        <div className={stlyes.story}>
-                            <img src="/media/images/logo.svg" alt="Logo"/>
-                            <div>
-                                <img src="/media/images/Add.svg" alt="Plus"/>
-                            </div>
-                            <p>My Story</p>
-                        </div>
-
-                        {
-                            storiesLoading ?
-                                <>
-                                    <div className={stlyes.story}>
-                                        <img src="/media/images/small_loading.gif" style={{border: "0px"}} alt="Logo"/>
-                                    </div>
-                                    <div className={stlyes.story}>
-                                        <p>Loading Stories...</p>
-                                    </div>
-                                </>
-                            :
-                                <>
-                                    <div className={stlyes.story + " " + stlyes.active}>
-                                        <img src="/media/images/logo.svg" alt="Logo"/>
-                                        <p>Username</p>
-                                    </div>
-                                    <div className={stlyes.story}>
-                                        <img src="/media/images/logo.svg" alt="Logo"/>
-                                        <p>Username</p>
-                                    </div>
-                                    <div className={stlyes.story}>
-                                        <img src="/media/images/logo.svg" alt="Logo"/>
-                                        <p>Username</p>
-                                    </div>
-                                </>
-                        }
-
-                    </div>
-
-                    <div className={stlyes.postsContianer}>
                     { following && session?.user &&
                         <QueryClientProvider client={queryClient}>
                             <InfiniteLoading searchQuery={`/api/posts/fetch?operation=generalFeed&following=${following}&id=${id}`} display={"PostCard"}/>
                         </QueryClientProvider>
                     }
-                    </div>
 
 
                 </div>
