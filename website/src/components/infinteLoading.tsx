@@ -55,7 +55,7 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
     })
 
     useEffect(() => {
-        if(entry?.isIntersecting){
+        if(entry?.isIntersecting && !isFetchingNextPage && !allLoaded){
             fetchNextPage()
         }
     }, [entry])

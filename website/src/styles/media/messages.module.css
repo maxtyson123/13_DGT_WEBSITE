@@ -140,7 +140,7 @@
     border-radius: 20px;
     border: 1px solid var(--text-dark);
     width: 90%;
-    margin: 20px auto;
+    margin: 40px auto;
     display: grid;
     grid-template-columns: 2fr 0.5fr;
     padding: 10px;

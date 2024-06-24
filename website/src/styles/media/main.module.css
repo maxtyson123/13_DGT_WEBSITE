@@ -137,7 +137,7 @@
     align-items: center;
     width: 90%;
     gap: 5%;
-    margin-bottom: 5%;
+    margin-bottom: 50px;
     background-color: var(--main-green);
     border-radius: 15px;
     padding: 3% 8% 3% 8%;

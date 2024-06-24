@@ -225,7 +225,7 @@ export default function Page() {
                 {/* New Message Popup */}
                 {
                     newMessagePopup &&
-                    <div className={styles.newMessagePopup} style={{width: pageWidth + 10}}>
+                    <div className={styles.newMessagePopup} style={{width: pageWidth + 50}}>
                         <div className={styles.newMessagePopupContent}>
 
                             {/* Top Info */}

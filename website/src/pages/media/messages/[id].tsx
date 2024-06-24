@@ -125,6 +125,7 @@ export default function Page(){
             setRecipientID(firstMessage.user_two_id);
         }
 
+
         // Check if the first message is null
         setNoMessages(firstMessage.message_text === null);
 
@@ -146,8 +147,8 @@ export default function Page(){
 
 
 
-        // Get the ids of the messages relevant to this conversation id
-        const message_ids = notificationsResponse.filter((item) => item.data.conversation_id === conversationID).map((item) => item.id);
+        // Get the ids of the messages relevant to this conversation id and not seen
+        const message_ids = notificationsResponse.filter((item) => (item.data.conversation_id === conversationID && item.seen_at === null )).map((item) => item.id);
         console.log(message_ids)
 
         // Check if there are any notifications
@@ -159,7 +160,7 @@ export default function Page(){
         }
 
         // Send the request to update the status
-        const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds + "&status=seen&workflow_id=messages");
+        const response = makeRequestWithToken('post', '/api/user/notifications?operation=update_status' + urlIds + "&status=seen&workflow_id="+MESSAGES_NOTIFICATIONS);
         console.log("Updated notifications")
 
     }
@@ -191,7 +192,7 @@ export default function Page(){
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>
 
-                    <h1>{recpientName} + {recipientID}</h1>
+                    <h1>{recpientName.length > 20 ? recpientName.substring(0, 20) + "..." : recpientName}</h1>
 
                 </div>
 

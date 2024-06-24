@@ -8,6 +8,7 @@ import Image from "next/image";
 import {loader_data} from "@/lib/loader_data";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {fetchData} from "next-auth/client/_utils";
+import {da} from "date-fns/locale";
 
 export default function Page(){
     return <></>
@@ -19,21 +20,26 @@ interface PostCardProps {
     post_user_id: number,
     post_plant_id: number,
     post_date: string,
-    id: number
+    id: number,
+    like_count: number,
+    user_liked: boolean,
 }
 
 export function PostCard(props: PostCardProps) {
 
-
+    // Data
     const [timeAgo, setTimeAgo] = useState("")
     const [username, setUsername] = useState("Loading..")
     const [userImage, setUserImage] = useState("/media/images/small_loading.gif")
     const [userType, setUserType] = useState("")
-    const [likes, setLikes] = useState(0)
+    const [likes, setLikes] = useState(props.like_count)
     const [plantName, setPlantName] = useState("Loading...")
     const [width, setWidth] = useState(0)
-    const [liked, setLiked] = useState(false)
+    const [liked, setLiked] = useState(props.user_liked)
+
+    // States
     const [lastTap, setLastTap] = useState(0)
+    const [lastLikeTime, setLastLikeTime] = useState(0)
 
     const router = useRouter();
     const dataFetch = useRef(false);
@@ -124,16 +130,6 @@ export function PostCard(props: PostCardProps) {
             setPlantName(name);
         }
 
-        // Get the likes
-        const likes = await makeRequestWithToken("get", `/api/posts/likes?operation=likes&id=${props.id}`);
-        setLikes(likes.data.data[0]["COUNT(*)"]);
-
-        // Check if the user has liked the post
-        const liked = await makeRequestWithToken("get", `/api/posts/likes?operation=check&id=${props.id}`);
-        if(liked.data.data[0]["COUNT(*)"] > 0) {
-            setLiked(true);
-        }
-
     }
     const goToProfile = () => {
 
@@ -150,6 +146,21 @@ export function PostCard(props: PostCardProps) {
     }
 
     const toggleLike = async () => {
+
+        // Get the time
+        const time = new Date().getTime();
+
+        // Check if the time is less than 300ms
+        if(time - lastLikeTime < 300) {
+
+            // Give let the request go through
+            return;
+        }
+
+        // Set the last tap
+        setLastLikeTime(time);
+
+        // Toggle the like
         if(liked) {
             setLiked(false);
             await unlikePost();
@@ -224,7 +235,7 @@ interface PostCardApiProps {
 
 export function  PostCardApi(props: PostCardApiProps){
 
-    const [data, setData] = useState<any>()
+    const [data, setData] = useState<PostCardProps>()
 
     useEffect(() => {
         fetchData();
@@ -237,12 +248,7 @@ export function  PostCardApi(props: PostCardApiProps){
 
     return(<>
         {data != null ? <PostCard
-            post_title={data.post_title}
-            post_image={data.post_image}
-            post_user_id={data.post_user_id}
-            post_plant_id={data.post_plant_id}
-            post_date={data.post_date}
-            id={data.id}
+            {...data}
         /> : <></>}
     </>)
 }
