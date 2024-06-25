@@ -63,7 +63,7 @@ export default function Page(){
                     <p>Users</p>
                     {searchResults.users.map((user: any, index: number) => {
                         return (
-                            <Link href={"/media/profile?id=" + user.id} key={index} className={stlyes.searchResult}>
+                            <Link href={"/media/profile?id=" + user.id+"&returnPath=search"} key={index} className={stlyes.searchResult}>
                                   <UserCard id={user.id}/>
                             </Link>
                         )

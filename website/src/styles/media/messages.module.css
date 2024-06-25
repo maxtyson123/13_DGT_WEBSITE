@@ -26,6 +26,7 @@
     font-size: 1.7em;
     color: var(--text-dark);
     font-weight: bolder;
+    width: 100%;
 }
 
 .backButton{

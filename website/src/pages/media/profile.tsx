@@ -25,6 +25,7 @@ export default function Profile() {
     const [postsData, setPostsData] = useState<any>([]);
     const [likesData, setLikesData] = useState<any>([])
     const [currentId, setCurrentId] = useState(0)
+    const [currentReturnPath, setCurrentReturnPath] = useState('')
 
     // States
     const [showPosts, setShowPosts] = useState(true);
@@ -44,7 +45,11 @@ export default function Profile() {
         if(!session?.user) return;
 
         // Get the id from the url params
-        const {id} = router.query;
+        const {id, returnPath} = router.query;
+
+        // Set the return path
+        if(returnPath) setCurrentReturnPath(returnPath as string);
+
         if(id) {
 
             // Check if id is a number
@@ -177,7 +182,7 @@ export default function Profile() {
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
-                    <button onClick={() => {window.location.href = '/media'}} className={styles.backButton}>
+                    <button onClick={() => {window.location.href = '/media/'+currentReturnPath}} className={styles.backButton}>
                         <img src={"/media/images/back.svg"}/>
                     </button>
 

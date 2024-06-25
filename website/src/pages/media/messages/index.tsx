@@ -106,7 +106,7 @@ export default function Page() {
     useEffect(() => {
 
         // Get the element with the .page class
-        const page = document.querySelector("." + styles.page)
+        const page = document.querySelector(".pageWrapper")
 
         // Get the width of the page
         setPageWidth(page?.clientWidth as number)
@@ -225,7 +225,7 @@ export default function Page() {
                 {/* New Message Popup */}
                 {
                     newMessagePopup &&
-                    <div className={styles.newMessagePopup} style={{width: pageWidth + 50}}>
+                    <div className={styles.newMessagePopup} style={{width: pageWidth}}>
                         <div className={styles.newMessagePopupContent}>
 
                             {/* Top Info */}
