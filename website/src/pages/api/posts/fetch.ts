@@ -137,7 +137,7 @@ export default async function handler(
         const user = await makeQuery(query, client)
 
         if(!user) {
-            return response.status(400).json({ error: 'No Data Found'});
+            return response.status(200).json({ data: []});
         }
 
         // Return the user
