@@ -220,6 +220,7 @@
     padding: 4%;
     display: block;
     position: relative;
+    min-height: 100px;
 }
 
 .post img{
