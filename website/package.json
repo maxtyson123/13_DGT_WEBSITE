@@ -29,6 +29,7 @@
     "archiver": "^6.0.0",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
+    "browser-image-compression": "^2.0.2",
     "cross-env": "^7.0.3",
     "custom-sweeper": "^0.1.1",
     "eslint": "8.37.0",

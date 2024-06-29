@@ -21,20 +21,30 @@ import {Layout} from "@/components/layout";
 import axios from "axios";
 
 // TODO:
-// - Rewrite fetching data
-// - Rewrite the about section
-// - Remove a lot of the anys
-// - Re make API (paths, auth, methods, return objects)
-// - Re make the way tables are created and stored in the database to be dynamic
-// - Make new create page
-// - Re do admin interface
-// - Re do tables for search scablibily
-// - New search pop up
-// - Link images to main site
-// - Structure set up
-// - Make new docs (api ref, new readme, auto gen code thing as action)
-// - Re do calander
-// - Publish & Un publish function
+// - Plant App
+// - - Moderation
+// - - Live Chat
+// - - Settings Page
+// - - Publish on stores
+// - - Link To Rongoa (Images Popup and Home Feed)
+// - Plant Updates
+// - - Publishing
+// - - Auto Create Sections
+// - - New Create Page
+// - - API v2
+// - - Change Edit Mode
+// - - History
+// - Docs
+// - - Rewrite Read Me
+// - - Re Name Repo
+// - - Update Doxy
+// - - Auto Generate Doxy Gen
+// - - API Docs
+// -  General QOL
+// - - Data Fetch Rewrite
+// - - About Section Rewrite
+// - - Calender Overhaul
+// - - Admin Overhaul
 
 
 export default function Home() {

@@ -9,6 +9,7 @@ import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {cleanInput, getFilePath} from "@/lib/data";
 import {useRouter} from "next/router";
+import imageCompression from "browser-image-compression";
 
 
 export default function Post(){
@@ -124,11 +125,32 @@ export default function Post(){
             return
         }
 
+        // Compress the image
+        setLoading("Compressing Image...")
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        }
+        let compressedFile;
+        try {
+            compressedFile = await imageCompression(image, options);
+            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+        } catch (error) {
+            console.log(error);
+            return
+        }
+
+        // Create a new file instance for the blob with the name and type from the original file
+        const compressedImage = new File([compressedFile], image.name, {type: image.type});
+
         // Loading
-        setLoading("Uploading Infomation...")
+        setLoading("Uploading Information...")
         const post_title = postTitle;
         const post_plant_id = plantIDs[plantNames.indexOf(plant)];
-        const plant_image = cleanInput(image.name)
+        const plant_image = cleanInput(compressedImage.name)
 
         console.log(post_plant_id)
         console.log(plantIDs)
@@ -148,7 +170,7 @@ export default function Post(){
 
         // Create a new form data object and append the file to it
         const formData = new FormData();
-        formData.append('file', image);
+        formData.append('file', compressedImage);
         formData.append('id', newId);
         formData.append('path', 'users/' + userID + '/posts');
 
