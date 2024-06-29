@@ -165,3 +165,32 @@ body{
     padding: 10px;
     height: 100vh;
 }
+
+/* Slide in from the right */
+.slide-in-right {
+    animation: slide-in-right 0.5s forwards;
+}
+
+/* Slide out to the right */
+.slide-out-right {
+    animation: slide-in-right 0.5s reverse forwards;
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Slide in from the left */
+.slide-in-left {
+    animation: slide-in-left 0.5s forwards;
+}
+
+/* Slide out to the left */
+.slide-out-left {
+    animation: slide-in-left 0.5s reverse forwards;
+}

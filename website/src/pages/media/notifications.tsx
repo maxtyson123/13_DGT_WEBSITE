@@ -6,6 +6,7 @@ import {makeRequestWithToken} from "@/lib/api_tools";
 import { useSession } from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {NOTIFICATIONS} from "@/lib/constants";
+import {useRouter} from "next/router";
 
 interface NotificationProps {
     title: string,
@@ -108,6 +109,8 @@ export default function Page(){
 
     }
 
+    const router = useRouter();
+
     return(
         <Wrapper>
             <div className={styles.page}>
@@ -116,7 +119,7 @@ export default function Page(){
                 {/* Top Bar */}
                 <div className={styles.topBar}>
                     <button onClick={() => {
-                        window.location.href = '/media'
+                        router.push("/media")
                     }} className={styles.backButton}>
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>

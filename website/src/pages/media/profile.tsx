@@ -175,6 +175,8 @@ export default function Profile() {
         setLoading(false);
     }
 
+
+
     return(
         <Wrapper>
             <div className={styles.page}>
@@ -182,14 +184,18 @@ export default function Profile() {
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
-                    <button onClick={() => {window.location.href = '/media/'+currentReturnPath}} className={styles.backButton}>
+                    <button onClick={() => {
+                        router.push('/media/'+currentReturnPath)
+                    }} className={styles.backButton}>
                         <img src={"/media/images/back.svg"}/>
                     </button>
 
                     <h1>{myProfile ? 'My Profile' : 'Profile'}</h1>
 
                     {myProfile &&
-                        <button onClick={() => {window.location.href = '/media/profile/settings'}} className={styles.editButton}>
+                        <button onClick={() => {
+                            router.push('/media/profile/settings')
+                        }} className={styles.editButton}>
                             <img src={"/media/images/Settings.svg"}/>
                         </button>
                     }

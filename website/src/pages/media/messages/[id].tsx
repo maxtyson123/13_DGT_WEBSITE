@@ -7,6 +7,7 @@ import {useSession} from "next-auth/react";
 import {getFilePath} from "@/lib/data";
 import {Knock} from "@knocklabs/node";
 import {MESSAGES_NOTIFICATIONS} from "@/lib/constants";
+import {useRouter} from "next/router";
 
 interface MessageBubbleProps {
     message: string,
@@ -49,6 +50,7 @@ export default function Page(){
     const [recipientImage, setRecipientImage] = useState<string>("")
     const [recipientID, setRecipientID] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
+    const router = useRouter();
 
     const {data: session} = useSession()
     const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
@@ -106,7 +108,7 @@ export default function Page(){
 
         // If the array is empty, return
         if(apiMessages.length === 0){
-            window.location.href = "/media/messages";
+            router.push("/media/messages");
             return;
         }
 

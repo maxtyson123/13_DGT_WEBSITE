@@ -26,27 +26,27 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
       <>
         <main>
-          {/* The session provider must wrap the entire app to keep the user logged in */}
-          <SessionProvider session={pageProps.session}>
+                  {/* The session provider must wrap the entire app to keep the user logged in */}
+                  <SessionProvider session={pageProps.session}>
 
-              {/* Show the page */}
-              <Component  key={pageKey} {...pageProps} />
+                      {/* Show the page */}
+                      <Component  key={pageKey} {...pageProps} />
 
 
-              {/* Dont show the credits or scroll to top on the media page */}
-              {router.pathname.includes("/media") ? null :
+                      {/* Dont show the credits or scroll to top on the media page */}
+                      {router.pathname.includes("/media") ? null :
 
-                    <>
-                        {/* Credits and analytics should be on every page*/}
-                        <Credits/>
+                            <>
+                                {/* Credits and analytics should be on every page*/}
+                                <Credits/>
 
-                        {/* Allow the user to scroll to the top of the page easily*/}
-                        <ScrollToTop/>
-                    </>
-              }
-              <Analytics />
-              <AxiomWebVitals />
-           </SessionProvider>
+                                {/* Allow the user to scroll to the top of the page easily*/}
+                                <ScrollToTop/>
+                            </>
+                      }
+                      <Analytics />
+                      <AxiomWebVitals />
+                   </SessionProvider>
         </main>
       </>
   )

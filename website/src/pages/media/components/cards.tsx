@@ -40,6 +40,7 @@ export function PostCard(props: PostCardProps) {
     // States
     const [lastTap, setLastTap] = useState(0)
     const [lastLikeTime, setLastLikeTime] = useState(0)
+    const likeRef = useRef<HTMLDivElement>(null);
 
     const router = useRouter();
     const dataFetch = useRef(false);
@@ -162,11 +163,25 @@ export function PostCard(props: PostCardProps) {
 
         // Toggle the like
         if(liked) {
+
             setLiked(false);
             await unlikePost();
             setLikes(likes - 1);
+
+
+
         } else {
+
+
+            // Set the liked
             setLiked(true);
+
+            // Show the like animation
+            if(likeRef.current == null) return;
+            likeRef.current.classList.remove(stlyes.likePopup);
+            likeRef.current.classList.add(stlyes.likePopup);
+
+            // Update the likes
             await likePost();
             setLikes(likes + 1);
         }
@@ -189,6 +204,7 @@ export function PostCard(props: PostCardProps) {
     return(
         <>
             <div className={stlyes.post} style={{width: width}}>
+
                 <div className={stlyes.postHeader}>
                     <img src={userImage} alt="Profile" onClick={goToProfile}/>
                     <div className={stlyes.userInfo} onClick={goToProfile}>
@@ -202,6 +218,7 @@ export function PostCard(props: PostCardProps) {
                     </div>
                 </div>
                 <div className={stlyes.mainImage}>
+                    <div ref={likeRef}><img src="/media/images/Liked.svg" alt="Liked"/></div>
                     <Image
                         fill
                         placeholder={loader_data() as any}

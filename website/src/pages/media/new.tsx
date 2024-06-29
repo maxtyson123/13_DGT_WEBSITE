@@ -8,6 +8,7 @@ import {Loading} from "@/components/loading";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
 import {cleanInput, getFilePath} from "@/lib/data";
+import {useRouter} from "next/router";
 
 
 export default function Post(){
@@ -94,6 +95,8 @@ export default function Post(){
         setImageURL(URL.createObjectURL(file));
     }
 
+    const router = useRouter();
+
     const post = async () => {
 
         // Check if there is a image
@@ -177,7 +180,7 @@ export default function Post(){
         setLoading("")
 
         // Redirect to the post
-        window.location.href = '/media/';
+        router.push("/media/")
     }
 
     return(
@@ -190,7 +193,9 @@ export default function Post(){
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
-                    <button onClick={() => {window.location.href = '/media'}} className={styles.backButton}>
+                    <button onClick={() => {
+                        router.push("/media/")
+                    }} className={styles.backButton}>
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>
 

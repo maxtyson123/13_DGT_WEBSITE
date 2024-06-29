@@ -3,8 +3,11 @@ import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Wrapper from "@/pages/media/components/wrapper";
 import {signIn, useSession} from "next-auth/react";
+import {useRouter} from "next/router";
 
 export default function Login(){
+
+    const router = useRouter();
 
     const publicKey = "fhyw5m5ft21sxmtchpvoqp6sak19q7ahocphds90"
 
@@ -29,7 +32,7 @@ export default function Login(){
     // Check if the user already logged in
     useEffect(() => {
         if(session?.user){
-            window.location.href = "/media"
+            router.push("/media")
         }
     }, [session])
 

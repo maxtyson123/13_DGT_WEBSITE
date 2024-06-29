@@ -9,6 +9,7 @@ import {UserCard} from "@/pages/media/components/cards";
 import {className} from "postcss-selector-parser";
 import {Knock} from "@knocklabs/node";
 import {MESSAGES_NOTIFICATIONS} from "@/lib/constants";
+import {useRouter} from "next/router";
 
 
 export interface ConversationData {
@@ -59,11 +60,12 @@ export function Conversation(props: ConversationData){
 
         setMessageDate(props.message_date ? new Date(props.message_date).toLocaleString() : "")
     }, [props])
+    const router = useRouter();
 
     return(
         <>
             <div className={styles.message + ' ' + (props.unread ? styles.unread : "")} onClick={() => {
-                window.location.href = '/media/messages/' + props.conversation_id
+                router.push('/media/messages/' + props.conversation_id)
             }}>
                 <div className={styles.messageIcon}>
                     <img src={props.user_photo} alt={"user"}/>
@@ -84,6 +86,7 @@ export default function Page() {
 
     const {data: session} = useSession()
     const knockClient = new Knock(process.env.NEXT_PUBLIC_KNOCK_API_KEY_PUBLIC);
+    const router = useRouter();
 
     const dataFetch = useRef(false)
     const [conversations, setConversations] = useState<ConversationData[]>([])
@@ -181,7 +184,7 @@ export default function Page() {
         // Check if the user id already has a conversation
         for(let i = 0; i < conversations.length; i++){
             if(conversations[i].conversation_user_two === parseInt(id) || conversations[i].conversation_user_one === parseInt(id)){
-                window.location.href = '/media/messages/' + conversations[i].conversation_id
+                router.push('/media/messages/' + conversations[i].conversation_id)
                 return
             }
         }
@@ -265,7 +268,9 @@ export default function Page() {
 
                 {/* Top Bar */}
                 <div className={styles.topBar}>
-                    <button onClick={() => {window.location.href = '/media'}} className={styles.backButton}>
+                    <button onClick={() => {
+                        router.push("/media")
+                    }} className={styles.backButton}>
                         <img src={"/media/images/back.svg"} alt={"back"}/>
                     </button>
 
