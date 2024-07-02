@@ -25,6 +25,10 @@
     border-radius: 20px;
 }
 
+.mainImage > div > img{
+    opacity: 0;
+}
+
 .postHeader{
     display: grid;
     grid-template-columns: 0.2fr 0.75fr 0.25fr;
@@ -189,15 +193,18 @@
 
 @keyframes popIn {
     0% {
+        opacity: 0;
         transform: scale(0);
     }
     30% {
+        opacity: 1;
         transform: scale(1);
     }
     60% {
         transform: scale(1);
     }
     100% {
+        opacity: 1;
         transform: scale(0);
     }
 }

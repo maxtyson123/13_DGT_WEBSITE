@@ -73,7 +73,7 @@ export default async function handler(
             }
 
 
-            query += ` ${selector} (english_name LIKE '${name}%' OR maori_name LIKE '${name}%' OR latin_name LIKE '${name}%')`;
+            query += ` ${selector} (english_name LIKE '%${name}%' OR maori_name LIKE '%${name}%' OR latin_name LIKE '%${name}%')`;
             selector = "AND";
         }
 
@@ -133,7 +133,7 @@ export default async function handler(
 
         if(getUsers){
 
-            query = `SELECT id FROM users WHERE ${tables.user_name} LIKE '${name}%'`
+            query = `SELECT id FROM users WHERE ${tables.user_name} LIKE '%${name}%'`
             const users = await makeQuery(query, client)
 
             // If there are no users, return an error
@@ -150,7 +150,7 @@ export default async function handler(
 
 
             // Get the info
-            query = `SELECT id FROM posts WHERE ${tables.post_title} LIKE '${name}%' ORDER BY ${tables.post_date} DESC`
+            query = `SELECT id FROM posts WHERE ${tables.post_title} LIKE '%${name}%' ORDER BY ${tables.post_date} DESC`
             if(getExtras){
                 query = `SELECT id, ${tables.post_title}, ${tables.post_date}, ${tables.post_user_id} FROM posts WHERE ${tables.post_title} LIKE '${name}%' ORDER BY ${tables.post_date} DESC`
             }
