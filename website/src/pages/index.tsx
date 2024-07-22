@@ -22,9 +22,10 @@ import axios from "axios";
 
 // TODO:
 // - Plant App
+// - - Settings Page
+// - - Plant Info Page In App
 // - - Moderation
 // - - Live Chat
-// - - Settings Page
 // - - Publish on stores
 // - - Link To Rongoa (Images Popup and Home Feed)
 // - Plant Updates
@@ -41,7 +42,8 @@ import axios from "axios";
 // - - Auto Generate Doxy Gen
 // - - API Docs
 // -  General QOL
-// - - Data Fetch Rewrite
+// - - S.E.O
+// - - Data Fetch Rewrite (STATIC PROPS)
 // - - About Section Rewrite
 // - - Calender Overhaul
 // - - Admin Overhaul

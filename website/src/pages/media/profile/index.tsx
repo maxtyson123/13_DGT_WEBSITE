@@ -9,7 +9,7 @@ import {addMeasureSuffix, getFilePath} from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import {loader_data} from "@/lib/loader_data";
-export default function Profile() {
+export default function Index() {
 
 
 

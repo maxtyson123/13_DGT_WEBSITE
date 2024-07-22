@@ -98,11 +98,13 @@ export default function PlantCardData({ data}: PlantCardProps){
 
                 {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
-                    <CreditedImage url={mainImage} alt={mainImageAlt} credits={mainImageCredits} colour={"white"}/>
+                    <Link href={"/plants/" + data.id}>
+                        <CreditedImage url={mainImage} alt={mainImageAlt} credits={mainImageCredits} colour={"white"}/>
+                    </Link>
                 </div>
 
                 {/* Title, category, description*/}
-                <h1 className={styles.title}>{names[0]}</h1>
+                <Link href={"/plants/" + data.id} className={styles.title}>{names[0]}</Link>
                 <h3 className={styles.category}>{names[1]} | {names[2]}</h3>
                 <p className={styles.description}>{data.small_description}</p>
 

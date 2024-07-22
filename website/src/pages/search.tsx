@@ -93,7 +93,7 @@ export default function Search(){
         const startTime = Date.now()
         let apiResults: JSX.Element[] = []
 
-        const seedSweeperVariants = ["seedsweeper", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper", "sweeper", "seed"]
+        const seedSweeperVariants = ["seedsweeper", "sweed", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper", "sweeper", "seed"]
         if (seedSweeperVariants.includes(name.toLowerCase())){
 
 
@@ -106,7 +106,7 @@ export default function Search(){
                             preferred_name: "English",
                             english_name: "Seed Sweeper",
                             latin_name: "Max Tyson",
-                            maori_name: "Easter Egg",
+                            maori_name: "Easter Egg-plant",
                             small_description: "A fun game made by Max Tyson",
                             display_image: "main",
                             authorIDs: [2],
