@@ -22,7 +22,6 @@ import axios from "axios";
 
 // TODO:
 // - Plant App
-// - - Settings Page
 // - - Plant Info Page In App
 // - - Moderation
 // - - Live Chat
