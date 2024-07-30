@@ -10,7 +10,7 @@ import {PostCard} from "@/pages/media/components/cards";
 
 interface InfiniteLoadingProps {
     searchQuery: string
-    display?: string    // The display type of the plant card  TODO: find a better way to  not hard  code this
+     display?: string    // The display type of the plant card  TODO: find a better way to  not hard  code this
 }
 
 export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {

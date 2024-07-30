@@ -97,6 +97,7 @@ export class SQLDatabase {
     post_user_id: string;
     post_date: string;
     post_image: string;
+    post_approved: string;
 
     // Likes Table
     like_post_id: string;
@@ -203,6 +204,7 @@ export class SQLDatabase {
         this.post_user_id               = "post_user_id";
         this.post_date                  = "post_date";
         this.post_image                 = "post_image";
+        this.post_approved              = "post_approved";
 
         // Likes Table
         this.like_post_id               = "like_post_id";

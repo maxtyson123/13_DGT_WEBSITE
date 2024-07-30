@@ -22,11 +22,10 @@ import axios from "axios";
 
 // TODO:
 // - Plant App
-// - - Plant Info Page In App
 // - - Moderation
 // - - Live Chat
-// - - Publish on stores
 // - - Link To Rongoa (Images Popup and Home Feed)
+// - - Publish on stores
 // - Plant Updates
 // - - Publishing
 // - - Auto Create Sections

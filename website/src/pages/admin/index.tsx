@@ -117,6 +117,9 @@ export default function Admin(){
                                 <Link href={"/admin/plants"}>
                                     <button>Manage Plants</button>
                                 </Link>
+                                <Link href={"/admin/posts"}>
+                                    <button>Manage Posts</button>
+                                </Link>
                                 <Link href={"/admin/users"}>
                                     <button>Manage Users</button>
                                 </Link>
@@ -131,6 +134,10 @@ export default function Admin(){
                         <div className={styles.adminData}>
                             <h2>Plants</h2>
                             <p>There are currently <strong>{numberOfPlants}</strong> plants in the database.</p>
+                        </div>
+                        <div className={styles.adminData}>
+                            <h2>Posts</h2>
+                            <p>There are currently <strong>{numberOfPlants}</strong> posts in the database.</p>
                         </div>
                         <div className={styles.adminData}>
                             <h2>Users</h2>

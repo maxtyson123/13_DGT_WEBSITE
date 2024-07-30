@@ -5,7 +5,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
 import { Logger } from 'next-axiom';
-import {RongoaUser} from "@/lib/users";
+import {MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
 
 export default async function handler(
     request: NextApiRequest,
@@ -23,9 +23,6 @@ export default async function handler(
     // Get the client
     const client =  await getClient()
 
-
-    // Get te
-
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:upload:access")
@@ -39,6 +36,7 @@ export default async function handler(
     // Get the user details
     const user = session.user as RongoaUser;
     const user_id = user.database.id;
+    const user_is_member = user.database.user_type === MEMBER_USER_TYPE;
 
     // Try uploading the data to the database
     try {
@@ -56,7 +54,7 @@ export default async function handler(
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
         // Run the query
-        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0) ) RETURNING id;`;
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member} ) RETURNING id;`;
         const data = await makeQuery(query, client, true)
 
         console.log("DATA")
