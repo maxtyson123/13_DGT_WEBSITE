@@ -272,7 +272,7 @@ export default function Home() {
                             <p> This website is a resource for information about rongoā Māori, the traditional Māori healing system. It is intended to be a resource for anyone interested in learning more about rongoā, including practitioners, students, and members of the general public.</p>
                             <p> Please note that the information provided on this site is not intended as a substitute for advice from Health Care Professionals, Medicinal Herbalist or Tohunga. It is for informational and educational purposes only.  (Please take personal responsibility for your decisions.)</p>
                             <p> This site is designed and populated by volunteers. Information is provided by a variety of sources, including books, websites, and personal experience. </p>
-                            <p> Please contact us at <a href={"mailto:placeholder@email.com"}>placeholder@email.com</a> if:</p>
+                            <p> Please contact us at <a href={"mailto:contact@rongoa.stream"}>contact@rongoa.stream</a> if:</p>
                             <ul>
                                 <li>You have useful information or Images that you would like to contribute</li>
                                 <li>You would like to volunteer time with research / data input</li>

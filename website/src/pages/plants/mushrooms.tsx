@@ -11,7 +11,7 @@ export default function Mushrooms(){
 
     return(
         <>
-            <Layout pageName={pageName} header={"Plants"}>
+            <Layout pageName={pageName} header={"Mushrooms"}>
                 {/* Section title */}
                 <h1 className={styles.title}>All Mushrooms</h1>
                 <p className={styles.subtitle}> To search for a specific mushroom, use the search page. </p>

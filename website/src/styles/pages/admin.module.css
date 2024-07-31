@@ -16,6 +16,10 @@
     box-shadow: 0 8px 8px var(--shadow-min);
 }
 
+.adminDataContainer button:hover{
+    background-color: var(--darker-main-green);
+}
+
 .adminDataContainer{
     display: flex;
     justify-content: space-between;
@@ -129,4 +133,47 @@
     width: 100%;
     color: var(--text-light);
     cursor: pointer;
+}
+
+.approveAndDeny{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.postsToModerate{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.postsToModerate > div{
+    background: white;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+/* Second div behind the first one slightly offset */
+.postsToModerate > div:nth-child(2){
+    margin-left: -380px;
+    margin-top: 10px;
+    z-index: -1;
+    background: white;
+}
+
+.slideoutAnimation{
+    animation: slideout 0.5s ease-out;
+}
+
+@keyframes slideout {
+    0% {
+        transform: translateX(0);
+    }
+    50%{
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-380px);
+    }
 }
