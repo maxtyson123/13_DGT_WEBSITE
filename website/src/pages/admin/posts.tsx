@@ -1,7 +1,7 @@
 import Section from "@/components/section";
 import styles from "@/styles/pages/admin.module.css";
 import Link from "next/link";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
@@ -22,6 +22,24 @@ export default function Admin(){
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
+
+
+    useEffect(() => {
+        getUnModeratedPosts()
+    }, [])
+
+    const getUnModeratedPosts = async () => {
+
+        try {
+            setLoadingMessage("Loading posts to moderate")
+            const data = await makeRequestWithToken("get", "/api/posts/moderate?operation=list")
+            setModerationIds(data.data)
+            setLoadingMessage("")
+        } catch (e) {
+            setError("Error loading posts to moderate")
+            log.error(e)
+        }
+    }
 
     const handleModeration = (action: string) => {
         const postContainer = document.querySelector(`.${styles.postsToModerate}`);
