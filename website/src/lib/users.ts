@@ -161,6 +161,14 @@ export interface UserPermissions {
             viewRestrictedSections: boolean;
         };
 
+        posts: {
+            moderate: {
+                publicAccess: boolean;
+                internalAccess: boolean
+                access: boolean;
+            };
+        }
+
         logs: {
             unlimitedApiLogEntries: boolean;
         }
@@ -321,6 +329,14 @@ export const getDefaultPermissions = () : UserPermissions => {
         data: {
             account: {
                 viewPrivateDetails: false,
+            },
+
+            posts: {
+                moderate: {
+                    publicAccess: false,
+                    internalAccess: false,
+                    access: false,
+                },
             },
 
             plants: {

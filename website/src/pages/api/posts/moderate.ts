@@ -12,20 +12,12 @@ export default async function handler(
     response: NextApiResponse,
 ) {
 
-    // Get the logger
-    const logger = new Logger()
-
-    // If the request is not a POST request, return an error
-    if(request.method !== 'POST') {
-        return response.status(405).json({ error: 'Method not allowed, please use POST' });
-    }
-
     // Get the client
     const client =  await getClient()
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:admin:moderate:access")
+    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "data:posts:moderate:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
 

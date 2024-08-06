@@ -10,7 +10,7 @@ import {FileInput, SmallInput, ValidationState} from "@/components/input_section
 import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
-import {PostCardApi} from "@/pages/media/components/cards";
+import {PostCard, PostCardApi} from "@/pages/media/components/cards";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -18,7 +18,7 @@ export default function Admin(){
     const router = useRouter()
     const { data: session, update } = useSession()
 
-    const [moderationIds, setModerationIds] = useState<number[]>([32, 33, 34, 35])
+    const [moderationIds, setModerationIds] = useState<number[]>([])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
@@ -32,10 +32,17 @@ export default function Admin(){
 
         try {
             setLoadingMessage("Loading posts to moderate")
-            const data = await makeRequestWithToken("get", "/api/posts/moderate?operation=list")
-            setModerationIds(data.data)
+            const response = await makeRequestWithToken("get", "/api/posts/moderate?operation=list")
+
+
+            if(response.data.data){
+
+                const ids = response.data.data.map((post: any) => post.id)
+                setModerationIds(ids)
+            }
             setLoadingMessage("")
-        } catch (e) {
+
+        } catch (e: any) {
             setError("Error loading posts to moderate")
             log.error(e)
         }
@@ -83,11 +90,21 @@ export default function Admin(){
 
                         <div id={"widthReference"} style={{width: "400px", height: "50px"}}/>
                         <div className={styles.postsToModerate}>
-                            {moderationIds.slice(currentIndex, currentIndex + 2).map((id) => (
+                            {moderationIds && moderationIds.slice(currentIndex, currentIndex + 2).map((id) => (
                                     <PostCardApi id={id} key={id}/>
                             ))}
                             {currentIndex >= moderationIds.length && (
-                                <p>No more posts to moderate.</p>
+                                <div style={{
+                                    background: "white",
+                                    borderRadius: "10px",
+                                    padding: "20px",
+                                    marginTop: "200px",
+                                    textAlign: "center",
+                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                                    height: "200px"
+                                }}>
+                                    <h1>No more posts to moderate</h1>
+                                </div>
                             )}
                         </div>
 

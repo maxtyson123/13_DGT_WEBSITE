@@ -22,10 +22,13 @@ import axios from "axios";
 
 // TODO:
 // - Plant App
-// - - Moderation
+// = = Moderation
 // - - Live Chat
 // - - Link To Rongoa (Images Popup and Home Feed)
 // - - Publish on stores
+// - Databse
+// - - Use better wrapper
+// - - Remove postgres
 // - Plant Updates
 // - - Publishing
 // - - Auto Create Sections

@@ -251,6 +251,7 @@ function createBackUpQuery(json: any) {
         }
     }
 
+    console.log(query)
     return query;
 }
 
