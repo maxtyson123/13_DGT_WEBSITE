@@ -172,6 +172,20 @@ export default function Page(){
         scrollMessages();
     }, [messages]);
 
+
+    const setupRealtime = useRef(false);
+    useEffect(() => {
+
+        if(setupRealtime.current) return;
+        setupRealtime.current = true;
+
+        // Create a timeout to refresh every 3
+        const interval = setInterval(() => {
+            fetchMessages();
+        }, 3000);
+
+    }, []);
+
     const scrollMessages = () => {
 
         // Scroll to the bottom of the messages
@@ -215,7 +229,7 @@ export default function Page(){
                                             type={message.message_user_id === (session?.user as RongoaUser).database.id ? "sent" : "received"}
                                         />
                                     </>
-
+sudo nano /etc/network/interfaces
                                 )
                             })}
                         </>

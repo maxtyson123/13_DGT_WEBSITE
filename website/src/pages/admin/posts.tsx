@@ -11,6 +11,8 @@ import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {PostCard, PostCardApi} from "@/pages/media/components/cards";
+import {getFilePath} from "@/lib/data";
+import {ModalImage} from "@/components/modal";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -19,6 +21,7 @@ export default function Admin(){
     const { data: session, update } = useSession()
 
     const [moderationIds, setModerationIds] = useState<number[]>([])
+    const [images, setImages] = useState<string[]>([])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
@@ -38,7 +41,9 @@ export default function Admin(){
             if(response.data.data){
 
                 const ids = response.data.data.map((post: any) => post.id)
+                const images = response.data.data.map((post: any) => getFilePath(post.post_user_id, post.id, post.post_image))
                 setModerationIds(ids)
+                setImages(images)
             }
             setLoadingMessage("")
 
@@ -85,13 +90,16 @@ export default function Admin(){
                         <div className={globalStyles.container}>
                             <div className={styles.adminHeaderContainer}>
                                 <h1>Post Moderation</h1>
+                                <p> There are {moderationIds.length} posts that need to be moderated. </p>
                             </div>
                         </div>
 
                         <div id={"widthReference"} style={{width: "400px", height: "50px"}}/>
                         <div className={styles.postsToModerate}>
                             {moderationIds && moderationIds.slice(currentIndex, currentIndex + 2).map((id) => (
-                                    <PostCardApi id={id} key={id}/>
+                                <ModalImage url={images[currentIndex]} description={"Post: " + id} key={id}>
+                                    <PostCardApi id={id} />
+                                </ModalImage>
                             ))}
                             {currentIndex >= moderationIds.length && (
                                 <div style={{
@@ -111,6 +119,7 @@ export default function Admin(){
                         <div className={styles.adminHeaderContainer}>
                             <div className={styles.approveAndDeny}>
                                 <button style={{background: "red"}} onClick={() => handleModeration("deny")}> Deny</button>
+                                <button style={{background: "orange"}} onClick={() => handleModeration("edit")}> Edit</button>
                                 <button onClick={() => handleModeration("approve")}> Approve</button>
                             </div>
                         </div>
