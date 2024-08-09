@@ -26,6 +26,8 @@ export default async function handler(
         let {
             operation,
             id,
+            post_title,
+            post_plant_id
 
         } = request.query;
 
@@ -54,6 +56,13 @@ export default async function handler(
 
                 // Deny the post
                 query = `DELETE FROM posts WHERE ${tables.id} = ${id};`;
+
+                break;
+
+            case "edit":
+
+                // Edit the post
+                query = `UPDATE posts SET ${tables.post_title} = '${post_title}', ${tables.post_approved} = true, ${tables.post_plant_id} = ${post_plant_id} WHERE ${tables.id} = ${id};`;
 
                 break;
 

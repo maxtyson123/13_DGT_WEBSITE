@@ -3,16 +3,17 @@ import styles from "@/styles/pages/admin.module.css";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
-import {makeRequestWithToken} from "@/lib/api_tools";
+import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
-import {FileInput, SmallInput, ValidationState} from "@/components/input_sections";
+import {DropdownInput, FileInput, SmallInput, ValidationState} from "@/components/input_sections";
 import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {PostCard, PostCardApi} from "@/pages/media/components/cards";
 import {getFilePath} from "@/lib/data";
 import {ModalImage} from "@/components/modal";
+import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
 export default function Admin(){
     const pageName = "Admin";
@@ -20,11 +21,17 @@ export default function Admin(){
     const router = useRouter()
     const { data: session, update } = useSession()
 
-    const [moderationIds, setModerationIds] = useState<number[]>([])
-    const [images, setImages] = useState<string[]>([])
+    const [posts, setPosts] = useState<any[]>([])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [loadingMessage, setLoadingMessage] = useState("")
     const [error, setError] = useState("")
+
+    const [postTitle, setPostTitle] = useState("")
+    const [plant, setPlant] = useState("")
+    const [plantNames, setPlantNames] = useState<string[]>(["Loading..."]);
+    const [plantIDs, setPlantIDs] = useState<string[]>([""]);
+
+    const [showEditPost, setShowEditPost] = useState(false)
 
 
     useEffect(() => {
@@ -33,6 +40,16 @@ export default function Admin(){
 
     const getUnModeratedPosts = async () => {
 
+        // Get the plants
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
+
+        // Get the plant names
+        const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
+        const plantIDs = plants.map((plant : any) => plant.id);
+
+        setPlantNames(plantNames);
+        setPlantIDs(plantIDs);
+
         try {
             setLoadingMessage("Loading posts to moderate")
             const response = await makeRequestWithToken("get", "/api/posts/moderate?operation=list")
@@ -40,10 +57,7 @@ export default function Admin(){
 
             if(response.data.data){
 
-                const ids = response.data.data.map((post: any) => post.id)
-                const images = response.data.data.map((post: any) => getFilePath(post.post_user_id, post.id, post.post_image))
-                setModerationIds(ids)
-                setImages(images)
+                setPosts(response.data.data)
             }
             setLoadingMessage("")
 
@@ -54,18 +68,30 @@ export default function Admin(){
     }
 
     const handleModeration = (action: string) => {
+        setLoadingMessage("Moderating post...")
+        setShowEditPost(false);
         const postContainer = document.querySelector(`.${styles.postsToModerate}`);
         const postCard = postContainer?.firstChild as HTMLElement;
+        const post_plant_id = plantIDs[plantNames.indexOf(plant)];
+
         if (postCard) {
             postCard.classList.add(styles.slideoutAnimation);
             setTimeout(async () => {
                 // Perform the moderation action (approve/deny)
-                await makeRequestWithToken("get", `/api/posts/moderate?id=${moderationIds[currentIndex]}&operation=${action}`);
+                let url = `/api/posts/moderate?id=${posts[currentIndex].id}&operation=${action}`;
+
+                if(action === "edit") {
+                    url += `&post_title=${postTitle}&post_plant_id=${post_plant_id}`;
+                }
+
+                await makeRequestWithToken("get", url);
+                setLoadingMessage("");
 
                 // Slide away the first post and show the next one
                 setCurrentIndex((prevIndex) => prevIndex + 1);
             }, 500); // Match the duration of the CSS transition
         }
+
     };
 
     return (
@@ -85,23 +111,56 @@ export default function Admin(){
                     </div>
                 </Section>
 
+                {showEditPost && (
+                    <div className={styles.editPostOverlay}>
+                        <div className={styles.editPostContainer}>
+                            <div className={styles.editPostHeader}>
+                                <h1>Edit Post</h1>
+                                <button onClick={() => setShowEditPost(false)}>Cancel</button>
+                            </div>
+                            <div className={styles.editPostContent}>
+                                <SmallInput
+                                    placeHolder={"Post Title"}
+                                    required={true}
+                                    state={"normal"}
+                                    defaultValue={posts[currentIndex].post_title}
+                                    changeEventHandler={setPostTitle}
+                                />
+
+                                <DropdownInput
+                                    placeHolder={"Plant"}
+                                    required={true}
+                                    state={"normal"}
+                                    options={plantNames}
+                                    defaultValue={plantNames[plantIDs.indexOf(posts[currentIndex].post_plant_id)]}
+                                    changeEventHandler={setPlant}
+                                />
+                                <button onClick={() => handleModeration("edit")}>Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    )
+                }
+
+
                 <Section autoPadding>
                     <div className={globalStyles.gridCentre}>
                         <div className={globalStyles.container}>
                             <div className={styles.adminHeaderContainer}>
                                 <h1>Post Moderation</h1>
-                                <p> There are {moderationIds.length} posts that need to be moderated. </p>
+                                <p> There are {posts.length} posts that need to be moderated. </p>
                             </div>
                         </div>
 
                         <div id={"widthReference"} style={{width: "400px", height: "50px"}}/>
-                        <div className={styles.postsToModerate}>
-                            {moderationIds && moderationIds.slice(currentIndex, currentIndex + 2).map((id) => (
-                                <ModalImage url={images[currentIndex]} description={"Post: " + id} key={id}>
-                                    <PostCardApi id={id} />
-                                </ModalImage>
+                        <ModalImage url={getFilePath(posts[currentIndex]?.post_user_id, posts[currentIndex]?.id, posts[currentIndex]?.post_image)} description={"Post: " + currentIndex} >
+                            <div className={styles.postsToModerate}>
+                            {posts && posts.slice(currentIndex, currentIndex + 2).map((post: any) => (
+
+                                    <PostCardApi id={post.id} key={post.id}/>
+
                             ))}
-                            {currentIndex >= moderationIds.length && (
+                            {currentIndex >= posts.length && (
                                 <div style={{
                                     background: "white",
                                     borderRadius: "10px",
@@ -115,11 +174,12 @@ export default function Admin(){
                                 </div>
                             )}
                         </div>
+                        </ModalImage>
 
                         <div className={styles.adminHeaderContainer}>
                             <div className={styles.approveAndDeny}>
                                 <button style={{background: "red"}} onClick={() => handleModeration("deny")}> Deny</button>
-                                <button style={{background: "orange"}} onClick={() => handleModeration("edit")}> Edit</button>
+                                <button style={{background: "orange"}} onClick={() => setShowEditPost(true)}> Edit</button>
                                 <button onClick={() => handleModeration("approve")}> Approve</button>
                             </div>
                         </div>
