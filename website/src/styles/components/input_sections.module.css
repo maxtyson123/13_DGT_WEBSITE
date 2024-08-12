@@ -99,12 +99,26 @@
   Style the input box to look better by changing the border and adding a border radius
   Make it take up the full width of the container
  */
-.smallInput input[type=text] {
+.smallInput input[type=text], .filteredSearchInput input[type=text], .filteredOptions {
     padding: var(--top-spacing) 16px 8px 16px;
     border-radius: 8px;
     width: 100%;
     background: var(--main-background);
+}
 
+
+.filteredOptions{
+    border-radius: 0px 0px 8px 8px;
+}
+
+.filteredOptions > p:hover{
+    color: var(--main-green);
+    cursor: pointer;
+}
+
+.filteredSearchInput input[type=text] {
+    border-radius: 8px 8px 0px 0px;
+    border-bottom: 2px solid var(--darker-secondary-gray);
 }
 
 .dropdownInput {
@@ -188,4 +202,12 @@
 
 .uploadButton input[type=file]{
     display: none;
+}
+
+.moreAvailable{
+    color: var(--darker-secondary-gray);
+}
+
+.moreAvailable:hover{
+    color: var(--darker-secondary-gray);
 }

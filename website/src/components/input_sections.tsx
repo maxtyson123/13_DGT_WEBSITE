@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faCloudArrowUp, faFile} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import {toTitleCase} from "@/lib/data";
 
 
 // States for the input
@@ -711,6 +712,168 @@ export function FileInput({placeHolder, defaultValue,  required, state, errorTex
                     {/* Show the error text if the state is in error */}
                     { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
                 </div>
+            </div>
+        </>
+    )
+}
+
+// Filterd search input
+type FilteredSearchInputProps = {
+    placeHolder: string;
+    defaultValue?: string;
+    required: boolean;
+    state: ValidationState;
+    errorText?: string;
+    changeEventHandler?: (value: string) => void;
+    options: string[];
+    forceOptions?: boolean;
+};
+
+/**
+ * A filtered search input element that will filter the options based on the input value. Will style it self-based on the validation state passed in, error text will be displayed if the state is "error". If it is required, the required text will be displayed but will be hidden when the input is focused. If there is a change event handler, it will be called when the input value changes. If there is a default value, it will be set as the initial value otherwise the placeholder will be displayed.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.placeHolder - The placeholder text for the filtered search input.
+ * @param {string} props.defaultValue - The default value of the filtered search input.
+ * @param {boolean} props.required - Indicates if the filtered search input is required.
+ * @param {ValidationState} props.state - The current validation state of the filtered search input.
+ * @param {string} props.errorText - The error text to display when the state is "error".
+ * @param {string[]} props.options - The available options for the filtered search input.
+ * @param {function} props.changeEventHandler - A function to handle input changes.
+ * @param {boolean} props.forceOptions - Does the input have to select an option from the list.
+ *
+ * @see {@link useInputState} for the hook that handles the input state.
+ * @see {@link ValidationState} for the type of the validation state.
+ *
+ * @returns {JSX.Element} - The filtered search input component.
+ */
+export function FilteredSearchInput({placeHolder, defaultValue, required, state, errorText = "", options, changeEventHandler, forceOptions}: FilteredSearchInputProps) {
+
+    // States to track
+    const [thisState, setThisState] = useState(state);
+    const [thisRequired, setThisRequired] = useState(required);
+
+    const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+
+    // Get the states and functions from the hook
+    const { inputValue, setInputValue, inputRef, handleInputFocus, handleInputBlur, isInputFocused } = useInputState(
+        "",
+        required,
+        state,
+        setThisState,
+        setThisRequired
+    );
+
+    // Set the state class based on the state
+    let stateClass = "";
+    switch (state) {
+        case "normal":
+            stateClass = styles.normal;
+            break;
+
+        case "error":
+            stateClass = styles.error;
+            break;
+
+        case "success":
+            stateClass = styles.success;
+            break;
+    }
+
+    /**
+     * Handles the change event of the input. Sets the input value and calls the change event handler if it exists.
+     *
+     * @param value - The value of the input.
+     */
+    const changeHandler = (value: string) => {
+        setInputValue(value);
+
+        // Value has changed so state is no longer valid
+        setThisState("normal")
+
+        // Get the options
+        let optionsToFilter = options;
+
+        // Remove the macrons
+        optionsToFilter = optionsToFilter.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
+
+        // Filter the options
+        optionsToFilter = optionsToFilter.filter(option => option.toLowerCase().includes(value.toLowerCase()));
+
+        // Set the first letter to be capital
+        optionsToFilter = optionsToFilter.map(option => toTitleCase(option));
+
+        // If there are no options, set the value to the input value (if force options is not set)
+        if(optionsToFilter.length === 0 && forceOptions){
+            optionsToFilter = ["Not available"];
+        }else{
+
+            // If there are more than 8 options, set 8 to be "More available"
+            if(optionsToFilter.length > 8){
+                optionsToFilter = [...optionsToFilter.slice(0, 7), "More available"];
+            }
+
+        }
+
+        // Set the filtered options
+        setFilteredOptions(optionsToFilter);
+
+
+
+        // Pass to the handler if it exists
+        if (changeEventHandler) {
+            changeEventHandler(value);
+        }
+    }
+
+    useEffect(() =>{
+
+        // If there is a default value, set it
+        if(defaultValue){
+            changeHandler(defaultValue)
+        }
+    }, [defaultValue])
+
+    return(
+        <>
+            {/* The filtered search input section */}
+            <div className={styles.filteredSearchInput + " " + stateClass} ref={inputRef}>
+
+                {/* Show the required text if the input is not focused */}
+                <p className={`${styles.required} ${isInputFocused ? styles.hidden : ''}`}>
+                    {thisRequired ? 'Required' : ''}
+                </p>
+
+                {/* Filtered search input */}
+                <div className={styles.selectBorder}>
+                    <input
+                        type="text"
+                        placeholder={placeHolder}
+                        value={inputValue}
+                        onChange={(e) => {
+                            changeHandler(e.target.value)
+                        }}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                    />
+
+
+                    {/* Show the top 8 options */}
+                    <div className={styles.filteredOptions}>
+                        {filteredOptions.slice(0, 8).map((option, index) => {
+                            return <p key={index} onClick={() => changeHandler(option)} className={option == "More available" ? styles.moreAvailable : ""}>{option}</p>
+                        })}
+                    </div>
+                </div>
+
+
+
+
+                {/* Show the success icon if the state is in success and if the input is not focused */}
+                {state === "success" ? <FontAwesomeIcon icon={faCircleCheck} className={`${styles.icon} ${isInputFocused ? styles.hidden : ''}`}/> : ''}
+
+                {/* Show the error text if the state is in error */}
+                { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
     )

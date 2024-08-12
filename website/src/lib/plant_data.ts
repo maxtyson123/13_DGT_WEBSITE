@@ -855,6 +855,7 @@ export function fixAttachmentsPaths (plant: PlantData) {
 }
 
 export const macronDictionary  = ["ā", "ē", "ī", "ō", "ū", "Ā", "Ē", "Ī", "Ō", "Ū"]
+export const letterDictionary  = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"]
 export const numberDictionary  = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 export const textDictionary    = ["macron_a", "macron_e", "macron_i", "macron_o", "macron_u", "macron_A", "macron_E", "macron_I", "macron_O", "macron_U"]
 

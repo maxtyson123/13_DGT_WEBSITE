@@ -6,7 +6,7 @@ import {useSession} from "next-auth/react";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
-import {DropdownInput, FileInput, SmallInput, ValidationState} from "@/components/input_sections";
+import {DropdownInput, FileInput, FilteredSearchInput, SmallInput, ValidationState} from "@/components/input_sections";
 import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
@@ -41,10 +41,10 @@ export default function Admin(){
     const getUnModeratedPosts = async () => {
 
         // Get the plants
-        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
 
         // Get the plant names
-        const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
+        const plantNames = plants.map((plant : any) => macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary));
         const plantIDs = plants.map((plant : any) => plant.id);
 
         setPlantNames(plantNames);
@@ -127,13 +127,14 @@ export default function Admin(){
                                     changeEventHandler={setPostTitle}
                                 />
 
-                                <DropdownInput
+                                <FilteredSearchInput
                                     placeHolder={"Plant"}
                                     required={true}
                                     state={"normal"}
                                     options={plantNames}
                                     defaultValue={plantNames[plantIDs.indexOf(posts[currentIndex].post_plant_id)]}
                                     changeEventHandler={setPlant}
+                                    forceOptions
                                 />
                                 <button onClick={() => handleModeration("edit")}>Submit</button>
                             </div>
