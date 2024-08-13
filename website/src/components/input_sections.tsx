@@ -752,6 +752,7 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
     // States to track
     const [thisState, setThisState] = useState(state);
     const [thisRequired, setThisRequired] = useState(required);
+    const [animate, setAnimate] = useState(false);
 
     const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
 
@@ -824,7 +825,15 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
         if (changeEventHandler) {
             changeEventHandler(value);
         }
+        setAnimate(true);
     }
+
+    useEffect(() => {
+        if (animate) {
+            const timer = setTimeout(() => setAnimate(false), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [animate]);
 
     useEffect(() =>{
 
@@ -861,7 +870,14 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
                     {/* Show the top 8 options */}
                     <div className={styles.filteredOptions}>
                         {filteredOptions.slice(0, 8).map((option, index) => {
-                            return <p key={index} onClick={() => changeHandler(option)} className={option == "More available" ? styles.moreAvailable : ""}>{option}</p>
+                            return <p
+                                key={index}
+                                onClick={() => changeHandler(option)}
+                                style={{ "--delay": `${index * 0.05}s` } as React.CSSProperties}
+                                className={(option == "More available" ? styles.moreAvailable : "") + " " + (animate ? styles.fadeIn : "")}
+                            >
+                                {option}
+                            </p>
                         })}
                     </div>
                 </div>

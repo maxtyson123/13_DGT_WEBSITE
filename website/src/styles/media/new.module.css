@@ -79,10 +79,15 @@
 
 .plantLink{
     width: 90%;
-    height: 100%;
     display: grid;
     justify-items: start;
     align-items: start;
+    height: 370px;
+}
+
+.plantLink > div{
+    width: 100%;
+
 }
 
 .postButton{

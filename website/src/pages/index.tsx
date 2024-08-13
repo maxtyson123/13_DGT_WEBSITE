@@ -24,7 +24,7 @@ import axios from "axios";
 // - Plant App
 // = = Moderation
 // = = Live Chat
-// - - Better Plan Search
+// = = Better Plan Search
 // - - Link To Rongoa (Images Popup and Home Feed)
 // - - Publish on stores
 // - Databse

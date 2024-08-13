@@ -211,3 +211,18 @@
 .moreAvailable:hover{
     color: var(--darker-secondary-gray);
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    opacity: 0;
+    animation: fadeIn 0.1s ease-in-out forwards;
+    animation-delay: var(--delay);
+}

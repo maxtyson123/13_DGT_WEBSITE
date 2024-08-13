@@ -1,7 +1,7 @@
 import Wrapper from "@/pages/media/components/wrapper";
 import styles from '@/styles/media/new.module.css'
-import {useEffect, useRef, useState} from "react";
-import {DropdownInput, SmallInput, ValidationState} from "@/components/input_sections";
+import React, {useEffect, useRef, useState} from "react";
+import {DropdownInput, FilteredSearchInput, SmallInput, ValidationState} from "@/components/input_sections";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
@@ -79,7 +79,18 @@ export default function Post(){
         const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
 
         // Get the plant names
-        const plantNames = plants.map((plant : any) => macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary));
+        const plantNames = plants.map((plant : any) => {
+
+            if (plant.maori_name && plant.english_name)
+                return  macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
+
+            if(plant.maori_name)
+                return macronCodeToChar(plant.maori_name, numberDictionary)
+
+            if(plant.english_name)
+                return macronCodeToChar(plant.english_name, numberDictionary)
+
+        });
         const plantIDs = plants.map((plant : any) => plant.id);
 
         setPlantNames(plantNames);
@@ -252,8 +263,14 @@ export default function Post(){
                     </div>
 
                     <div className={styles.plantLink}>
-                        <DropdownInput placeHolder={"Plant"} required={true} state={plantValidation}
-                                       options={plantNames} changeEventHandler={setPlant}/>
+                        <FilteredSearchInput
+                            placeHolder={"Plant"}
+                            required={true}
+                            state={"normal"}
+                            options={plantNames}
+                            changeEventHandler={setPlant}
+                            forceOptions
+                        />
                     </div>
 
 

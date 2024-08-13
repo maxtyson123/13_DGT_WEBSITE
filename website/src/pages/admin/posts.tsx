@@ -44,7 +44,18 @@ export default function Admin(){
         const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
 
         // Get the plant names
-        const plantNames = plants.map((plant : any) => macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary));
+        const plantNames = plants.map((plant : any) => {
+
+            if (plant.maori_name && plant.english_name)
+                return  macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
+
+            if(plant.maori_name)
+                return macronCodeToChar(plant.maori_name, numberDictionary)
+
+            if(plant.english_name)
+                return macronCodeToChar(plant.english_name, numberDictionary)
+
+        });
         const plantIDs = plants.map((plant : any) => plant.id);
 
         setPlantNames(plantNames);
@@ -68,11 +79,18 @@ export default function Admin(){
     }
 
     const handleModeration = (action: string) => {
+
+
         setLoadingMessage("Moderating post...")
         setShowEditPost(false);
         const postContainer = document.querySelector(`.${styles.postsToModerate}`);
         const postCard = postContainer?.firstChild as HTMLElement;
+
+        console.log(plant)
+        console.log(plantNames)
+        console.log(plantIDs)
         const post_plant_id = plantIDs[plantNames.indexOf(plant)];
+        console.log(post_plant_id)
 
         if (postCard) {
             postCard.classList.add(styles.slideoutAnimation);
@@ -180,7 +198,11 @@ export default function Admin(){
                         <div className={styles.adminHeaderContainer}>
                             <div className={styles.approveAndDeny}>
                                 <button style={{background: "red"}} onClick={() => handleModeration("deny")}> Deny</button>
-                                <button style={{background: "orange"}} onClick={() => setShowEditPost(true)}> Edit</button>
+                                <button style={{background: "orange"}} onClick={() => {
+                                   if(posts[currentIndex]?.post_plant_id) {
+                                       setShowEditPost(true);
+                                   }
+                                }}> Edit</button>
                                 <button onClick={() => handleModeration("approve")}> Approve</button>
                             </div>
                         </div>
