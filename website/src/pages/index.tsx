@@ -19,6 +19,7 @@ import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
 import {Layout} from "@/components/layout";
 import axios from "axios";
+import PostFeed from "@/components/postfeed";
 
 // TODO:
 // - Plant App
@@ -332,6 +333,18 @@ export default function Home() {
                         <Stats/>
                     </div>
                 </Section>
+
+               {/* Section for the images feed */}
+               <Section autoPadding>
+
+                   {/* Container for the images */}
+                   <div className={globalStyles.gridCentre}>
+
+                       {/* Display the images */}
+                       <PostFeed/>
+                   </div>
+               </Section>
+
 
            </Layout>
         </>

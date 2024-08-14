@@ -118,7 +118,7 @@ export function PostCard(props: PostCardProps) {
 
 
         // Get the plant information
-        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
         const plant = plants.find((plant: any) => plant.id === props.post_plant_id);
         if(plant != null) {
             let name = macronCodeToChar(getNamesInPreference(plant)[0], numberDictionary);

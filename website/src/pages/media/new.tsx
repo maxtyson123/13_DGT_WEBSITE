@@ -76,7 +76,7 @@ export default function Post(){
     const fetchData = async () => {
 
         // Get the plants
-        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true');
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
 
         // Get the plant names
         const plantNames = plants.map((plant : any) => {

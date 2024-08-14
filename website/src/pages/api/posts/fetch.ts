@@ -18,7 +18,14 @@ export default async function handler(
     const tables = getTables();
 
     // Get the id
-    const { id, operation, min, following,  page } = request.query;
+    const {
+        id,
+        operation,
+        min,
+        following,
+        page ,
+        plant_id
+    } = request.query;
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
@@ -38,9 +45,25 @@ export default async function handler(
 
         let query = '';
 
-        const amountPerPage = 3
+        let amountPerPage = 3
 
         switch (operation) {
+
+            case "siteFeed":
+
+
+                amountPerPage = 8
+
+                // Get the latest posts
+                query = `SELECT * FROM posts ORDER BY ${tables.post_date} DESC`;
+
+                // Check if a specific plant id was provided
+                if(plant_id) {
+                    query = `SELECT * FROM posts WHERE ${tables.post_plant_id} = ${plant_id} ORDER BY ${tables.post_date} DESC`;
+                }
+
+                break;
+
 
             case "list":
                 // Check if there is no user id

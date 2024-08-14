@@ -7,6 +7,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useIntersection} from "@mantine/hooks";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {PostCard} from "@/pages/media/components/cards";
+import {PostFeedCard} from "@/components/postfeed";
 
 interface InfiniteLoadingProps {
     searchQuery: string
@@ -71,6 +72,8 @@ export function InfiniteLoading({searchQuery, display} : InfiniteLoadingProps) {
 
                     {display === "PlantCardApi" && <PlantCardApi id={plant.id}/>}
                     {display === "PostCard" && <PostCard {...plant}/>}
+                    {display === "PostFeedCard" && <PostFeedCard {...plant}/>}
+
 
                 </div>
             ))}

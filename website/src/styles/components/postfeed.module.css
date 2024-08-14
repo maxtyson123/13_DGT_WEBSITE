@@ -1,0 +1,75 @@
+.postFeed{
+    width: 100%;
+}
+
+.postFeedHeader{
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 64px;
+    color: var(--text-dark);
+    padding: 5%;
+}
+
+/* Instagram like grid that displays the posts */
+.postGrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 5%;
+    align-items: center;
+}
+
+/*make the button span the entire width of the container */
+.postGrid button{
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    padding: 10px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.postCard{
+    background-color: var(--secondary-gray);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    width: 300px;
+    height: 300px;
+}
+
+.postCard img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* post card text at the bottom of the card with a gradient background fading from black to transparent */
+.postCardText{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    color: white;
+    font-size: 16px;
+}
+
+.postCard:hover p {
+    opacity: 1;
+    color: #94c47d;
+}
+
+.postCardText p{
+    opacity: 0.8;
+}
+
+/* On hover, the post card text will slide up to reveal the post, make sure the gradient background is still visible */
+.postCard:hover .postCardText{
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5));
+    font-size: 18px;
+    transition: 0.01s;
+}
