@@ -795,9 +795,6 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
         // Get the options
         let optionsToFilter = options;
 
-        // Remove the macrons
-        optionsToFilter = optionsToFilter.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
-
         // Filter the options
         optionsToFilter = optionsToFilter.filter(option => option.toLowerCase().includes(value.toLowerCase()));
 

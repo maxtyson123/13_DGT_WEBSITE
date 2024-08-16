@@ -54,13 +54,11 @@ export default async function handler(
 
                 amountPerPage = 8
 
-                // Get the latest posts
-                query = `SELECT * FROM posts ORDER BY ${tables.post_date} DESC`;
+                const specificQuery = plant_id ? ` AND ${tables.post_plant_id} = ${plant_id}` : ""
 
-                // Check if a specific plant id was provided
-                if(plant_id) {
-                    query = `SELECT * FROM posts WHERE ${tables.post_plant_id} = ${plant_id} ORDER BY ${tables.post_date} DESC`;
-                }
+                // Get the latest posts
+                query = `SELECT * FROM posts WHERE ${tables.post_approved} = 1 ${specificQuery} ORDER BY ${tables.post_date} DESC`;
+
 
                 break;
 

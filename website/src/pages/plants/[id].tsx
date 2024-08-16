@@ -17,6 +17,7 @@ import {Loading} from "@/components/loading";
 import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Layout} from "@/components/layout";
 import {loader_data} from "@/lib/loader_data";
+import PostFeed from "@/components/postfeed";
 
 export default function PlantPage() {
 
@@ -437,6 +438,14 @@ export default function PlantPage() {
                         </div>
                     </div>
                 </Section>
+
+
+                {/* Images feed */}
+                {plantData?.id &&
+                    <Section autoPadding>
+                        <PostFeed plant_id={plantData.id}/>
+                    </Section>
+                }
             </>
         )
     }

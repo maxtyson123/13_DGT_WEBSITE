@@ -70,3 +70,38 @@
         width: 100%;
     }
 }
+
+/* Overlay container */
+.imagePopup{
+    position: fixed;
+    /*display: none;*/
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--shadow-less);
+}
+
+.imagePopupContent{
+    position: relative;
+    margin: 10vh auto auto;
+    display: block;
+    width: 80vw;
+    padding: 20px;
+    height: 80vh;
+    background: white;
+    border-radius: 20px;
+
+}
+
+.tabs{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    gap: 10px;
+    margin: 10px 0;
+    border-bottom: 2px solid var(--secondary-gray);
+}
+
+.tab

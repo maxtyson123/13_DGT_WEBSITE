@@ -40,6 +40,7 @@ import {createToken, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
 import {Layout} from "@/components/layout";
 import { cleanInput } from "@/lib/data";
+import {ImagePopup} from "@/components/modal";
 
 
 /// _______________ SECTIONS _______________ ///
@@ -2921,6 +2922,9 @@ export default function CreatePlant() {
 
                     </div>
                 </div>
+
+                <ImagePopup />
+
             </Layout>
         </>
     )

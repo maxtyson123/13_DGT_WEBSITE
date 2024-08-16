@@ -50,3 +50,29 @@ export function ModalImage({url, description, show, hideCallbackOveride, childre
         </>
     )
 }
+
+
+
+/* Multi page image upload selector */
+export function ImagePopup({}){
+    return (
+        <div className={styles.imagePopup}>
+            <div className={styles.imagePopupContent}>
+
+                {/* Tab selector */}
+                <div className={styles.tabs}>
+
+                    <button className={styles.tab}>Current</button>
+                    <button className={styles.tab}>Gallery</button>
+                    <button className={styles.tab}>My Images</button>
+                    <button className={styles.tab}>Upload</button>
+                    <button className={styles.tab}>Close</button>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    )
+}

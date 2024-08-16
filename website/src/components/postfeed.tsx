@@ -59,7 +59,12 @@ export function PostFeedCard(props: PostCardProps) {
     )
 }
 
-export default function PostFeed() {
+
+type PostFeedProps = {
+    plant_id?: number,
+}
+
+export default function PostFeed(props: PostFeedProps) {
     const queryClient = new QueryClient()
 
     return (
@@ -71,7 +76,7 @@ export default function PostFeed() {
                 <div className={styles.postGrid}>
                     <QueryClientProvider client={queryClient}>
                        <InfiniteLoading
-                           searchQuery={"/api/posts/fetch?operation=siteFeed"}
+                           searchQuery={"/api/posts/fetch?operation=siteFeed" + (props.plant_id != null ? "&plant_id=" + props.plant_id : "")}
                            display={"PostFeedCard"}
                        />
                     </QueryClientProvider>

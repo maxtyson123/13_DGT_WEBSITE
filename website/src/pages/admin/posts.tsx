@@ -11,7 +11,7 @@ import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {PostCard, PostCardApi} from "@/pages/media/components/cards";
-import {getFilePath} from "@/lib/data";
+import {getFilePath, toTitleCase} from "@/lib/data";
 import {ModalImage} from "@/components/modal";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
@@ -44,7 +44,7 @@ export default function Admin(){
         const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
 
         // Get the plant names
-        const plantNames = plants.map((plant : any) => {
+        let plantNames = plants.map((plant : any) => {
 
             if (plant.maori_name && plant.english_name)
                 return  macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
@@ -56,6 +56,14 @@ export default function Admin(){
                 return macronCodeToChar(plant.english_name, numberDictionary)
 
         });
+
+
+        // Remove the macrons
+        plantNames = plantNames.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
+
+        // Set the first letter to be capital
+        plantNames = plantNames.map(option => toTitleCase(option));
+
         const plantIDs = plants.map((plant : any) => plant.id);
 
         setPlantNames(plantNames);

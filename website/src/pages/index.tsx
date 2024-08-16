@@ -18,7 +18,6 @@ import {makeRequestWithToken} from "@/lib/api_tools";
 import {useSession} from "next-auth/react";
 import {UserDatabaseDetails} from "@/lib/users";
 import {Layout} from "@/components/layout";
-import axios from "axios";
 import PostFeed from "@/components/postfeed";
 
 // TODO:
@@ -26,7 +25,7 @@ import PostFeed from "@/components/postfeed";
 // = = Moderation
 // = = Live Chat
 // = = Better Plan Search
-// - - Link To Rongoa (Images Popup and Home Feed)
+// - - Link To Rongoa (Images Popup and -H-o-m-e- -F-e-e-d-)
 // - - Publish on stores
 // - Databse
 // - - Use better wrapper
