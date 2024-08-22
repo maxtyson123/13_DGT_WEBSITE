@@ -23,11 +23,13 @@ import PostFeed from "@/components/postfeed";
 // TODO:
 // - Plant App
 // = = Moderation
-// = = Live Chat
+// = = Live Chats
 // = = Better Plan Search
 // - - Link To Rongoa (Images Popup and -H-o-m-e- -F-e-e-d-)
+// - - Denied Notification
+// - - Image Description
 // - - Publish on stores
-// - Databse
+// - Database
 // - - Use better wrapper
 // - - Remove postgres
 // - Plant Updates

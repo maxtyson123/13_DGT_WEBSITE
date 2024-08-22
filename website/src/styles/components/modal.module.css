@@ -86,22 +86,98 @@
 .imagePopupContent{
     position: relative;
     margin: 10vh auto auto;
-    display: block;
+    display: grid;
     width: 80vw;
     padding: 20px;
     height: 80vh;
     background: white;
     border-radius: 20px;
+    grid-template-columns: 0.75fr 0.25fr;
+    grid-template-rows: 0.1fr 0.9fr;
+    grid-template-areas:
+        "topbar sidepanel"
+        "content sidepanel";
 
 }
 
 .tabs{
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     width: 100%;
+    height: 100%;
     gap: 10px;
-    margin: 10px 0;
+    padding: 10px 0;
     border-bottom: 2px solid var(--secondary-gray);
+    grid-area: topbar;
 }
 
-.tab
+.activeTab{
+    position: relative;
+    top: 10px;
+    border-bottom: 2px solid var(--main-green);
+}
+
+
+.sidePanel{
+    grid-area: sidepanel;
+    width: 100%;
+    height: 100%;
+    border-left: 2px solid var(--secondary-gray);
+    box-shadow: -5px 0px 5px -3px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-rows: 0.6fr 0.2fr 0.3fr 0.1fr;
+    padding: 30% 0px 0px 20px;
+}
+
+.sidePanel img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px -3px var(--shadow-less);
+
+}
+
+.sidePanel h1{
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-top: 20px;
+}
+
+.sidePanel h3{
+    font-size: 0.9rem;
+    word-break: break-all;
+    color: var(--darker-secondary-gray);
+}
+
+
+/* Repeating grid for the content (like instagram), make it scrollable */
+.mainContent{
+    grid-area: content;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    justify-content: center;
+    padding: 5%;
+
+    overflow-y: auto;
+}
+
+.imageContainer{
+    background-color: var(--secondary-gray);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+    opacity: 0.8;
+}
+
+.imageContainer:hover{
+    opacity: 1;
+}

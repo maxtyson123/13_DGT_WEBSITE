@@ -5,7 +5,7 @@ import {useSession} from "next-auth/react";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {useRouter} from "next/router";
-import {addMeasureSuffix, getFilePath} from "@/lib/data";
+import {addMeasureSuffix, getFilePath, getPostImage} from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import {loader_data} from "@/lib/loader_data";
@@ -259,7 +259,7 @@ export default function Index() {
                                         postsData.map((post: any, index: number) => {
                                             return(
                                                 <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
-                                                    <Image fill placeholder={loader_data() as any}  src={getFilePath(currentId, post.id, post.post_image)} alt="Post"/>
+                                                    <Image fill placeholder={loader_data() as any}  src={getPostImage(post)} alt="Post"/>
                                                 </div>
                                             )
                                         })
@@ -271,7 +271,7 @@ export default function Index() {
                                         likesData.map((post: any, index: number) => {
                                             return(
                                                 <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
-                                                    <Image fill placeholder={loader_data() as any}  src={getFilePath(post.post_user_id, post.id, post.post_image)} alt="Post"/>
+                                                    <Image fill placeholder={loader_data() as any}  src={getPostImage(post)} alt="Post"/>
                                                 </div>
                                             )
                                         })

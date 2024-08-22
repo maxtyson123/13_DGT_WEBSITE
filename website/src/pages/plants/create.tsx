@@ -672,7 +672,7 @@ class EdibleInfo {
         nutritionalValue:   "",
         preparation:        "",
         preparationType:    "",
-        image:              "",
+        image:              [],
     };
 
     // Store the validation state for each input
@@ -682,18 +682,17 @@ class EdibleInfo {
         nutritionalValue:   ["normal", "No Error"] as [ValidationState, string],
         preparation:        ["normal", "No Error"] as [ValidationState, string],
         preparationType:    ["normal", "No Error"] as [ValidationState, string],
-        image:              ["normal", "No Error"] as [ValidationState, string],
     }
 
     section: JSX.Element = <></>;
 
     // Change Handlers that update the state
     handlePartOfPlantChange         = (value : string) => { this.state.partOfPlant     = value};
-    handleUseIdentifierChange       = (value : string) => {this.state.useIdentifier  = value};
+    handleUseIdentifierChange       = (value : string) => {this.state.useIdentifier    = value};
     handleNutritionalValueChange    = (value : string) => {this.state.nutritionalValue = value};
     handlePreparationChange         = (value : string) => {this.state.preparation      = value};
     handlePreparationTypeChange     = (value : string) => {this.state.preparationType  = value};
-    handleImageChange               = (value : string) => {this.state.image            = value};
+    handleImageChange               = (value : string[]) => {this.state.image          = value};
 
     // Update the section to show the current state
     setSection = (section: JSX.Element) => {this.section = section};
@@ -705,6 +704,7 @@ class EdibleInfo {
                 nutritionalValueHandler={this.handleNutritionalValueChange}
                 preparationHandler={this.handlePreparationChange}
                 preparationTypeHandler={this.handlePreparationTypeChange}
+                imageHandler={this.handleImageChange}
                 valid={this.valid}
                 state={this.state}
             />
@@ -759,13 +759,6 @@ class EdibleInfo {
             isValid = false;
         } else { this.valid.preparation = ["success", "No Error"] as [ValidationState, string]; }
 
-        // If there is no image selected then show an error otherwise the input is valid
-        if(this.state.image === "") {
-            this.valid.image = ["error", "Please select what image is related to the edible use of this plant"];
-            isValid = false;
-            this.showErrorInImage();
-        } else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
-
         // Update section to show validation
         this.reRenderSection();
 
@@ -785,13 +778,13 @@ type EdibleUseSectionProps = {
     nutritionalValueHandler: (value: string) => void;
     preparationTypeHandler:  (value: string) => void;
     preparationHandler:      (value: string) => void;
+    imageHandler:            (value: string[]) => void;
     valid: {
         partOfPlant:        [ValidationState, string];
         useIdentifier:     [ValidationState, string];
         nutritionalValue:   [ValidationState, string];
         preparation:        [ValidationState, string];
         preparationType:    [ValidationState, string];
-        image:              [ValidationState, string];
 
     }
     state: {
@@ -800,10 +793,16 @@ type EdibleUseSectionProps = {
         nutritionalValue:   string;
         preparation:        string;
         preparationType:    string;
-        image:        string;
+        image:              string[];
     }
 }
-export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, valid, state}: EdibleUseSectionProps){
+export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, imageHandler, valid, state}: EdibleUseSectionProps){
+
+    const [showImagePopup, setShowImagePopup] = useState(false);
+
+    useEffect(() => {
+        console.log(showImagePopup);
+    }, [showImagePopup]);
 
     return(
         <>
@@ -867,10 +866,28 @@ export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutr
                     changeEventHandler={preparationHandler}
                 />
             </div>
+
+
+            {/* Image Selector */}
+            <ImagePopup
+                show={showImagePopup}
+                hideCallback={(value: string[]) => setShowImagePopup(false)}
+            />
+
+            {/* Image Displays */}
+            <div className={styles.formItem}>
+
+                {/* Image Display */}
+
+                {/* Button to select image */}
+                <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}> <FontAwesomeIcon icon={faFile} /> Select Image </button>
+            </div>
         </>
     )
 }
 
+
+// TODO: Remove
 class ImageInfo{
 
     // Store the state of the section
@@ -2922,9 +2939,6 @@ export default function CreatePlant() {
 
                     </div>
                 </div>
-
-                <ImagePopup />
-
             </Layout>
         </>
     )

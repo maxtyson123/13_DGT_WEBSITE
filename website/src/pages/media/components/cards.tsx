@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE} from "@/lib/users";
 import stlyes from "@/styles/media/cards.module.css";
-import {getFilePath} from "@/lib/data";
+import {getFilePath, getPostImage} from "@/lib/data";
 import Image from "next/image";
 import {loader_data} from "@/lib/loader_data";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
@@ -222,7 +222,7 @@ export function PostCard(props: PostCardProps) {
                     <Image
                         fill
                         placeholder={loader_data() as any}
-                        src={getFilePath(props.post_user_id, props.id, props.post_image)}
+                        src={getPostImage(props)}
                         alt={props.post_title}
                         onClick={detectDoubleTap}
                     />

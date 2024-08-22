@@ -43,6 +43,23 @@ export function getFilePath(userId: number, postId: number, fileName: string): s
 
 }
 
+export function getPostImage(post): string {
+
+    // Base
+    let path = process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/"
+
+    // Add the user id
+    path += post.post_user_id + "/posts/"
+
+    // Add the post id
+    path += post.id + "/" + post.post_image
+
+    path = path.replaceAll("’", "'");
+
+    return path;
+
+}
+
 export function toTitleCase(str: string): string {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }

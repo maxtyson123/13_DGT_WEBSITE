@@ -1,6 +1,6 @@
 import styles from "@/styles/components/postfeed.module.css";
 import Link from "next/link";
-import {getFilePath} from "@/lib/data";
+import {getFilePath, getPostImage} from "@/lib/data";
 import {useEffect, useState} from "react";
 import {makeCachedRequest} from "@/lib/api_tools";
 import {ADMIN_USER_TYPE, EDITOR_USER_TYPE, MEMBER_USER_TYPE} from "@/lib/users";
@@ -50,7 +50,7 @@ export function PostFeedCard(props: PostCardProps) {
                 window.location.href = `/plants/${props.post_plant_id}`;
             }
         } className={styles.postCard}>
-            <Image fill src={getFilePath(props.post_user_id, props.id, props.post_image)} alt={props.post_title}/>
+            <Image fill src={getPostImage(props)} alt={props.post_title}/>
             <div className={styles.postCardText}>
                 <h1>{props.post_title}</h1>
                 <p>{plantName}</p>

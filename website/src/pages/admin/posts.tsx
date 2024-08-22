@@ -11,7 +11,7 @@ import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {PostCard, PostCardApi} from "@/pages/media/components/cards";
-import {getFilePath, toTitleCase} from "@/lib/data";
+import {getFilePath, getPostImage, toTitleCase} from "@/lib/data";
 import {ModalImage} from "@/components/modal";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
@@ -180,7 +180,7 @@ export default function Admin(){
                         </div>
 
                         <div id={"widthReference"} style={{width: "400px", height: "50px"}}/>
-                        <ModalImage url={getFilePath(posts[currentIndex]?.post_user_id, posts[currentIndex]?.id, posts[currentIndex]?.post_image)} description={"Post: " + currentIndex} >
+                        <ModalImage url={getPostImage(posts[currentIndex])} description={"Post: " + currentIndex} >
                             <div className={styles.postsToModerate}>
                             {posts && posts.slice(currentIndex, currentIndex + 2).map((post: any) => (
 
