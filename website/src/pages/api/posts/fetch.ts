@@ -27,14 +27,23 @@ export default async function handler(
         plant_id
     } = request.query;
 
-    // Check if the user is permitted to access the API
-    const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:data:access")
-    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
-    // Get the user id
-    const user = session?.user as RongoaUser;
-    const uid = user.database.id;                // Get the user id
+    let uid;
+
+    if(operation != "siteFeed"){
+
+        // Check if the user is permitted to access the API
+        const session = await getServerSession(request, response, authOptions)
+        const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:data:access")
+        if(!permission) return response.status(401).json({error: "Not Authorized"})
+
+        // Get the user id
+        const user = session?.user as RongoaUser;
+        uid = user.database.id;                // Get the user id
+    }
+
+
+
 
     try {
 

@@ -799,10 +799,20 @@ type EdibleUseSectionProps = {
 export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, imageHandler, valid, state}: EdibleUseSectionProps){
 
     const [showImagePopup, setShowImagePopup] = useState(false);
+    const [ID, setID] = useState<any>(null)
+    const router = useRouter()
 
     useEffect(() => {
         console.log(showImagePopup);
     }, [showImagePopup]);
+
+    useEffect(() => {
+
+        // Get the id from the path
+        let {id} = router.query;
+        setID(id);
+
+    }, []);
 
     return(
         <>
@@ -872,6 +882,7 @@ export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutr
             <ImagePopup
                 show={showImagePopup}
                 hideCallback={(value: string[]) => setShowImagePopup(false)}
+                id={ID}
             />
 
             {/* Image Displays */}

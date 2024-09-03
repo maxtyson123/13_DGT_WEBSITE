@@ -26,7 +26,6 @@ import PostFeed from "@/components/postfeed";
 // = = Live Chats
 // = = Better Plan Search
 // - - Link To Rongoa (Images Popup and -H-o-m-e- -F-e-e-d-)
-// - - Denied Notification
 // - - Image Description
 // - - Publish on stores
 // - Database
@@ -35,6 +34,7 @@ import PostFeed from "@/components/postfeed";
 // - Plant Updates
 // - - Publishing
 // - - Auto Create Sections
+// - - Fix Image Pop Up
 // - - New Create Page
 // - - API v2
 // - - Change Edit Mode

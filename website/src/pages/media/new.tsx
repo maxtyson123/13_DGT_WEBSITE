@@ -56,8 +56,6 @@ export default function Post(){
         followersFetch(id);
 
 
-
-
     }, [session]);
 
     const followersFetch = async (id: number) => {

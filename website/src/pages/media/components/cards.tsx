@@ -280,13 +280,15 @@ export function UserCard(props: UserCardProps) {
     const [userImage, setUserImage] = useState("/media/images/small_loading.gif")
     const [userType, setUserType] = useState("")
     const [followers, setFollowers] = useState(0)
-    const dataFetch = useRef(false);
+    const dataFetch = useRef(props.id);
 
     useEffect(() => {
-        if(dataFetch.current) return;
-        dataFetch.current = true;
+        console.log(props.id)
+        if(props.id == dataFetch.current) return;
+            dataFetch.current = props.id;
         fetchData();
-    }, []);
+
+    }, [props.id]);
 
     const fetchData = async () => {
 
