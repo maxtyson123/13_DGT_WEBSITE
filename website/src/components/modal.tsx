@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import styles from "@/styles/components/modal.module.css"
 import {fetchPlant, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
@@ -66,7 +66,7 @@ type ImagePopupProps = {
 }
 
 /* Multi page image upload selector */
-export function ImagePopup({show, hideCallback, id = 1}: ImagePopupProps) {
+export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
     const [activeTab, setActiveTab] = useState(0)
     const [defaultShow, setDefaultShow] = useState(false)
@@ -127,14 +127,13 @@ export function ImagePopup({show, hideCallback, id = 1}: ImagePopupProps) {
         const plantOBJ = await fetchPlant(id);
 
         // Fetch the images for this post
-        const userPosts = await makeCachedRequest("editor_posts_mine_"+id, `/api/posts/fetch?operation=list&id=${(id ? id : (session?.user as RongoaUser).database.id)}`);
+        const userPosts = await makeCachedRequest("editor_posts_mine_"+id, `/api/posts/fetch?operation=list&id=${(session?.user as RongoaUser).database.id}`);
         console.log(userPosts);
         if(userPosts){
             // Reverse the posts
             userPosts.reverse();
 
-            let plantUserPosts = userPosts.filter((post: any) => post.plant_id === id)
-
+            let plantUserPosts = userPosts.filter((post: any) => post.post_plant_id == id)
             setMyImages(plantUserPosts);
         }
 
@@ -193,6 +192,14 @@ export function ImagePopup({show, hideCallback, id = 1}: ImagePopupProps) {
         hideCallback()
     }
 
+    const dropFile = (event: any) =>{
+        console.log(event.dataTransfer.items)
+    }
+
+    const dragOver = () =>{
+
+    }
+
     return (
             <>
                 {defaultShow &&
@@ -246,26 +253,51 @@ export function ImagePopup({show, hideCallback, id = 1}: ImagePopupProps) {
 
 
                             {/* Main content */}
-                            <div className={styles.mainContent}>
-                                    {currentDisplayImages.map((post: any, index: number) => {
-                                        return (
-                                            <div className={styles.imageContainer} key={index}>
-                                                <img src={getPostImage(post)}
-                                                     alt={"Placeholder"}
-                                                     onClick={() => {
-                                                         setCurrentImage(getPostImage(post))
-                                                         setCurrentImageName(post.post_title)
-                                                         setCurrentImageUser(post.post_user_id)
-                                                         setCurrentImagePlant(plantNames[plantIDs.indexOf(post.post_plant_id)])
-                                                         setCurrentImageDate(new Date(post.post_date).toLocaleString())
+                            <div
+                                className={styles.mainContent}
+                                onDrop={dropFile}
+                                onDragOver={dragOver}
+                            >
 
-                                                     }}
-                                                />
-                                            </div>
-                                        )
+                                {activeTab == 3 ?
+                                    <>
+                                        <div
+                                            className={styles.uploadForm}
 
-                                    })}
+                                        >
 
+
+                                            {/* Image Title */}
+
+                                            {/* Image Descripton */}
+
+                                            {/* Upload Button */}
+
+
+                                        </div>
+                                    </>
+                                :
+                                    <>
+                                        {currentDisplayImages.map((post: any, index: number) => {
+                                            return (
+                                                <div className={styles.imageContainer} key={index}>
+                                                    <img src={getPostImage(post)}
+                                                         alt={"Placeholder"}
+                                                         onClick={() => {
+                                                             setCurrentImage(getPostImage(post))
+                                                             setCurrentImageName(post.post_title)
+                                                             setCurrentImageUser(post.post_user_id)
+                                                             setCurrentImagePlant(plantNames[plantIDs.indexOf(post.post_plant_id)])
+                                                             setCurrentImageDate(new Date(post.post_date).toLocaleString())
+
+                                                         }}
+                                                    />
+                                                </div>
+                                            )
+
+                                        })}
+                                    </>
+                                }
                             </div>
 
                         </div>
