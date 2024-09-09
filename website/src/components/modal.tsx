@@ -70,6 +70,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
     const [activeTab, setActiveTab] = useState(0)
     const [defaultShow, setDefaultShow] = useState(false)
+    const [isDragging, setIsDragging] = useState(false);
     const {data: session} = useSession();
 
     const [currentImage, setCurrentImage] = useState("/media/images/logo.svg")
@@ -82,6 +83,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     const [thisImages, setThisImages] = useState<object[]>([])
     const [postImages, setPostImages] = useState<object[]>([])
     const [myImages, setMyImages] = useState<object[]>([])
+    const [localImages, setLocalImages] = useState<string[]>([])
 
     const [currentDisplayImages, setCurrentDisplayImages] = useState<object[]>([])
 
@@ -192,11 +194,42 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         hideCallback()
     }
 
-    const dropFile = (event: any) =>{
-        console.log(event.dataTransfer.items)
+    const dragOver = (event: React.DragEvent) => {
+        event.preventDefault();
+        setIsDragging(true);
+    };
+
+    const dropFile = (event: React.DragEvent) => {
+        event.preventDefault();
+        setIsDragging(false);
+        handleFiles(event.dataTransfer.files);
+
+    };
+
+    const submitFile = () => {
+
+        // Create and click an file input
+        const input = document.createElement('input') as HTMLInputElement;
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (event: ChangeEvent<HTMLInputElement>) => {
+            if (event.target.files) {
+                handleFiles(event.target.files);
+            }
+        };
+        input.click();
     }
 
-    const dragOver = () =>{
+    const dragLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleFiles = (files: FileList) => {
+
+        // Create blobs for all the files
+        const blobs = Array.from(files).map(file => URL.createObjectURL(file))
+
+        setLocalImages((prev) => [...prev, ...blobs])
 
     }
 
@@ -236,49 +269,63 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                      alt={currentImageName}/>
 
                                 <div>
-                                    <h1>{currentImageName}</h1>
+                                    <h1
+                                        contentEditable={activeTab == 3}
+                                    >{currentImageName}</h1>
                                     <h2>Description</h2>
                                 </div>
 
                                 <div>
                                     <h3>{currentImage}</h3>
-                                    <h3>{currentImagePlant}</h3>
-                                    <h3>{currentImageDate}</h3>
+                                    { activeTab !== 3 &&
+                                        <>
+                                            <h3>{currentImagePlant}</h3>
+                                            <h3>{currentImageDate}</h3>
+                                        </>
+                                    }
                                 </div>
 
-
-                                <UserCard id={currentImageUser}/>
+                                {activeTab !== 3 &&
+                                    <UserCard id={currentImageUser}/>
+                                }
 
                             </div>
 
 
                             {/* Main content */}
                             <div
-                                className={styles.mainContent}
+                                className={`${styles.mainContent} ${isDragging ? styles.dragging : ''}`}
                                 onDrop={dropFile}
                                 onDragOver={dragOver}
+                                onDragLeave={dragLeave}
                             >
-
+                                {isDragging && <div className={styles.dragText}>Drop your image here</div>}
                                 {activeTab == 3 ?
                                     <>
-                                        <div
-                                            className={styles.uploadForm}
+                                        {/* Current Image Blobs */}
+                                        {localImages.map((image, index) => {
+                                            return (
+                                                <div className={styles.imageContainer} key={index}>
+                                                    <img src={image}
+                                                         alt={"Placeholder"}
+                                                         onClick={() => {
+                                                             setCurrentImage(image)
+                                                             setCurrentImageName("Please Type a Title Here")
+                                                         }}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
 
-                                        >
+                                        {/* Upload Image Only Button */}
+                                        {!isDragging &&
+                                            <button className={styles.uploadImageButton} onClick={submitFile}>Upload
+                                                Image</button>}
 
-
-                                            {/* Image Title */}
-
-                                            {/* Image Descripton */}
-
-                                            {/* Upload Button */}
-
-
-                                        </div>
                                     </>
-                                :
+                                    :
                                     <>
-                                        {currentDisplayImages.map((post: any, index: number) => {
+                                    {currentDisplayImages.map((post: any, index: number) => {
                                             return (
                                                 <div className={styles.imageContainer} key={index}>
                                                     <img src={getPostImage(post)}
