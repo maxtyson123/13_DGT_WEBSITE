@@ -6,6 +6,8 @@ import {getFilePath, getPostImage} from "@/lib/data";
 import {UserCard} from "@/pages/media/components/cards";
 import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
+import {PlantSelector} from "@/components/input_sections";
+import {Loading} from "@/components/loading";
 
 interface ModalImageProps {
     url: string
@@ -19,6 +21,7 @@ export function ModalImage({url, description, show, hideCallbackOveride, childre
 
 
     const [defaultShow, setDefaultShow] = useState(false)
+
 
     useEffect(() => {
         if(defaultShow) {
@@ -79,12 +82,15 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     const [currentImageDate, setCurrentImageDate] = useState("No Date")
     const [currentImagePlant, setCurrentImagePlant] = useState("No Plant Selected")
     const [currentImageUser, setCurrentImageUser] = useState(20)
+    const [currentSelectedPlant, setCurrentSelectedPlant] = useState(0)
 
     const [thisImages, setThisImages] = useState<object[]>([])
     const [postImages, setPostImages] = useState<object[]>([])
     const [myImages, setMyImages] = useState<object[]>([])
     const [localImages, setLocalImages] = useState<string[]>([])
+    const [localFiles, setLocalFiles] = useState<File[]>([])
 
+    const [loadingMessage, setLoadingMessage] = useState("")
     const [currentDisplayImages, setCurrentDisplayImages] = useState<object[]>([])
 
     const [plantNames, setPlantNames] = useState<string[]>(["Loading..."]);
@@ -230,11 +236,45 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         const blobs = Array.from(files).map(file => URL.createObjectURL(file))
 
         setLocalImages((prev) => [...prev, ...blobs])
+        setLocalFiles((prev) => [...prev, ...Array.from(files)])
+
+    }
+
+
+    const uploadImage = async (image: string) => {
+
+
+        // Get the file
+        const file = localFiles[localImages.indexOf(image)]
+        console.log(file)
+
+        // Check if there is a plant and a title
+        if(currentSelectedPlant === 0 || currentSelectedPlant === undefined) {
+            alert("Please select a plant")
+            return;
+        }
+
+        const titleInput = document.getElementById("title") as HTMLElement;
+        const title = titleInput.innerText;
+        if(title === "Please Type a Title Here") {
+            alert("Please type a title")
+            return;
+        }
+
+
+        // Set the loading message
+        setLoadingMessage("Uploading image")
+
+        // Create a form data object
+
+
+
 
     }
 
     return (
             <>
+                {loadingMessage && <Loading progressMessage={loadingMessage}/>}
                 {defaultShow &&
                     <div className={styles.imagePopup}>
                         <div className={styles.imagePopupContent}>
@@ -270,6 +310,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
                                 <div>
                                     <h1
+                                        id={"title"}
                                         contentEditable={activeTab == 3}
                                     >{currentImageName}</h1>
                                     <h2>Description</h2>
@@ -277,15 +318,25 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
                                 <div>
                                     <h3>{currentImage}</h3>
-                                    { activeTab !== 3 &&
+                                    { activeTab !== 3 ?
                                         <>
                                             <h3>{currentImagePlant}</h3>
                                             <h3>{currentImageDate}</h3>
                                         </>
+                                        :
+                                        <>
+                                            <PlantSelector setPlant={setCurrentSelectedPlant} allowNew={false}/>
+                                        </>
                                     }
                                 </div>
 
-                                {activeTab !== 3 &&
+                                {activeTab == 3 ?
+                                     <>
+                                         <button
+                                             className={styles.uploadImageButton}
+                                             onClick={() => uploadImage(currentImage)}>Upload</button>
+                                     </>
+                                    :
                                     <UserCard id={currentImageUser}/>
                                 }
 

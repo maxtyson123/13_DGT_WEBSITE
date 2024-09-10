@@ -1,7 +1,13 @@
 import Wrapper from "@/pages/media/components/wrapper";
 import styles from '@/styles/media/new.module.css'
 import React, {useEffect, useRef, useState} from "react";
-import {DropdownInput, FilteredSearchInput, SmallInput, ValidationState} from "@/components/input_sections";
+import {
+    DropdownInput,
+    FilteredSearchInput,
+    PlantSelector,
+    SmallInput,
+    ValidationState
+} from "@/components/input_sections";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
@@ -20,11 +26,8 @@ export default function Post(){
     const [postError, setPostError] = useState<string>("")
 
     const [plant, setPlant] = useState('');
-    const [plantValidation, setPlantValidation] = useState<ValidationState>("normal")
-    const [plantError, setPlantError] = useState<string>("")
+    const [currentPlant, setCurrentPlant] = useState<number>(0);
 
-    const [plantNames, setPlantNames] = useState<string[]>(["Loading..."]);
-    const [plantIDs, setPlantIDs] = useState<string[]>([""]);
     const [userIDs, setUserIDs] = useState<string[]>([]);
 
     const [image, setImage] = useState<File | null>(null);
@@ -33,7 +36,7 @@ export default function Post(){
     const [loading, setLoading] = useState("");
 
     const {data: session} = useSession();
-    const [userID, setUserID] = useState<number>(0);
+
 
     const dataFetch = useRef(false);
     useEffect(() => {
@@ -47,52 +50,8 @@ export default function Post(){
 
     }, []);
 
-    useEffect(() => {
-        if(session?.user == null) return;
-
-        const id = (session.user as RongoaUser).database.id;
-
-        setUserID(id);
-        followersFetch(id);
-
-
-    }, [session]);
-
-    const followersFetch = async (id: number) => {
-
-        const followers = await makeRequestWithToken('get', '/api/user/follow?operation=listFollowers&id=' + id);
-        const ids = followers.data.data
-
-        let previousIDs = []
-        for (let i = 0; i < ids.length; i++) {
-            previousIDs.push(ids[i].follower_id)
-        }
-        setUserIDs(previousIDs)
-        console.log(previousIDs)
-    }
 
     const fetchData = async () => {
-
-        // Get the plants
-        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
-
-        // Get the plant names
-        const plantNames = plants.map((plant : any) => {
-
-            if (plant.maori_name && plant.english_name)
-                return  macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
-
-            if(plant.maori_name)
-                return macronCodeToChar(plant.maori_name, numberDictionary)
-
-            if(plant.english_name)
-                return macronCodeToChar(plant.english_name, numberDictionary)
-
-        });
-        const plantIDs = plants.map((plant : any) => plant.id);
-
-        setPlantNames(plantNames);
-        setPlantIDs(plantIDs);
 
     }
 
@@ -127,94 +86,24 @@ export default function Post(){
             return
         }
 
+
         // Check if there is a plant
-        if(plant == ""){
-            setPlantValidation("error")
-            setPlantError("Please select a plant")
+        if(currentPlant == 0  || currentPlant == undefined){
+            setPostValidation("error")
+            setPostError("Please select a plant")
             return
         }
 
         // Compress the image
-        setLoading("Compressing Image...")
-        const options = {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true,
-        }
-        let compressedFile;
-        try {
-            compressedFile = await imageCompression(image, options);
-            console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
 
-        } catch (error) {
-            console.log(error);
-            return
-        }
-
-        // Create a new file instance for the blob with the name and type from the original file
-        const compressedImage = new File([compressedFile], image.name, {type: image.type});
-
-        // Loading
-        setLoading("Uploading Information...")
-        const post_title = postTitle;
-        const post_plant_id = plantIDs[plantNames.indexOf(plant)];
-        const plant_image = cleanInput(compressedImage.name)
-
-        console.log(post_plant_id)
-        console.log(plantIDs)
-
-
-        // Send the post data to the server
-        const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image);
-
-        console.log(response)
-        console.log(userID)
-
-        // Get the post id
-        const newId = response.data.id
-
-        // Upload the image
-        setLoading("Uploading Image...")
-
-        // Create a new form data object and append the file to it
-        const formData = new FormData();
-        formData.append('file', compressedImage);
-        formData.append('id', newId);
-        formData.append('path', 'users/' + userID + '/posts');
-
-        try {
-            // Send the form data to the server
-            console.log("Uploading file")
-            const response = await makeRequestWithToken('post', '/api/files/upload', formData);
-
-            // Check if the file was uploaded successfully
-            if (!response.data.error) {
-                console.log("File uploaded successfully")
-            }
-
-        } catch (error) {
-            console.log('An error occurred.');
-        }
-
-
-        // Send the notification to the followers
-        setLoading("Sending Notifications...")
-        let uids = ""
-        for (let i = 0; i < userIDs.length; i++) {
-            uids += "&user_ids=" + userIDs[i]
-        }
-        console.log(uids)
-
-        const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
-
+        await postImage(image, setLoading)
         setLoading("")
 
         // Redirect to the post
         router.push("/media/")
     }
 
-    return(
+        return(
         <Wrapper>
 
             {loading != "" && <Loading progressMessage={loading}/>}
@@ -257,17 +146,14 @@ export default function Post(){
 
                     <div className={styles.postTitle}>
                         <SmallInput placeHolder={"Post Title"} required={true} state={postValidation}
+                                    errorText={postError}
                                     changeEventHandler={setPostTitle}/>
                     </div>
 
                     <div className={styles.plantLink}>
-                        <FilteredSearchInput
-                            placeHolder={"Plant"}
-                            required={true}
-                            state={"normal"}
-                            options={plantNames}
-                            changeEventHandler={setPlant}
-                            forceOptions
+                        <PlantSelector
+                            setPlant={setCurrentPlant}
+                            allowNew={false}
                         />
                     </div>
 
@@ -283,4 +169,87 @@ export default function Post(){
             </div>
         </Wrapper>
     )
+}
+
+export const postImage = async (image: File, postTitle: string, currentPlant: number, userID: number, setLoadingMessage: (message: string) => void) => {
+
+
+
+
+    const followers = await makeRequestWithToken('get', '/api/user/follow?operation=listFollowers&id=' + userID);
+    const ids = followers.data.data
+
+    let userIDs = []
+    for (let i = 0; i < ids.length; i++) {
+        userIDs.push(ids[i].follower_id)
+    }
+
+    setLoadingMessage("Compressing Image...")
+    const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+    }
+    let compressedFile;
+    try {
+        compressedFile = await imageCompression(image, options);
+        console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+    } catch (error) {
+        console.log(error);
+        return
+    }
+
+    // Create a new file instance for the blob with the name and type from the original file
+    const compressedImage = new File([compressedFile], image.name, {type: image.type});
+
+    // Loading
+    setLoadingMessage("Uploading Information...")
+    const post_title = postTitle;
+    const post_plant_id = currentPlant
+    const plant_image = cleanInput(compressedImage.name)
+
+    // Send the post data to the server
+    const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image);
+
+    console.log(response)
+    console.log(userID)
+
+    // Get the post id
+    const newId = response.data.id
+
+    // Upload the image
+    setLoadingMessage("Uploading Image...")
+
+    // Create a new form data object and append the file to it
+    const formData = new FormData();
+    formData.append('file', compressedImage);
+    formData.append('id', newId);
+    formData.append('path', 'users/' + userID + '/posts');
+
+    try {
+        // Send the form data to the server
+        console.log("Uploading file")
+        const response = await makeRequestWithToken('post', '/api/files/upload', formData);
+
+        // Check if the file was uploaded successfully
+        if (!response.data.error) {
+            console.log("File uploaded successfully")
+        }
+
+    } catch (error) {
+        console.log('An error occurred.');
+    }
+
+
+    // Send the notification to the followers
+    setLoadingMessage("Sending Notifications...")
+    let uids = ""
+    for (let i = 0; i < userIDs.length; i++) {
+        uids += "&user_ids=" + userIDs[i]
+    }
+    console.log(uids)
+
+    const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
 }

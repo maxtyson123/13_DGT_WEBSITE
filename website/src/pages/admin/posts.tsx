@@ -6,7 +6,14 @@ import {useSession} from "next-auth/react";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {globalStyles} from "@/lib/global_css";
 import { useLogger } from 'next-axiom';
-import {DropdownInput, FileInput, FilteredSearchInput, SmallInput, ValidationState} from "@/components/input_sections";
+import {
+    DropdownInput,
+    FileInput,
+    FilteredSearchInput,
+    PlantSelector,
+    SmallInput,
+    ValidationState
+} from "@/components/input_sections";
 import {useRouter} from "next/router";
 import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
@@ -28,8 +35,7 @@ export default function Admin(){
 
     const [postTitle, setPostTitle] = useState("")
     const [plant, setPlant] = useState("")
-    const [plantNames, setPlantNames] = useState<string[]>(["Loading..."]);
-    const [plantIDs, setPlantIDs] = useState<string[]>([""]);
+    const [currentPlant, setCurrentPlant] = useState(0)
 
     const [showEditPost, setShowEditPost] = useState(false)
 
@@ -39,35 +45,6 @@ export default function Admin(){
     }, [])
 
     const getUnModeratedPosts = async () => {
-
-        // Get the plants
-        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
-
-        // Get the plant names
-        let plantNames = plants.map((plant : any) => {
-
-            if (plant.maori_name && plant.english_name)
-                return  macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
-
-            if(plant.maori_name)
-                return macronCodeToChar(plant.maori_name, numberDictionary)
-
-            if(plant.english_name)
-                return macronCodeToChar(plant.english_name, numberDictionary)
-
-        });
-
-
-        // Remove the macrons
-        plantNames = plantNames.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
-
-        // Set the first letter to be capital
-        plantNames = plantNames.map(option => toTitleCase(option));
-
-        const plantIDs = plants.map((plant : any) => plant.id);
-
-        setPlantNames(plantNames);
-        setPlantIDs(plantIDs);
 
         try {
             setLoadingMessage("Loading posts to moderate")
@@ -88,6 +65,10 @@ export default function Admin(){
 
     const handleModeration = (action: string) => {
 
+        if(currentPlant === 0 || currentPlant === undefined) {
+            alert("Please select a plant")
+            return;
+        }
 
         setLoadingMessage("Moderating post...")
         setShowEditPost(false);
@@ -95,9 +76,7 @@ export default function Admin(){
         const postCard = postContainer?.firstChild as HTMLElement;
 
         console.log(plant)
-        console.log(plantNames)
-        console.log(plantIDs)
-        const post_plant_id = plantIDs[plantNames.indexOf(plant)];
+        const post_plant_id = currentPlant;
         console.log(post_plant_id)
 
         if (postCard) {
@@ -153,14 +132,9 @@ export default function Admin(){
                                     changeEventHandler={setPostTitle}
                                 />
 
-                                <FilteredSearchInput
-                                    placeHolder={"Plant"}
-                                    required={true}
-                                    state={"normal"}
-                                    options={plantNames}
-                                    defaultValue={plantNames[plantIDs.indexOf(posts[currentIndex].post_plant_id)]}
-                                    changeEventHandler={setPlant}
-                                    forceOptions
+                                <PlantSelector
+                                    setPlant={setCurrentPlant}
+                                    allowNew={false}
                                 />
                                 <button onClick={() => handleModeration("edit")}>Submit</button>
                             </div>
@@ -180,28 +154,30 @@ export default function Admin(){
                         </div>
 
                         <div id={"widthReference"} style={{width: "400px", height: "50px"}}/>
-                        <ModalImage url={getPostImage(posts[currentIndex])} description={"Post: " + currentIndex} >
-                            <div className={styles.postsToModerate}>
-                            {posts && posts.slice(currentIndex, currentIndex + 2).map((post: any) => (
+                        {posts && posts.length > 0 &&
+                            <ModalImage url={getPostImage(posts[currentIndex])} description={"Post: " + currentIndex} >
+                                <div className={styles.postsToModerate}>
+                                {posts && posts.slice(currentIndex, currentIndex + 2).map((post: any) => (
 
-                                    <PostCardApi id={post.id} key={post.id}/>
+                                        <PostCardApi id={post.id} key={post.id}/>
 
-                            ))}
-                            {currentIndex >= posts.length && (
-                                <div style={{
-                                    background: "white",
-                                    borderRadius: "10px",
-                                    padding: "20px",
-                                    marginTop: "200px",
-                                    textAlign: "center",
-                                    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                                    height: "200px"
-                                }}>
-                                    <h1>No more posts to moderate</h1>
-                                </div>
-                            )}
-                        </div>
-                        </ModalImage>
+                                ))}
+                                {currentIndex >= posts.length && (
+                                    <div style={{
+                                        background: "white",
+                                        borderRadius: "10px",
+                                        padding: "20px",
+                                        marginTop: "200px",
+                                        textAlign: "center",
+                                        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                                        height: "200px"
+                                    }}>
+                                        <h1>No more posts to moderate</h1>
+                                    </div>
+                                )}
+                            </div>
+                            </ModalImage>
+                        }
 
                         <div className={styles.adminHeaderContainer}>
                             <div className={styles.approveAndDeny}>

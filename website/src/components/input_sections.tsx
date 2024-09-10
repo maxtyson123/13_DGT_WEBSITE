@@ -5,6 +5,8 @@ import {faCircleCheck, faCloudArrowUp, faFile} from "@fortawesome/free-solid-svg
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import {toTitleCase} from "@/lib/data";
+import {makeCachedRequest} from "@/lib/api_tools";
+import {macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
 
 // States for the input
@@ -787,6 +789,8 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
      * @param value - The value of the input.
      */
     const changeHandler = (value: string) => {
+        if(value == "More available") return;
+
         setInputValue(value);
 
         // Value has changed so state is no longer valid
@@ -889,5 +893,94 @@ export function FilteredSearchInput({placeHolder, defaultValue, required, state,
                 { state === "error" ? <p className={`${styles.errorText} ${isInputFocused ? styles.hidden : ''}`}>{errorText}</p> : ''}
             </div>
         </>
+    )
+}
+
+type PlantSelectorProps = {
+    defaultValue?: string | number;
+    setPlant: (value: number) => void;
+    allowNew?: boolean;
+}
+
+export function PlantSelector({defaultValue, setPlant, allowNew}: PlantSelectorProps) {
+
+    const [plantNames, setPlantNames] = useState<string[]>(["Enter a plant name"]);
+    const [plantIDs, setPlantIDs] = useState<number[]>([]);
+    const [defaultPlant, setDefaultPlant] = useState<string>();
+    const [selectedPlant, setSelectedPlant] = useState<string>("");
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+
+        // Set the plant
+        console.log(selectedPlant)
+        console.log(plantIDs[plantNames.indexOf(selectedPlant)])
+        setPlant(plantIDs[plantNames.indexOf(selectedPlant)])
+
+    }, [selectedPlant]);
+
+
+    useEffect(() => {
+
+        if(plantNames[0] == "Loading..."){
+            return
+        }
+
+        // If number get the string
+        if(typeof defaultValue === "number"){
+            setDefaultPlant(plantNames[plantIDs.indexOf(defaultValue)])
+        }
+        else {
+            setDefaultPlant(defaultValue)
+        }
+
+
+    }, [defaultValue, plantNames]);
+
+
+    const fetchData = async () => {
+        // Get the plants
+        const plants = await makeCachedRequest('plants_names_all', '/api/plants/search?getNames=true&getUnpublished=true');
+
+        // Get the plant names
+        let plantNames = plants.map((plant: any) => {
+
+            if (plant.maori_name && plant.english_name)
+                return macronCodeToChar(`${plant.maori_name} | ${plant.english_name}`, numberDictionary)
+
+            if (plant.maori_name)
+                return macronCodeToChar(plant.maori_name, numberDictionary)
+
+            if (plant.english_name)
+                return macronCodeToChar(plant.english_name, numberDictionary)
+
+        });
+
+
+        // Remove the macrons
+        plantNames = plantNames.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
+
+        // Set the first letter to be capital
+        plantNames = plantNames.map(option => toTitleCase(option));
+
+        const plantIDs = plants.map((plant: any) => plant.id);
+
+        setPlantNames(plantNames);
+        setPlantIDs(plantIDs);
+    }
+
+    return (
+        <FilteredSearchInput
+            required={false}
+            placeHolder={"Plant"}
+            state={"normal"}
+            options={plantNames}
+            defaultValue={defaultPlant}
+            changeEventHandler={setSelectedPlant}
+            forceOptions={allowNew}
+        />
     )
 }
