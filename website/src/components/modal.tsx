@@ -8,6 +8,7 @@ import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
 import {PlantSelector} from "@/components/input_sections";
 import {Loading} from "@/components/loading";
+import {postImage} from "@/pages/media/new";
 
 interface ModalImageProps {
     url: string
@@ -82,13 +83,13 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     const [currentImageDate, setCurrentImageDate] = useState("No Date")
     const [currentImagePlant, setCurrentImagePlant] = useState("No Plant Selected")
     const [currentImageUser, setCurrentImageUser] = useState(20)
-    const [currentSelectedPlant, setCurrentSelectedPlant] = useState(0)
 
     const [thisImages, setThisImages] = useState<object[]>([])
     const [postImages, setPostImages] = useState<object[]>([])
     const [myImages, setMyImages] = useState<object[]>([])
     const [localImages, setLocalImages] = useState<string[]>([])
     const [localFiles, setLocalFiles] = useState<File[]>([])
+    const [selectedImages, setSelectedImages] = useState<boolean[][]>([[], [], []])
 
     const [loadingMessage, setLoadingMessage] = useState("")
     const [currentDisplayImages, setCurrentDisplayImages] = useState<object[]>([])
@@ -97,6 +98,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     const [plantIDs, setPlantIDs] = useState<string[]>([""]);
 
     const dataFetch = useRef(false)
+    const [renderKey, setRenderKey] = useState(0)
 
     useEffect(() => {
         if (!dataFetch.current && id) {
@@ -130,28 +132,37 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         setPlantNames(plantNames);
         setPlantIDs(plantIDs);
 
-
-        // Fetch the images for this plant
-        const plantOBJ = await fetchPlant(id);
-
-        // Fetch the images for this post
+        // Fetch the images for this user
         const userPosts = await makeCachedRequest("editor_posts_mine_"+id, `/api/posts/fetch?operation=list&id=${(session?.user as RongoaUser).database.id}`);
         console.log(userPosts);
+        let plantUserPosts;
         if(userPosts){
             // Reverse the posts
             userPosts.reverse();
 
-            let plantUserPosts = userPosts.filter((post: any) => post.post_plant_id == id)
+            plantUserPosts = userPosts.filter((post: any) => post.post_plant_id == id)
             setMyImages(plantUserPosts);
         }
+
 
         // Fetch the posts for this plant
         const posts = await makeCachedRequest("editor_posts_"+id, "/api/posts/fetch?operation=siteFeed&plant_id=" + id)
         if(posts)
             setPostImages(posts)
 
-        // Fetch the images for this user
 
+        let cSelectedImages = [[], Array(posts.length).fill(false), Array(plantUserPosts.length).fill(false)]
+        console.log(cSelectedImages)
+        setSelectedImages(cSelectedImages)
+    }
+
+
+    const updateSelectedImages = (imageIndex: number) => {
+        let newSelectedImages = selectedImages
+        newSelectedImages[activeTab][imageIndex] = !newSelectedImages[activeTab][imageIndex]
+        console.log(newSelectedImages)
+        setSelectedImages(newSelectedImages)
+        setRenderKey(renderKey + 1)
     }
 
     useEffect(() => {
@@ -166,7 +177,6 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     useEffect(() => {
             setDefaultShow(show)
     }, [show])
-
 
     const setTab = (tab: number) => {
         setActiveTab(tab)
@@ -187,6 +197,10 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         }
 
         // Reset the currently selected display one
+        resetCurrentImage()
+    }
+
+    const resetCurrentImage = () => {
         setCurrentImage("/media/images/logo.svg")
         setCurrentImageName("No Image Selected")
         setCurrentImageUser(20)
@@ -248,15 +262,10 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         const file = localFiles[localImages.indexOf(image)]
         console.log(file)
 
-        // Check if there is a plant and a title
-        if(currentSelectedPlant === 0 || currentSelectedPlant === undefined) {
-            alert("Please select a plant")
-            return;
-        }
 
         const titleInput = document.getElementById("title") as HTMLElement;
         const title = titleInput.innerText;
-        if(title === "Please Type a Title Here") {
+        if(title === "Please Type a Title Here" || title === "No Image Selected") {
             alert("Please type a title")
             return;
         }
@@ -266,10 +275,22 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         setLoadingMessage("Uploading image")
 
         // Create a form data object
+        const user = session?.user as RongoaUser
+        if(user == null) return
+        const userID = user.database.id
+        const userName = user.database.user_name
 
+        // Upload the image
+        await postImage(file, title, id, userID, userName, setLoadingMessage, true)
+        setLoadingMessage("")
 
+        // Remove the image from the local images
+        const index = localImages.indexOf(image)
+        setLocalImages((prev) => { prev.splice(index, 1); return prev})
+        setLocalFiles((prev) => { prev.splice(index, 1); return prev})
 
-
+        // Reset the current image
+        resetCurrentImage()
     }
 
     return (
@@ -318,14 +339,10 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
                                 <div>
                                     <h3>{currentImage}</h3>
-                                    { activeTab !== 3 ?
+                                    { activeTab !== 3 &&
                                         <>
                                             <h3>{currentImagePlant}</h3>
                                             <h3>{currentImageDate}</h3>
-                                        </>
-                                        :
-                                        <>
-                                            <PlantSelector setPlant={setCurrentSelectedPlant} allowNew={false}/>
                                         </>
                                     }
                                 </div>
@@ -349,6 +366,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                 onDrop={dropFile}
                                 onDragOver={dragOver}
                                 onDragLeave={dragLeave}
+                                key={renderKey}
                             >
                                 {isDragging && <div className={styles.dragText}>Drop your image here</div>}
                                 {activeTab == 3 ?
@@ -376,9 +394,18 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                     </>
                                     :
                                     <>
+
+                                    {/* If there are no images */}
+                                    {currentDisplayImages.length === 0 &&
+                                        <div className={styles.noImages}>
+                                            <h1>No Images</h1>
+                                        </div>
+                                    }
+
+                                    {/* Display the images */}
                                     {currentDisplayImages.map((post: any, index: number) => {
                                             return (
-                                                <div className={styles.imageContainer} key={index}>
+                                                <div className={styles.imageContainer + " " + (selectedImages[activeTab][index] ? styles.selected : "")} key={index}>
                                                     <img src={getPostImage(post)}
                                                          alt={"Placeholder"}
                                                          onClick={() => {
@@ -387,7 +414,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                                              setCurrentImageUser(post.post_user_id)
                                                              setCurrentImagePlant(plantNames[plantIDs.indexOf(post.post_plant_id)])
                                                              setCurrentImageDate(new Date(post.post_date).toLocaleString())
-
+                                                             updateSelectedImages(index)
                                                          }}
                                                     />
                                                 </div>

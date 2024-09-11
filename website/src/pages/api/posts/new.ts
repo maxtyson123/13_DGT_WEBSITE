@@ -44,9 +44,11 @@ export default async function handler(
             title,
             plant,
             image,
-
+            inUse,
         } = request.query;
 
+        let post_in_use = false;
+        if(inUse === "true") post_in_use = true;
 
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
@@ -54,7 +56,7 @@ export default async function handler(
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
         // Run the query
-        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member} ) RETURNING id;`;
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}, ${tables.post_in_use}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member}, ${post_in_use} ) RETURNING id;`;
         const data = await makeQuery(query, client, true)
 
         console.log("DATA")

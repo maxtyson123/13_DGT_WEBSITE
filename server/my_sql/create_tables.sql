@@ -149,6 +149,7 @@ CREATE TABLE IF NOT EXISTS posts (
     post_date DATETIME,
     post_image TEXT,
     post_approved BOOLEAN,
+    post_in_use BOOLEAN,
     PRIMARY KEY (id),
     FOREIGN KEY (post_plant_id) REFERENCES plants(id),
     FOREIGN KEY (post_user_id) REFERENCES users(id)

@@ -94,9 +94,13 @@ export default function Post(){
             return
         }
 
-        // Compress the image
+        const user = session?.user as RongoaUser
+        if(user == null) return
+        const userID = user.database.id
+        const userName = user.database.user_name
 
-        await postImage(image, setLoading)
+        // Upload the image
+        await postImage(image, postTitle, currentPlant, userID, userName, setLoading)
         setLoading("")
 
         // Redirect to the post
@@ -171,18 +175,7 @@ export default function Post(){
     )
 }
 
-export const postImage = async (image: File, postTitle: string, currentPlant: number, userID: number, setLoadingMessage: (message: string) => void) => {
-
-
-
-
-    const followers = await makeRequestWithToken('get', '/api/user/follow?operation=listFollowers&id=' + userID);
-    const ids = followers.data.data
-
-    let userIDs = []
-    for (let i = 0; i < ids.length; i++) {
-        userIDs.push(ids[i].follower_id)
-    }
+export const postImage = async (image: File, postTitle: string, currentPlant: number, userID: number, userName: string, setLoadingMessage: (message: string) => void, inUse ?: boolean ) => {
 
     setLoadingMessage("Compressing Image...")
     const options = {
@@ -211,9 +204,10 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
     const plant_image = cleanInput(compressedImage.name)
 
     // Send the post data to the server
-    const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image);
+    const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image + '&inUse=' + inUse);
 
     console.log(response)
+    return
     console.log(userID)
 
     // Get the post id
@@ -245,11 +239,18 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
 
     // Send the notification to the followers
     setLoadingMessage("Sending Notifications...")
+    const followers = await makeRequestWithToken('get', '/api/user/follow?operation=listFollowers&id=' + userID);
+    const ids = followers.data.data
+
+    let userIDs = []
+    for (let i = 0; i < ids.length; i++) {
+        userIDs.push(ids[i].follower_id)
+    }
     let uids = ""
     for (let i = 0; i < userIDs.length; i++) {
         uids += "&user_ids=" + userIDs[i]
     }
     console.log(uids)
 
-    const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + (session?.user as RongoaUser).name + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
+    const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + userName + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
 }
