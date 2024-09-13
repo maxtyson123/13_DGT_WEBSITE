@@ -314,8 +314,8 @@ export function UserCard(props: UserCardProps) {
         }
 
         // Get the followers
-        const followers = await makeRequestWithToken("get", `/api/user/follow?operation=followersCount&id=${props.id}`);
-        setFollowers(followers.data.data[0]["COUNT(*)"]);
+        const followers = await makeCachedRequest('user_followers_'+props.id, `/api/user/follow?operation=followersCount&id=${props.id}`);
+        setFollowers(followers[0]["COUNT(*)"]);
     }
 
     return(

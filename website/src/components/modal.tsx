@@ -134,7 +134,6 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         // Fetch the images for this user
         const userPosts = await makeCachedRequest("editor_posts_mine_"+id, `/api/posts/fetch?operation=list&id=${(session?.user as RongoaUser).database.id}`);
-        console.log(userPosts);
         let plantUserPosts;
         if(userPosts){
             // Reverse the posts
@@ -147,12 +146,16 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         // Fetch the posts for this plant
         const posts = await makeCachedRequest("editor_posts_"+id, "/api/posts/fetch?operation=siteFeed&plant_id=" + id)
-        if(posts)
-            setPostImages(posts)
+        if(posts){
+            // Reverse the posts
+            posts.reverse();
+
+            setThisImages(posts.filter((post: any) => post.in_use))
+            setPostImages(posts.filter((post: any) => !post.in_use))
+        }
 
 
         let cSelectedImages = [[], Array(posts.length).fill(false), Array(plantUserPosts.length).fill(false)]
-        console.log(cSelectedImages)
         setSelectedImages(cSelectedImages)
     }
 
@@ -160,7 +163,46 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     const updateSelectedImages = (imageIndex: number) => {
         let newSelectedImages = selectedImages
         newSelectedImages[activeTab][imageIndex] = !newSelectedImages[activeTab][imageIndex]
-        console.log(newSelectedImages)
+
+        // Set the current image
+        let currentImage : any = currentDisplayImages[imageIndex]
+        setCurrentImage(getPostImage(currentImage))
+        setCurrentImageName(currentImage.post_title)
+        setCurrentImageUser(currentImage.post_user_id)
+        setCurrentImagePlant((plantNames[plantIDs.indexOf(currentImage.post_plant_id)]))
+        setCurrentImageDate(new Date(currentImage.post_date).toLocaleString())
+
+        // If the current tab is the post gallery, update the my posts tab if its the same image
+        if(activeTab === 1){
+            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
+            if(myPostIndex !== -1){
+                newSelectedImages[2][myPostIndex] = newSelectedImages[activeTab][imageIndex]
+            }
+
+        // My Images
+        }else if(activeTab === 2){
+
+            // Update the post gallery tab if its the same image
+            let postIndex = postImages.findIndex((post: any) => post.id === currentImage.id)
+            if(postIndex !== -1){
+                newSelectedImages[1][postIndex] = newSelectedImages[activeTab][imageIndex]
+            }
+
+            // Update the this plant tab if its the same image
+            let thisIndex = thisImages.findIndex((post: any) => post.id === currentImage.id)
+            if(thisIndex !== -1){
+                newSelectedImages[0][thisIndex] = newSelectedImages[activeTab][imageIndex]
+            }
+        }else{
+
+                // Update the my posts tab if its the same image
+                let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
+                if(myPostIndex !== -1){
+                    newSelectedImages[2][myPostIndex] = newSelectedImages[activeTab][imageIndex]
+                }
+        }
+
+
         setSelectedImages(newSelectedImages)
         setRenderKey(renderKey + 1)
     }
@@ -209,7 +251,8 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
     }
 
 
-    const hide = () => {
+    const hide = async () => {
+        await moveImages()
         setDefaultShow(false)
         hideCallback()
     }
@@ -293,6 +336,12 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         resetCurrentImage()
     }
 
+    const moveImages = async () => {
+
+        // Find the ids
+
+    }
+
     return (
             <>
                 {loadingMessage && <Loading progressMessage={loadingMessage}/>}
@@ -309,18 +358,18 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                             {/* Tab selector */}
                             <div className={styles.tabs}>
 
-                                <button onClick={() => setTab(0)}
-                                        className={activeTab === 0 ? styles.activeTab : ""}>This Plant
-                                </button>
-                                <button onClick={() => setTab(1)}
-                                        className={activeTab === 1 ? styles.activeTab : ""}>Post Gallery
-                                </button>
-                                <button onClick={() => setTab(2)} className={activeTab === 2 ? styles.activeTab : ""}>My
-                                    Images
-                                </button>
-                                <button onClick={() => setTab(3)}
-                                        className={activeTab === 3 ? styles.activeTab : ""}>Upload
-                                </button>
+                                {["This Plant", "Post Gallery", "My Posts", "Upload"].map((tab, index) => {
+                                    return (
+                                        <button onClick={() => setTab(index)} className={activeTab === index ? styles.activeTab : ""} key={index}>
+                                            <p>{tab}</p>
+
+                                            {/* Selected  Count */}
+                                            {selectedImages[index] && selectedImages[index].filter((value) => value).length > 0 &&
+                                                <p className={styles.selectedCount}>{selectedImages[index].filter((value) => value).length}</p>
+                                            }
+                                        </button>
+                                    )
+                                })}
 
                             </div>
 
@@ -409,14 +458,14 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                                     <img src={getPostImage(post)}
                                                          alt={"Placeholder"}
                                                          onClick={() => {
-                                                             setCurrentImage(getPostImage(post))
-                                                             setCurrentImageName(post.post_title)
-                                                             setCurrentImageUser(post.post_user_id)
-                                                             setCurrentImagePlant(plantNames[plantIDs.indexOf(post.post_plant_id)])
-                                                             setCurrentImageDate(new Date(post.post_date).toLocaleString())
                                                              updateSelectedImages(index)
                                                          }}
                                                     />
+
+                                                    {/* Selected  Count */}
+                                                    {selectedImages[activeTab][index] &&
+                                                        <p className={styles.selectedCount}>&#10004;</p>
+                                                    }
                                                 </div>
                                             )
 
