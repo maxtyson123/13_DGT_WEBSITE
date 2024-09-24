@@ -146,18 +146,23 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         // Fetch the posts for this plant
         const posts = await makeCachedRequest("editor_posts_"+id, "/api/posts/fetch?operation=siteFeed&plant_id=" + id)
+        let thisPlantPosts;
+        let thisPostsPosts;
         if(posts){
             // Reverse the posts
             posts.reverse();
 
-            setThisImages(posts.filter((post: any) => post.post_in_use))
-            setPostImages(posts.filter((post: any) => !post.post_in_use))
-            setCurrentDisplayImages(posts.filter((post: any) => post.post_in_use))
+            thisPlantPosts = posts.filter((post: any) => post.post_in_use)
+            thisPostsPosts = posts.filter((post: any) => !post.post_in_use)
+
+            setThisImages(thisPlantPosts)
+            setPostImages(thisPostsPosts)
+            setCurrentDisplayImages(thisPlantPosts)
 
         }
 
 
-        let cSelectedImages = [[], Array(posts.length).fill(false), Array(plantUserPosts.length).fill(false)]
+        let cSelectedImages = [Array(thisPlantPosts.length).fill(false), Array(thisPostsPosts.length).fill(false), Array(plantUserPosts.length).fill(false)]
         setSelectedImages(cSelectedImages)
 
 
@@ -347,13 +352,64 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         setMyImages((prev) => [...prev, newPost])
         setThisImages((prev) => [...prev, newPost])
-        setSelectedImages((prev) => { console.log(prev); return prev})
+        let newSelectedImages = selectedImages
+        newSelectedImages[0].push(true)
+        newSelectedImages[2].push(true)
+        setSelectedImages(newSelectedImages)
         setLoadingMessage("")
     }
 
     const moveImages = async () => {
 
-        // Find th
+        // Set the loading message
+        setLoadingMessage("Moving images")
+
+        // Find the selected images for the post gallery
+        let selectedPostImages : any = selectedImages[1].map((value, index) => {
+            if(value) return postImages[index]
+        })
+
+        // Remove the undefined values
+        selectedPostImages = selectedPostImages.filter((value: any) => value)
+
+        // If none are selected, return
+        if(!selectedPostImages) return
+
+        // Update the in use status of the selected images
+        await makeRequestWithToken("get","/api/posts/move?" + selectedPostImages.map((post: any) => `id=${post.id}`).join("&"))
+
+        // Move them to the plant images
+        setThisImages((prev) => {
+            setPostImages((prev) => [...prev, ...selectedPostImages])
+            return [...prev, ...selectedPostImages]
+        })
+
+        // If any are authored by the user, move them to the user images also
+        let selectedMyImages = selectedPostImages.filter((post: any) => post.post_user_id === (session?.user as RongoaUser).database.id)
+        if(selectedMyImages){
+            setMyImages((prev) => [...prev, ...selectedMyImages])
+        }
+
+        // Remove the selected images from the post images
+        let newPostImages = postImages.filter((post: any) => !selectedPostImages.includes(post))
+        setPostImages(newPostImages)
+
+        // Update the selected status
+        let newSelectedImages = selectedImages
+        newSelectedImages[0].push(...selectedPostImages.map(() => true))
+        newSelectedImages[1] = newSelectedImages[1].filter((value) => !value)
+        newSelectedImages[2].push(...selectedMyImages.map(() => true))
+        setSelectedImages(newSelectedImages)
+
+        // Clear the cache
+        sessionStorage.removeItem("editor_posts_"+id)
+        sessionStorage.removeItem("editor_posts_mine_"+id)
+
+        // Change tab
+        setTab(0)
+
+        // Clear loading message
+        setLoadingMessage("")
 
     }
 
