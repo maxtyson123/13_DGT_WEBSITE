@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import styles from "@/styles/components/modal.module.css"
 import {fetchPlant, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
-import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
+import {makeCachedRequest, makeRequestWithToken, removeCachedRequest} from "@/lib/api_tools";
 import {getFilePath, getPostImage} from "@/lib/data";
 import {UserCard} from "@/pages/media/components/cards";
 import {RongoaUser} from "@/lib/users";
@@ -150,19 +150,24 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
             // Reverse the posts
             posts.reverse();
 
-            setThisImages(posts.filter((post: any) => post.in_use))
-            setPostImages(posts.filter((post: any) => !post.in_use))
+            setThisImages(posts.filter((post: any) => post.post_in_use))
+            setPostImages(posts.filter((post: any) => !post.post_in_use))
+            setCurrentDisplayImages(posts.filter((post: any) => post.post_in_use))
+
         }
 
 
         let cSelectedImages = [[], Array(posts.length).fill(false), Array(plantUserPosts.length).fill(false)]
         setSelectedImages(cSelectedImages)
+
+
     }
 
 
-    const updateSelectedImages = (imageIndex: number) => {
+    const updateSelectedImages = (imageIndex: number, tab = activeTab) => {
+
         let newSelectedImages = selectedImages
-        newSelectedImages[activeTab][imageIndex] = !newSelectedImages[activeTab][imageIndex]
+        newSelectedImages[tab][imageIndex] = !newSelectedImages[tab][imageIndex]
 
         // Set the current image
         let currentImage : any = currentDisplayImages[imageIndex]
@@ -172,33 +177,33 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         setCurrentImagePlant((plantNames[plantIDs.indexOf(currentImage.post_plant_id)]))
         setCurrentImageDate(new Date(currentImage.post_date).toLocaleString())
 
-        // If the current tab is the post gallery, update the my posts tab if its the same image
-        if(activeTab === 1){
+        // If the current tab is the post gallery
+        if(tab === 1){
             let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
             if(myPostIndex !== -1){
-                newSelectedImages[2][myPostIndex] = newSelectedImages[activeTab][imageIndex]
+                newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
             }
 
         // My Images
-        }else if(activeTab === 2){
+        }else if(tab === 2){
 
             // Update the post gallery tab if its the same image
             let postIndex = postImages.findIndex((post: any) => post.id === currentImage.id)
             if(postIndex !== -1){
-                newSelectedImages[1][postIndex] = newSelectedImages[activeTab][imageIndex]
+                newSelectedImages[1][postIndex] = newSelectedImages[tab][imageIndex]
             }
 
             // Update the this plant tab if its the same image
             let thisIndex = thisImages.findIndex((post: any) => post.id === currentImage.id)
             if(thisIndex !== -1){
-                newSelectedImages[0][thisIndex] = newSelectedImages[activeTab][imageIndex]
+                newSelectedImages[0][thisIndex] = newSelectedImages[tab][imageIndex]
             }
         }else{
 
                 // Update the my posts tab if its the same image
                 let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
                 if(myPostIndex !== -1){
-                    newSelectedImages[2][myPostIndex] = newSelectedImages[activeTab][imageIndex]
+                    newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
                 }
         }
 
@@ -305,7 +310,6 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         const file = localFiles[localImages.indexOf(image)]
         console.log(file)
 
-
         const titleInput = document.getElementById("title") as HTMLElement;
         const title = titleInput.innerText;
         if(title === "Please Type a Title Here" || title === "No Image Selected") {
@@ -324,8 +328,12 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         const userName = user.database.user_name
 
         // Upload the image
-        await postImage(file, title, id, userID, userName, setLoadingMessage, true)
-        setLoadingMessage("")
+        const newPost = await postImage(file, title, id, userID, userName, setLoadingMessage, true)
+
+        if(!newPost)
+            return
+
+        console.log("New Post", newPost)
 
         // Remove the image from the local images
         const index = localImages.indexOf(image)
@@ -334,11 +342,18 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         // Reset the current image
         resetCurrentImage()
+        sessionStorage.removeItem("editor_posts_"+id)
+        sessionStorage.removeItem("editor_posts_mine_"+id)
+
+        setMyImages((prev) => [...prev, newPost])
+        setThisImages((prev) => [...prev, newPost])
+        setSelectedImages((prev) => { console.log(prev); return prev})
+        setLoadingMessage("")
     }
 
     const moveImages = async () => {
 
-        // Find the ids
+        // Find th
 
     }
 
@@ -381,7 +396,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
                                 <div>
                                     <h1
                                         id={"title"}
-                                        contentEditable={activeTab == 3}
+                                        contentEditable={activeTab == 3 && currentImageName !== "No Image Selected"}
                                     >{currentImageName}</h1>
                                     <h2>Description</h2>
                                 </div>

@@ -177,3 +177,7 @@ export async function makeCachedRequest(key: string, url: string){
     }
     return cache.data.data
 }
+
+export function removeCachedRequest(key: string){
+    return saveToCache(key, null)
+}

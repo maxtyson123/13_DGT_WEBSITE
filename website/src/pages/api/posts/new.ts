@@ -56,32 +56,30 @@ export default async function handler(
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
         // Run the query
-        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}, ${tables.post_in_use}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member}, ${post_in_use} ) RETURNING id;`;
-        const data = await makeQuery(query, client, true)
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}, ${tables.post_in_use}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member}, ${post_in_use} ) ${process.env.USING_MYSQL == "true" ? '' : 'RETURNING id;'}`;
+        const data = await makeQuery(query, client, true);
 
-        console.log("DATA")
-        console.log(data)
-        if(!data)
-            return response.status(500).json({ error: "No data returned" });
+        let id;
+        if (process.env.USING_MYSQL == "true") {
+            // Workaround for MySQL to get the last inserted ID
+            const lastInsertIdQuery = 'SELECT LAST_INSERT_ID() as id;';
+            const lastInsertIdData = await makeQuery(lastInsertIdQuery, client, true);
+            id = lastInsertIdData[0].id;
+        } else {
+            if(USE_POSTGRES){
+                id = data[0].rows[0].id;
+            }else{
 
-        // Get the id of the new plant
-        // @ts-ignore (has to be like this data[0] is an object)
-        let id = undefined
+                // Loop through the data
+                data.forEach((item: any) => {
 
-        if(USE_POSTGRES){
-            id = data[0].rows[0].id;
-        }else{
-
-            // Loop through the data
-            data.forEach((item: any) => {
-
-                // If there is an id, set it
-                if (item && item.id) {
-                    id = item.id;
-                }
-            });
+                    // If there is an id, set it
+                    if (item && item.id) {
+                        id = item.id;
+                    }
+                });
+            }
         }
-
 
 
         // If there is no id, return an error

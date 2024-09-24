@@ -206,10 +206,6 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
     // Send the post data to the server
     const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image + '&inUse=' + inUse);
 
-    console.log(response)
-    return
-    console.log(userID)
-
     // Get the post id
     const newId = response.data.id
 
@@ -253,4 +249,15 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
     console.log(uids)
 
     const response2 = await makeRequestWithToken('post', '/api/user/notifications?operation=send_notification' + uids + '&title=New Post&body=' + userName + ' has made a new post&image=' + getFilePath(userID, newId, plant_image));
+    const newpost = {
+        post_title: post_title,
+        post_plant_id: post_plant_id,
+        post_user_id: userID,
+        post_image: plant_image,
+        post_date: Date.now(),
+        post_approved: true,
+        post_in_use: inUse,
+        id: newId
+    }
+    return newpost
 }

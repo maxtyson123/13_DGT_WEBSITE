@@ -43,7 +43,9 @@ export function getFilePath(userId: number, postId: number, fileName: string): s
 
 }
 
-export function getPostImage(post): string {
+export function getPostImage(post: any): string {
+
+    if(!post) return "";
 
     // Base
     let path = process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/"
