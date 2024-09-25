@@ -117,7 +117,7 @@ export default async function handler(
                 plantOBJ = fixAttachmentsPaths(plantOBJ);
                 plantOBJ = macronsForDisplay(plantOBJ)
 
-                return response.status(200).json({ data: plantOBJ});
+                return response.status(200).json({ data: plantOBJ, apiData: apiData});
 
             case 'upload':
 

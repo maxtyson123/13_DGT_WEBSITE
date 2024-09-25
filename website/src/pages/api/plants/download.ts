@@ -126,7 +126,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                                 plant_id,
                                 ${joinCommand}(${tables.edible_part_of_plant}) AS edible_parts,
                                 ${joinCommand}(${tables.edible_use_identifier}) AS edible_use_identifiers,
-                                ${joinCommand}(${tables.edible_image_of_part}) AS edible_images,
+                                ${joinCommand}(${tables.edible_images}) AS edible_images,
                                 ${joinCommand}(${tables.edible_nutrition}) AS edible_nutrition,
                                 ${joinCommand}(${tables.edible_preparation}) AS edible_preparation,
                                 ${joinCommand}(${tables.edible_preparation_type}) AS edible_preparation_type
@@ -149,7 +149,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                                 ${joinCommand}(${tables.medical_type}) AS medical_types,
                                 ${joinCommand}(${tables.medical_use_identifier}) AS medical_use_identifiers,
                                 ${joinCommand}(${tables.medical_use}) AS medical_uses,
-                                ${joinCommand}(${tables.medical_image}) AS medical_images,
+                                ${joinCommand}(${tables.medical_images}) AS medical_images,
                                 ${joinCommand}(${tables.medical_preparation}) AS medical_preparation
                                 ${restrictedData ? ("," + joinCommand + "(" + tables.medical_restricted + ") AS medical_restricteds") : ""}
                                 FROM medical
@@ -171,7 +171,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                                 ${joinCommand}(${tables.craft_part_of_plant}) AS craft_parts,
                                 ${joinCommand}(${tables.craft_use_identifier}) AS craft_use_identifiers,
                                 ${joinCommand}(${tables.craft_use}) AS craft_uses,
-                                ${joinCommand}(${tables.craft_image}) AS craft_images,
+                                ${joinCommand}(${tables.craft_images}) AS craft_images,
                                 ${joinCommand}(${tables.craft_additional_info}) AS craft_additional_info
                                 FROM craft
                                 WHERE plant_id = ${id}
@@ -274,3 +274,5 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         return ["error", error];
     }
 }
+
+// TODO: medical_images, craft_images and edible_images all return an array of strings. These strings are ids seperated by a comma or null. For example: "craft_images":[ null, "31,32,33,34" ]. If it is null create an empty array in place otherwise create an array of posts by fetching all from the posts table where the id is the same. The example would return: "craft_images":[ [], [{id: 31, ...}, {id: 32, ...}, {id: 33, ...}, {id: 34, ...},],  "31,32,33,34" ],

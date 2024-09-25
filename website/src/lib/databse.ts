@@ -40,7 +40,7 @@ export class SQLDatabase {
     craft_use_identifier: string;
     craft_use: string;
     craft_additional_info: string;
-    craft_image: string;
+    craft_images: string;
 
     // Custom Table
     custom_title: string;
@@ -49,7 +49,7 @@ export class SQLDatabase {
     // Edible Table
     edible_part_of_plant: string;
     edible_use_identifier: string;
-    edible_image_of_part: string;
+    edible_images: string;
     edible_nutrition: string;
     edible_preparation: string;
     edible_preparation_type: string;
@@ -58,7 +58,7 @@ export class SQLDatabase {
     medical_type: string;
     medical_use_identifier: string;
     medical_use: string;
-    medical_image: string;
+    medical_images: string;
     medical_preparation: string;
     medical_restricted: string;
 
@@ -148,7 +148,7 @@ export class SQLDatabase {
         this.craft_use_identifier       = "craft_use_identifier";
         this.craft_use                  = "craft_use";
         this.craft_additional_info      = "craft_additional_info";
-        this.craft_image                = "craft_image";
+        this.craft_images                = "craft_images";
 
         // Custom Table
         this.custom_title               = "custom_title";
@@ -157,7 +157,7 @@ export class SQLDatabase {
         // Edible Table
         this.edible_part_of_plant       = "edible_part_of_plant";
         this.edible_use_identifier      = "edible_use_identifier";
-        this.edible_image_of_part       = "edible_image";
+        this.edible_images              = "edible_images";
         this.edible_nutrition           = "edible_nutrition";
         this.edible_preparation         = "edible_preparation";
         this.edible_preparation_type    = "edible_preparation_type";
@@ -166,7 +166,7 @@ export class SQLDatabase {
         this.medical_type               = "medical_type";
         this.medical_use_identifier     = "medical_use_identifier";
         this.medical_use                = "medical_use";
-        this.medical_image              = "medical_image";
+        this.medical_images             = "medical_images";
         this.medical_preparation        = "medical_preparation";
         this.medical_restricted         = "medical_restricted";
 
