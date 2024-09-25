@@ -65,12 +65,14 @@ export function ModalImage({url, description, show, hideCallbackOveride, childre
 
 type ImagePopupProps = {
     show: boolean
-    hideCallback: () => (value: string[]) => void
+    hideCallback: () => void
+    setImages: (value: any[]) => void
+    startImages?: any[]
     id?: number
 }
 
 /* Multi page image upload selector */
-export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
+export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}: ImagePopupProps) {
 
     const [activeTab, setActiveTab] = useState(0)
     const [defaultShow, setDefaultShow] = useState(false)
@@ -107,6 +109,23 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
         }
     }, [id]);
 
+    useEffect(() => {
+
+        // If selectedImages is empty, wait for datafetch to finish
+        if(selectedImages[0].length === 0) return
+
+        // Get where the start images are located in the thisImages array and update the relevant selectedImages array
+        let currentSelectedImages = selectedImages
+        if(startImages){
+            startImages.forEach((image: any) => {
+                let index = thisImages.findIndex((post: any) => post.id === image.id)
+                if(index !== -1){
+                    currentSelectedImages[0][index] = true
+                }
+            })
+        }
+
+    }, [startImages, selectedImages]);
 
 
     const fetchImages = async () => {
@@ -205,11 +224,11 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
             }
         }else{
 
-                // Update the my posts tab if its the same image
-                let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
-                if(myPostIndex !== -1){
-                    newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
-                }
+            // Update the posts tab if its the same image
+            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
+            if(myPostIndex !== -1){
+                newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
+            }
         }
 
 
@@ -262,7 +281,19 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
 
     const hide = async () => {
+
+        // Update the images
         await moveImages()
+
+        // Get the selected images
+        let newImages = selectedImages[0].map((value, index) => {
+            if(value) return thisImages[index]
+        })
+        newImages = newImages.filter((value: any) => value)
+        setImages(newImages)
+
+
+        // Hide the modal
         setDefaultShow(false)
         hideCallback()
     }
@@ -380,7 +411,7 @@ export function ImagePopup({show, hideCallback, id = 0}: ImagePopupProps) {
 
         // Move them to the plant images
         setThisImages((prev) => {
-            setPostImages((prev) => [...prev, ...selectedPostImages])
+            setCurrentDisplayImages([...prev, ...selectedPostImages])
             return [...prev, ...selectedPostImages]
         })
 

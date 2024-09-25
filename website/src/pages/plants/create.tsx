@@ -39,7 +39,7 @@ import {RongoaUser} from "@/lib/users";
 import {createToken, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
 import {Layout} from "@/components/layout";
-import { cleanInput } from "@/lib/data";
+import {cleanInput, getPostImage} from "@/lib/data";
 import {ImagePopup} from "@/components/modal";
 
 
@@ -290,7 +290,7 @@ class CraftInfo {
         useIdentifier: "",
         use:            "",
         additionalInfo: "",
-        image:          "",
+        images:        [] as any[],
     };
 
     // Store the validation state for each input
@@ -309,7 +309,7 @@ class CraftInfo {
     handleUseValueChange        = (value : string) => {this.state.use              = value};
     handleAdditionalInfoChange  = (value : string) => {this.state.additionalInfo   = value};
     handlePartOfPlantChange     = (value : string) => { this.state.partOfPlant     = value};
-    handleImageChange           = (value : string) => {this.state.image            = value};
+    handleImagesChange          = (value : any[])=> {this.state.images           = value;};
 
     // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -320,6 +320,7 @@ class CraftInfo {
                 useValueHandler = {this.handleUseValueChange}
                 additionalInfoHandler = {this.handleAdditionalInfoChange}
                 partOfPlantHandler = {this.handlePartOfPlantChange}
+                imageHandler = {this.handleImagesChange}
                 valid = {this.valid}
                 state = {this.state}
             />
@@ -365,11 +366,6 @@ class CraftInfo {
             this.valid.additionalInfo = ["success", "No Error"] as [ValidationState, string];
         }
 
-        // If there is no image selected then show an error otherwise the input is valid
-        if(this.state.image === "") {
-            this.valid.image = ["error", "Please select what image is related to the use of this plant"] as [ValidationState, string];
-            isValid = false;
-        }else{ this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
 
         // Update section to show validation
         this.reRenderSection()
@@ -390,6 +386,7 @@ type CraftSectionProps = {
     useValueHandler:        (value: string) => void;
     additionalInfoHandler:  (value: string) => void;
     partOfPlantHandler:     (value: string) => void;
+    imageHandler:           (value: any[]) => void;
     valid: {
         partOfPlant:    [ValidationState, string];
         useIdentifier: [ValidationState, string];
@@ -402,10 +399,22 @@ type CraftSectionProps = {
         useIdentifier: string;
         use:            string;
         additionalInfo: string;
-        image:          string;
+        images:         any[];
     }
 }
-export function CraftSection({useIdentifierHandler, useValueHandler, additionalInfoHandler, partOfPlantHandler, valid, state}: CraftSectionProps){
+export function CraftSection({useIdentifierHandler, useValueHandler, additionalInfoHandler, partOfPlantHandler, imageHandler, valid, state}: CraftSectionProps){
+
+    const [showImagePopup, setShowImagePopup] = useState(false);
+    const [ID, setID] = useState<any>(null)
+    const router = useRouter()
+
+    useEffect(() => {
+
+        // Get the id from the path
+        let {id} = router.query;
+        setID(id);
+
+    }, []);
 
     return(
         <>
@@ -459,6 +468,44 @@ export function CraftSection({useIdentifierHandler, useValueHandler, additionalI
                 />
             </div>
 
+            {/* Image Selector */}
+            <ImagePopup
+                show={showImagePopup}
+                hideCallback={() => setShowImagePopup(false)}
+                setImages={imageHandler}
+                startImages={state.images}
+                id={ID}
+            />
+
+            {/* Image Displays */}
+            <div className={styles.formItem} key={JSON.stringify(state.images)}>
+
+                {/* Display the images */}
+                {state.images.map((image: any, index: number) => {
+                    return (
+                        <div className={styles.formItem} key={index} style={{width: "100%"}}>
+                            <div className={styles.fileUploader + " " + globalStyles.gridCentre} >
+
+                                {/* Load the image from the website or use the blob data from the file */}
+                                <Image style={{borderRadius: 8}}
+                                       src={getPostImage(image)}
+                                       alt={image.title}
+                                       width={600}
+                                       height={600}
+                                       objectFit={"contain"}
+                                />
+
+                            </div>
+                        </div>
+                    )
+                })}
+
+
+                {/* Button to select image */}
+                <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}><FontAwesomeIcon
+                    icon={faFile}/> Select Image(s)
+                </button>
+            </div>
         </>
     )
 }
@@ -471,7 +518,7 @@ class MedicalInfo {
         use:            "",
         preparation:    "",
         restricted:     "",
-        image:          "",
+        images:         [] as any[],
     };
 
     // Store the validation state for each input
@@ -491,8 +538,8 @@ class MedicalInfo {
     handleUseIdentifierChange   = (value : string) => {this.state.useIdentifier = value};
     handeUseValueChange         = (value : string) => {this.state.use          = value};
     handlePreparationChange     = (value : string) => {this.state.preparation  = value};
-    handleImageChange           = (value : string) => {this.state.image        = value};
     handleRestrictedChange      = (value : string) => {this.state.restricted   = value};
+    handleImagesChange          = (value : any[])=> {this.state.images           = value;};
 
     // Functions to update the section
     setSection = (section: JSX.Element) => {this.section = section};
@@ -504,6 +551,7 @@ class MedicalInfo {
                 useValueHandler={this.handeUseValueChange}
                 preparationHandler={this.handlePreparationChange}
                 restrictedHandler={this.handleRestrictedChange}
+                imageHandler={this.handleImagesChange}
                 valid={this.valid}
                 state={this.state}
             />
@@ -553,12 +601,6 @@ class MedicalInfo {
         // Restricted is optional
         this.valid.restricted = ["success", "No Error"] as [ValidationState, string];
 
-        // If there is no image selected then show an error otherwise the input is valid
-        if(this.state.image === "") {
-            this.valid.image = ["error", "Please select what image is related to the medical use of this plant"] as [ValidationState, string];
-            isValid = false;
-        }else { this.valid.image = ["success", "No Error"] as [ValidationState, string]; }
-
         // Update section to show validation
         this.reRenderSection();
 
@@ -579,6 +621,7 @@ type MedicalUseSectionProps = {
     useValueHandler:        (value: string) => void;
     preparationHandler:     (value: string) => void;
     restrictedHandler:      (value: string) => void;
+    imageHandler:            (value: any[]) => void;
     valid: {
         type:           [ValidationState, string];
         useIdentifier:  [ValidationState, string];
@@ -592,11 +635,23 @@ type MedicalUseSectionProps = {
         useIdentifier: string;
         use:            string;
         preparation:    string;
-        image:          string;
+        images:         any[];
         restricted:     string;
     }
 }
-export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandler, useValueHandler, preparationHandler, restrictedHandler, valid, state}: MedicalUseSectionProps){
+export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandler, useValueHandler, preparationHandler, restrictedHandler, imageHandler, valid, state}: MedicalUseSectionProps){
+
+    const [showImagePopup, setShowImagePopup] = useState(false);
+    const [ID, setID] = useState<any>(null)
+    const router = useRouter()
+
+    useEffect(() => {
+
+        // Get the id from the path
+        let {id} = router.query;
+        setID(id);
+
+    }, []);
 
     return(
         <>
@@ -659,6 +714,45 @@ export function MedicalUseSection({medicalTypeHandler, medicalUseIdentifierHandl
                     changeEventHandler={restrictedHandler}
                 />
             </div>
+
+            {/* Image Selector */}
+            <ImagePopup
+                show={showImagePopup}
+                hideCallback={() => setShowImagePopup(false)}
+                setImages={imageHandler}
+                startImages={state.images}
+                id={ID}
+            />
+
+            {/* Image Displays */}
+            <div className={styles.formItem} key={JSON.stringify(state.images)}>
+
+                {/* Display the images */}
+                {state.images.map((image: any, index: number) => {
+                    return (
+                        <div className={styles.formItem} key={index} style={{width: "100%"}}>
+                            <div className={styles.fileUploader + " " + globalStyles.gridCentre} >
+
+                                {/* Load the image from the website or use the blob data from the file */}
+                                <Image style={{borderRadius: 8}}
+                                       src={getPostImage(image)}
+                                       alt={image.title}
+                                       width={600}
+                                       height={600}
+                                       objectFit={"contain"}
+                                />
+
+                            </div>
+                        </div>
+                    )
+                })}
+
+
+                {/* Button to select image */}
+                <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}><FontAwesomeIcon
+                    icon={faFile}/> Select Image(s)
+                </button>
+            </div>
         </>
     )
 }
@@ -672,7 +766,7 @@ class EdibleInfo {
         nutritionalValue:   "",
         preparation:        "",
         preparationType:    "",
-        image:              [],
+        images:              [] as any,
     };
 
     // Store the validation state for each input
@@ -687,12 +781,12 @@ class EdibleInfo {
     section: JSX.Element = <></>;
 
     // Change Handlers that update the state
-    handlePartOfPlantChange         = (value : string) => { this.state.partOfPlant     = value};
-    handleUseIdentifierChange       = (value : string) => {this.state.useIdentifier    = value};
-    handleNutritionalValueChange    = (value : string) => {this.state.nutritionalValue = value};
-    handlePreparationChange         = (value : string) => {this.state.preparation      = value};
-    handlePreparationTypeChange     = (value : string) => {this.state.preparationType  = value};
-    handleImageChange               = (value : string[]) => {this.state.image          = value};
+    handlePartOfPlantChange         = (value : string)  => { this.state.partOfPlant     = value};
+    handleUseIdentifierChange       = (value : string)  => {this.state.useIdentifier    = value};
+    handleNutritionalValueChange    = (value : string)  => {this.state.nutritionalValue = value};
+    handlePreparationChange         = (value : string)  => {this.state.preparation      = value};
+    handlePreparationTypeChange     = (value : string)  => {this.state.preparationType  = value};
+    handleImagesChange              = (value : any[])=> {this.state.images           = value;};
 
     // Update the section to show the current state
     setSection = (section: JSX.Element) => {this.section = section};
@@ -704,7 +798,7 @@ class EdibleInfo {
                 nutritionalValueHandler={this.handleNutritionalValueChange}
                 preparationHandler={this.handlePreparationChange}
                 preparationTypeHandler={this.handlePreparationTypeChange}
-                imageHandler={this.handleImageChange}
+                imageHandler={this.handleImagesChange}
                 valid={this.valid}
                 state={this.state}
             />
@@ -778,7 +872,7 @@ type EdibleUseSectionProps = {
     nutritionalValueHandler: (value: string) => void;
     preparationTypeHandler:  (value: string) => void;
     preparationHandler:      (value: string) => void;
-    imageHandler:            (value: string[]) => void;
+    imageHandler:            (value: any[]) => void;
     valid: {
         partOfPlant:        [ValidationState, string];
         useIdentifier:     [ValidationState, string];
@@ -788,12 +882,12 @@ type EdibleUseSectionProps = {
 
     }
     state: {
-        partOfPlant:        string;
-        useIdentifier:     string;
-        nutritionalValue:   string;
-        preparation:        string;
-        preparationType:    string;
-        image:              string[];
+        partOfPlant:         string;
+        useIdentifier:       string;
+        nutritionalValue:    string;
+        preparation:         string;
+        preparationType:     string;
+        images:              any[];
     }
 }
 export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutritionalValueHandler, preparationTypeHandler, preparationHandler, imageHandler, valid, state}: EdibleUseSectionProps){
@@ -801,10 +895,6 @@ export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutr
     const [showImagePopup, setShowImagePopup] = useState(false);
     const [ID, setID] = useState<any>(null)
     const router = useRouter()
-
-    useEffect(() => {
-        console.log(showImagePopup);
-    }, [showImagePopup]);
 
     useEffect(() => {
 
@@ -881,242 +971,44 @@ export function EdibleUseSection({partOfPlantHandler, useIdentifierHandler, nutr
             {/* Image Selector */}
             <ImagePopup
                 show={showImagePopup}
-                hideCallback={(value: string[]) => setShowImagePopup(false)}
+                hideCallback={() => setShowImagePopup(false)}
+                setImages={imageHandler}
+                startImages={state.images}
                 id={ID}
             />
 
             {/* Image Displays */}
-            <div className={styles.formItem}>
+            <div className={styles.formItem} key={JSON.stringify(state.images)}>
 
-                {/* Image Display */}
+                {/* Display the images */}
+                {state.images.map((image: any, index: number) => {
+                    return (
+                        <div className={styles.formItem} key={index} style={{width: "100%"}}>
+                            <div className={styles.fileUploader + " " + globalStyles.gridCentre} >
+
+                                {/* Load the image from the website or use the blob data from the file */}
+                                <Image style={{borderRadius: 8}}
+                                       src={getPostImage(image)}
+                                       alt={image.title}
+                                       width={600}
+                                       height={600}
+                                       objectFit={"contain"}
+                                />
+
+                            </div>
+                        </div>
+                    )
+                })}
+
 
                 {/* Button to select image */}
-                <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}> <FontAwesomeIcon icon={faFile} /> Select Image </button>
+                <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}><FontAwesomeIcon
+                    icon={faFile}/> Select Image(s)
+                </button>
             </div>
         </>
     )
 }
-
-
-// TODO: Remove
-class ImageInfo{
-
-    // Store the state of the section
-    state: {
-        image_url:      string;
-        image_data:     string;
-        image_name:     string;
-        image_credit:   string;
-        image_description:     string;
-        image_file:     File | null;
-    } = {
-        image_url:      "",
-        image_data:     "",
-        image_name:     "",
-        image_credit:   "",
-        image_description:     "",
-        image_file:     null,
-    }
-
-    // Store the validation state of the section
-    valid = {
-        image_url:      ["normal", "No Error"] as [ValidationState, string],
-        image_name:     ["normal", "No Error"] as [ValidationState, string],
-        image_credit:   ["normal", "No Error"] as [ValidationState, string],
-        image_description:     ["normal", "No Error"] as [ValidationState, string],
-    }
-
-    section: JSX.Element = <></>;
-
-    updateNames = () => {}
-
-    // Handlers that update the state
-    handleImageChange       = (file : File)    => {this.state.image_file = file};
-    handeURLChange          = (value : string) => {this.state.image_url   = value};
-    handleDataChange        = (value : string) => {this.state.image_data  = value};
-    handleNameChange        = (value : string) => {this.state.image_name   = value; this.updateNames()};
-    handleCreditChange      = (value : string) => {this.state.image_credit = value};
-    handleDescriptionChange        = (value : string) => {this.state.image_description   = value};
-
-    // Update the section
-    setSection = (section: JSX.Element) => {this.section = section};
-    updateSection = () => {
-        this.setSection(
-            <ImageSection
-                nameHandler={this.handleNameChange}
-                imageFileHandler={this.handleImageChange}
-                imageURLHandler={this.handeURLChange}
-                imageDataURLHandler={this.handleDataChange}
-                creditHandler={this.handleCreditChange}
-                descriptionHandler={this.handleDescriptionChange}
-                valid={this.valid}
-                state={this.state}
-            />
-        )
-    }
-
-    reRenderSection = () => {
-        const updatedSection = React.cloneElement(
-            this.section,
-            {
-                valid: this.valid,
-                state: this.state
-            }
-        );
-        this.setSection(updatedSection);
-    }
-
-
-    // Validate the section
-    validate = () => {
-        let isValid = true;
-
-        // If there is no image name entered, or it is longer than 50 chars then show an error otherwise the input is valid
-        if(this.state.image_name === "") {
-            this.valid.image_name = ["error", "Please enter a name for the image"];
-            isValid = false;
-        }else if(this.state.image_name.length > 50) {
-            this.valid.image_name = ["error", "Image name must be less than 50 characters"];
-            isValid = false;
-        }else { this.valid.image_name = ["success", "No Error"] as [ValidationState, string]; }
-
-        // If there is no image uploaded then show an error otherwise the input is valid
-        if(this.state.image_url === "") {
-            this.valid.image_name = ["error", "Please upload a image"]; // Use name here as upload doesn't have a state
-            isValid = false;
-        }
-
-        this.reRenderSection();
-
-        // Return whether the section is valid or not
-        return isValid;
-    }
-
-    constructor() {
-        this.updateSection();
-    }
-
-}
-
-// Define the type of the props for the Image Section
-type ImageSectionProps = {
-    nameHandler:     (value: string) => void;
-    imageURLHandler:       (value: string) => void;
-    imageDataURLHandler:   (value: string) => void;
-    imageFileHandler:       (file: File)    => void;
-    creditHandler:          (value: string) => void;
-    descriptionHandler:            (value: string) => void;
-    valid: {
-        image_url:  [ValidationState, string];
-        image_name: [ValidationState, string];
-        image_credit: [ValidationState, string];
-        image_description: [ValidationState, string];
-    }
-    state: {
-        image_url:  string;
-        image_data: string;
-        image_name: string;
-        image_credit: string;
-        image_description: string;
-    }
-}
-export function ImageSection({nameHandler, imageFileHandler, imageURLHandler, imageDataURLHandler, creditHandler, descriptionHandler, state, valid}: ImageSectionProps){
-
-    const [localURL, setLocalURL] = useState(1);
-
-    useEffect(() => {
-        setLocalURL(prevState => prevState + 1);
-
-    }, [state])
-
-    const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-
-        // Prevent the default behaviour
-        event.preventDefault();
-
-        // Get the file from the event
-        const selectedFile = event.target.files;
-
-        // If there is no file selected, then return
-        if (!selectedFile) {
-            console.log('Please select a file.');
-            return;
-        }
-
-        const file = selectedFile[0];
-
-        // Handle the change of the file
-        imageFileHandler(file);
-        imageURLHandler(file.name);
-        imageDataURLHandler(URL.createObjectURL(file));
-
-        // re-render
-        setLocalURL(prevState => prevState + 1);
-    }
-
-
-    return(
-        <>
-            {/* Image / Uploader */}
-            <div className={styles.formItem} key={localURL}>
-                <div className={styles.fileUploader + " " + globalStyles.gridCentre}>
-
-                    {/* If there is an image then display that, otherwise show an upload button */}
-                    {state.image_url !== "" ?
-                        <>
-                            {/* Load the image from the website or use the blob data from the file */}
-                            <Image style={{borderRadius: 8}} src={state.image_url.startsWith("http") ? state.image_url : state.image_data} alt={state.image_url} width={600} height={600} objectFit={"contain"}/>
-                        </>
-                        :
-                        <>
-                            <div className={styles.uploadButton}>
-                                <label htmlFor="files"><FontAwesomeIcon icon={faCloudArrowUp}/> Select Image</label>
-                                <input id="files" type="file" accept="image/png, image/jpeg" onChange={handleImageUpload} />
-                            </div>
-                        </>
-                    }
-                </div>
-            </div>
-
-            {/* Image Name */}
-            <div className={styles.formItem}>
-                <SmallInput
-                    placeHolder={"Image Name"}
-                    defaultValue={state.image_name}
-                    required={true}
-                    state={valid.image_name[0]}
-                    errorText={valid.image_name[1]}
-                    changeEventHandler={nameHandler}
-                />
-            </div>
-
-            {/* Image Credit */}
-            <div className={styles.formItem}>
-                <SmallInput
-                    placeHolder={"Image Credits"}
-                    defaultValue={state.image_credit}
-                    required={false}
-                    state={valid.image_credit[0]}
-                    errorText={valid.image_credit[1]}
-                    changeEventHandler={creditHandler}
-                />
-            </div>
-
-            {/* Image description */}
-            <div className={styles.formItem}>
-                <SmallInput
-                    placeHolder={"Short Image Description"}
-                    defaultValue={state.image_description}
-                    required={false}
-                    state={valid.image_description[0]}
-                    errorText={valid.image_description[1]}
-                    changeEventHandler={descriptionHandler}
-                />
-            </div>
-        </>
-    )
-}
-
 
 class FileInfo{
 
@@ -1467,14 +1359,12 @@ interface infoDisplayedProps{
         | React.MutableRefObject<CraftInfo[]>
         | React.MutableRefObject<SourceInfo[]>
         | React.MutableRefObject<CustomInfo[]>
-        | React.MutableRefObject<ImageInfo[]>
         | React.MutableRefObject<FileInfo[]>
     newInfo         : () => void
     name            : string
     setRenderKey    : React.Dispatch<React.SetStateAction<number>>
-    imageRef?       : React.MutableRefObject<ImageInfo[]>
 }
-function InfoDisplayed({infoRef, newInfo, name, setRenderKey, imageRef} : infoDisplayedProps){
+function InfoDisplayed({infoRef, newInfo, name, setRenderKey} : infoDisplayedProps){
 
     // Calculate the id of the info
     let id = name.toLowerCase().replace(" ", "-");
@@ -1486,18 +1376,6 @@ function InfoDisplayed({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
         // Re-render the entire div with this update
         setRenderKey(prevState => prevState + 1)
     }
-
-    let images: string[] = [];
-
-    if(imageRef){
-        if(imageRef.current.length > 0) {
-            images = imageRef.current.map((value, index) => {
-                return value.state.image_name
-            });
-        }
-    }
-
-    images.unshift("Default")
 
     return(
         <>
@@ -1516,28 +1394,6 @@ function InfoDisplayed({infoRef, newInfo, name, setRenderKey, imageRef} : infoDi
 
                         {/* Add the section */}
                         {value.section}
-
-                        {/* Image selector has to be here as the sections themselves cant see each other */}
-                        {imageRef ?
-                        <div className={styles.formItem}>
-                            <DropdownInput
-                                placeHolder={"Image"}
-                                defaultValue={value.state && 'image' in value.state ? value.state.image : ""}
-                                required={true}
-                                state={value.valid && 'image' in value.valid ? value.valid.image[0] : "normal"}
-                                errorText={value.valid && 'image' in value.valid ? value.valid.image[1] : "No Error"}
-                                options={images}
-                                changeEventHandler={
-                                    value instanceof EdibleInfo ||
-                                    value instanceof MedicalInfo ||
-                                    value instanceof CraftInfo
-                                    // Any other classes that use images here...
-                                    ? value.handleImageChange : undefined}
-                            />
-                        </div>
-                            :
-                        <></>
-                        }
                     </div>
                 </div>
             ))}
@@ -1583,7 +1439,6 @@ export default function CreatePlant() {
     const [plantType, setPlantType]                 = useState("")
 
     // Section Refs
-    const imageInfoRef                 = useRef<ImageInfo[]>([]);
     const dateInfoRef                   = useRef<DateInfo[]>([]);
     const edibleInfoRef               = useRef<EdibleInfo[]>([]);
     const medicalInfoRef             = useRef<MedicalInfo[]>([]);
@@ -1594,7 +1449,6 @@ export default function CreatePlant() {
 
     // Section Render Keys
     const [renderKeyDate, setRenderKeyDate] = useState(0);
-    const [renderKeyImage, setRenderKeyImage] = useState(0);
     const [renderKeyEdible, setRenderKeyEdible] = useState(0);
     const [renderKeyMedical, setRenderKeyMedical] = useState(0);
     const [renderKeyCraft, setRenderKeyCraft] = useState(0);
@@ -1616,7 +1470,6 @@ export default function CreatePlant() {
 
     // New Section Setters
     const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKeyDate(prevState => prevState + 1)}
-    const newImage = () => { imageInfoRef.current = [...imageInfoRef.current, new ImageInfo()]; setRenderKeyImage(prevState => prevState + 1)}
     const newEdibleInfo = () => { edibleInfoRef.current = [...edibleInfoRef.current, new EdibleInfo()]; setRenderKeyEdible(prevState => prevState + 1)}
     const newMedicalInfo = () => { medicalInfoRef.current = [...medicalInfoRef.current, new MedicalInfo()]; setRenderKeyMedical(prevState => prevState + 1)}
     const newCraftInfo = () => { craftInfoRef.current = [...craftInfoRef.current, new CraftInfo()]; setRenderKeyCraft(prevState => prevState + 1)}
@@ -1732,16 +1585,6 @@ export default function CreatePlant() {
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "plant-type";
         } else { setPlantTypeValidationState(["success", "No Error"] as [ValidationState, string]) }
 
-        // Validate the image info
-        for (let i = 0; i < imageInfoRef.current.length; i++) {
-
-            // Only change the valid state if it is false to prevent previous falses being overridden to be true
-            if(!imageInfoRef.current[i].validate()){
-                isValid = false;
-                if(elementThatNeedsFocus === null) elementThatNeedsFocus = "image-" + i;
-            }
-        }
-
         // Validate the date info
         for (let i = 0; i < dateInfoRef.current.length; i++) {
             // Only change the valid state if it is false to prevent previous falses being overridden to be true
@@ -1826,9 +1669,6 @@ export default function CreatePlant() {
         return isValid;
     }
 
-
-
-
     const generateJSON = () => {
 
         // Create the JSON object
@@ -1866,24 +1706,6 @@ export default function CreatePlant() {
                     plantOBJ.authorIDs.push(userID)
                 }
             }
-        }
-
-        // Image info
-        for(let i = 0; i < imageInfoRef.current.length; i++) {
-            const thisImageInfo = imageInfoRef.current[i].state;
-
-            let imageInfoOBJ = {
-                path: cleanInput(thisImageInfo.image_url),
-                type: "image",
-                meta: {
-                    "name": cleanInput(thisImageInfo.image_name),
-                    "credits": cleanInput(thisImageInfo.image_credit),
-                    "description": cleanInput(thisImageInfo.image_description),
-                },
-                downloadable: false,
-            } as AttachmentData;
-
-            plantOBJ.attachments.push(imageInfoOBJ);
         }
 
         // File info
@@ -1933,7 +1755,7 @@ export default function CreatePlant() {
                 type: "edible",
                 part_of_plant: "",
                 use_identifier: "",
-                image_of_part: "",
+                images: [],
                 nutrition: "",
                 preparation: "",
                 preparation_type: "",
@@ -1941,7 +1763,7 @@ export default function CreatePlant() {
 
             edibleInfoOBJ.part_of_plant = cleanInput(thisEdibleInfo.partOfPlant);
             edibleInfoOBJ.use_identifier = cleanInput(thisEdibleInfo.useIdentifier);
-            edibleInfoOBJ.image_of_part = cleanInput(thisEdibleInfo.image);
+            edibleInfoOBJ.images = thisEdibleInfo.images;
             edibleInfoOBJ.nutrition = cleanInput(thisEdibleInfo.nutritionalValue);
             edibleInfoOBJ.preparation = cleanInput(thisEdibleInfo.preparation);
             edibleInfoOBJ.preparation_type = cleanInput(thisEdibleInfo.preparationType);
@@ -1963,7 +1785,7 @@ export default function CreatePlant() {
                 medical_type: "",
                 use_identifier: "",
                 use: "",
-                image: "",
+                images: [],
                 preparation: "",
                 restricted: "",
             } as MedicalSectionData;
@@ -1971,7 +1793,7 @@ export default function CreatePlant() {
             medicalInfoOBJ.medical_type = cleanInput(thisMedicalInfo.type);
             medicalInfoOBJ.use_identifier = cleanInput(thisMedicalInfo.useIdentifier);
             medicalInfoOBJ.use = cleanInput(thisMedicalInfo.use);
-            medicalInfoOBJ.image = cleanInput(thisMedicalInfo.image);
+            medicalInfoOBJ.images = thisMedicalInfo.images;
             medicalInfoOBJ.preparation = cleanInput(thisMedicalInfo.preparation);
             medicalInfoOBJ.restricted = cleanInput(thisMedicalInfo.restricted);
 
@@ -1992,14 +1814,14 @@ export default function CreatePlant() {
                 part_of_plant: "",
                 use_identifier: "",
                 use: "",
-                image: "",
+                images: [],
                 additonal_info: "",
             } as CraftSectionData;
 
             craftInfoOBJ.part_of_plant = cleanInput(thisCraftInfo.partOfPlant);
             craftInfoOBJ.use_identifier = cleanInput(thisCraftInfo.useIdentifier);
             craftInfoOBJ.use = cleanInput(thisCraftInfo.use);
-            craftInfoOBJ.image = cleanInput(thisCraftInfo.image);
+            craftInfoOBJ.images = thisCraftInfo.images;
             craftInfoOBJ.additonal_info = cleanInput(thisCraftInfo.additionalInfo);
 
             // If it isn't already in the use array, add it
@@ -2042,67 +1864,6 @@ export default function CreatePlant() {
             plantOBJ.sections.push(customInfoOBJ);
         }
 
-        // Loop through the sections to double-check that the images they use are in the attachments
-        let imageFailed = false
-        for(let i = 0; i < plantOBJ.sections.length; i++) {
-
-            // Only Edible, Medical and Craft sections have images
-            if (!(plantOBJ.sections[i].type === "edible" || plantOBJ.sections[i].type === "medical" || plantOBJ.sections[i].type === "craft"))
-                continue
-
-            // Get the image (for whatever reason edible stores it differently)
-            const image = plantOBJ.sections[i].type == "edible" ? (plantOBJ.sections[i] as EdibleSectionData).image_of_part : (plantOBJ.sections[i] as MedicalSectionData).image;
-
-            // If the image is Default then continue:
-            if (image === "Default")
-                continue
-
-            // Store whether the image is valid
-            let validImage = false;
-
-            // Check if the image name is in the attachments
-            for (let j = 0; j < plantOBJ.attachments.length; j++) {
-                if ((plantOBJ.attachments[j].meta as ImageMetaData).name === image) {
-                    // If it is then this section is valid
-                    validImage = true;
-                }
-            }
-
-            // If the image isn't valid then set it to default
-            if (!validImage) {
-                if (plantOBJ.sections[i].type == "edible") {
-                    (plantOBJ.sections[i] as EdibleSectionData).image_of_part = "Default";
-                } else {
-                    (plantOBJ.sections[i] as MedicalSectionData).image = "Default";
-                }
-            }
-        }
-
-        // Check if the display image is in the attachments
-        if(plantOBJ.display_image !== "Default"){
-            let validImage = false;
-            for (let j = 0; j < plantOBJ.attachments.length; j++) {
-                if ((plantOBJ.attachments[j].meta as ImageMetaData).name === plantOBJ.display_image) {
-                    // If it is then this section is valid
-                    validImage = true;
-                }
-            }
-
-            // If the image isn't valid then set it to default
-            if (!validImage) {
-                plantOBJ.display_image = "Default";
-            }
-        }
-
-        // If the image failed then return null
-        if(imageFailed){
-            loadJson(plantOBJ)
-            scrollToElement("errorSection")
-            return null
-        }
-
-
-
         return plantOBJ;
     }
 
@@ -2118,7 +1879,6 @@ export default function CreatePlant() {
         craftInfoRef.current    = [];
         sourceInfoRef.current   = [];
         customInfoRef.current   = [];
-        imageInfoRef.current    = [];
         fileInfoRef.current     = [];
 
         // Create the months ready for ues
@@ -2138,32 +1898,8 @@ export default function CreatePlant() {
             dateSection.reRenderSection()
         }
 
-        // Create the images and files
+        // Create the files
         for (let i = 0; i < jsonContents.attachments.length; i++) {
-
-            // If this is an image
-            if(jsonContents.attachments[i].type === "image"){
-                // Create the new section
-                newImage()
-
-                // Get the new section
-                const imageSection = imageInfoRef.current[imageInfoRef.current.length-1];
-
-                // Update the values
-                if(jsonContents.id !== 1) { // If it is not an import from local
-                    imageSection.handeURLChange(jsonContents.attachments[i].path)
-                }
-                const metaData = jsonContents.attachments[i].meta as ImageMetaData
-                imageSection.handleNameChange(metaData.name)
-                imageSection.handleCreditChange(metaData.credits)
-                imageSection.handleDescriptionChange(metaData.description)
-
-                // Re-render the section
-                imageSection.reRenderSection()
-                continue;
-            }
-
-            // Otherwise it is a file
 
             // Create the new section
             newFileInfo()
@@ -2204,7 +1940,7 @@ export default function CreatePlant() {
                     edibleSection.handleNutritionalValueChange(jsonContents.sections[i].nutrition)
                     edibleSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     edibleSection.handlePreparationTypeChange(jsonContents.sections[i].preparation_type)
-                    edibleSection.handleImageChange(jsonContents.sections[i].image_of_part)
+                    edibleSection.handleImagesChange(jsonContents.sections[i].images)
 
                     // Re-render the section
                     edibleSection.reRenderSection()
@@ -2223,7 +1959,7 @@ export default function CreatePlant() {
                     medicalSection.handlePreparationChange(jsonContents.sections[i].preparation)
                     medicalSection.handleUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     medicalSection.handeUseValueChange(jsonContents.sections[i].use)
-                    medicalSection.handleImageChange(jsonContents.sections[i].image)
+                    medicalSection.handleImagesChange(jsonContents.sections[i].images)
                     medicalSection.handleRestrictedChange(jsonContents.sections[i].restricted)
 
                     // Re-render the section
@@ -2243,8 +1979,7 @@ export default function CreatePlant() {
                     craftSection.handUseIdentifierChange(jsonContents.sections[i].use_identifier)
                     craftSection.handleUseValueChange(jsonContents.sections[i].use)
                     craftSection.handleAdditionalInfoChange(jsonContents.sections[i].additonal_info)
-                    craftSection.handleImageChange(jsonContents.sections[i].image)
-                    console.log(craftSection)
+                    craftSection.handleImagesChange(jsonContents.sections[i].images)
 
                     // Re-render the section
                     craftSection.reRenderSection()
@@ -2286,9 +2021,6 @@ export default function CreatePlant() {
 
             }
         }
-
-        // Update the image names in the image sections
-        updateNames()
     }
 
     const importPlant = () =>
@@ -2509,28 +2241,7 @@ export default function CreatePlant() {
         if(newId === undefined){
             return}
 
-        // Loop through each image info and upload the image
-        for(let i = 0; i < imageInfoRef.current.length; i++){
 
-            setProgressMessage(`Uploading image ${i + 1} of ${imageInfoRef.current.length}`)
-            // If the image url is already set to have an url, skip it
-            if(imageInfoRef.current[i].state.image_url.startsWith("http")) {
-                continue;
-            }
-
-            // Get the file
-            const file = imageInfoRef.current[i].state.image_file
-
-            // Check if there is a file
-            if(!file){
-                console.log("NO FILE", i)
-                continue;
-            }
-
-            // Upload the image
-            await uploadFile(file, newId)
-
-        }
 
         // Loop through each file info and upload the file
         for(let i = 0; i < fileInfoRef.current.length; i++){
@@ -2668,33 +2379,6 @@ export default function CreatePlant() {
 
     // Images used to select the display image
     const displayImageRef = useRef(["Default"]);
-
-    // When the names are updated re-render the sections that use images
-    const updateNames = () => {
-        setRenderKeyEdible(prevState => prevState + 1)
-        setRenderKeyMedical(prevState => prevState + 1)
-        setRenderKeyCraft(prevState => prevState + 1)
-        setRenderKeyDisplayImage(prevState => prevState + 1)
-
-        displayImageRef.current = []
-
-        if(imageInfoRef.current.length > 0) {
-            displayImageRef.current = imageInfoRef.current.map((value, index) => {
-                return value.state.image_name
-            });
-            displayImageRef.current.unshift("Random")
-        }
-        displayImageRef.current.unshift("Default")
-    }
-
-    useEffect(() => {
-
-        // Register the updateNames names function to the image info object as it doest have a reference to the render keys of the other sections
-        for (let i = 0; i < imageInfoRef.current.length; i++) {
-            imageInfoRef.current[i].updateNames = updateNames;
-        }
-
-    }, [imageInfoRef.current])
 
     return (
         <>
@@ -2845,7 +2529,6 @@ export default function CreatePlant() {
                                 newInfo={newEdibleInfo}
                                 key={renderKeyEdible}
                                 setRenderKey={setRenderKeyEdible}
-                                imageRef={imageInfoRef}
                             />
                         </div>
 
@@ -2857,7 +2540,6 @@ export default function CreatePlant() {
                                 newInfo={newMedicalInfo}
                                 key={renderKeyMedical}
                                 setRenderKey={setRenderKeyMedical}
-                                imageRef={imageInfoRef}
                             />
                         </div>
 
@@ -2869,7 +2551,6 @@ export default function CreatePlant() {
                                 newInfo={newCraftInfo}
                                 key={renderKeyCraft}
                                 setRenderKey={setRenderKeyCraft}
-                                imageRef={imageInfoRef}
                             />
                         </div>
 
@@ -2899,16 +2580,6 @@ export default function CreatePlant() {
                     {/* Right Hand Column */}
                     <div className={"column"}>
 
-                        {/* Images */}
-                        <div className={styles.formSection + " " + globalStyles.gridCentre}>
-                            <InfoDisplayed
-                                name={"Image"}
-                                infoRef={imageInfoRef}
-                                newInfo={newImage}
-                                key={renderKeyImage}
-                                setRenderKey={setRenderKeyImage}
-                            />
-                        </div>
 
                         {/* File */}
                         <div className={styles.formSection + " " + globalStyles.gridCentre}>

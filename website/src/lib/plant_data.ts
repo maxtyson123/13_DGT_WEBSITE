@@ -48,7 +48,7 @@ export interface PlantDataApi {
     months_ready_end_months:    string[];
     edible_parts:               string[];
     edible_use_identifiers:     string[];
-    edible_images:              string[];
+    edible_images:              PostData[][];
     edible_nutrition:           string[];
     edible_preparation:         string[];
     edible_preparation_type:    string[];
@@ -56,12 +56,12 @@ export interface PlantDataApi {
     medical_use_identifiers:    string[];
     medical_uses:               string[];
     medical_restricteds:        string[];
-    medical_images:             string[];
+    medical_images:             PostData[][];
     medical_preparation:        string[];
     craft_parts:                string[];
     craft_use_identifiers:      string[];
     craft_uses:                 string[];
-    craft_images:               string[];
+    craft_images:               PostData[][];
     craft_additional_info:      string[];
     source_types:               string[];
     source_data:                string[];
@@ -104,8 +104,8 @@ export interface FileMetaData{
 export interface EdibleSectionData{
     type:               string;
     part_of_plant:      string;
-    use_identifier:    string;
-    image_of_part:      string;
+    use_identifier:     string;
+    images:             PostData[];
     nutrition:          string;
     preparation:        string;
     preparation_type:   string;
@@ -121,7 +121,7 @@ export interface MedicalSectionData{
     medical_type:       string;
     use_identifier:     string;
     use:                string;
-    image:              string;
+    images:             PostData[];
     preparation:        string;
     restricted:         string;
 }
@@ -136,7 +136,7 @@ export interface CraftSectionData{
     part_of_plant:      string;
     use_identifier:     string;
     use:                string;
-    image:              string;
+    images:             PostData[];
     additonal_info:     string;
 }
 
@@ -183,6 +183,17 @@ export interface MonthsReadyData {
     event:          string;
     start_month:    string;
     end_month:      string;
+}
+
+export type PostData = {
+    id: number;
+    post_title: string;
+    post_plant_id: number;
+    post_user_id: number;
+    post_date: string;
+    post_image: string;
+    post_approved: boolean;
+    post_in_use: boolean;
 }
 
 /**
@@ -482,7 +493,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             type: "edible",
             part_of_plant:      apiData.edible_parts[i],
             use_identifier:     apiData.edible_use_identifiers[i],
-            image_of_part:      apiData.edible_images[i],
+            images:             apiData.edible_images[i],
             nutrition:          apiData.edible_nutrition[i],
             preparation:        apiData.edible_preparation[i],
             preparation_type:   apiData.edible_preparation_type[i],
@@ -503,7 +514,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             medical_type:   apiData.medical_types[i],
             use_identifier: apiData.medical_use_identifiers[i],
             use:            apiData.medical_uses[i],
-            image:          apiData.medical_images[i],
+            images:          apiData.medical_images[i],
             preparation:    apiData.medical_preparation[i],
             restricted:     apiData.medical_restricteds[i],
         } as MedicalSectionData;
@@ -523,7 +534,7 @@ export function ConvertApiIntoPlantData(apiData : PlantDataApi){
             part_of_plant:      apiData.craft_parts[i],
             use_identifier:     apiData.craft_use_identifiers[i],
             use:                apiData.craft_uses[i],
-            image:              apiData.craft_images[i],
+            images:              apiData.craft_images[i],
             additonal_info:     apiData.craft_additional_info[i],
         } as CraftSectionData;
 
@@ -614,7 +625,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
             case "edible":
                 apiData.edible_parts.push(plantData.sections[i].part_of_plant);
                 apiData.edible_use_identifiers.push(plantData.sections[i].use_identifier);
-                apiData.edible_images.push(plantData.sections[i].image_of_part);
+                apiData.edible_images.push(plantData.sections[i].images.map((image: any) => image.id).join(","));
                 apiData.edible_nutrition.push(plantData.sections[i].nutrition);
                 apiData.edible_preparation.push(plantData.sections[i].preparation);
                 apiData.edible_preparation_type.push(plantData.sections[i].preparation_type);
@@ -624,7 +635,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
                 apiData.medical_types.push(plantData.sections[i].medical_type);
                 apiData.medical_use_identifiers.push(plantData.sections[i].use_identifier);
                 apiData.medical_uses.push(plantData.sections[i].use);
-                apiData.medical_images.push(plantData.sections[i].image);
+                apiData.medical_images.push(plantData.sections[i].images.map((image: any) => image.id).join(","));
                 apiData.medical_preparation.push(plantData.sections[i].preparation);
                 apiData.medical_restricteds.push(plantData.sections[i].restricted);
                 break;
@@ -633,7 +644,7 @@ export function ConvertPlantDataIntoApi(plantData : PlantData){
                 apiData.craft_parts.push(plantData.sections[i].part_of_plant);
                 apiData.craft_use_identifiers.push(plantData.sections[i].use_identifier);
                 apiData.craft_uses.push(plantData.sections[i].use);
-                apiData.craft_images.push(plantData.sections[i].image);
+                apiData.craft_images.push(plantData.sections[i].images.map((image: any) => image.id).join(","));
                 apiData.craft_additional_info.push(plantData.sections[i].additonal_info);
                 break;
 
@@ -1032,7 +1043,7 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
                     type: "edible",
                     part_of_plant: columns[i += 2],
                     use_identifier: "",
-                    image_of_part: "",
+                    images: [],
                     nutrition: columns[i += 3], // Plus 4 as image is skipped
                     preparation_type: columns[i += 2],
                     preparation: columns[i += 2]
@@ -1052,8 +1063,9 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
                     medical_type: columns[i += 2],
                     use_identifier: "",
                     use: columns[i += 2],
-                    image: "",
-                    preparation: columns[i += 2]
+                    images: [],
+                    preparation: columns[i += 2],
+                    restricted: ""
                 } as MedicalSectionData;
 
                 plant.sections.push(medicalInfoOBJ);
@@ -1070,7 +1082,7 @@ export function convertTableDataToPlantData(tableData: any): PlantData {
                     part_of_plant: columns[i += 2],
                     use_identifier: "",
                     use: columns[i += 2],
-                    image: "",
+                    images: [],
                     additonal_info: columns[i += 2]
                 } as CraftSectionData;
 

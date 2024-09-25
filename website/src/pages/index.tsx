@@ -47,6 +47,7 @@ import PostFeed from "@/components/postfeed";
 // - - API Docs
 // - - User docs
 // -  General QOL
+// - - typed
 // - - S.E.O
 // - - Data Fetch Rewrite (STATIC PROPS)
 // - - About Section Rewrite
