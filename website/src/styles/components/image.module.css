@@ -1,0 +1,40 @@
+.imageContainer{
+    color: #0A670A;
+}
+
+.imageControls{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    position: relative;
+    top: -2.5%;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.imageControls button:hover{
+    color: var(--main-green);
+}
+
+.dotsContainer {
+    display: flex;
+    gap: 12px; /* Adjust the gap as needed */
+}
+
+.dot{
+    height: 10px;
+    width: 10px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    margin: auto;
+}
+
+.dot:hover{
+    background-color: var(--main-green);
+}
+
+.dot.active{
+    background-color: var(--main-green);
+}

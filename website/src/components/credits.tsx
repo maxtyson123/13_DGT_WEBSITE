@@ -81,7 +81,7 @@ export function CreditedImage({url, alt, credits, colour = "gray"}: CreditedImag
                 src={url}
                 alt={alt}
                 fill
-                style={{objectFit: "contain"}}
+                style={{objectFit: "cover"}}
             />
             <p className={styles.credits + " " + backgroundColour}> <FontAwesomeIcon icon={faCopyright}/> {credits} </p>
         </>

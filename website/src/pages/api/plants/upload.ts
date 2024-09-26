@@ -41,7 +41,7 @@ export default async function handler(
             small_description,
             long_description,
             author,
-            display_image,
+            display_images,
             plant_type,
             months_ready_events,
             months_ready_start_months,
@@ -101,8 +101,8 @@ export default async function handler(
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}, ${tables.author}, ${tables.last_modified}, ${tables.display_image}, ${tables.plant_type}, ${tables.published}) `;
-        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', ${timeFunction}(${Date.now()} / 1000.0), '${display_image}', '${plant_type}', 0) ${USE_POSTGRES ? "RETURNING id" : ""};`;
+        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}, ${tables.author}, ${tables.last_modified}, ${tables.display_images}, ${tables.plant_type}, ${tables.published}) `;
+        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', ${timeFunction}(${Date.now()} / 1000.0), '${display_images}', '${plant_type}', 0) ${USE_POSTGRES ? "RETURNING id" : ""};`;
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS ( SELECT id FROM plants ORDER BY id DESC LIMIT 1 ); ${!USE_POSTGRES ? "SELECT id FROM new_plant;" : ""}`;

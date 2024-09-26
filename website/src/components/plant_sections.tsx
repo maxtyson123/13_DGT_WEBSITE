@@ -31,6 +31,7 @@ import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {CreditedImage} from "@/components/credits";
 import {ModalImage} from "@/components/modal";
 import {getPostImage} from "@/lib/data";
+import {ImageArray} from "@/components/image";
 
 interface AutoSectionProps{
     section: any
@@ -82,7 +83,6 @@ interface EdibleSectionProps{
  * @param {EdibleSectionData} props.section - The section data.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
- * @see {@link AdvancedTextArea} - The advanced text area component.
  *
  * @returns {JSX.Element} The rendered section component.
  */
@@ -93,16 +93,26 @@ export function EdibleSection({section, isLeft} : EdibleSectionProps){
     const preparationRef = useRef<HTMLParagraphElement>(null)
 
     const hasImage = section.images.length > 0
-    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
-    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
-    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
+    const images = hasImage ?
+        section.images.map((image: any) => {
+            return {
+                url: getPostImage(image),
+                name: image.post_title,
+                credits: image.post_user_id.toString(),
+                description: image.post_title
+            }
+        })
+        : [{
+            url: "/media/images/default_noImage.png",
+            name: "No Image",
+            credits: "",
+            description: ""
+        }]
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageURI} description={imageAlt}>
-                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
-                </ModalImage>
+                <ImageArray images={images} enableModal/>
             </div>
         </>
     )
@@ -165,16 +175,26 @@ export function MedicalSection({section, isLeft} : MedicalSectionProps){
 
     // TODO COMPONETIZE THIS
     const hasImage = section.images.length > 0
-    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
-    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
-    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
+    const images = hasImage ?
+        section.images.map((image: any) => {
+            return {
+                url: getPostImage(image),
+                name: image.post_title,
+                credits: image.post_user_id.toString(),
+                description: image.post_title
+            }
+        })
+        : [{
+            url: "/media/images/default_noImage.png",
+            name: "No Image",
+            credits: "",
+            description: ""
+        }]
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageURI} description={imageAlt}>
-                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
-                </ModalImage>
+                <ImageArray images={images} enableModal/>
             </div>
         </>
     )
@@ -238,16 +258,26 @@ export function CraftSection({section, isLeft} : CraftSectionProps){
     const additional_infoRef = useRef<HTMLDivElement>(null)
 
     const hasImage = section.images.length > 0
-    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
-    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
-    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
+    const images = hasImage ?
+        section.images.map((image: any) => {
+            return {
+                url: getPostImage(image),
+                name: image.post_title,
+                credits: image.post_user_id.toString(),
+                description: image.post_title
+            }
+        })
+    : [{
+            url: "/media/images/default_noImage.png",
+            name: "No Image",
+            credits: "",
+            description: ""
+       }]
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageURI} description={imageAlt}>
-                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
-                </ModalImage>
+                <ImageArray images={images} enableModal/>
             </div>
         </>
     )

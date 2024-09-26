@@ -66,9 +66,14 @@
  Hide the overflow as the corners are rounded
  */
 .plantImageContainer{
-    width: 100%;
+    background-color: var(--secondary-gray);
+    width: 80%;
     height: 100%;
+    border-radius: 20px;
+    min-height: 600px;
+    position: relative;
     overflow: hidden;
+    top: 30%;
 }
 
 /*
@@ -247,8 +252,8 @@
      Center the images when there is only one column
     */
     .plantImageContainer{
-        display: grid;
-        justify-items: center;
+        width: 100%;
+        min-height: 200px;
     }
 
     /*

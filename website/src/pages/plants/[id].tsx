@@ -18,21 +18,21 @@ import {checkUserPermissions, RongoaUser} from "@/lib/users";
 import {Layout} from "@/components/layout";
 import {loader_data} from "@/lib/loader_data";
 import PostFeed from "@/components/postfeed";
+import {getPostImage} from "@/lib/data";
+import {ImageArray} from "@/components/image";
 
 export default function PlantPage() {
 
     // Store the plant data
     const [plantData, setPlantData] = React.useState<PlantData | null>(null)
     const [plantNames, setPlantNames] = React.useState(["Loading...", "Loading...", "Loading..."])
+    const [images, setImages] = React.useState<{url: string, name: string, credits: string, description: string}[]>([])
 
-    // States for the images
-    const [currentImage, setCurrentImage] = React.useState(0)
-    const [mainImage, setMainImage] = React.useState("/media/images/loading.gif")
-    const [mainImageMetaData, setMainImageMetaData] = React.useState<ImageMetaData | null>(null)
+
     const [showMainImage, setShowMainImage] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
-    
-    
+
+
     // Loading
     const [loadingMessage, setLoadingMessage] = React.useState("")
 
@@ -140,25 +140,6 @@ export default function PlantPage() {
         }
     }, [])
 
-    // Update content when the plant data changes
-    const setMainImageFromIndex = (index: number) => {
-
-        // Get all the attachments with image type
-        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
-
-        // If there are no images then return
-        if(!images)
-            return
-
-        // If the index is out of bounds then return
-        if(index < 0 || index >= images.length)
-            return;
-
-        // Set the current image
-        setMainImage(images[index].path)
-        setMainImageMetaData(images[index].meta as ImageMetaData)
-
-    }
 
     // Load the data when the plant data changes
     useEffect(() => {
@@ -169,28 +150,25 @@ export default function PlantPage() {
             div.innerHTML = plantData ? plantData.long_description : "Loading...";
         }
 
-        // Get all the attachments with image type
-        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
+        if(!plantData) return;
 
-        // Set the main image
-        switch (plantData?.display_image){
-
-            case "Default":
-                setMainImage("/media/images/default_noImage.png")
-                break;
-
-            case "Random":
-                // Get a random index and set the image
-                if(images)
-                    setMainImageFromIndex(Math.floor(Math.random() * images.length))
-                break;
-
-            default:
-                // Find the image with the same name as the display image
-                if(images)
-                    setMainImageFromIndex(images.findIndex((image) => (image.meta as ImageMetaData).name === plantData?.display_image))
-
-        }
+        const hasImage = plantData.display_images.length > 0
+        const images = hasImage ?
+            plantData.display_images.map((image: any) => {
+                return {
+                    url: getPostImage(image),
+                    name: image.post_title,
+                    credits: image.post_user_id.toString(),
+                    description: image.post_title
+                }
+            })
+            : [{
+                url: "/media/images/default_noImage.png",
+                name: "No Image",
+                credits: "",
+                description: ""
+            }]
+        setImages(images)
 
     }, [plantData]);
 
@@ -316,51 +294,8 @@ export default function PlantPage() {
 
                             <div className={"column"}>
 
-
                                 <div className={styles.plantImageContainer}>
-
-                                    {/* The main image, will be set to the first image until the users scrolls below to another one */}
-                                    <div className={styles.mainImage} onClick={toggleMainImage}>
-                                        <ModalImage url={mainImage} description={mainImageMetaData ? mainImageMetaData.description : ""} show={showMainImage} hideCallbackOveride={toggleMainImage}/>
-                                        <CreditedImage url={mainImage} alt={`${plantNames[0]} Header Image`} credits={mainImageMetaData ? mainImageMetaData.credits : "Uncredited"}/>
-                                    </div>
-
-
-
-                                    {/* The bottom images, will be set to the first 5 images, on click they will change the main image */}
-                                    <div className={styles.bottomImages}>
-
-                                        {/* Decrement the current image by 1 */}
-                                        <button onClick={() => {
-                                            changeImage(currentImage - 1)
-                                        }}><FontAwesomeIcon icon={faArrowLeft} className={styles.arrow}/></button>
-
-                                        {/* Loop through 5 creating 5 images */}
-                                        {plantData && plantData.attachments.filter((attachment, index) => index < 5 && attachment.type === "image").map((attachment, index) => (
-                                            <>
-                                                {/* On click set the main image to the image clicked */}
-                                                <button key={index} onClick={() => {
-                                                    setMainImageFromIndex(currentImage + index)
-                                                }}>
-
-                                                    {/* The image, use the current shown image plus the index to get the correct 5 */}
-                                                    <Image
-                                                        key={plantData?.attachments[currentImage + index].path}
-                                                        src={plantData?.attachments[currentImage + index] ? plantData?.attachments[currentImage + index].path : "/media/images/loading.gif"}
-                                                        alt={plantData?.attachments[currentImage + index] ? (plantData?.attachments[currentImage + index].meta as ImageMetaData).name : "Loading"}
-                                                        fill
-                                                        placeholder={loader_data() as any}
-                                                        style={{objectFit: "contain"}}
-                                                    />
-                                                </button>
-                                            </>
-                                        ))}
-
-                                        {/* Decrement the current image by 1 */}
-                                        <button onClick={() => {
-                                            changeImage(currentImage + 1)
-                                        }}><FontAwesomeIcon icon={faArrowRight} className={styles.arrow}/></button>
-                                    </div>
+                                    <ImageArray images={images} enableModal/>
                                 </div>
                             </div>
                         </div>

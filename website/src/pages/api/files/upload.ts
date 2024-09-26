@@ -79,8 +79,8 @@ function createBackUpQuery(json: any) {
                 let old = query
 
                 query = createUpSertQuery("plants",
-                    [tables.id, tables.preferred_name, tables.english_name, tables.maori_name, tables.latin_name, tables.location_found, tables.small_description, tables.long_description, tables.author, tables.last_modified, tables.display_image, tables.plant_type, tables.published],
-                    [plantTable[j].id, plantTable[j].preferred_name, plantTable[j].english_name, plantTable[j].maori_name, plantTable[j].latin_name, plantTable[j].location_found, plantTable[j].small_description, plantTable[j].long_description, plantTable[j].author, plantTable[j].last_modified, plantTable[j].display_image, plantTable[j].plant_type, plantTable[j].published]
+                    [tables.id, tables.preferred_name, tables.english_name, tables.maori_name, tables.latin_name, tables.location_found, tables.small_description, tables.long_description, tables.author, tables.last_modified, tables.display_images, tables.plant_type, tables.published],
+                    [plantTable[j].id, plantTable[j].preferred_name, plantTable[j].english_name, plantTable[j].maori_name, plantTable[j].latin_name, plantTable[j].location_found, plantTable[j].small_description, plantTable[j].long_description, plantTable[j].author, plantTable[j].last_modified, plantTable[j].display_images, plantTable[j].plant_type, plantTable[j].published]
                 )
 
                 // Add the old query
@@ -106,7 +106,7 @@ function createBackUpQuery(json: any) {
             let craftTable = json.data[i];
             for (let j = 0; j < craftTable.length; j++)
                 query += createUpSertQuery("craft",
-                    [tables.id, tables.plant_id, tables.craft_part_of_plant, tables.craft_use_identifier, tables.craft_use, tables.craft_image, tables.craft_additional_info],
+                    [tables.id, tables.plant_id, tables.craft_part_of_plant, tables.craft_use_identifier, tables.craft_use, tables.craft_images, tables.craft_additional_info],
                     [craftTable[j].id, craftTable[j].plant_id, craftTable[j].craft_part_of_plant, craftTable[j].craft_use_identifier, craftTable[j].craft_use, craftTable[j].craft_image, craftTable[j].craft_additional_info]
                 )
 
@@ -130,7 +130,7 @@ function createBackUpQuery(json: any) {
             let edibleTable = json.data[i];
             for (let j = 0; j < edibleTable.length; j++)
                 query += createUpSertQuery("edible",
-                    [tables.id, tables.plant_id, tables.edible_part_of_plant, tables.edible_use_identifier, tables.edible_image_of_part, tables.edible_nutrition, tables.edible_preparation, tables.edible_preparation_type],
+                    [tables.id, tables.plant_id, tables.edible_part_of_plant, tables.edible_use_identifier, tables.edible_images, tables.edible_nutrition, tables.edible_preparation, tables.edible_preparation_type],
                     [edibleTable[j].id, edibleTable[j].plant_id, edibleTable[j].edible_part_of_plant, edibleTable[j].edible_use_identifier, edibleTable[j].edible_image, edibleTable[j].edible_nutrition, edibleTable[j].edible_preparation, edibleTable[j].edible_preparation_type]
                 )
             continue;
@@ -142,7 +142,7 @@ function createBackUpQuery(json: any) {
             let medicalTable = json.data[i];
             for (let j = 0; j < medicalTable.length; j++)
                 query += createUpSertQuery("medical",
-                    [tables.id, tables.plant_id, tables.medical_type, tables.medical_use_identifier, tables.medical_use, tables.medical_image, tables.medical_preparation, tables.medical_restricted],
+                    [tables.id, tables.plant_id, tables.medical_type, tables.medical_use_identifier, tables.medical_use, tables.medical_images, tables.medical_preparation, tables.medical_restricted],
                     [medicalTable[j].id, medicalTable[j].plant_id, medicalTable[j].medical_type, medicalTable[j].medical_use_identifier, medicalTable[j].medical_use, medicalTable[j].medical_image, medicalTable[j].medical_preparation, medicalTable[j].medical_restricted]
                 )
             continue;

@@ -93,7 +93,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                                     plants.${tables.long_description}, 
                                     plants.${tables.author}, 
                                     plants.${tables.last_modified}, 
-                                    plants.${tables.display_image},
+                                    plants.${tables.display_images},
                                     plants.${tables.plant_type},
                                     plants.${tables.published},`;
                     break;
@@ -272,12 +272,14 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         data[0].medical_images = parseImageIds(data[0].medical_images);
         data[0].edible_images = parseImageIds(data[0].edible_images);
         data[0].craft_images = parseImageIds(data[0].craft_images);
+        data[0].display_images = parseImageId(data[0].display_images);
 
         // Remove duplicates
         let allPostIds: any = [];
         for (let i = 0; i < data[0].medical_images.length; i++) { allPostIds = allPostIds.concat(data[0].medical_images[i]); }
         for (let i = 0; i < data[0].edible_images.length; i++) { allPostIds = allPostIds.concat(data[0].edible_images[i]); }
         for (let i = 0; i < data[0].craft_images.length; i++) { allPostIds = allPostIds.concat(data[0].craft_images[i]); }
+        allPostIds.concat(data[0].display_images);
         allPostIds = allPostIds.filter((id: any, index: any) => allPostIds.indexOf(id) === index);
 
         // Make sure that allPostIds is not empty
@@ -291,6 +293,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         for (let i = 0; i < data[0].medical_images.length; i++) { data[0].medical_images[i] = data[0].medical_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
         for (let i = 0; i < data[0].edible_images.length; i++) { data[0].edible_images[i] = data[0].edible_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
         for (let i = 0; i < data[0].craft_images.length; i++) { data[0].craft_images[i] = data[0].craft_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
+        data[0].display_images = data[0].display_images.map((id: any) => postData.find((post: any) => post.id === id));
 
         // If the data is not empty, return the data
         return ["success", data];
@@ -311,4 +314,11 @@ const parseImageIds = (imageData: string) => {
             })
         }
     )
+}
+
+const parseImageId = (imageData: string) => {
+    if(imageData === null || imageData == "") return [];
+    return imageData.split(",").map((id: string) => {
+        return parseInt(id.trim().split("\n")[0])
+    })
 }

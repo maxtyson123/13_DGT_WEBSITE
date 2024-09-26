@@ -1423,6 +1423,8 @@ export default function CreatePlant() {
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [progressMessage, setProgressMessage] = useState("")
+    const [plantID, setPlantID] = useState<number | undefined>()
+    const [showImagePopup, setShowImagePopup] = useState(false)
 
     // Imported DATA
     const [importedJSON, setImportedJSON] = useState<PlantData>(emptyPlantData())
@@ -1435,8 +1437,8 @@ export default function CreatePlant() {
     const [smallDescription, setSmallDescription]   = useState("")
     const [largeDescription, setLargeDescription]   = useState("")
     const [location, setLocation]                   = useState("")
-    const [displayImage, setDisplayImage]           = useState("")
     const [plantType, setPlantType]                 = useState("")
+    const [mainImages, setMainImages]                                                    = useState<any[]>([])
 
     // Section Refs
     const dateInfoRef                   = useRef<DateInfo[]>([]);
@@ -1465,8 +1467,8 @@ export default function CreatePlant() {
     const handleSmallDescriptionChange = (value : string) => { setSmallDescription(value) };
     const handleLargeDescriptionChange = (value : string) => { setLargeDescription(value) };
     const handleLocationChange = (value : string) => { setLocation(value) };
-    const handleDisplayImageChange = (value : string) => { setDisplayImage(value) };
     const handlePlantTypeChange = (value : string) => { setPlantType(value) };
+    const handleMainImagesChange = (value : any[]) => { setMainImages(value) };
 
     // New Section Setters
     const newDateInfo = () => {dateInfoRef.current = [...dateInfoRef.current, new DateInfo()]; setRenderKeyDate(prevState => prevState + 1)}
@@ -1570,13 +1572,6 @@ export default function CreatePlant() {
             isValid = false;
             if(elementThatNeedsFocus === null) elementThatNeedsFocus = "location";
         } else { setLocationValidationState(["success", "No Error"] as [ValidationState, string]) }
-
-        // Display Image
-        if(displayImage === ""){
-            setDisplayImageValidationState(["error", "Please select a display image"])
-            isValid = false;
-            if(elementThatNeedsFocus === null) elementThatNeedsFocus = "display-image";
-        }else { setDisplayImageValidationState(["success", "No Error"] as [ValidationState, string]) }
 
         // Plant Type
         if(plantType === ""){
@@ -1683,7 +1678,7 @@ export default function CreatePlant() {
         plantOBJ.small_description = cleanInput(smallDescription)
         plantOBJ.long_description = cleanInput(largeDescription)
         plantOBJ.last_modified = new Date().toISOString()
-        plantOBJ.display_image = cleanInput(displayImage);
+        plantOBJ.display_images = mainImages;
         plantOBJ.plant_type = cleanInput(plantType);
         plantOBJ.authorIDs = [];
 
@@ -2321,6 +2316,8 @@ export default function CreatePlant() {
         // Convert to a number
         const idNum = parseInt(id);
 
+        setPlantID(idNum)
+
         // Check if the id is valid
         if(isNaN(idNum)){
             setError("The id of the plant you are trying to edit is not a valid id")
@@ -2481,20 +2478,6 @@ export default function CreatePlant() {
                                 />
                             </div>
 
-                            {/* Plant Display Image */}
-                            <div className={styles.formItem} id={"display-image"}>
-                                <DropdownInput
-                                    key={renderKeyDisplayImage}
-                                    placeHolder={"Display Image"}
-                                    defaultValue={importedJSON.display_image}
-                                    required={true}
-                                    state={displayImageValidationState[0]}
-                                    errorText={displayImageValidationState[1]}
-                                    options={displayImageRef.current}
-                                    changeEventHandler={handleDisplayImageChange}
-                                />
-                            </div>
-
                             {/* Plant Type */}
                             <div className={styles.formItem} id={"plant-type"}>
                                 <DropdownInput
@@ -2580,6 +2563,48 @@ export default function CreatePlant() {
                     {/* Right Hand Column */}
                     <div className={"column"}>
 
+                        {/* Image Selector */}
+                        <ImagePopup
+                            show={showImagePopup}
+                            hideCallback={() => setShowImagePopup(false)}
+                            setImages={setMainImages}
+                            startImages={mainImages}
+                            id={plantID}
+                        />
+
+                        {/* Image Displays */}
+                        <div className={styles.formItem} key={JSON.stringify(mainImages)}>
+
+                            <h3 className={styles.sectionTitle}>Main Images</h3>
+                            <p> Images displayed in searches and the top of the plant page, set per section images in the sections below</p>
+                            <br/>
+
+                            {/* Display the images */}
+                            {mainImages.map((image: any, index: number) => {
+                                return (
+                                    <div className={styles.formItem} key={index} style={{width: "100%"}}>
+                                        <div className={styles.fileUploader + " " + globalStyles.gridCentre} >
+
+                                            {/* Load the image from the website or use the blob data from the file */}
+                                            <Image style={{borderRadius: 8}}
+                                                   src={getPostImage(image)}
+                                                   alt={image.title}
+                                                   width={600}
+                                                   height={600}
+                                                   objectFit={"contain"}
+                                            />
+
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
+
+                            {/* Button to select image */}
+                            <button onClick={() => setShowImagePopup(true)} className={styles.selectImageButton}><FontAwesomeIcon
+                                icon={faFile}/> Select Image(s)
+                            </button>
+                        </div>
 
                         {/* File */}
                         <div className={styles.formSection + " " + globalStyles.gridCentre}>

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS plants (
     long_description TEXT,
     author TEXT,
     last_modified DATE,
-    display_image TEXT,
+    display_images TEXT,
     plant_type TEXT,
     published BOOLEAN,
 	PRIMARY KEY (id)
