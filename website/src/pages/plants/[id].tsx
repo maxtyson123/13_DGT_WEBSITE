@@ -393,7 +393,6 @@ export default function PlantPage() {
                             {plantData?.sections.map((section, index) => (
                                 <AutoSection
                                     section={section}
-                                    images={plantData?.attachments.filter((attachment) => attachment.type === "image")}
                                     isLeft={isMobile ? true : index % 2 === 0}
                                     key={index}
                                 />

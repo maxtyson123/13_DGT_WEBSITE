@@ -30,6 +30,7 @@ import {
 import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 import {CreditedImage} from "@/components/credits";
 import {ModalImage} from "@/components/modal";
+import {getPostImage} from "@/lib/data";
 
 interface AutoSectionProps{
     section: any
@@ -42,7 +43,6 @@ interface AutoSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {Object} props.section - The section data.
- * @param {AttachmentData[]} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
  * @see {@link EdibleSection} - The edible section.
@@ -54,14 +54,14 @@ interface AutoSectionProps{
  *
  * @returns {JSX.Element} The rendered section component.
  */
-export function AutoSection({section, images, isLeft} : AutoSectionProps){
+export function AutoSection({section, isLeft} : AutoSectionProps){
     switch (section.type){
         case "edible":
-            return <EdibleSection section={section} images={images} isLeft={isLeft}/>
+            return <EdibleSection section={section} isLeft={isLeft}/>
         case "medical":
-            return <MedicalSection section={section} images={images} isLeft={isLeft}/>
+            return <MedicalSection section={section} isLeft={isLeft}/>
         case "craft":
-            return <CraftSection section={section} images={images} isLeft={isLeft}/>
+            return <CraftSection section={section} isLeft={isLeft}/>
         case "custom":
             return <CustomSection section={section}/>
         default:
@@ -72,7 +72,6 @@ export function AutoSection({section, images, isLeft} : AutoSectionProps){
 
 interface EdibleSectionProps{
     section:                EdibleSectionData;
-    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -81,43 +80,28 @@ interface EdibleSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {EdibleSectionData} props.section - The section data.
- * @param {AttachmentData} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
  *
  * @see {@link AdvancedTextArea} - The advanced text area component.
  *
  * @returns {JSX.Element} The rendered section component.
  */
-export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
+export function EdibleSection({section, isLeft} : EdibleSectionProps){
 
     // Store the nutrition amd preparation section in a ref
     const nutritionRef = useRef<HTMLParagraphElement>(null)
     const preparationRef = useRef<HTMLParagraphElement>(null)
-    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
-    const [altState, setAltState] = useState<string>("Loading")
-    const [creditsState, setCreditsState] = useState<string>("Loading")
 
-    useEffect(() => {
-        // Get the image of the part of the plant
-        if(section.image_of_part == "Default"){
-            setImageState("/media/images/default_noImage.png")
-            setAltState("No Image")
-            setCreditsState("")
-        }else{
-            let image_index = images.findIndex((image) => {
-                return (image.meta as ImageMetaData).name == section.image_of_part
-            })
-            setImageState(images[image_index].path)
-            setAltState((images[image_index].meta as ImageMetaData).name)
-            setCreditsState((images[image_index].meta as ImageMetaData).credits)
-        }
-    }, [])
+    const hasImage = section.images.length > 0
+    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
+    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
+    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageState} description={altState}>
-                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageURI} description={imageAlt}>
+                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
                 </ModalImage>
             </div>
         </>
@@ -160,7 +144,6 @@ export function EdibleSection({section, images, isLeft} : EdibleSectionProps){
 
 interface MedicalSectionProps{
     section:                MedicalSectionData;
-    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -169,45 +152,28 @@ interface MedicalSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {MedicalSectionData} props.section - The section data.
- * @param {AttachmentData} props.images - The images for the plant.
- * @param {boolean} props.isLeft - Whether the image should be on the left or right side of the page.
- *
- * @see {@link AdvancedTextArea} - The advanced text area component.
+ * @param {boolean} props.isLeft - Whether the image should be on the left or right side of the page..
  *
  * @returns {JSX.Element} The rendered section component.
  */
-export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
+export function MedicalSection({section, isLeft} : MedicalSectionProps){
 
     // Store the use and preparation in a ref to set the contents with html later
     const medUseRef = useRef<HTMLDivElement>(null)
     const preparationRef = useRef<HTMLDivElement>(null)
     const restrictedRef = useRef<HTMLDivElement>(null)
 
-    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
-    const [altState, setAltState] = useState<string>("Loading")
-    const [creditsState, setCreditsState] = useState<string>("Loading")
-
-    useEffect(() => {
-        // Get the image of the part of the plant
-        if(section.image == "Default"){
-            setImageState("/media/images/default_noImage.png")
-            setAltState("No Image")
-            setCreditsState("")
-        }else{
-            let image_index = images.findIndex((image) => {
-                return (image.meta as ImageMetaData).name == section.image
-            })
-            setImageState(images[image_index].path)
-            setAltState((images[image_index].meta as ImageMetaData).name)
-            setCreditsState((images[image_index].meta as ImageMetaData).credits)
-        }
-    }, [])
+    // TODO COMPONETIZE THIS
+    const hasImage = section.images.length > 0
+    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
+    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
+    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageState} description={altState}>
-                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageURI} description={imageAlt}>
+                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
                 </ModalImage>
             </div>
         </>
@@ -253,7 +219,6 @@ export function MedicalSection({section, images, isLeft} : MedicalSectionProps){
 
 interface CraftSectionProps{
     section:                CraftSectionData;
-    images:                 AttachmentData[]
     isLeft:                 boolean
 }
 
@@ -262,45 +227,26 @@ interface CraftSectionProps{
  *
  * @param {Object} props - Component props.
  * @param {CraftSectionData} props.section - The section data.
- * @param {AttachmentData} props.images - The images for the plant.
  * @param {boolean} props.isLeft -  Whether the image should be on the left or right side of the page.
- *
- * @see {@link AdvancedTextArea} - The advanced text area component.
  *
  * @returns {JSX.Element} The rendered section component.
  */
-export function CraftSection({section, images, isLeft} : CraftSectionProps){
+export function CraftSection({section, isLeft} : CraftSectionProps){
 
     // Store the use and additional info in a ref to set the contents with html later
     const craft_useRef = useRef<HTMLDivElement>(null)
     const additional_infoRef = useRef<HTMLDivElement>(null)
 
-    const [imageState, setImageState] = useState<string>("/media/images/loading.gif")
-    const [altState, setAltState] = useState<string>("Loading")
-    const [creditsState, setCreditsState] = useState<string>("Loading")
-
-    useEffect(() => {
-
-        // Get the image of the part of the plant
-        if(section.image == "Default"){
-            setImageState("/media/images/default_noImage.png")
-            setAltState("No Image")
-            setCreditsState("")
-        }else{
-            let image_index = images.findIndex((image) => {
-                return (image.meta as ImageMetaData).name == section.image
-            })
-            setImageState(images[image_index].path)
-            setAltState((images[image_index].meta as ImageMetaData).name)
-            setCreditsState((images[image_index].meta as ImageMetaData).credits)
-        }
-    }, [])
+    const hasImage = section.images.length > 0
+    const imageURI = hasImage ? getPostImage(section.images[0]) : "/media/images/default_noImage.png"
+    const imageAlt = hasImage ? section.images[0].post_title : "No Image"
+    const imageCredits = hasImage ? section.images[0].post_user_id.toString() : ""
 
     const imageDiv = (
         <>
             <div className={styles.imageContainer}>
-                <ModalImage url={imageState} description={altState}>
-                    <CreditedImage url={imageState} alt={altState} credits={creditsState}/>
+                <ModalImage url={imageURI} description={imageAlt}>
+                    <CreditedImage url={imageURI} alt={imageAlt} credits={imageCredits}/>
                 </ModalImage>
             </div>
         </>

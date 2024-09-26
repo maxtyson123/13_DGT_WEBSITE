@@ -46,6 +46,8 @@ export default async function handler(
 
 }
 
+
+
 export async function downloadPlantData(table: any, id: any, client: any, restrictedData: boolean) {
     const tables = USE_POSTGRES ?  new PostgresSQL() : new SQLDatabase();
 
@@ -252,7 +254,7 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         joiner += ` WHERE plants.id = ${id}`;
 
         // Create the query
-        const query = `
+        let query = `
             SELECT
             ${selector}
             FROM ${process.env.MYSQL_DATABASE}.plants
@@ -266,13 +268,47 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         if(!data)
             return ["error", "No data found"];
 
+        // Get the post ids
+        data[0].medical_images = parseImageIds(data[0].medical_images);
+        data[0].edible_images = parseImageIds(data[0].edible_images);
+        data[0].craft_images = parseImageIds(data[0].craft_images);
+
+        // Remove duplicates
+        let allPostIds: any = [];
+        for (let i = 0; i < data[0].medical_images.length; i++) { allPostIds = allPostIds.concat(data[0].medical_images[i]); }
+        for (let i = 0; i < data[0].edible_images.length; i++) { allPostIds = allPostIds.concat(data[0].edible_images[i]); }
+        for (let i = 0; i < data[0].craft_images.length; i++) { allPostIds = allPostIds.concat(data[0].craft_images[i]); }
+        allPostIds = allPostIds.filter((id: any, index: any) => allPostIds.indexOf(id) === index);
+
+        // Make sure that allPostIds is not empty
+        if(allPostIds.length === 0) return ["success", data];
+
+        // Get the post data
+        query = `SELECT * FROM posts WHERE id IN (${allPostIds.join(",")})`;
+        const postData = await makeQuery(query, client);
+
+        // Add the post data to the data
+        for (let i = 0; i < data[0].medical_images.length; i++) { data[0].medical_images[i] = data[0].medical_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
+        for (let i = 0; i < data[0].edible_images.length; i++) { data[0].edible_images[i] = data[0].edible_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
+        for (let i = 0; i < data[0].craft_images.length; i++) { data[0].craft_images[i] = data[0].craft_images[i].map((id: any) => postData.find((post: any) => post.id === id)); }
+
         // If the data is not empty, return the data
         return ["success", data];
 
     } catch (error) {
         // If there is an error, return the error
+        console.error(error);
         return ["error", error];
     }
 }
 
-// TODO: medical_images, craft_images and edible_images all return an array of strings. These strings are ids seperated by a comma or null. For example: "craft_images":[ null, "31,32,33,34" ]. If it is null create an empty array in place otherwise create an array of posts by fetching all from the posts table where the id is the same. The example would return: "craft_images":[ [], [{id: 31, ...}, {id: 32, ...}, {id: 33, ...}, {id: 34, ...},],  "31,32,33,34" ],
+const parseImageIds = (imageData: string) => {
+    if(imageData === null) return [[]];
+    return JSON.parse(imageData).map((imageIds: string) => {
+            if(imageIds === null || imageIds == "") return [];
+            return imageIds.split(",").map((id: string) => {
+                return parseInt(id.trim().split("\n")[0])
+            })
+        }
+    )
+}

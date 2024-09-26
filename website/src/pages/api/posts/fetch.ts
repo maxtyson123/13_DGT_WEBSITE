@@ -66,6 +66,7 @@ export default async function handler(
                 const specificQuery = plant_id ? ` AND ${tables.post_plant_id} = ${plant_id}` : ""
 
                 // Get the latest posts
+                // todo: GET The plant names here please
                 query = `SELECT * FROM posts WHERE ${tables.post_approved} = 1 ${specificQuery} ORDER BY ${tables.post_date} DESC`;
 
 

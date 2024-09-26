@@ -83,8 +83,6 @@ export default async function handler(
             selector = "AND";
         }
 
-        console.log(query)
-
         // Filter mushrooms
         if (!mushrooms){
             mushrooms = "exclude"

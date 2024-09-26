@@ -130,7 +130,7 @@ export default async function handler(
         if(edible_parts.length > 0) {
 
             // Tell the query that we are adding to the edible parts table
-            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_use_identifier}, ${tables.edible_image_of_part}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
+            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_use_identifier}, ${tables.edible_images}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
 
             // Loop through each of the edible parts
             for(let i = 0; i < edible_parts.length; i++) {
@@ -150,7 +150,7 @@ export default async function handler(
         if(medical_types.length > 0) {
 
             // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_image}, ${tables.medical_preparation}, ${tables.medical_restricted}) VALUES `;
+            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_images}, ${tables.medical_preparation}, ${tables.medical_restricted}) VALUES `;
 
             // Loop through each of the medical types
             for(let i = 0; i < medical_types.length; i++) {
@@ -170,7 +170,7 @@ export default async function handler(
         if(craft_parts.length > 0) {
 
             // Tell the query that we are adding to the craft parts table
-            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use_identifier}, ${tables.craft_use}, ${tables.craft_image}, ${tables.craft_additional_info}) VALUES `;
+            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use_identifier}, ${tables.craft_use}, ${tables.craft_images}, ${tables.craft_additional_info}) VALUES `;
 
 
             // Loop through each of the craft parts

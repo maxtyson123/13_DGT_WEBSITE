@@ -2382,7 +2382,7 @@ export default function CreatePlant() {
 
     return (
         <>
-            <Layout pageName={"Create Plant"} loginRequired header={"Creating plant: " + plantName} loadingMessage={progressMessage} permissionRequired={"pages:plants:edit"}>
+            <Layout pageName={"Create Plant"} loginRequired header={"Editing plant: " + plantName} loadingMessage={progressMessage} permissionRequired={"pages:plants:edit"}>
                 <div className={"row"}>
 
                     {/* If there is an error then show it */}
