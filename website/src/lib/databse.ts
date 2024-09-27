@@ -255,7 +255,7 @@ export class PostgresSQL extends SQLDatabase{
         this.craft_use_identifier       = "use_identifier";
         this.craft_use                  = "use";
         this.craft_additional_info      = "additional_info";
-        this.craft_image                = "image";
+        this.craft_images                = "image";
 
         // Custom Table
         this.custom_title               = "title";
@@ -264,7 +264,7 @@ export class PostgresSQL extends SQLDatabase{
         // Edible Table
         this.edible_part_of_plant       = "part_of_plant";
         this.edible_use_identifier      = "use_identifier";
-        this.edible_image_of_part       = "image_of_part";
+        this.edible_images       = "image_of_part";
         this.edible_nutrition           = "nutrition";
         this.edible_preparation         = "preparation";
         this.edible_preparation_type    = "preparation_type";
@@ -273,7 +273,7 @@ export class PostgresSQL extends SQLDatabase{
         this.medical_type               = "medical_type";
         this.medical_use_identifier     = "use_identifier";
         this.medical_use                = "use";
-        this.medical_image              = "image";
+        this.medical_images             = "image";
         this.medical_preparation        = "preparation";
 
         // Source Table

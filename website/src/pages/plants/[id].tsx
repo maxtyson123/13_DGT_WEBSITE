@@ -172,31 +172,6 @@ export default function PlantPage() {
 
     }, [plantData]);
 
-    const changeImage = (index: number) => {
-
-        // Get all the attachments with image type
-        let images = plantData?.attachments.filter((attachment) => attachment.type === "image")
-
-        // If there are no images then return
-        if(!images)
-            return
-
-        // If the index is out of bounds then return
-        if(index < 0)
-            return;
-
-        console.log(index)
-        console.log(images.length)
-
-        // If current image is the last image then return (minus 4 because there are 4 images shown after the current one)
-        if(index >= images.length - 4)
-            return;
-
-        // Set the current image
-        setCurrentImage(index)
-
-    }
-
     const editThisPlant = () => {
 
         router.push("/plants/create?id=" + plantData?.id)

@@ -25,13 +25,16 @@ import PostFeed from "@/components/postfeed";
 // = = Moderation
 // = = Live Chats
 // = = Better Plan Search
-// - - Link To Rongoa (Images Popup and -H-o-m-e- -F-e-e-d-)
+// = = Link To Rongoa
 // - - Image Description
+// - - Edit Image Info In Pop Up
+// - - Show Posts in user account
 // - - Publish on stores
 // - Database
 // - - Use better wrapper
 // - - Remove postgres
 // - Plant Updates
+// - - New Creation Mode
 // - - Publishing
 // - - Auto Create Sections
 // - - Fix Image Pop Up

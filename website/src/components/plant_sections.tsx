@@ -35,7 +35,6 @@ import {ImageArray} from "@/components/image";
 
 interface AutoSectionProps{
     section: any
-    images: AttachmentData[]
     isLeft: boolean
 }
 

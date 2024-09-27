@@ -22,6 +22,8 @@ import Link from "next/link";
 import {getNamesInPreference, macronCodeToChar, numberDictionary, PlantData} from "@/lib/plant_data";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import {Layout} from "@/components/layout";
+import {getPostImage} from "@/lib/data";
+import {ModalImage} from "@/components/modal";
 
 export default function Account() {
 
@@ -231,6 +233,27 @@ export function AccountPage({dataID}: AccountPageProps){
         }
 
         // Get the users posts
+        try{
+
+            setLoadingMessage("Fetching posts...")
+
+            // Get the posts
+            const posts = await makeCachedRequest("userPostsData_" + localId, `/api/posts/fetch?operation=list&id=${(localId ? localId : (session?.user as RongoaUser).database.id)}`);
+            console.log("posts", posts.length.toString())
+            if(posts){
+                // Reverse the posts
+                posts.reverse();
+                setUserPosts(posts.length.toString());
+                setUserPostsData(posts);
+            }else{
+                setUserPosts("0")
+                setUserPostsData([])
+            }
+
+        }catch (e) {
+            console.log(e)
+            setUserPosts("0")
+        }
 
         // Get the users api keys
         try {
@@ -243,6 +266,7 @@ export function AccountPage({dataID}: AccountPageProps){
             }
 
             setLoadingMessage("Fetching API keys...")
+
 
             // Get the data
             let apikeys = await makeCachedRequest("userApiKeysData_" + localId, apiUrl)
@@ -333,7 +357,7 @@ export function AccountPage({dataID}: AccountPageProps){
 
                                 {/* Each stat is a div with the number central and the icon and value inline */}
                                 <div className={statsStyles.stat}>
-                                    <h2> N/A </h2>
+                                    <h2> {userPosts} </h2>
                                     <FontAwesomeIcon icon={faCamera} className={statsStyles.inline}/>
                                     <p className={statsStyles.inline}> Posts </p>
                                 </div>
@@ -387,7 +411,7 @@ export function AccountPage({dataID}: AccountPageProps){
                                 </tbody>
                             </table>
 
-                            {editor && <button className={styles.createButton} onClick={() => router.push("/plants/create")}>Create Plant</button> }
+                            {editor && <button className={styles.createButton} disabled onClick={() => router.push("/plants/create")}>Create Plant | TEMPORARIlY DISABLED</button> }
 
                         </div>
                     </DropdownSection>
@@ -401,18 +425,33 @@ export function AccountPage({dataID}: AccountPageProps){
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Plant</th>
                                     <th>Date</th>
                                     <th className={styles.divider}>Divider</th>
-                                    <th className={styles.divider}>Divider</th>
                                     <th>View</th>
-                                    {editor && <th>Edit</th>}
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td><p> No Posts Found </p></td>
-                                </tr>
+                                {userPostsData.length > 0 ? userPostsData.map((post: any) => (
+                                    <tr key={post.id}>
+                                        <td>{post.id}</td>
+                                        <td>{post.post_title}</td>
+                                        <td>{post.post_plant_id}</td>  {/* TODO: Get the plant name */}
+                                        <td>{new Date(post.post_date).toLocaleString()}</td>
+                                        <td className={styles.divider}>Divider</td>
+                                        <td>
+                                            <ModalImage url={getPostImage(post)} description={post.post_title}>
+                                                <a>
+                                                    <button className={styles.viewButton}>View</button>
+                                                </a>
+                                            </ModalImage>
+                                        </td>
+
+                                    </tr>
+                                )) : <tr>
+                                    <td><p> No Plants Found </p></td>
+                                </tr>}
                                 </tbody>
                             </table>
                         </div>

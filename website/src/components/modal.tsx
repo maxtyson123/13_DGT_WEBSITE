@@ -282,12 +282,60 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
     const hide = async () => {
 
-        // Update the images
-        await moveImages()
+        // Set the loading message
+        setLoadingMessage("Moving images")
+
+        // Find the selected images for the post gallery
+        let selectedPostImages : any = selectedImages[1].map((value, index) => {
+            if(value) return postImages[index]
+        })
+
+        // Remove the undefined values
+        selectedPostImages = selectedPostImages.filter((value: any) => value)
+
+        // If none are selected, return
+        if(!selectedPostImages) return
+
+        // Update the in use status of the selected images
+        await makeRequestWithToken("get","/api/posts/move?" + selectedPostImages.map((post: any) => `id=${post.id}`).join("&"))
+
+        // Move them to the plant images
+        setThisImages((prev) => {
+            setCurrentDisplayImages([...prev, ...selectedPostImages])
+            return [...prev, ...selectedPostImages]
+        })
+        let updatedThisImages = [...thisImages, ...selectedPostImages]
+
+        // If any are authored by the user, move them to the user images also
+        let selectedMyImages = selectedPostImages.filter((post: any) => post.post_user_id === (session?.user as RongoaUser).database.id)
+        if(selectedMyImages){
+            setMyImages((prev) => [...prev, ...selectedMyImages])
+        }
+
+        // Remove the selected images from the post images
+        let newPostImages = postImages.filter((post: any) => !selectedPostImages.includes(post))
+        setPostImages(newPostImages)
+
+        // Update the selected status
+        let newSelectedImages = selectedImages
+        newSelectedImages[0].push(...selectedPostImages.map(() => true))
+        newSelectedImages[1] = newSelectedImages[1].filter((value) => !value)
+        newSelectedImages[2].push(...selectedMyImages.map(() => true))
+        setSelectedImages(newSelectedImages)
+
+        // Clear the cache
+        sessionStorage.removeItem("editor_posts_"+id)
+        sessionStorage.removeItem("editor_posts_mine_"+id)
+
+        // Change tab
+        setTab(0)
+
+        // Clear loading message
+        setLoadingMessage("")
 
         // Get the selected images
-        let newImages = selectedImages[0].map((value, index) => {
-            if(value) return thisImages[index]
+        let newImages = newSelectedImages[0].map((value, index) => {
+            if(value) return updatedThisImages[index]
         })
         newImages = newImages.filter((value: any) => value)
         setImages(newImages)
@@ -390,59 +438,6 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         setLoadingMessage("")
     }
 
-    const moveImages = async () => {
-
-        // Set the loading message
-        setLoadingMessage("Moving images")
-
-        // Find the selected images for the post gallery
-        let selectedPostImages : any = selectedImages[1].map((value, index) => {
-            if(value) return postImages[index]
-        })
-
-        // Remove the undefined values
-        selectedPostImages = selectedPostImages.filter((value: any) => value)
-
-        // If none are selected, return
-        if(!selectedPostImages) return
-
-        // Update the in use status of the selected images
-        await makeRequestWithToken("get","/api/posts/move?" + selectedPostImages.map((post: any) => `id=${post.id}`).join("&"))
-
-        // Move them to the plant images
-        setThisImages((prev) => {
-            setCurrentDisplayImages([...prev, ...selectedPostImages])
-            return [...prev, ...selectedPostImages]
-        })
-
-        // If any are authored by the user, move them to the user images also
-        let selectedMyImages = selectedPostImages.filter((post: any) => post.post_user_id === (session?.user as RongoaUser).database.id)
-        if(selectedMyImages){
-            setMyImages((prev) => [...prev, ...selectedMyImages])
-        }
-
-        // Remove the selected images from the post images
-        let newPostImages = postImages.filter((post: any) => !selectedPostImages.includes(post))
-        setPostImages(newPostImages)
-
-        // Update the selected status
-        let newSelectedImages = selectedImages
-        newSelectedImages[0].push(...selectedPostImages.map(() => true))
-        newSelectedImages[1] = newSelectedImages[1].filter((value) => !value)
-        newSelectedImages[2].push(...selectedMyImages.map(() => true))
-        setSelectedImages(newSelectedImages)
-
-        // Clear the cache
-        sessionStorage.removeItem("editor_posts_"+id)
-        sessionStorage.removeItem("editor_posts_mine_"+id)
-
-        // Change tab
-        setTab(0)
-
-        // Clear loading message
-        setLoadingMessage("")
-
-    }
 
     return (
             <>
