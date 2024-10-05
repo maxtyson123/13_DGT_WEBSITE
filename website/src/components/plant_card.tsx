@@ -1,10 +1,13 @@
 import styles from "@/styles/components/plant_card.module.css"
 import Link from "next/link";
-import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData} from "@/lib/plant_data";
+import {fetchPlant, getNamesInPreference, ImageMetaData, PlantData, PostData} from "@/lib/plant_data";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {CreditedImage} from "@/components/credits";
 import {useRouter} from "next/router";
+import {getPostImage} from "@/lib/data";
+
+//TODO: Move all to cards.tsx
 
 // Define the props for the plant card and the types for the plant data
 type PlantCardProps = {
@@ -22,10 +25,13 @@ type PlantCardProps = {
 export default function PlantCardData({ data}: PlantCardProps){
 
     const [names, setNames] = useState(["None", "None", "None"])
-    const [mainImage, setMainImage] = useState("/media/images/loading.gif")
-    const [mainImageAlt, setMainImageAlt] = useState("Loading")
-    const [mainImageCredits, setMainImageCredits] = useState("None")
     const router = useRouter()
+    let currentImage = {
+        post_user_id: 0,
+        post_title: "",
+        post_image: "/media/images/loading.gif",
+
+    } as PostData
 
     // Run on page start
     useEffect(() => {
@@ -33,44 +39,10 @@ export default function PlantCardData({ data}: PlantCardProps){
         // Update the names
         setNames(getNamesInPreference(data))
 
+        if(data.display_images.length === 0) return
+        currentImage = data.display_images[Math.floor(Math.random() * data.display_images.length)]
+
     }, [data])
-
-    useEffect(() => {
-        // Get all the attachments with image type
-        let images = data?.attachments.filter((attachment) => attachment.type === "image")
-
-        // Set the main image
-        switch (data?.display_image){
-
-            case "Default":
-                setMainImage("/media/images/default_noImage.png")
-                setMainImageAlt("Default Image")
-                break;
-
-            case "Random":
-                // Get a random index and set the image
-                if(images){
-                    let image = images[Math.floor(Math.random() * images.length)]
-                    setMainImage(image.path)
-                    setMainImageAlt((image.meta as ImageMetaData).name)
-                }
-                break;
-
-            default:
-                // Find the image with the same name as the display image
-                if(images){
-                    let image = images.find((image) => (image.meta as ImageMetaData).name === data?.display_image)
-                    if(!image){
-                        break;
-                    }
-                    setMainImage(image.path)
-                    setMainImageAlt((image.meta as ImageMetaData).name)
-                    setMainImageCredits((image.meta as ImageMetaData).credits)
-                }
-                break;
-
-        }
-    }, [])
 
 
     const goToIndex = (filter: string) => {
@@ -99,7 +71,7 @@ export default function PlantCardData({ data}: PlantCardProps){
                 {/* Image of the plant, grabbed from the image attachments of the pant data*/}
                 <div className={styles.imageContainer}>
                     <Link href={"/plants/" + data.id}>
-                        <CreditedImage url={mainImage} alt={mainImageAlt} credits={mainImageCredits} colour={"white"}/>
+                        <CreditedImage url={currentImage.post_user_id == 0 ? currentImage.post_image : getPostImage(currentImage)} alt={currentImage.post_title} credits={currentImage.post_user_id.toString()} colour={"white"}/>
                     </Link>
                 </div>
 

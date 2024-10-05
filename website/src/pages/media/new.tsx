@@ -4,12 +4,12 @@ import React, {useEffect, useRef, useState} from "react";
 import {
     DropdownInput,
     FilteredSearchInput,
-    PlantSelector,
+    PlantSelector, SimpleTextArea,
     SmallInput,
     ValidationState
 } from "@/components/input_sections";
 import {makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
-import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
+import {getNamesInPreference, macronCodeToChar, numberDictionary, PostData} from "@/lib/plant_data";
 import {Loading} from "@/components/loading";
 import {useSession} from "next-auth/react";
 import {RongoaUser} from "@/lib/users";
@@ -24,6 +24,10 @@ export default function Post(){
     const [postTitle, setPostTitle] = useState('');
     const [postValidation, setPostValidation] = useState<ValidationState>("normal")
     const [postError, setPostError] = useState<string>("")
+
+    const [postDescription, setPostDescription] = useState('');
+    const [descriptionValidation, setDescriptionValidation] = useState<ValidationState>("normal")
+    const [descriptionError, setDescriptionError] = useState<string>("")
 
     const [plant, setPlant] = useState('');
     const [currentPlant, setCurrentPlant] = useState<number>(0);
@@ -94,13 +98,20 @@ export default function Post(){
             return
         }
 
+        // Check if there is a description
+        if(postDescription == "" || postDescription == undefined || postDescription.length < 10){
+            setDescriptionValidation("error")
+            setDescriptionError("Please enter a description")
+            return
+        }
+
         const user = session?.user as RongoaUser
         if(user == null) return
         const userID = user.database.id
         const userName = user.database.user_name
 
         // Upload the image
-        await postImage(image, postTitle, currentPlant, userID, userName, setLoading)
+        await postImage(image, postTitle, postDescription, currentPlant, userID, userName, setLoading)
         setLoading("")
 
         // Redirect to the post
@@ -154,6 +165,16 @@ export default function Post(){
                                     changeEventHandler={setPostTitle}/>
                     </div>
 
+                    <div className={styles.postTitle}>
+                        <SimpleTextArea
+                            placeHolder={"Description"}
+                            required={true}
+                            state={descriptionValidation}
+                            changeEventHandler={setPostDescription}
+                            errorText={descriptionError}
+                        />
+                    </div>
+
                     <div className={styles.plantLink}>
                         <PlantSelector
                             setPlant={setCurrentPlant}
@@ -175,7 +196,7 @@ export default function Post(){
     )
 }
 
-export const postImage = async (image: File, postTitle: string, currentPlant: number, userID: number, userName: string, setLoadingMessage: (message: string) => void, inUse ?: boolean ) => {
+export const postImage = async (image: File, postTitle: string, postDescription: string, currentPlant: number, userID: number, userName: string, setLoadingMessage: (message: string) => void, inUse ?: boolean ) => {
 
     setLoadingMessage("Compressing Image...")
     const options = {
@@ -204,7 +225,7 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
     const plant_image = cleanInput(compressedImage.name)
 
     // Send the post data to the server
-    const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image + '&inUse=' + inUse);
+    const response = await makeRequestWithToken('post', '/api/posts/new?title=' + post_title + '&plant=' + post_plant_id + '&image=' + plant_image + '&inUse=' + inUse + '&description=' + postDescription);
 
     // Get the post id
     const newId = response.data.id
@@ -257,7 +278,8 @@ export const postImage = async (image: File, postTitle: string, currentPlant: nu
         post_date: Date.now(),
         post_approved: true,
         post_in_use: inUse,
-        id: newId
+        id: newId,
+        post_description: postDescription
     }
     return newpost
 }

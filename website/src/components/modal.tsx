@@ -6,7 +6,7 @@ import {getFilePath, getPostImage} from "@/lib/data";
 import {UserCard} from "@/pages/media/components/cards";
 import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
-import {PlantSelector} from "@/components/input_sections";
+import {PlantSelector, SimpleTextArea, UserSelector} from "@/components/input_sections";
 import {Loading} from "@/components/loading";
 import {postImage} from "@/pages/media/new";
 
@@ -84,7 +84,8 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
     const [currentImageDescription, setCurrentImageDescription] = useState("No Description")
     const [currentImageDate, setCurrentImageDate] = useState("No Date")
     const [currentImagePlant, setCurrentImagePlant] = useState("No Plant Selected")
-    const [currentImageUser, setCurrentImageUser] = useState(20)
+    const [currentImageUser, setCurrentImageUser] = useState(0)
+    const [currentImageMine, setCurrentImageMine] = useState(true)
 
     const [thisImages, setThisImages] = useState<object[]>([])
     const [postImages, setPostImages] = useState<object[]>([])
@@ -180,11 +181,8 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
         }
 
-
         let cSelectedImages = [Array(thisPlantPosts.length).fill(false), Array(thisPostsPosts.length).fill(false), Array(plantUserPosts.length).fill(false)]
         setSelectedImages(cSelectedImages)
-
-
     }
 
 
@@ -200,6 +198,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         setCurrentImageUser(currentImage.post_user_id)
         setCurrentImagePlant((plantNames[plantIDs.indexOf(currentImage.post_plant_id)]))
         setCurrentImageDate(new Date(currentImage.post_date).toLocaleString())
+        setCurrentImageDescription(currentImage.post_description)
 
         // If the current tab is the post gallery
         if(tab === 1){
@@ -224,7 +223,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
             }
         }else{
 
-            // Update the posts tab if its the same image
+            // Update the posts tab if it's the same image
             let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
             if(myPostIndex !== -1){
                 newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
@@ -274,9 +273,11 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
     const resetCurrentImage = () => {
         setCurrentImage("/media/images/logo.svg")
         setCurrentImageName("No Image Selected")
-        setCurrentImageUser(20)
+        setCurrentImageUser(0)
         setCurrentImagePlant("No Plant Selected")
         setCurrentImageDate("No Date")
+        setCurrentImageMine(false)
+        setCurrentImageDescription("No Description")
     }
 
 
@@ -389,17 +390,30 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
     const uploadImage = async (image: string) => {
 
-
         // Get the file
         const file = localFiles[localImages.indexOf(image)]
         console.log(file)
 
+        // Check if the title has been set
         const titleInput = document.getElementById("title") as HTMLElement;
         const title = titleInput.innerText;
-        if(title === "Please Type a Title Here" || title === "No Image Selected") {
+        if(title === "Please Type a Title Here" || title === "No Image Selected" || title.length < 3) {
             alert("Please type a title")
             return;
         }
+
+        // Check if the description has been set
+        if(currentImageDescription === "No Description" || currentImageDescription.length < 3) {
+            alert("Please type a description")
+            return;
+        }
+
+        // Check if the user is the author
+        if(!currentImageMine && (currentImageUser === 0 || currentImageUser == undefined)){
+            alert("Please select a user or check the 'I took this image' box")
+            return
+        }
+
 
 
         // Set the loading message
@@ -412,7 +426,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         const userName = user.database.user_name
 
         // Upload the image
-        const newPost = await postImage(file, title, id, userID, userName, setLoadingMessage, true)
+        const newPost = await postImage(file, title, currentImageDescription, id, (currentImageMine ? userID : currentImageUser), userName, setLoadingMessage, true)
 
         if(!newPost)
             return
@@ -429,7 +443,9 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         sessionStorage.removeItem("editor_posts_"+id)
         sessionStorage.removeItem("editor_posts_mine_"+id)
 
-        setMyImages((prev) => [...prev, newPost])
+        if(currentImageMine)
+            setMyImages((prev) => [...prev, newPost])
+
         setThisImages((prev) => [...prev, newPost])
         let newSelectedImages = selectedImages
         newSelectedImages[0].push(true)
@@ -472,30 +488,52 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
                             {/* Side panel */}
                             <div className={styles.sidePanel}>
-                                <img src={currentImage}
-                                     alt={currentImageName}/>
-
+                                <img src={currentImage} alt={currentImageName}/>
                                 <div>
                                     <h1
                                         id={"title"}
                                         contentEditable={activeTab == 3 && currentImageName !== "No Image Selected"}
                                     >{currentImageName}</h1>
-                                    <h2>Description</h2>
+
+                                    { activeTab !== 3 ?
+                                        <p>{currentImageDescription}</p>
+                                    :
+                                        <SimpleTextArea
+                                            placeHolder={"Description"}
+                                            required={true}
+                                            state={"normal"}
+                                            changeEventHandler={setCurrentImageDescription}
+                                        />
+                                    }
+
                                 </div>
 
-                                <div>
-                                    <h3>{currentImage}</h3>
-                                    { activeTab !== 3 &&
+                                <div key={currentImageMine ? "a" : "b"}>
+                                    { activeTab !== 3 ?
                                         <>
+                                            <h3>{currentImage}</h3>
                                             <h3>{currentImagePlant}</h3>
                                             <h3>{currentImageDate}</h3>
+                                        </>
+                                        :
+                                        <>
+                                            <div className={styles.myImage}>
+                                                <input type={"checkbox"} id={"myImage"} name={"myImage"} defaultChecked={currentImageMine} onChange={() => setCurrentImageMine(!currentImageMine)}/>
+                                                <label htmlFor={"myImage"}>I took this image</label>
+                                            </div>
+                                            {
+                                                !currentImageMine &&
+                                                <UserSelector
+                                                    setUser={setCurrentImageUser}
+                                                />
+                                            }
                                         </>
                                     }
                                 </div>
 
                                 {activeTab == 3 ?
-                                     <>
-                                         <button
+                                    <>
+                                    <button
                                              className={styles.uploadImageButton}
                                              onClick={() => uploadImage(currentImage)}>Upload</button>
                                      </>
@@ -526,6 +564,8 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
                                                          onClick={() => {
                                                              setCurrentImage(image)
                                                              setCurrentImageName("Please Type a Title Here")
+                                                             setCurrentImageMine(false)
+                                                             setCurrentImageDescription("")
                                                          }}
                                                     />
                                                 </div>
@@ -534,8 +574,9 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
                                         {/* Upload Image Only Button */}
                                         {!isDragging &&
-                                            <button className={styles.uploadImageButton} onClick={submitFile}>Upload
-                                                Image</button>}
+                                            <button className={styles.uploadImageButton} onClick={submitFile}>Select
+                                                Image(s)</button>
+                                        }
 
                                     </>
                                     :

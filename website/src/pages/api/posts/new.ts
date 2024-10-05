@@ -45,6 +45,7 @@ export default async function handler(
             plant,
             image,
             inUse,
+            description
         } = request.query;
 
         let post_in_use = false;
@@ -55,8 +56,13 @@ export default async function handler(
 
         const timeFunction = USE_POSTGRES ? "to_timestamp" : "FROM_UNIXTIME";
 
+        // Check if missing data
+        if (!title || !plant || !image || !description) {
+            return response.status(400).json({ error: "Missing data" });
+        }
+
         // Run the query
-        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}, ${tables.post_in_use}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member}, ${post_in_use} ) ${process.env.USING_MYSQL == "true" ? '' : 'RETURNING id;'}`;
+        const query = `INSERT INTO posts (${tables.post_title}, ${tables.post_plant_id}, ${tables.post_user_id}, ${tables.post_image}, ${tables.post_date}, ${tables.post_approved}, ${tables.post_in_use}, ${tables.post_description}) VALUES ('${title}', ${plant}, ${user_id}, '${image}', ${timeFunction}(${Date.now()} / 1000.0), ${!user_is_member}, ${post_in_use}, '${description}' ) ${process.env.USING_MYSQL == "true" ? '' : 'RETURNING id;'}`;
         const data = await makeQuery(query, client, true);
 
         let id;

@@ -194,6 +194,7 @@ export type PostData = {
     post_image: string;
     post_approved: boolean;
     post_in_use: boolean;
+    post_description: string;
 }
 
 /**

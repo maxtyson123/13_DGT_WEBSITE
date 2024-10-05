@@ -150,6 +150,7 @@ CREATE TABLE IF NOT EXISTS posts (
     post_image TEXT,
     post_approved BOOLEAN,
     post_in_use BOOLEAN,
+    post_description TEXT,
     PRIMARY KEY (id),
     FOREIGN KEY (post_plant_id) REFERENCES plants(id),
     FOREIGN KEY (post_user_id) REFERENCES users(id)

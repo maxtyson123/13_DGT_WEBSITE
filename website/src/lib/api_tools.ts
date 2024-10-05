@@ -164,7 +164,7 @@ export async function makeRequestWithToken (
 }
 
 
-export async function makeCachedRequest(key: string, url: string){
+export async function makeCachedRequest(key: string, url: string, dontParse: boolean = false){
 
     let cache = getFromCache(key)
     if(cache){
@@ -173,9 +173,10 @@ export async function makeCachedRequest(key: string, url: string){
     cache = await makeRequestWithToken("get",url)
     if(!cache.data.error){
 
-        saveToCache(key, cache.data.data)
+
+        saveToCache(key, dontParse ? cache.data : cache.data.data)
     }
-    return cache.data.data
+    return dontParse ? cache.data : cache.data.data
 }
 
 export function removeCachedRequest(key: string){

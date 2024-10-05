@@ -26,13 +26,17 @@ import PostFeed from "@/components/postfeed";
 // = = Live Chats
 // = = Better Plan Search
 // = = Link To Rongoa
-// - - Image Description
+// = = Image Description
+// = = Upload set user
 // - - Edit Image Info In Pop Up
-// - - Show Posts in user account
-// - - Publish on stores
+// - - Image Page
+// - - Storing inuse images in plant folder
+// = = Show Posts in user account
+// - - Publish on stores (API REFACTOR TO ALLOW FOR THIS)
 // - Database
 // - - Use better wrapper
 // - - Remove postgres
+// - - Ids on backend values on api end
 // - Plant Updates
 // - - New Creation Mode
 // - - Publishing

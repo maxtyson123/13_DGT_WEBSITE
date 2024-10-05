@@ -26,7 +26,12 @@ export default function PlantPage() {
     // Store the plant data
     const [plantData, setPlantData] = React.useState<PlantData | null>(null)
     const [plantNames, setPlantNames] = React.useState(["Loading...", "Loading...", "Loading..."])
-    const [images, setImages] = React.useState<{url: string, name: string, credits: string, description: string}[]>([])
+    const [images, setImages] = React.useState<{url: string, name: string, credits: string, description: string}[]>([{
+        url: "/media/images/default_noImage.png",
+        name: "No Image",
+        credits: "",
+        description: ""
+    }])
 
 
     const [showMainImage, setShowMainImage] = React.useState(false)
@@ -152,9 +157,8 @@ export default function PlantPage() {
 
         if(!plantData) return;
 
-        const hasImage = plantData.display_images.length > 0
-        const images = hasImage ?
-            plantData.display_images.map((image: any) => {
+        if(!(plantData.display_images.length > 0)) return;
+        const images = plantData.display_images.map((image: any) => {
                 return {
                     url: getPostImage(image),
                     name: image.post_title,
@@ -162,12 +166,7 @@ export default function PlantPage() {
                     description: image.post_title
                 }
             })
-            : [{
-                url: "/media/images/default_noImage.png",
-                name: "No Image",
-                credits: "",
-                description: ""
-            }]
+
         setImages(images)
 
     }, [plantData]);

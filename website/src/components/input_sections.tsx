@@ -984,3 +984,76 @@ export function PlantSelector({defaultValue, setPlant, allowNew}: PlantSelectorP
         />
     )
 }
+
+type UserSelectorProps = {
+    defaultValue?: string | number;
+    setUser: (value: number) => void;
+    allowNew?: boolean;
+}
+
+export function UserSelector({defaultValue, setUser, allowNew}: UserSelectorProps) {
+
+    const [userNames, setUserNames] = useState<string[]>(["Enter a user name"]);
+    const [userIDs, setUserIDs] = useState<number[]>([]);
+    const [defaultUser, setDefaultUser] = useState<string>();
+    const [selectedUser, setSelectedUser] = useState<string>("");
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+
+        // Set the plant
+        setUser(userIDs[userNames.indexOf(selectedUser)])
+
+    }, [selectedUser]);
+
+
+    useEffect(() => {
+
+        if(userNames[0] == "Loading..."){
+            return
+        }
+
+        // If number get the string
+        if(typeof defaultValue === "number"){
+            setDefaultUser(userNames[userIDs.indexOf(defaultValue)])
+        }
+        else {
+            setDefaultUser(defaultValue)
+        }
+
+
+    }, [defaultValue, userNames]);
+
+
+    const fetchData = async () => {
+        // Get the users
+        let users = await makeCachedRequest('user_names_all', '/api/plants/search?getNames=true&getUsers=true&getPlants=false', true);
+        users = users.users
+
+        // Get the plant names
+        let userNames = users.map((user: any) => { return user.user_name });
+
+        // Set the first letter to be capital
+        userNames = userNames.map(option => toTitleCase(option));
+
+        const plantIDs = users.map((user: any) => user.id);
+
+        setUserNames(userNames);
+        setUserIDs(plantIDs);
+    }
+
+    return (
+        <FilteredSearchInput
+            required={false}
+            placeHolder={"User"}
+            state={"normal"}
+            options={userNames}
+            defaultValue={defaultUser}
+            changeEventHandler={setSelectedUser}
+            forceOptions={allowNew}
+        />
+    )
+}

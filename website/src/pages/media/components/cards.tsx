@@ -283,6 +283,9 @@ export function UserCard(props: UserCardProps) {
     const dataFetch = useRef(props.id);
 
     useEffect(() => {
+
+        if(props.id == 0) return;
+
         if(props.id == dataFetch.current) return;
             dataFetch.current = props.id;
         fetchData();

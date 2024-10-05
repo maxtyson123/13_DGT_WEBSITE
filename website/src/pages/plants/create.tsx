@@ -36,7 +36,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudArrowUp, faFile} from "@fortawesome/free-solid-svg-icons";
 import {globalStyles} from "@/lib/global_css";
 import {RongoaUser} from "@/lib/users";
-import {createToken, makeRequestWithToken} from "@/lib/api_tools";
+import {createToken, makeCachedRequest, makeRequestWithToken} from "@/lib/api_tools";
 import axios from "axios";
 import {Layout} from "@/components/layout";
 import {cleanInput, getPostImage} from "@/lib/data";
