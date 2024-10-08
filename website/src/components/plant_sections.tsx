@@ -98,7 +98,7 @@ export function EdibleSection({section, isLeft} : EdibleSectionProps){
                 url: getPostImage(image),
                 name: image.post_title,
                 credits: image.post_user_id.toString(),
-                description: image.post_title
+                description: image.post_description
             }
         })
         : [{
@@ -180,7 +180,7 @@ export function MedicalSection({section, isLeft} : MedicalSectionProps){
                 url: getPostImage(image),
                 name: image.post_title,
                 credits: image.post_user_id.toString(),
-                description: image.post_title
+                description: image.post_description
             }
         })
         : [{
@@ -263,7 +263,7 @@ export function CraftSection({section, isLeft} : CraftSectionProps){
                 url: getPostImage(image),
                 name: image.post_title,
                 credits: image.post_user_id.toString(),
-                description: image.post_title
+                description: image.post_description
             }
         })
     : [{

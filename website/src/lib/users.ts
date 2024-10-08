@@ -136,7 +136,55 @@ export interface UserPermissions {
                 checkFollowing: boolean;
                 list: boolean;
             };
+            conversations: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+                list: boolean;
+                new: boolean;
+                get: boolean;
+                update: boolean;
+            }
+            notifications: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+                send: boolean;
+                update: boolean;
+            }
         };
+        posts: {
+            edit: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            }
+            fetch: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            }
+            likes: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+                likes: boolean;
+                like: boolean;
+                unlike: boolean;
+                check: boolean;
+                list: boolean;
+            }
+            moderate: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+                list: boolean;
+                approve: boolean;
+                deny: boolean;
+            }
+            move: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            }
+            new: {
+                publicAccess: boolean;
+                internalAccess: boolean;
+            }
+        }
     };
 
     pages: {
@@ -160,17 +208,6 @@ export interface UserPermissions {
         plants: {
             viewRestrictedSections: boolean;
         };
-
-        posts: {
-            moderate: {
-                publicAccess: boolean;
-                internalAccess: boolean
-            };
-            edit: {
-                publicAccess: boolean;
-                internalAccess: boolean
-            }
-        }
 
         logs: {
             unlimitedApiLogEntries: boolean;
@@ -309,8 +346,64 @@ export const getDefaultPermissions = () : UserPermissions => {
                     unfollow: true,
                     checkFollowing: true,
                     list: true,
-                }
+                },
+
+                conversations: {
+                    publicAccess: false,
+                    internalAccess: true,
+                    list: true,
+                    new: true,
+                    get: true,
+                    update: true,
+                },
+
+                notifications: {
+                    publicAccess: false,
+                    internalAccess: true,
+                    send: true,
+                    update: true,
+                },
             },
+
+            posts: {
+                edit: {
+                    publicAccess: false,
+                    internalAccess: true,
+                },
+
+                fetch: {
+                    publicAccess: false,
+                    internalAccess: true,
+                },
+
+                likes: {
+                    publicAccess: false,
+                    internalAccess: true,
+                    likes: true,
+                    like:  true,
+                    unlike:  true,
+                    check:  true,
+                    list:  true,
+                },
+
+                moderate: {
+                    publicAccess: false,
+                    internalAccess: true,
+                    list: false,
+                    approve: false,
+                    deny: false,
+                },
+
+                move: {
+                    publicAccess: false,
+                    internalAccess: true,
+                },
+
+                new: {
+                    publicAccess: false,
+                    internalAccess: true,
+                }
+            }
 
         },
 
@@ -332,17 +425,6 @@ export const getDefaultPermissions = () : UserPermissions => {
         data: {
             account: {
                 viewPrivateDetails: false,
-            },
-
-            posts: {
-                moderate: {
-                    publicAccess: false,
-                    internalAccess: false,
-                },
-                edit: {
-                    publicAccess: false,
-                    internalAccess: true,
-                }
             },
 
             plants: {
@@ -381,6 +463,11 @@ export function getUserPermissions(user: RongoaUser | null) {
         permissions.api.plants.uses.publicAccess = true;
         permissions.api.user.data.publicAccess = true;
         permissions.api.user.plants.publicAccess = true;
+        permissions.api.user.follow.publicAccess = true;
+        permissions.api.user.conversations.publicAccess = true;
+        permissions.api.posts.likes.publicAccess = true;
+        permissions.api.posts.new.publicAccess = true;
+        permissions.api.posts.fetch.publicAccess = true;
 
         // Pages
         permissions.pages.account.publicAccess = true;
@@ -397,6 +484,7 @@ export function getUserPermissions(user: RongoaUser | null) {
         permissions.api.plants.json.convert = true;
         permissions.api.plants.remove.internalAccess = true;
         permissions.api.plants.upload.publicAccess = true;
+        permissions.api.posts.edit.publicAccess = true;
 
         // Pages
         permissions.pages.plants.edit = true;

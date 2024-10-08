@@ -51,22 +51,32 @@ export default async function handler(
         switch (operation) {
 
             case "likes":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:likes:likes")
+                if (!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `SELECT COUNT(*) FROM likes WHERE ${tables.like_post_id} = ${id}`;
                 break;
 
             case "like":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:likes:like")
+                if (!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `INSERT INTO likes (${tables.like_user_id}, ${tables.like_post_id}) VALUES (${userId}, ${id})`;
                 break;
 
             case "unlike":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:likes:unlike")
+                if (!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `DELETE FROM likes WHERE ${tables.like_user_id} = ${userId} AND ${tables.like_post_id} = ${id}`;
                 break;
 
             case "check":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:likes:check")
+                if (!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `SELECT COUNT(*) FROM likes WHERE ${tables.like_user_id} = ${userId} AND ${tables.like_post_id} = ${id}`;
                 break;
 
             case "list":
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:likes:list")
+                if (!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `SELECT * FROM likes WHERE ${tables.like_user_id} = ${id ? id : userId}`;
                 break;
 

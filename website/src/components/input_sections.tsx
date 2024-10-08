@@ -961,10 +961,10 @@ export function PlantSelector({defaultValue, setPlant, allowNew}: PlantSelectorP
 
 
         // Remove the macrons
-        plantNames = plantNames.map(option => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
+        plantNames = plantNames.map((option : any) => option.toLowerCase().replaceAll("ā", "a").replaceAll("ē", "e").replaceAll("ī", "i").replaceAll("ō", "o").replaceAll("ū", "u"));
 
         // Set the first letter to be capital
-        plantNames = plantNames.map(option => toTitleCase(option));
+        plantNames = plantNames.map((option : any) => toTitleCase(option));
 
         const plantIDs = plants.map((plant: any) => plant.id);
 
@@ -1037,7 +1037,7 @@ export function UserSelector({defaultValue, setUser, allowNew}: UserSelectorProp
         let userNames = users.map((user: any) => { return user.user_name });
 
         // Set the first letter to be capital
-        userNames = userNames.map(option => toTitleCase(option));
+        userNames = userNames.map((option : any) => toTitleCase(option));
 
         const plantIDs = users.map((user: any) => user.id);
 

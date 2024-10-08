@@ -26,12 +26,12 @@ export default function PlantCardData({ data}: PlantCardProps){
 
     const [names, setNames] = useState(["None", "None", "None"])
     const router = useRouter()
-    let currentImage = {
+    const [currentImage, setCurrentImage] = useState<any>( {
         post_user_id: 0,
         post_title: "",
         post_image: "/media/images/loading.gif",
 
-    } as PostData
+    })
 
     // Run on page start
     useEffect(() => {
@@ -39,8 +39,11 @@ export default function PlantCardData({ data}: PlantCardProps){
         // Update the names
         setNames(getNamesInPreference(data))
 
+
+
         if(data.display_images.length === 0) return
-        currentImage = data.display_images[Math.floor(Math.random() * data.display_images.length)]
+        console.log(data.display_images)
+        setCurrentImage(data.display_images[Math.floor(Math.random() * data.display_images.length)])
 
     }, [data])
 

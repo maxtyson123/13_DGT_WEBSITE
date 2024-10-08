@@ -163,7 +163,7 @@ export default function PlantPage() {
                     url: getPostImage(image),
                     name: image.post_title,
                     credits: image.post_user_id.toString(),
-                    description: image.post_title
+                    description: image.post_description
                 }
             })
 

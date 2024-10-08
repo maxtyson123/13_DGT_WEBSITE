@@ -38,9 +38,9 @@ export default async function handler(
 
 
     // Check if the user is permitted to access the API
-    // const session = await getServerSession(request, response, authOptions)
-    // const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:new:access")
-    // if(!permission) return response.status(401).json({error: "Not Authorized"})
+    const session = await getServerSession(request, response, authOptions)
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:notifications:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     let axiosConfig;
 
@@ -48,10 +48,15 @@ export default async function handler(
     if(!workflow_id)
         workflow_id = NOTIFICATIONS;
 
+
     try {
 
         switch (operation) {
             case "send_notification":
+
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:notifications:send")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 let notificationData = {}
                 if(workflow_id === NOTIFICATIONS) {
@@ -99,6 +104,10 @@ export default async function handler(
                 break;
 
             case "update_status":
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:notifications:update")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
+
                 if(!message_ids)
                     return response.status(400).json({ error: 'Missing variables, must have message_ids', message_ids });
 

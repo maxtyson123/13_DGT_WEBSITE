@@ -47,14 +47,18 @@ export function getPostImage(post: any): string {
 
     if(!post) return "";
 
+    if(post.post_image.includes("/"))
+        return post.post_image
+
     // Base
-    let path = process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + "/users/"
+    let path = process.env.NEXT_PUBLIC_FTP_PUBLIC_URL + (post.post_in_use ? "/plants/" : "/users/")
 
     // Add the user id
-    path += post.post_user_id + "/posts/"
+    if(!post.post_in_use)
+        path += post.post_user_id + "/posts/"
 
     // Add the post id
-    path += post.id + "/" + post.post_image
+    path += (post.post_in_use ? post.post_plant_id : post.id) + "/" + post.post_image
 
     path = path.replaceAll("’", "'");
 

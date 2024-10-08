@@ -17,7 +17,7 @@ export default async function handler(
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "data:posts:moderate:access")
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:moderate:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
 
@@ -39,6 +39,9 @@ export default async function handler(
         switch (operation) {
             case "list":
 
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:moderate:list")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 // List all the posts that need to be moderated
                 query = `SELECT * FROM posts WHERE ${tables.post_approved} = false;`;
@@ -47,6 +50,10 @@ export default async function handler(
 
             case "approve":
 
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:moderate:approve")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
+
                 // Approve the post
                 query = `UPDATE posts SET ${tables.post_approved} = true WHERE ${tables.id} = ${id};`;
 
@@ -54,12 +61,19 @@ export default async function handler(
 
             case "deny":
 
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:moderate:deny")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
+
                 // Deny the post
                 query = `DELETE FROM posts WHERE ${tables.id} = ${id};`;
 
                 break;
 
             case "edit":
+
+                // Check permissions
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:moderate:edit")
 
                 // Edit the post
                 query = `UPDATE posts SET ${tables.post_title} = '${post_title}', ${tables.post_approved} = true, ${tables.post_plant_id} = ${post_plant_id} WHERE ${tables.id} = ${id};`;

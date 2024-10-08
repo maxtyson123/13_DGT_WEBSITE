@@ -279,8 +279,10 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
         for (let i = 0; i < data[0].medical_images.length; i++) { allPostIds = allPostIds.concat(data[0].medical_images[i]); }
         for (let i = 0; i < data[0].edible_images.length; i++) { allPostIds = allPostIds.concat(data[0].edible_images[i]); }
         for (let i = 0; i < data[0].craft_images.length; i++) { allPostIds = allPostIds.concat(data[0].craft_images[i]); }
-        allPostIds.concat(data[0].display_images);
+        allPostIds = allPostIds.concat(data[0].display_images);
         allPostIds = allPostIds.filter((id: any, index: any) => allPostIds.indexOf(id) === index);
+
+        console.log(allPostIds);
 
         // Make sure that allPostIds is not empty
         if(allPostIds.length === 0) return ["success", data];

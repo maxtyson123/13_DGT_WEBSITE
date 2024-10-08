@@ -22,18 +22,7 @@ import PostFeed from "@/components/postfeed";
 
 // TODO:
 // - Plant App
-// = = Moderation
-// = = Live Chats
-// = = Better Plan Search
-// = = Link To Rongoa
-// = = Image Description
-// = = Upload set user
-// = = Edit Image Info In Pop Up
-// = = Image Page
-// = = Storing inuse images in plant folder
-// = = Show Posts in user account
-// - - Update Permissions
-// - - Publish on stores (API REFACTOR TO ALLOW FOR THIS)
+// - - Publish on stores (LOGIN w no env, Native apis)
 // - Database
 // - - Use better wrapper
 // - - Remove postgres

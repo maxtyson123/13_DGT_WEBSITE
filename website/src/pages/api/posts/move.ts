@@ -17,13 +17,12 @@ export default async function handler(
     // Get the logger
     const logger = new Logger()
 
-
     // Get the client
     const client =  await getClient()
 
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
-    const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:plants:upload:access")
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:posts:move:access")
     if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     // If there is no session then return an error
@@ -43,7 +42,7 @@ export default async function handler(
         } = request.query;
 
 
-        let ids = [];
+        let ids: string[] = [];
 
         // If no id is provided, return an error
         if(!id) {
@@ -88,13 +87,18 @@ export default async function handler(
                     return response.status(404).json({error: "Post not found"});
                 }
 
+                // Check if already in use
+                if(postData.post_in_use) {
+                    return response.status(400).json({error: "Post already in use"});
+                }
+
                 const {post_image, post_user_id, post_plant_id, post_title, post_date} = postData;
                 const originalFilePath = `/users/${post_user_id}/posts/${postId}/${post_image}`.replaceAll("’","'");
 
                 // Generate a random string for the new image name
                 const newImageRand = crypto.randomBytes(4).toString("hex");
                 const newImageName = `${post_title}_${new Date(post_date).toDateString().replaceAll(" ", "_")}_${newImageRand}.${post_image.split('.').pop()}`
-                const newFilePath = `/plants/${post_plant_id}/`;
+                const newFilePath = `/plants/${post_plant_id}/${newImageName}`;
 
                 console.log(`Moving image from ${originalFilePath} to ${newFilePath}`);
 
@@ -110,7 +114,7 @@ export default async function handler(
                 });
 
                 // Update the database with the new image path
-                const updateQuery = `UPDATE posts SET post_image = '${newImageName}' WHERE id = ${postId};`;
+                const updateQuery = `UPDATE posts SET post_image = '${newImageName}', post_in_use = true WHERE id = ${postId};`;
                 await makeQuery(updateQuery, client);
 
                 // Log the move

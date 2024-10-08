@@ -229,7 +229,6 @@ export default function Page(){
                                             type={message.message_user_id === (session?.user as RongoaUser).database.id ? "sent" : "received"}
                                         />
                                     </>
-sudo nano /etc/network/interfaces
                                 )
                             })}
                         </>

@@ -53,7 +53,7 @@ export function ModalImage({url, description, show, hideCallbackOveride, childre
             </div>
             {defaultShow &&
                 <div className={styles.modal}>
-                    <span className={styles.close} onClick={hideCallbackOveride ? hideCallbackOveride : toggleShow}>&times;</span>
+                    <span className={styles.close} onClick={hideCallbackOveride ? hideCallbackOveride : toggleShow} style={{color: "white"}}>&times;</span>
                     <img className={styles.modalContent} src={url} alt={description}/>
                     <p className={styles.caption}>{description}</p>
                 </div>
@@ -286,17 +286,6 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
     }
 
 
-    const getImageURL = (image: any): string => {
-
-        // If it is a post it will not have a "/"
-        if(!image.post_image.includes("/"))
-            return getPostImage(image) as string
-
-        return image.post_image
-
-
-    }
-
     const hide = async () => {
 
         // Set the loading message
@@ -381,11 +370,11 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         const input = document.createElement('input') as HTMLInputElement;
         input.type = 'file';
         input.accept = 'image/*';
-        input.onchange = (event: ChangeEvent<HTMLInputElement>) => {
+        input.onchange = ((event: ChangeEvent<HTMLInputElement>) => {
             if (event.target.files) {
                 handleFiles(event.target.files);
             }
-        };
+        }) as any;
         input.click();
     }
 
@@ -538,7 +527,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
                             {/* Side panel */}
                             <div className={styles.sidePanel}>
-                                <img src={getImageURL(currentImage)} alt={currentImage.post_title}/>
+                                <img src={getPostImage(currentImage)} alt={currentImage.post_title}/>
                                 <div>
                                     <h1
                                         id={"title"}
@@ -564,7 +553,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
                                 <div key={currentImageMine ? "a" : "b"}>
                                     {activeTab !== 3 ?
                                         <>
-                                            <h3>{getImageURL(currentImage)}</h3>
+                                            <h3>{getPostImage(currentImage)}</h3>
                                             <h3>{plantNames[plantIDs.indexOf(currentImage.post_plant_id as any)]}</h3>
                                             <h3>{currentImage.post_date}</h3>
                                         </>

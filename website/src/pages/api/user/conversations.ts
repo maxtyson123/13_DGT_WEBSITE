@@ -36,8 +36,8 @@ export default async function handler(
     // Check if the user is permitted to access the API
     const session = await getServerSession(request, response, authOptions)
     const userID = (session?.user as RongoaUser).database.id
-    // const permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:new:access")
-    // if(!permission) return response.status(401).json({error: "Not Authorized"})
+    let permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:conversations:access")
+    if(!permission) return response.status(401).json({error: "Not Authorized"})
 
     let query;
 
@@ -47,6 +47,8 @@ export default async function handler(
 
             case "list":
 
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:conversations:list")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `
                           SELECT
                             c.id AS conversation_id,
@@ -94,13 +96,16 @@ export default async function handler(
                 break
 
             case "new":
-
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:conversations:new")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 query = `INSERT INTO conversations (conversation_user_one, conversation_user_two) VALUES (${userID}, ${recipientID});`
 
                 break
 
             case "get":
 
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:conversations:get")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
                 // Make sure there is a user id and a channel id
                 if(!userID || !channelID) return response.status(400).json({error: "Missing user ID or channel ID"})
 
@@ -128,6 +133,9 @@ export default async function handler(
                 break
 
             case "update":
+
+                permission = await checkApiPermissions(request, response, session, client, makeQuery, "api:user:conversations:update")
+                if(!permission) return response.status(401).json({error: "Not Authorized"})
 
                 // Make sure there is a user id and a channel id
                 if(!userID || !channelID || !message) return response.status(400).json({error: "Missing user ID, channel ID, or message"})

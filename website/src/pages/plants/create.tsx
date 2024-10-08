@@ -1876,6 +1876,9 @@ export default function CreatePlant() {
         customInfoRef.current   = [];
         fileInfoRef.current     = [];
 
+        // Load main images
+        handleMainImagesChange(jsonContents.display_images);
+
         // Create the months ready for ues
         for (let i = 0; i < jsonContents.months_ready_for_use.length; i++) {
             // Create the new section
