@@ -10,7 +10,7 @@ import {
     DropdownInput,
     FileInput,
     FilteredSearchInput,
-    PlantSelector,
+    PlantSelector, SimpleTextArea,
     SmallInput,
     ValidationState
 } from "@/components/input_sections";
@@ -19,7 +19,7 @@ import {Layout} from "@/components/layout";
 import {RongoaUser, UserDatabaseDetails} from "@/lib/users";
 import {PostCard, PostCardApi} from "@/pages/media/components/cards";
 import {getFilePath, getPostImage, toTitleCase} from "@/lib/data";
-import {ModalImage} from "@/components/modal";
+import {EditPostPopup, ModalImage} from "@/components/modal";
 import {getNamesInPreference, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
 
 export default function Admin(){
@@ -35,7 +35,6 @@ export default function Admin(){
 
     const [postTitle, setPostTitle] = useState("")
     const [plant, setPlant] = useState("")
-    const [currentPlant, setCurrentPlant] = useState(0)
 
     const [showEditPost, setShowEditPost] = useState(false)
 
@@ -65,29 +64,17 @@ export default function Admin(){
 
     const handleModeration = (action: string) => {
 
-        if(currentPlant === 0 || currentPlant === undefined) {
-            alert("Please select a plant")
-            return;
-        }
 
         setLoadingMessage("Moderating post...")
         setShowEditPost(false);
         const postContainer = document.querySelector(`.${styles.postsToModerate}`);
         const postCard = postContainer?.firstChild as HTMLElement;
 
-        console.log(plant)
-        const post_plant_id = currentPlant;
-        console.log(post_plant_id)
-
         if (postCard) {
             postCard.classList.add(styles.slideoutAnimation);
             setTimeout(async () => {
                 // Perform the moderation action (approve/deny)
                 let url = `/api/posts/moderate?id=${posts[currentIndex].id}&operation=${action}`;
-
-                if(action === "edit") {
-                    url += `&post_title=${postTitle}&post_plant_id=${post_plant_id}`;
-                }
 
                 await makeRequestWithToken("get", url);
                 setLoadingMessage("");
@@ -115,33 +102,6 @@ export default function Admin(){
                         </div>
                     </div>
                 </Section>
-
-                {showEditPost && (
-                    <div className={styles.editPostOverlay}>
-                        <div className={styles.editPostContainer}>
-                            <div className={styles.editPostHeader}>
-                                <h1>Edit Post</h1>
-                                <button onClick={() => setShowEditPost(false)}>Cancel</button>
-                            </div>
-                            <div className={styles.editPostContent}>
-                                <SmallInput
-                                    placeHolder={"Post Title"}
-                                    required={true}
-                                    state={"normal"}
-                                    defaultValue={posts[currentIndex].post_title}
-                                    changeEventHandler={setPostTitle}
-                                />
-
-                                <PlantSelector
-                                    setPlant={setCurrentPlant}
-                                    allowNew={false}
-                                />
-                                <button onClick={() => handleModeration("edit")}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                    )
-                }
 
 
                 <Section autoPadding>
@@ -191,6 +151,13 @@ export default function Admin(){
                             </div>
                         </div>
                     </div>
+
+                    <EditPostPopup show={showEditPost} hideCallback={(edited, post) => {
+                        setShowEditPost(false)
+                        if(edited)  handleModeration("approve");
+                    }
+                    } post={posts[currentIndex]}/>
+
                 </Section>
             </Layout>
         </>

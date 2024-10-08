@@ -41,6 +41,7 @@ export function PostCard(props: PostCardProps) {
     const [lastTap, setLastTap] = useState(0)
     const [lastLikeTime, setLastLikeTime] = useState(0)
     const likeRef = useRef<HTMLDivElement>(null);
+    const likeTimeout = useRef<any>(null);
 
     const router = useRouter();
     const dataFetch = useRef(false);
@@ -192,9 +193,22 @@ export function PostCard(props: PostCardProps) {
         // Get the time
         const time = new Date().getTime();
 
+        // Clear the timeout
+        if(likeTimeout.current)
+            clearTimeout(likeTimeout.current);
+
         // Check if the time is less than 300ms
         if(time - lastTap < 300) {
             toggleLike();
+        }else{
+
+            // If there is no second tap after 300ms log smth
+            likeTimeout.current = setTimeout(() => {
+
+                window.location.href = "/media/posts/"+props.id;
+
+            }, 300);
+
         }
 
         // Set the last tap
@@ -259,8 +273,8 @@ export function  PostCardApi(props: PostCardApiProps){
     }, []);
 
     const fetchData = async () => {
-        const response = await makeRequestWithToken("get", `/api/posts/fetch?id=${props.id}&operation=data`);
-        setData(response.data.data[0]);
+        const response = await makeCachedRequest("post_data_" + props.id, `/api/posts/fetch?id=${props.id}&operation=data`);
+        setData(response[0]);
     }
 
     return(<>

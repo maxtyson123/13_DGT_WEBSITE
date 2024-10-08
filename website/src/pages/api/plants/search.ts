@@ -40,6 +40,7 @@ export default async function handler(
         getUnpublished
     } = request.query;
 
+
     // Try querying the database
     try {
 

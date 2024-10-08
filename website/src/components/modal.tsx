@@ -1,14 +1,15 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import styles from "@/styles/components/modal.module.css"
-import {fetchPlant, macronCodeToChar, numberDictionary} from "@/lib/plant_data";
+import {fetchPlant, macronCodeToChar, numberDictionary, PostData} from "@/lib/plant_data";
 import {makeCachedRequest, makeRequestWithToken, removeCachedRequest} from "@/lib/api_tools";
 import {getFilePath, getPostImage} from "@/lib/data";
 import {UserCard} from "@/pages/media/components/cards";
 import {RongoaUser} from "@/lib/users";
 import {useSession} from "next-auth/react";
-import {PlantSelector, SimpleTextArea, UserSelector} from "@/components/input_sections";
+import {PlantSelector, SimpleTextArea, SmallInput, UserSelector} from "@/components/input_sections";
 import {Loading} from "@/components/loading";
 import {postImage} from "@/pages/media/new";
+import {prop} from "remeda";
 
 interface ModalImageProps {
     url: string
@@ -77,14 +78,19 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
     const [activeTab, setActiveTab] = useState(0)
     const [defaultShow, setDefaultShow] = useState(false)
     const [isDragging, setIsDragging] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const {data: session} = useSession();
 
-    const [currentImage, setCurrentImage] = useState("/media/images/logo.svg")
-    const [currentImageName, setCurrentImageName] = useState("No Image Selected")
-    const [currentImageDescription, setCurrentImageDescription] = useState("No Description")
-    const [currentImageDate, setCurrentImageDate] = useState("No Date")
-    const [currentImagePlant, setCurrentImagePlant] = useState("No Plant Selected")
-    const [currentImageUser, setCurrentImageUser] = useState(0)
+    const [currentImage, setCurrentImage] = useState({
+        id: 0,
+        post_image: "/media/images/logo.svg",
+        post_title: "No Image Selected",
+        post_user_id: 0,
+        post_plant_id: id,
+        post_date: "No Date",
+        post_description: "No Description",
+        post_in_use: false
+    })
     const [currentImageMine, setCurrentImageMine] = useState(true)
 
     const [thisImages, setThisImages] = useState<object[]>([])
@@ -192,17 +198,12 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         newSelectedImages[tab][imageIndex] = !newSelectedImages[tab][imageIndex]
 
         // Set the current image
-        let currentImage : any = currentDisplayImages[imageIndex]
-        setCurrentImage(getPostImage(currentImage))
-        setCurrentImageName(currentImage.post_title)
-        setCurrentImageUser(currentImage.post_user_id)
-        setCurrentImagePlant((plantNames[plantIDs.indexOf(currentImage.post_plant_id)]))
-        setCurrentImageDate(new Date(currentImage.post_date).toLocaleString())
-        setCurrentImageDescription(currentImage.post_description)
+        let currentImageL : any = currentDisplayImages[imageIndex]
+        setCurrentImage(currentImageL)
 
         // If the current tab is the post gallery
         if(tab === 1){
-            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
+            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImageL.id)
             if(myPostIndex !== -1){
                 newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
             }
@@ -211,20 +212,20 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         }else if(tab === 2){
 
             // Update the post gallery tab if its the same image
-            let postIndex = postImages.findIndex((post: any) => post.id === currentImage.id)
+            let postIndex = postImages.findIndex((post: any) => post.id === currentImageL.id)
             if(postIndex !== -1){
                 newSelectedImages[1][postIndex] = newSelectedImages[tab][imageIndex]
             }
 
             // Update the this plant tab if its the same image
-            let thisIndex = thisImages.findIndex((post: any) => post.id === currentImage.id)
+            let thisIndex = thisImages.findIndex((post: any) => post.id === currentImageL.id)
             if(thisIndex !== -1){
                 newSelectedImages[0][thisIndex] = newSelectedImages[tab][imageIndex]
             }
         }else{
 
             // Update the posts tab if it's the same image
-            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImage.id)
+            let myPostIndex = myImages.findIndex((post: any) => post.id === currentImageL.id)
             if(myPostIndex !== -1){
                 newSelectedImages[2][myPostIndex] = newSelectedImages[tab][imageIndex]
             }
@@ -271,15 +272,30 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
     }
 
     const resetCurrentImage = () => {
-        setCurrentImage("/media/images/logo.svg")
-        setCurrentImageName("No Image Selected")
-        setCurrentImageUser(0)
-        setCurrentImagePlant("No Plant Selected")
-        setCurrentImageDate("No Date")
+        setCurrentImage({
+            id: 0,
+            post_image: "/media/images/logo.svg",
+            post_title: "No Image Selected",
+            post_user_id: 0,
+            post_plant_id: id,
+            post_date: "No Date",
+            post_description: "No Description",
+            post_in_use: false
+        })
         setCurrentImageMine(false)
-        setCurrentImageDescription("No Description")
     }
 
+
+    const getImageURL = (image: any): string => {
+
+        // If it is a post it will not have a "/"
+        if(!image.post_image.includes("/"))
+            return getPostImage(image) as string
+
+        return image.post_image
+
+
+    }
 
     const hide = async () => {
 
@@ -403,18 +419,16 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         }
 
         // Check if the description has been set
-        if(currentImageDescription === "No Description" || currentImageDescription.length < 3) {
+        if(currentImage.post_description === "" || currentImage.post_description === "No Description"){
             alert("Please type a description")
             return;
         }
 
         // Check if the user is the author
-        if(!currentImageMine && (currentImageUser === 0 || currentImageUser == undefined)){
+        if(!currentImageMine && (currentImage.post_user_id === 0 || currentImage.post_user_id == undefined)){
             alert("Please select a user or check the 'I took this image' box")
             return
         }
-
-
 
         // Set the loading message
         setLoadingMessage("Uploading image")
@@ -426,7 +440,7 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         const userName = user.database.user_name
 
         // Upload the image
-        const newPost = await postImage(file, title, currentImageDescription, id, (currentImageMine ? userID : currentImageUser), userName, setLoadingMessage, true)
+        const newPost = await postImage(file, title, currentImage.post_description, id, (currentImageMine ? userID : currentImage.post_user_id), userName, setLoadingMessage, true)
 
         if(!newPost)
             return
@@ -454,26 +468,62 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
         setLoadingMessage("")
     }
 
+    const handleEdit = (e: boolean, post: PostData | null) => {
+
+        setIsEditing(false)
+        if(!post) return
+
+        // Helper function to update the images
+        const updateImageArray = (images: any[], post: any) => {
+            let index = images.findIndex((value) => value.id === post.id);
+            if (index !== -1) images[index] = post;
+            return images;
+        };
+
+        // Update the post in all arrays
+        setCurrentDisplayImages((prev) => updateImageArray([...prev], post));
+        setMyImages((prev) => updateImageArray([...prev], post));
+        setPostImages((prev) => updateImageArray([...prev], post));
+        setThisImages((prev) => updateImageArray([...prev], post));
+        setCurrentImage(post)
+
+    }
 
     return (
             <>
+
                 {loadingMessage && <Loading progressMessage={loadingMessage}/>}
                 {defaultShow &&
                     <div className={styles.imagePopup}>
                         <div className={styles.imagePopupContent}>
 
+                            <div key={currentImage.post_image + "asdj" + currentImage.post_title}>
+                                <EditPostPopup
+                                    show={isEditing}
+                                    hideCallback={(e, post) => handleEdit(e, post)}
+                                    post={currentImage}
+                                    disableChangePlant
+                                />
+                            </div>
 
-                    <span className={styles.close}
-                          onClick={hide}
-                          style={{color: "black"}}
-                    >&times;</span>
+
+
+                            <span className={styles.close}
+                                  onClick={hide}
+                            >&times;</span>
+
+                            <span className={styles.close + " " + styles.edit}
+                                  onClick={() => setIsEditing(true)}
+
+                            >✎</span>
 
                             {/* Tab selector */}
                             <div className={styles.tabs}>
 
                                 {["This Plant", "Post Gallery", "My Posts", "Upload"].map((tab, index) => {
                                     return (
-                                        <button onClick={() => setTab(index)} className={activeTab === index ? styles.activeTab : ""} key={index}>
+                                        <button onClick={() => setTab(index)}
+                                                className={activeTab === index ? styles.activeTab : ""} key={index}>
                                             <p>{tab}</p>
 
                                             {/* Selected  Count */}
@@ -488,43 +538,51 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
                             {/* Side panel */}
                             <div className={styles.sidePanel}>
-                                <img src={currentImage} alt={currentImageName}/>
+                                <img src={getImageURL(currentImage)} alt={currentImage.post_title}/>
                                 <div>
                                     <h1
                                         id={"title"}
-                                        contentEditable={activeTab == 3 && currentImageName !== "No Image Selected"}
-                                    >{currentImageName}</h1>
+                                        contentEditable={activeTab == 3 && currentImage.post_title !== "No Image Selected"}
+                                    >{currentImage.post_title}</h1>
 
-                                    { activeTab !== 3 ?
-                                        <p>{currentImageDescription}</p>
-                                    :
+                                    {activeTab !== 3 ?
+                                        <p>{currentImage.post_description}</p>
+                                        :
                                         <SimpleTextArea
                                             placeHolder={"Description"}
                                             required={true}
                                             state={"normal"}
-                                            changeEventHandler={setCurrentImageDescription}
+                                            changeEventHandler={(value) => setCurrentImage({
+                                                ...currentImage,
+                                                post_description: value
+                                            })}
                                         />
                                     }
 
                                 </div>
 
                                 <div key={currentImageMine ? "a" : "b"}>
-                                    { activeTab !== 3 ?
+                                    {activeTab !== 3 ?
                                         <>
-                                            <h3>{currentImage}</h3>
-                                            <h3>{currentImagePlant}</h3>
-                                            <h3>{currentImageDate}</h3>
+                                            <h3>{getImageURL(currentImage)}</h3>
+                                            <h3>{plantNames[plantIDs.indexOf(currentImage.post_plant_id as any)]}</h3>
+                                            <h3>{currentImage.post_date}</h3>
                                         </>
                                         :
                                         <>
                                             <div className={styles.myImage}>
-                                                <input type={"checkbox"} id={"myImage"} name={"myImage"} defaultChecked={currentImageMine} onChange={() => setCurrentImageMine(!currentImageMine)}/>
+                                                <input type={"checkbox"} id={"myImage"} name={"myImage"}
+                                                       defaultChecked={currentImageMine}
+                                                       onChange={() => setCurrentImageMine(!currentImageMine)}/>
                                                 <label htmlFor={"myImage"}>I took this image</label>
                                             </div>
                                             {
                                                 !currentImageMine &&
                                                 <UserSelector
-                                                    setUser={setCurrentImageUser}
+                                                    setUser={(value) => setCurrentImage({
+                                                        ...currentImage,
+                                                        post_user_id: value
+                                                    })}
                                                 />
                                             }
                                         </>
@@ -533,12 +591,13 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
                                 {activeTab == 3 ?
                                     <>
-                                    <button
-                                             className={styles.uploadImageButton}
-                                             onClick={() => uploadImage(currentImage)}>Upload</button>
-                                     </>
+                                        <button
+                                            className={styles.uploadImageButton}
+                                            onClick={() => uploadImage(currentImage.post_image)}>Upload
+                                        </button>
+                                    </>
                                     :
-                                    <UserCard id={currentImageUser}/>
+                                    <UserCard id={currentImage.post_user_id}/>
                                 }
 
                             </div>
@@ -562,10 +621,17 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
                                                     <img src={image}
                                                          alt={"Placeholder"}
                                                          onClick={() => {
-                                                             setCurrentImage(image)
-                                                             setCurrentImageName("Please Type a Title Here")
+                                                             setCurrentImage({
+                                                                 id: 0,
+                                                                 post_image: image,
+                                                                 post_title: "Please Type a Title Here",
+                                                                 post_user_id: 0,
+                                                                 post_plant_id: id,
+                                                                 post_date: "No Date",
+                                                                 post_description: "No Description",
+                                                                 post_in_use: false
+                                                             })
                                                              setCurrentImageMine(false)
-                                                             setCurrentImageDescription("")
                                                          }}
                                                     />
                                                 </div>
@@ -582,17 +648,19 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
                                     :
                                     <>
 
-                                    {/* If there are no images */}
-                                    {currentDisplayImages.length === 0 &&
-                                        <div className={styles.noImages}>
-                                            <h1>No Images</h1>
-                                        </div>
-                                    }
+                                        {/* If there are no images */}
+                                        {currentDisplayImages.length === 0 &&
+                                            <div className={styles.noImages}>
+                                                <h1>No Images</h1>
+                                            </div>
+                                        }
 
-                                    {/* Display the images */}
-                                    {currentDisplayImages.map((post: any, index: number) => {
+                                        {/* Display the images */}
+                                        {currentDisplayImages.map((post: any, index: number) => {
                                             return (
-                                                <div className={styles.imageContainer + " " + (selectedImages[activeTab][index] ? styles.selected : "")} key={index}>
+                                                <div
+                                                    className={styles.imageContainer + " " + (selectedImages[activeTab][index] ? styles.selected : "")}
+                                                    key={index}>
                                                     <img src={getPostImage(post)}
                                                          alt={"Placeholder"}
                                                          onClick={() => {
@@ -619,4 +687,70 @@ export function ImagePopup({show, hideCallback, id = 0, setImages, startImages}:
 
 
     )
+}
+
+
+interface EditPostPopupProps {
+    show: boolean
+    hideCallback: (e: boolean, post: PostData | null) => void
+    post: any
+    disableChangePlant?: boolean
+}
+
+export function EditPostPopup(props: EditPostPopupProps) {
+
+    const [post, setPost] = useState(props.post)
+
+    const submitEdit = async () => {
+        let url = `/api/posts/edit?id=${post.id}&post_title=${post.post_title}&post_plant_id=${post.post_plant_id}&post_description=${post.post_description}`
+
+        await makeRequestWithToken("get", url);
+
+        props.hideCallback(true, post)
+    }
+
+    if(!props.post){
+        return <></>
+    }
+
+    return (
+        <>
+        {
+            props.show &&
+                <div className={styles.editPostOverlay}>
+                    <div className={styles.editPostContainer}>
+                        <div className={styles.editPostHeader}>
+                            <h1>Edit Post</h1>
+                            <button onClick={() => {props.hideCallback(false, null)}}>Close</button>
+                        </div>
+                        <div className={styles.editPostContent}>
+                            <SmallInput
+                                placeHolder={"Post Title"}
+                                required={true}
+                                state={"normal"}
+                                defaultValue={post.post_title}
+                                changeEventHandler={(value) => setPost({...post, post_title: value})}
+                            />
+
+                            {!props.disableChangePlant &&
+                            <PlantSelector
+                                setPlant={(value) => setPost({...post, post_plant_id: value})}
+                                allowNew={false}
+                                defaultValue={post.post_plant_id}
+                            />}
+
+                            <SimpleTextArea
+                                defaultValue={post.post_description}
+                                placeHolder={"Description"}
+                                required={true}
+                                state={"normal"}
+                            />
+                            <button onClick={submitEdit}>Submit</button>
+                        </div>
+                    </div>
+                </div>
+        }
+        </>
+    )
+
 }

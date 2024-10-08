@@ -28,10 +28,11 @@ import PostFeed from "@/components/postfeed";
 // = = Link To Rongoa
 // = = Image Description
 // = = Upload set user
-// - - Edit Image Info In Pop Up
-// - - Image Page
-// - - Storing inuse images in plant folder
+// = = Edit Image Info In Pop Up
+// = = Image Page
+// = = Storing inuse images in plant folder
 // = = Show Posts in user account
+// - - Update Permissions
 // - - Publish on stores (API REFACTOR TO ALLOW FOR THIS)
 // - Database
 // - - Use better wrapper

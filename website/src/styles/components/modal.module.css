@@ -52,10 +52,15 @@
     position: absolute;
     top: 15px;
     right: 35px;
-    color: var(--text-light);
+    color: var(--text-dark);
     font-size: 40px;
     font-weight: bold;
     transition: 0.3s;
+}
+
+.edit{
+    right: 65px;
+    scale: 0.7;
 }
 
 .close:hover,
@@ -265,4 +270,46 @@
 .myImage label{
     margin-left: 10px;
     cursor: pointer;
+}
+
+
+.editPostOverlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.editPostContainer{
+    width: 50%;
+    background-color: var(--secondary-gray);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 8px var(--shadow-min);
+}
+
+.editPostHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editPostContent{
+    margin-top: 20px;
+}
+
+.editPostContent button{
+    background-color: var(--main-green);
+    border-radius: 15px;
+    padding: 5px 10px 5px 10px;
+    color: var(--text-light);
+    cursor: pointer;
+    margin-left: 45%;
+    margin-top: 20px;
 }

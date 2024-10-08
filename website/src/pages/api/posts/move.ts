@@ -6,6 +6,8 @@ import {authOptions} from "@/pages/api/auth/[...nextauth]";
 import {checkApiPermissions} from "@/lib/api_tools";
 import { Logger } from 'next-axiom';
 import {MEMBER_USER_TYPE, RongoaUser} from "@/lib/users";
+import crypto from 'crypto';
+import Client from "ftp";
 
 export default async function handler(
     request: NextApiRequest,
@@ -58,21 +60,77 @@ export default async function handler(
         // Check if the data is being downloaded from the Postgres database
         const tables = getTables()
 
-        // Update the posts in_use status
-        let query= "";
-        for (let i = 0; i < ids.length; i++) {
-            query = `UPDATE posts SET ${tables.post_in_use} = NOT ${tables.post_in_use} WHERE id = ${ids[i]};`;
-        }
+        // FTP config
+        const ftpConfig = {
+            host: process.env.FTP_HOST,
+            port: 21,
+            user: process.env.FTP_USER,
+            password: process.env.FTP_PASSWORD,
+        };
 
-        // Make the query
-        await makeQuery(query, client, true);
+        const ftp = new Client();
+        ftp.on('ready', async () => {
 
+            // Update the posts in_use status
+            let query = "";
+            for (let i = 0; i < ids.length; i++) {
 
-        // Log the upload
-        logger.info(`Move post ${id} by ${session?.user?.email}`);
+                const postId = ids[i];
+
+                // Fetch the existing post data from the database
+                const postQuery = `SELECT * FROM posts WHERE id = ${postId};`;
+                const postResult = await makeQuery(postQuery, client);
+
+                // Since postResult is an array, get the first element
+                const postData = postResult[0];
+
+                if (!postData) {
+                    return response.status(404).json({error: "Post not found"});
+                }
+
+                const {post_image, post_user_id, post_plant_id, post_title, post_date} = postData;
+                const originalFilePath = `/users/${post_user_id}/posts/${postId}/${post_image}`.replaceAll("’","'");
+
+                // Generate a random string for the new image name
+                const newImageRand = crypto.randomBytes(4).toString("hex");
+                const newImageName = `${post_title}_${new Date(post_date).toDateString().replaceAll(" ", "_")}_${newImageRand}.${post_image.split('.').pop()}`
+                const newFilePath = `/plants/${post_plant_id}/`;
+
+                console.log(`Moving image from ${originalFilePath} to ${newFilePath}`);
+
+                // Move the file on the FTP server
+                await new Promise((resolve, reject) => {
+                    ftp.rename(originalFilePath, newFilePath, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(null);
+                        }
+                    });
+                });
+
+                // Update the database with the new image path
+                const updateQuery = `UPDATE posts SET post_image = '${newImageName}' WHERE id = ${postId};`;
+                await makeQuery(updateQuery, client);
+
+                // Log the move
+                logger.info(`Post ${postId} image moved by ${session?.user?.email}`);
+                console.log(`Post ${postId} image moved by ${session?.user?.email}`);
+            }
+        });
+
+        // If there is an error return it
+        ftp.on('error', (ftpErr) => {
+            return response.status(500).json({ error: 'FTP connection error.' });
+        });
+
+        // Initiate the connection
+        ftp.connect(ftpConfig);
+
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {
+        console.error(error);
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
     } finally {
 

@@ -237,7 +237,11 @@ export const postImage = async (image: File, postTitle: string, postDescription:
     const formData = new FormData();
     formData.append('file', compressedImage);
     formData.append('id', newId);
-    formData.append('path', 'users/' + userID + '/posts');
+    if(inUse) {
+        formData.append('path', 'plants/' + post_plant_id);
+    }else{
+        formData.append('path', 'users/' + userID + '/posts');
+    }
 
     try {
         // Send the form data to the server

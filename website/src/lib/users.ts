@@ -165,8 +165,11 @@ export interface UserPermissions {
             moderate: {
                 publicAccess: boolean;
                 internalAccess: boolean
-                access: boolean;
             };
+            edit: {
+                publicAccess: boolean;
+                internalAccess: boolean
+            }
         }
 
         logs: {
@@ -335,8 +338,11 @@ export const getDefaultPermissions = () : UserPermissions => {
                 moderate: {
                     publicAccess: false,
                     internalAccess: false,
-                    access: false,
                 },
+                edit: {
+                    publicAccess: false,
+                    internalAccess: true,
+                }
             },
 
             plants: {

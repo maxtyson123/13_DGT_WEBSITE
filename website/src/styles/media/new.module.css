@@ -108,3 +108,33 @@
     padding: 1% 5% 1% 5%;
 
 }
+
+.data{
+    padding: 2%;
+    display: grid;
+    gap: 10px;
+}
+
+.data img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.data h1{
+    font-size: 1.5em;
+    color: var(--text-dark);
+    font-weight: bolder;
+}
+
+.data h2{
+    font-size: 1.3em;
+    color: var(--darker-secondary-gray);
+    margin-top: -15px;
+}
+
+.data p{
+    font-size: 1.2em;
+    color: var(--text-dark);
+}

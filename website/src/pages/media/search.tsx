@@ -30,6 +30,12 @@ export default function Page(){
         setLoading(true);
         const searchQuery = document.querySelector("input")?.value;
 
+        // If the query is less than 3 characters, return
+        if(searchQuery && searchQuery.length < 3) {
+            setLoading(false);
+            return;
+        }
+
         // Fetch the search results
         const results = await makeRequestWithToken("get", `/api/plants/search?name=${searchQuery}&getUsers=true&getPosts=true`);
         setSearchResults(results.data)

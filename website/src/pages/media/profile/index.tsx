@@ -258,7 +258,7 @@ export default function Index() {
                                     {
                                         postsData.map((post: any, index: number) => {
                                             return(
-                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
+                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} onClick={() => { window.location.href = '/media/posts/'+post.id }}>
                                                     <Image fill placeholder={loader_data() as any}  src={getPostImage(post)} alt="Post"/>
                                                 </div>
                                             )
@@ -270,7 +270,7 @@ export default function Index() {
                                     {
                                         likesData.map((post: any, index: number) => {
                                             return(
-                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} >
+                                                <div className={styles.post + " " + (index == 0 ? styles.main : "") } key={post.id} onClick={() => { window.location.href = '/media/posts/'+post.id }}>
                                                     <Image fill placeholder={loader_data() as any}  src={getPostImage(post)} alt="Post"/>
                                                 </div>
                                             )
