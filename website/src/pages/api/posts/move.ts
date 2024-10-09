@@ -102,8 +102,27 @@ export default async function handler(
 
                 console.log(`Moving image from ${originalFilePath} to ${newFilePath}`);
 
+
+
+
                 // Move the file on the FTP server
                 await new Promise((resolve, reject) => {
+
+                    // Create the directories
+                    const directories = newFilePath.split('/').slice(1, -1);
+                    let currentDir = '';
+                    directories.forEach((directory) => {
+                        currentDir += `/${directory}`;
+                        ftp.mkdir(currentDir, (ftpErr) => {
+                            if (ftpErr && (ftpErr as any).code !== 550) {
+                                // 550 error code means the directory already exists,
+                                // so ignore it and continue creating subdirectories
+                                return response.status(500).json({ error: 'Error creating directory.' });
+                            }
+                        });
+                    });
+
+                    // Move the file
                     ftp.rename(originalFilePath, newFilePath, (err) => {
                         if (err) {
                             reject(err);
