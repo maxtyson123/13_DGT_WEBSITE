@@ -220,15 +220,15 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
                 case 'attachments':
 
                     // Select all the attachments data and make them into an array
-                    selector += `attachments.attachment_paths, attachments.attachment_types, attachments.attachment_metas, attachments.attachment_downloadable,`;
+                    selector += `attachments.attachment_path, attachments.attachment_type, attachments.attachment_meta, attachments.attachment_downloadable,`;
 
                     // Join the attachments table
                     joiner += ` LEFT JOIN (
                                 SELECT
                                 plant_id,
-                                ${joinCommand}(${tables.attachment_path}) AS attachment_paths,
-                                ${joinCommand}(${tables.attachment_type}) AS attachment_types,
-                                ${joinCommand}(${tables.attachment_meta}) AS attachment_metas,
+                                ${joinCommand}(${tables.attachment_path}) AS attachment_path,
+                                ${joinCommand}(${tables.attachment_type}) AS attachment_type,
+                                ${joinCommand}(${tables.attachment_meta}) AS attachment_meta,
                                 ${joinCommand}(${tables.attachment_downloadable}) AS attachment_downloadable
                                 FROM attachments
                                 WHERE plant_id = ${id}
@@ -261,11 +261,13 @@ export async function downloadPlantData(table: any, id: any, client: any, restri
             ${joiner};
         `;
 
+        console.log(query);
+
         // Make the query
         const data = await makeQuery(query, client)
 
         // If the data is empty, return an error
-        if(!data)
+        if(!data || data.length === 0)
             return ["error", "No data found"];
 
         // Get the post ids

@@ -7,6 +7,7 @@ import PlantCardData, {PlantCardApi, PlantCardLoading, PlantCardNull} from "@/co
 import {Error} from "@/components/error";
 import {makeRequestWithToken} from "@/lib/api_tools";
 import {Layout} from "@/components/layout";
+import {LocalSearchResult, Mathdle, SeedSweeperSearch} from "@/components/credits";
 
 export default function Search(){
     const pageName = "Search"
@@ -93,56 +94,20 @@ export default function Search(){
         const startTime = Date.now()
         let apiResults: JSX.Element[] = []
 
-        const seedSweeperVariants = ["seedsweeper", "sweed", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper", "sweeper", "seed"]
-        if (seedSweeperVariants.includes(name.toLowerCase())){
+        const localSearchResults: LocalSearchResult[] = [ SeedSweeperSearch, Mathdle ]
 
+        for (let i = 0; i < localSearchResults.length; i++){
+            const searchResult = localSearchResults[i]
+            if (searchResult.matchs.includes(name.toLowerCase())){
 
-            // Add the result to the results
-            apiResults.push(
-                <div className={styles.searchResult}>
-                    <PlantCardData data={
-                        {   id: "seedsweeper" as any,
-                            published: true,
-                            preferred_name: "English",
-                            english_name: "Seed Sweeper",
-                            latin_name: "Max Tyson",
-                            maori_name: "Easter Egg-plant",
-                            small_description: "A fun game made by Max Tyson",
-                            display_images: [{
-                                post_title: "Main",
-                                post_image: "/media/images/sw.png",
-                                post_approved: true,
-                                post_date: new Date().toISOString(),
-                                post_in_use: true,
-                                post_user_id: 2,
-                                post_plant_id: 0,
-                                post_description: "seedsweeper",
-                                id: 0,
-                            }],
-                            authorIDs: [2],
-                            use: [],
-                            sections: [],
-                            months_ready_for_use: [],
-                            last_modified: new Date().toISOString(),
-                            attachments: [{type: "image", path: "/media/images/sw.png", meta: {name: "main", credits: "Max Tyson", description: "Yes"}, downloadable: false}],
-                            location_found: "NPM",
-                            plant_type: "Game",
-                            long_description: "click me",
-                            authors: [],
-                        }}/>
-                </div>
-            )
-
-            // Set the results
-            setResults(apiResults)
-
-            // Set the time and amount
-            setDuration(Date.now() - startTime)
-            setAmount(1)
-            console.log("SeedSweeper")
-
+                // Add the result to the results
+                apiResults.push(
+                    <div className={styles.searchResult}>
+                        <PlantCardData data={searchResult.data}/>
+                    </div>
+                )
+            }
         }
-
 
         try{
             console.log("Getting search results")
@@ -169,15 +134,10 @@ export default function Search(){
 
             }
 
-            // Set the results
-            setResults(apiResults)
-
-            // Set the time and amount
-            setDuration(Date.now() - startTime)
-            setAmount(data.length)
-
-
         } catch (e) {
+
+            if(apiResults.length !== 0)
+                return
 
             // Set the results to an error div
             setResults([
@@ -189,6 +149,13 @@ export default function Search(){
             setAmount(0)
 
         }
+
+        // Set the results
+        setResults(apiResults)
+
+        // Set the time and amount
+        setDuration(Date.now() - startTime)
+        setAmount(apiResults.length)
 
     }
 

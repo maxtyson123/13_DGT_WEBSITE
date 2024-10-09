@@ -22,6 +22,7 @@ import PostFeed from "@/components/postfeed";
 
 // TODO:
 // - Plant App
+// - - FIXES: UPLOAD USE UP SERT, DONT LOAD IMAGE FOR EVER USE DEAFULT IMAGE, ADD MATHDLE
 // - - Publish on stores (LOGIN w no env, Native apis)
 // - Database
 // - - Use better wrapper

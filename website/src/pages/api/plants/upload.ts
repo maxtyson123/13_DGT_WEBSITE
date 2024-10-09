@@ -101,151 +101,130 @@ export default async function handler(
         let query = ``;
 
         // Add the information for the plant data
-        query += `INSERT INTO plants (${insertQuery} ${tables.preferred_name}, ${tables.english_name}, ${tables.maori_name}, ${tables.latin_name}, ${tables.location_found}, ${tables.small_description}, ${tables.long_description}, ${tables.author}, ${tables.last_modified}, ${tables.display_images}, ${tables.plant_type}, ${tables.published}) `;
-        query += `VALUES (${insetQueryValues} '${preferred_name}', '${english_name}', '${maori_name}', '${latin_name}', '${location_found}', '${small_description}', '${long_description}', '${author}', ${timeFunction}(${Date.now()} / 1000.0), '${display_images}', '${plant_type}', 0) ${USE_POSTGRES ? "RETURNING id" : ""};`;
+        const plantData = {
+            preferred_name,
+            english_name,
+            maori_name,
+            latin_name,
+            location_found,
+            small_description,
+            long_description,
+            author,
+            display_images,
+            plant_type,
+            published: 1,
+            last_modified: new Date(),
+        };
+
+
+        query += buildQuery(plantData, 'plants', edit_id);
+
 
         // Create a temporary table to hold the new plant id
         query += `DROP TABLE IF EXISTS new_plant; CREATE TEMPORARY TABLE new_plant AS ( SELECT id FROM plants ORDER BY id DESC LIMIT 1 ); ${!USE_POSTGRES ? "SELECT id FROM new_plant;" : ""}`;
 
         // If there is months ready data, add it to the query
-        if(months_ready_events.length > 0) {
-            // Tell the query that we are adding to the months ready for use table
-            query += `INSERT INTO months_ready_for_use (plant_id, ${tables.months_event}, ${tables.months_start_month}, ${tables.months_end_month}) VALUES `;
+        if (months_ready_events.length > 0) {
+            const monthsReadyData = months_ready_events.map((event: any, i: number) => ({
+                months_event: event,
+                months_start_month: months_ready_start_months[i],
+                months_end_month: months_ready_end_months[i]
+            }));
 
-            // Loop through each of the months ready events
-            for(let i = 0; i < months_ready_events.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${months_ready_events[i]}', '${months_ready_start_months[i]}', '${months_ready_end_months[i]}')`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < months_ready_events.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const monthsReadyQuery = buildRelatedQueries(monthsReadyData, 'months_ready_for_use', edit_id);
+            query += monthsReadyQuery;
         }
 
         // If there is edible sections data, add it to the query
-        if(edible_parts.length > 0) {
+        if (edible_parts.length > 0) {
+            const edibleData = edible_parts.map((part: any, i: number) => ({
+                edible_part_of_plant: part,
+                edible_use_identifier: edible_use_identifiers[i],
+                edible_images: edible_images[i],
+                edible_nutrition: edible_nutrition[i],
+                edible_preparation: edible_preparation[i],
+                edible_preparation_type: edible_preparation_type[i]
+            }));
 
-            // Tell the query that we are adding to the edible parts table
-            query += `INSERT INTO edible (plant_id, ${tables.edible_part_of_plant}, ${tables.edible_use_identifier}, ${tables.edible_images}, ${tables.edible_nutrition}, ${tables.edible_preparation}, ${tables.edible_preparation_type}) VALUES `;
-
-            // Loop through each of the edible parts
-            for(let i = 0; i < edible_parts.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${edible_parts[i]}', '${edible_use_identifiers[i]}', '${edible_images[i]}', '${edible_nutrition[i]}', '${edible_preparation[i]}', '${edible_preparation_type[i]}')`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < edible_parts.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const edibleQuery = buildRelatedQueries(edibleData, 'edible', edit_id);
+            query += edibleQuery;
         }
 
         // If there is medical sections data, add it to the query
         if(medical_types.length > 0) {
 
-            // Tell the query that we are adding to the medical types table
-            query += `INSERT INTO medical (plant_id, ${tables.medical_type}, ${tables.medical_use_identifier}, ${tables.medical_use}, ${tables.medical_images}, ${tables.medical_preparation}, ${tables.medical_restricted}) VALUES `;
+            const medicalData = medical_types.map((type: any, i: number) => ({
+                medical_type: type,
+                medical_use_identifier: medical_use_identifiers[i],
+                medical_use: medical_uses[i],
+                medical_images: medical_images[i],
+                medical_preparation: medical_preparation[i],
+                medical_restricted: medical_restricteds[i]
+            }));
 
-            // Loop through each of the medical types
-            for(let i = 0; i < medical_types.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${medical_types[i]}', '${medical_use_identifiers[i]}', '${medical_uses[i]}', '${medical_images[i]}', '${medical_preparation[i]}', '${medical_restricteds[i]}')`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < medical_types.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const medicalQuery = buildRelatedQueries(medicalData, 'medical', edit_id);
+            query += medicalQuery;
         }
 
         // If there is craft section data, add it to the query
         if(craft_parts.length > 0) {
 
-            // Tell the query that we are adding to the craft parts table
-            query += `INSERT INTO craft (plant_id, ${tables.craft_part_of_plant}, ${tables.craft_use_identifier}, ${tables.craft_use}, ${tables.craft_images}, ${tables.craft_additional_info}) VALUES `;
+            const craftData = craft_parts.map((part: any, i: number) => ({
+                craft_part_of_plant: part,
+                craft_use_identifier: craft_use_identifiers[i],
+                craft_use: craft_uses[i],
+                craft_images: craft_images[i],
+                craft_additional_info: craft_additional_info[i]
+            }));
 
-
-            // Loop through each of the craft parts
-            for(let i = 0; i < craft_parts.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${craft_parts[i]}', '${craft_use_identifiers[i]}', '${craft_uses[i]}', '${craft_images[i]}', '${craft_additional_info[i]}')`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < craft_parts.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const craftQuery = buildRelatedQueries(craftData, 'craft', edit_id);
+            query += craftQuery;
         }
+
 
         // If there is source section, add it to the query
         if(source_types.length > 0) {
-            // Tell the query that we are adding to the source types table
 
-            query += `INSERT INTO source (plant_id, ${tables.source_type}, ${tables.source_data}) VALUES `;
+            const sourceData = source_types.map((type: any, i: number) => ({
+                source_type: type,
+                source_data: source_data[i]
+            }));
 
-            // Loop through each of the source types
-            for(let i = 0; i < source_types.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${source_types[i]}', '${source_data[i]}')`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < source_types.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const sourceQuery = buildRelatedQueries(sourceData, 'source', edit_id);
+            query += sourceQuery;
         }
 
         // If there is custom section, add it to the query
         if(custom_titles.length > 0) {
-            // Tell the query that we are adding to the custom table
-            query += `INSERT INTO custom (plant_id, ${tables.custom_title}, ${tables.custom_text}) VALUES `;
 
-            // Loop through each of the custom titles
-            for(let i = 0; i < custom_titles.length; i++) {
-                // Add the data to the query
-                query += `(${getIDQuery}, '${custom_titles[i]}', '${custom_text[i]}')`;
+            const customData = custom_titles.map((title: any, i: number) => ({
+                custom_title: title,
+                custom_text: custom_text[i]
+            }));
 
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < custom_titles.length - 1) {
-                    query += `, `;
-                }else{
-                    query += `;`;
-                }
-            }
+            // Build the query to delete existing data and insert new data
+            const customQuery = buildRelatedQueries(customData, 'custom', edit_id);
+            query += customQuery;
         }
 
         // If there are attachments, add them to the query
         if(attachment_paths.length > 0) {
 
-            // Tell the query that we are adding to the attachments table
-            query += `INSERT INTO attachments (plant_id, ${tables.attachment_path}, ${tables.attachment_type}, ${tables.attachment_meta}, ${tables.attachment_downloadable}) VALUES `;
+            const attachmentData = attachment_paths.map((path: any, i: number) => ({
+                attachment_path: path,
+                attachment_type: attachment_types[i],
+                attachment_meta: attachment_metas[i],
+                attachment_downloadable: attachment_downloadable[i]
+            }));
 
-            // Loop through each of the attachments
-            for(let i = 0; i < attachment_paths.length; i++) {
-
-                // Add the data to the query
-                query += `(${getIDQuery}, '${attachment_paths[i]}', '${attachment_types[i]}', '${attachment_metas[i]}', ${attachment_downloadable[i]})`;
-
-                // If this is not the last item, add a comma otherwise add a semicolon
-                if(i < attachment_paths.length - 1) {
-                    query += `, `;
-                } else {
-                    query += `;`;
-                }
-
-            }
+            // Build the query to delete existing data and insert new data
+            const attachmentQuery = buildRelatedQueries(attachmentData, 'attachments', edit_id);
+            query += attachmentQuery;
             
         }
 
@@ -293,6 +272,7 @@ export default async function handler(
 
         return response.status(200).json({ message: "Upload Successful", id: id });
     } catch (error) {
+        console.log(error)
         return response.status(500).json({message: "ERROR IN SERVER", error: error });
     } finally {
 
@@ -300,4 +280,87 @@ export default async function handler(
             await client.end();
 
     }
+}
+
+function buildQuery(data: Record<string, any>, tableName: string, edit_id: string | undefined) {
+    let columns = [];
+    let values: any = [];
+
+    for (const [column, value] of Object.entries(data)) {
+        if (value !== undefined) { // Only include defined values
+            columns.push(column);
+
+            if(typeof value === 'boolean') {
+                values.push(value);
+                continue;
+            }
+
+            if(typeof value === 'object' && value instanceof Date) {
+                values.push(`FROM_UNIXTIME(${Math.floor(value.getTime() / 1000)})`);
+                continue;
+            }
+
+            values.push(`'${value}'`);
+        }
+    }
+
+    if (edit_id) {
+        // Construct an UPDATE query
+        const updateFields = columns.map((col, i) => `${col}=${values[i]}`).join(', ');
+        return `UPDATE ${tableName} SET ${updateFields} WHERE id=${edit_id};`;
+    } else {
+        // Construct an INSERT query
+        const insertColumns = columns.join(', ');
+        const insertValues = values.join(', ');
+        return `INSERT INTO ${tableName} (${insertColumns}) VALUES (${insertValues}) ${USE_POSTGRES ? 'RETURNING id;' : ''}`;
+    }
+}
+
+
+function buildRelatedQueries(
+    relatedData: any[],
+    tableName: string,
+    edit_id: string | undefined,
+) {
+    let query = '';
+
+    if (relatedData.length === 0) return query;
+
+    // If we're editing, first delete any existing related data
+    if (edit_id) {
+        query += `DELETE FROM ${tableName} WHERE plant_id = ${edit_id}; `;
+    }
+
+
+    query += `INSERT INTO ${tableName} (plant_id, ${Object.keys(relatedData[0]).join(', ')}) VALUES `;
+
+    relatedData.forEach((dataRow, index) => {
+        const values = Object.values(dataRow)
+            .map(val => {
+                // Check if the value is a boolean
+                if (typeof val === 'boolean')
+                    return val;
+
+                // Check if it's a date
+                if(typeof val === 'object' && val instanceof Date)
+                    return `FROM_UNIXTIME(${Math.floor(val.getTime() / 1000)})`;
+
+                // For other types, wrap them in quotes
+                return `'${val}'`;
+            })
+            .join(', ');
+
+        // Insert the values, handling edit_id or using LAST_INSERT_ID() for MySQL
+        query += `(${edit_id || 'LAST_INSERT_ID()'}, ${values})`;
+
+        // Add a comma between rows or a semicolon at the end of the query
+        if (index < relatedData.length - 1) {
+            query += ', ';
+        } else {
+            query += ';';
+        }
+    });
+
+    return query;
+
 }

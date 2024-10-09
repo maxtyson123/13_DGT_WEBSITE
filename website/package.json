@@ -36,6 +36,7 @@
     "eslint-config-next": "^14.2.3",
     "ftp": "^0.3.10",
     "jquery": "^3.7.0",
+    "mathdle": "^0.1.1",
     "multiparty": "^4.2.3",
     "mysql2": "^3.4.1",
     "mysql2-async": "^1.1.10",

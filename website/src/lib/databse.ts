@@ -139,10 +139,10 @@ export class SQLDatabase {
         this.published                  = "published"
 
         // Attachments Table
-        this.attachment_path            = "attachments_path";
-        this.attachment_type            = "attachments_type";
-        this.attachment_meta            = "attachments_meta";
-        this.attachment_downloadable    = "attachments_downloadable";
+        this.attachment_path            = "attachment_path";
+        this.attachment_type            = "attachment_type";
+        this.attachment_meta            = "attachment_meta";
+        this.attachment_downloadable    = "attachment_downloadable";
 
         // Craft Table
         this.craft_part_of_plant        = "craft_part_of_plant";

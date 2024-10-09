@@ -29,7 +29,7 @@ export default function PlantCardData({ data}: PlantCardProps){
     const [currentImage, setCurrentImage] = useState<any>( {
         post_user_id: 0,
         post_title: "",
-        post_image: "/media/images/loading.gif",
+        post_image: "/media/images/default_noImage.png",
 
     })
 

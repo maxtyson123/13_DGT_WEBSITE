@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCodeBranch, faCopyright} from "@fortawesome/free-solid-svg-icons";
 import {DarkMode, Dyslexic} from "@/components/accessibility";
 import Image from "next/image";
+import {PlantData} from "@/lib/plant_data";
 
 /**
  * Renders the Credits component which displays the credits information and additional accessibility options.
@@ -86,4 +87,77 @@ export function CreditedImage({url, alt, credits, colour = "gray"}: CreditedImag
             <p className={styles.credits + " " + backgroundColour}> <FontAwesomeIcon icon={faCopyright}/> {credits} </p>
         </>
     )
+}
+
+
+export type LocalSearchResult = {
+    matchs: string[],
+    data: PlantData,
+}
+
+export const SeedSweeperSearch : LocalSearchResult = {
+    matchs: ["seedsweeper", "sweed", "seed-sweeper", "seed_sweeper", "seed sweeper", "mine sweeper", "minesweeper", "mine-sweeper", "mine sweeper", "sweeper", "seed"],
+    data:  {   id: "seedsweeper" as any,
+        published: true,
+        preferred_name: "English",
+        english_name: "Seed Sweeper",
+        latin_name: "Max Tyson",
+        maori_name: "Easter Egg-plant",
+        small_description: "A fun game made by Max Tyson",
+        display_images: [{
+            post_title: "Main",
+            post_image: "/media/images/sw.png",
+            post_approved: true,
+            post_date: new Date().toISOString(),
+            post_in_use: true,
+            post_user_id: 2,
+            post_plant_id: 0,
+            post_description: "seedsweeper",
+            id: 0,
+        }],
+        authorIDs: [2],
+        use: [],
+        sections: [],
+        months_ready_for_use: [],
+        last_modified: new Date().toISOString(),
+        attachments: [],
+        location_found: "NPM",
+        plant_type: "Game",
+        long_description: "click me",
+        authors: [],
+    }
+}
+
+export const Mathdle : LocalSearchResult = {
+    matchs: ["math", "mathdle", "mathdel", "1234"],
+    data:  {
+        id: "mathdle" as any,
+        published: true,
+        preferred_name: "English",
+        english_name: "Mathdle",
+        latin_name: "Max Tyson",
+        maori_name: "Easter Egg-plant",
+        small_description: "A fun game made by Max Tyson (& Haz)",
+        display_images: [{
+            post_title: "Main",
+            post_image: "/media/images/sw.png",
+            post_approved: true,
+            post_date: new Date().toISOString(),
+            post_in_use: true,
+            post_user_id: 2,
+            post_plant_id: 0,
+            post_description: "Mathdle",
+            id: 0,
+        }],
+        authorIDs: [2],
+        use: [],
+        sections: [],
+        months_ready_for_use: [],
+        last_modified: new Date().toISOString(),
+        attachments: [],
+        location_found: "NPM",
+        plant_type: "Game",
+        long_description: "click me",
+        authors: [],
+    }
 }

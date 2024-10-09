@@ -2164,34 +2164,6 @@ export default function CreatePlant() {
             // Check if this plant is being edited
             if(isEdit){
                 console.log("EDITING PLANT")
-                setProgressMessage("Removing previous plant data")
-
-                // Remove the plant from the database
-                try{
-
-                   // Remove the plant from the database
-                    console.log("REMOVING PLANT")
-                    result = await makeRequestWithToken("get",`/api/plants/remove?id=${idNum}`)
-                    console.log(result)
-
-                } catch (err: any) {
-                    console.log(err);
-
-                    // Update the error text
-                    let errorText = "Unable to remove previous plant data whilst editing"
-
-                    // Check if the error is a 401 error
-                    if(err.response && err.response.status === 401){
-                        errorText = "You are not authorized to edit plant data"
-                    }
-
-                    // Set these changes in the state and scroll to the error div so that the user can see that
-                    setError(errorText)
-                    scrollToElement("errorSection")
-                    setProgressMessage("");
-                    return;
-                }
-
                 // Remove the plant from the local storage
                 sessionStorage.removeItem("plant_" + idNum)
 

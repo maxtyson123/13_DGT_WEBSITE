@@ -32,10 +32,10 @@ CREATE TABLE IF NOT EXISTS months_ready_for_use (
 CREATE TABLE IF NOT EXISTS attachments (
     id INT NOT NULL AUTO_INCREMENT,
     plant_id INT,
-    attachments_path TEXT,
-    attachments_type TEXT,
-    attachments_meta JSON,
-    attachments_downloadable BOOLEAN,
+    attachment_path TEXT,
+    attachment_type TEXT,
+    attachment_meta JSON,
+    attachment_downloadable BOOLEAN,
 	PRIMARY KEY (id),
 	FOREIGN KEY (plant_id) REFERENCES plants(id)
 );

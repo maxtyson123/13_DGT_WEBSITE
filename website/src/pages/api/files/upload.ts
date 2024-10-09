@@ -90,13 +90,13 @@ function createBackUpQuery(json: any) {
         }
 
         // Check if it is attachment data
-        if(tableNames.includes("attachments_path")){
+        if(tableNames.includes("attachment_path")){
 
             let attachmentTable = json.data[i];
             for (let j = 0; j < attachmentTable.length; j++)
                 query += createUpSertQuery("attachments",
                     [tables.id, tables.plant_id, tables.attachment_path, tables.attachment_type, tables.attachment_downloadable, tables.attachment_meta],
-                    [attachmentTable[j].id, attachmentTable[j].plant_id, attachmentTable[j].attachments_path, attachmentTable[j].attachments_type, attachmentTable[j].attachments_downloadable, attachmentTable[j].attachments_meta]
+                    [attachmentTable[j].id, attachmentTable[j].plant_id, attachmentTable[j].attachment_path, attachmentTable[j].attachment_type, attachmentTable[j].attachment_downloadable, attachmentTable[j].attachment_meta]
                 )
             continue;
         }
